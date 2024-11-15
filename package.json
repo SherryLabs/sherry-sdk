@@ -1,0 +1,17 @@
+{
+  "name": "sherry-sdk",
+  "version": "0.0.5",
+  "description": "SDK for validating Blockchain actions and metadata",
+  "main": "dist/index.js",  
+  "types": "dist/index.d.ts",  
+  "scripts": {
+    "build": "tsc",  
+    "test": "jest"  
+  },
+  "author": "Jesus",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^4.5.5",
+    "jest": "^27.4.5" 
+  }
+}
