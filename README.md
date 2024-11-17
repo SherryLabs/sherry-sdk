@@ -53,6 +53,6 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## Contact
 
-If you have any questions or need further assistance, feel free to reach out to our support team at support@example.com.
+If you have any questions or need further assistance, feel free to reach out to our support team at support@getsherry.social.
 
 Happy coding with Sherry SDK!

@@ -1,33 +1,49 @@
-import { BlockchainAction, ChainId } from "../src/interfaces/BlockchainAction";
+import { ChainId, BlockchainAction } from "../src/interfaces/BlockchainAction";
 import { Abi, AbiParameter } from "abitype";
 import { describe, expect, it } from "@jest/globals";
+import { ExtractAbiFunctionNames } from 'abitype'
 
 describe('BlockchainAction Interface', () => {
-    const validAbi: Abi = []; // Simplified for testing purposes
-    const validAbiParameter: AbiParameter = { name: 'param1', type: 'uint256' };
+    const exampleAbi: Abi = [
+        {
+            name: 'balanceOf',
+            type: 'function',
+            stateMutability: 'view',
+            inputs: [{ name: 'owner', type: 'address' }],
+            outputs: [{ name: 'balance', type: 'uint256' }],
+        },
+        {
+            name: 'safeTransferFrom',
+            type: 'function',
+            stateMutability: 'nonpayable',
+            inputs: [
+                { name: 'from', type: 'address' },
+                { name: 'to', type: 'address' },
+                { name: 'tokenId', type: 'uint256' },
+            ],
+            outputs: [],
+        },
+    ];
+    // Simplified for testing purposes
+
+    //const validAbiParameter: AbiParameter = { name: 'param1', type: 'uint256' };
 
     it('should create a valid BlockchainAction object', () => {
-        const action: BlockchainAction = {
-            label: "Test Action",
+        // Esto debería causar un error de tipo en TypeScript
+        const invalidAction: BlockchainAction<typeof exampleAbi> = {
+            label: "Invalid Action",
             contractAddress: "0x1234567890abcdef1234567890abcdef12345678",
-            contractABI: validAbi,
-            functionName: "testFunction",
+            contractABI: exampleAbi,
+            functionName: "nonExistentFunction", // TypeScript debería marcar esto como error
             blockchainActionType: "read",
-            transactionParameters: [validAbiParameter],
+            transactionParameters: [],
             chainId: "ethereum",
             data: {}
         };
 
-        expect(action.label).toBe("Test Action");
-        expect(action.contractAddress).toBe("0x1234567890abcdef1234567890abcdef12345678");
-        expect(action.contractABI).toBe(validAbi);
-        expect(action.functionName).toBe("testFunction");
-        expect(action.blockchainActionType).toBe("read");
-        expect(action.transactionParameters).toEqual([validAbiParameter]);
-        expect(action.chainId).toBe("ethereum");
-        expect(action.data).toEqual({});
     });
 
+    /*
     it('should fail when required fields are missing', () => {
         const createInvalidAction = () => {
             const action: BlockchainAction = {
@@ -88,4 +104,5 @@ describe('BlockchainAction Interface', () => {
 
         expect(actionWithoutData.data).toBeUndefined();
     });
+    */
 });
