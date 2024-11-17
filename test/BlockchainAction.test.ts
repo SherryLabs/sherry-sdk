@@ -1,9 +1,11 @@
 import { describe, expect, it } from "@jest/globals";
-import { Abi, AbiParameter } from "abitype";
+import { Abi } from "abitype";
 import { BlockchainActionMetadata, BlockchainAction, getParameters, getAbiFunction, isValidFunction, validateActionParameters, getBlockchainActionType, getFinalBlockchainAction } from "../src/interfaces/BlockchainActionV2";
+import { Metadata } from "../src/interfaces/Metadata";
+import { readContract } from "../src/interfaces/BlockchainActionV2";
 
 describe('BlockchainActionV2 Functions', () => {
-  const exampleAbi: Abi = [
+  const exampleAbi = [
     {
       name: 'balanceOf',
       type: 'function',
@@ -22,7 +24,24 @@ describe('BlockchainActionV2 Functions', () => {
       ],
       outputs: [],
     },
-  ];
+  ] as const
+
+  const metadata: Metadata<"action", typeof exampleAbi> = {
+    type: "action",
+    icon: "icon",
+    title: "title",
+    description: "description",
+    label: "label",
+    actions: [
+      {
+        label: "Test Action",
+        contractAddress: "0x1234567890abcdef1234567890abcdef12345678",
+        contractABI: exampleAbi,
+        functionName: "safeTransferFrom",
+        chainId: "ethereum"
+      }
+    ]
+  };
 
   const actionMetadata: BlockchainActionMetadata = {
     label: "Test Action",
@@ -31,6 +50,16 @@ describe('BlockchainActionV2 Functions', () => {
     functionName: "balanceOf",
     chainId: "Ethereum",
   };
+
+  it('should get parameters of a function', () => {
+    // Only Readable Actions
+    const res = readContract({
+      abi: exampleAbi,
+      functionName: 'balanceOf',
+      args: ['0x'],
+    })
+
+  })
 
   it('should get parameters of a function', () => {
     const parameters = getParameters(actionMetadata);

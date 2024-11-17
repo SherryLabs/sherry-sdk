@@ -1,0 +1,1 @@
+export type ChainId = "fuji" | "avalanche" | "ethereum" | "ethSepolia"

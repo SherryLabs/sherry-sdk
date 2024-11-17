@@ -1,8 +1,19 @@
 import { BlockchainParameter } from "./BlockchainParameter";
 import { Abi, AbiFunction, AbiParameter, AbiStateMutability } from "abitype";
 import { ContractFunctionName } from "viem";
+import { ChainId } from "./Chains";
 
-export type ChainId = "Ethereum" | "Base" | "Optimism";
+/*
+  * Date: 17-11-2024:
+  * By: Gilberts Ahumada
+  * This code is under development in order to improve the blockchain action interface.
+  * In order to facilitate the creation of blockchain actions, we are defining a new interface
+  * and some utility functions to help with the validation of the blockchain action.
+  * This file is used to define the metadata of a blockchain action and the final blockchain action
+  * that will be executed. It also defines some utility functions to help with the validation of the
+  * blockchain action.
+  */
+
 
 // This interface is used for DEVs to define the metadata of a blockchain action
 export interface BlockchainActionMetadata {
@@ -17,8 +28,6 @@ export interface BlockchainActionMetadata {
 export interface BlockchainAction extends BlockchainActionMetadata {
   transactionParameters: BlockchainParameter[];
   blockchainActionType: AbiStateMutability;
-  //functionName: string;
-  //chainId: ChainId;
 }
 
 export function getParameters(action: BlockchainActionMetadata): readonly AbiParameter[] {
