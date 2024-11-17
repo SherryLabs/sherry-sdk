@@ -6,7 +6,9 @@
     "rootDir": "./src",  
     "declaration": true,  
     "strict": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "noImplicitAny": true,
+    "noUncheckedIndexedAccess": true
   },
   "include": ["src/**/*"]
 }
