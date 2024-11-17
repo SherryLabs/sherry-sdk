@@ -1,13 +1,12 @@
-import { BlockchainParameter } from "./BlockchainParameter";
-import { Abi, AbiFunction, AbiParametersToPrimitiveTypes, ExtractAbiFunctionNames, IsAbi } from "abitype";
-import { AbiStateMutability, ExtractAbiFunctions, AbiParameter, ExtractAbiFunction } from "abitype";
+import { Abi, AbiFunction, AbiParametersToPrimitiveTypes, ExtractAbiFunctionNames } from "abitype";
+import { ExtractAbiFunction } from "abitype";
 import { ChainId } from "./Chains";
 
 export interface BlockchainAction<ContractABI extends Abi> {
   label: string;
   contractAddress: `0x${string}`;
   contractABI: ContractABI;
-  functionName: ExtractAbiFunctionNames<ContractABI, 'pure' | 'view' | 'payable' | 'nonpayable'>; 
+  functionName: ExtractAbiFunctionNames<ContractABI, 'pure' | 'view' | 'payable' | 'nonpayable'>;
   chainId: ChainId;
 }
 
