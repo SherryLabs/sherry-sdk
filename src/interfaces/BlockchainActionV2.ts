@@ -14,14 +14,14 @@ export interface BlockchainActionMetadata {
 }
 
 // This interface is used internally to define the final blockchain action
-interface BlockchainAction extends BlockchainActionMetadata {
+export interface BlockchainAction extends BlockchainActionMetadata {
   transactionParameters: BlockchainParameter[];
   blockchainActionType: AbiStateMutability;
   //functionName: string;
   //chainId: ChainId;
 }
 
-function getParameters(action: BlockchainActionMetadata): readonly AbiParameter[] {
+export function getParameters(action: BlockchainActionMetadata): readonly AbiParameter[] {
   const abi: Abi = action.contractABI;
   const functionName: ContractFunctionName = action.functionName;
 
@@ -34,25 +34,25 @@ function getParameters(action: BlockchainActionMetadata): readonly AbiParameter[
   return abiParameters;
 }
 
-function getAbiFunction(abi: Abi, functionName: ContractFunctionName): AbiFunction | undefined {
+export function getAbiFunction(abi: Abi, functionName: ContractFunctionName): AbiFunction | undefined {
   if (!isValidFunction(abi, functionName)) {
     return undefined;
   }
   return abi.find((item): item is AbiFunction => item.type === "function" && item.name === functionName);
 }
 
-function isValidFunction(abi: Abi, functionName: ContractFunctionName): boolean {
+export function isValidFunction(abi: Abi, functionName: ContractFunctionName): boolean {
   return abi.some((item): item is AbiFunction => item.type === "function" && item.name === functionName);
 }
 
-function validateActionParameters(
+export function validateActionParameters(
   action: BlockchainAction
 ): boolean {
   const params = getParameters(action);
   return params.length === action.transactionParameters.length;
 }
 
-function getBlockchainActionType(action: BlockchainActionMetadata) {
+export function getBlockchainActionType(action: BlockchainActionMetadata) {
   const abiFunction: AbiFunction | undefined = getAbiFunction(action.contractABI, action.functionName);
   if (!abiFunction) {
     throw new Error(`Function ${action.functionName} not found in ABI`);
@@ -62,7 +62,7 @@ function getBlockchainActionType(action: BlockchainActionMetadata) {
   return blockAction;
 }
 
-function getFinalBlockchainAction(action: BlockchainActionMetadata): BlockchainAction {
+export function getFinalBlockchainAction(action: BlockchainActionMetadata): BlockchainAction {
   if (!isValidFunction(action.contractABI, action.functionName)) {
     throw new Error(`Function ${action.functionName} not found in ABI`);
   }

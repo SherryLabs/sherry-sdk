@@ -20,24 +20,6 @@ npm install sherry-sdk
 
 Here is a basic example of how to use the Sherry SDK:
 
-```javascript
-const SherrySDK = require('sherry-sdk');
-
-// Initialize the SDK
-const sdk = new SherrySDK();
-
-// Connect to a smart contract
-const contract = sdk.connect('contract-address');
-
-// Call a function on the smart contract
-contract.callFunction('functionName', params)
-    .then(response => {
-        console.log('Function response:', response);
-    })
-    .catch(error => {
-        console.error('Error calling function:', error);
-    });
-```
 
 ## Documentation
 
