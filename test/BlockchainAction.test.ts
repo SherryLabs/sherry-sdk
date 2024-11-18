@@ -30,7 +30,6 @@ describe('BlockchainActionV2 Functions', () => {
     icon: "icon",
     title: "title",
     description: "description",
-    label: "label",
     actions: [
       {
         label: "Test Action",
