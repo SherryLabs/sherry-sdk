@@ -1,75 +1,62 @@
-import { BlockchainParameter } from "./BlockchainParameter";
-import { Abi, AbiFunction, AbiParametersToPrimitiveTypes, ExtractAbiFunctionNames, IsAbi } from "abitype";
-import { AbiStateMutability, ExtractAbiFunctions, AbiParameter, ExtractAbiFunction } from "abitype";
+import { Abi, AbiFunction, AbiParametersToPrimitiveTypes, ExtractAbiFunctionNames } from "abitype";
+import { ExtractAbiFunction } from "abitype";
+import { ChainId } from "./Chains";
 
-export type ChainId = "ethereum" | "base" | "optimism" | "avalanche";
-
+/**
+ * Interface representing a blockchain action.
+ * 
+ * This interface is used to define the structure of a blockchain action, including
+ * the contract address, ABI, function name, and chain ID. It ensures that the 
+ * function name is valid within the provided ABI.
+ * 
+ * @template ContractABI - The ABI of the contract. This should extend the `Abi` type.
+ */
 export interface BlockchainAction<ContractABI extends Abi> {
+  /**
+   * The label for the action, typically used for display purposes.
+   */
   label: string;
+
+  /**
+   * The address of the contract on the blockchain.
+   * This should be a valid Ethereum address.
+   */
   contractAddress: `0x${string}`;
+
+  /**
+   * The ABI (Application Binary Interface) of the contract.
+   * This defines the functions and events that the contract exposes.
+   */
   contractABI: ContractABI;
-  functionName: ExtractAbiFunctionNames<ContractABI>; // Validación estricta del nombre
-  blockchainActionType: string;
-  transactionParameters: AbiParameter[];
+
+  /**
+   * The name of the function to be called on the contract.
+   * This must be a valid function name within the provided ABI and can be of type
+   * 'pure', 'view', 'payable', or 'nonpayable'.
+   */
+  functionName: ExtractAbiFunctionNames<ContractABI, 'pure' | 'view' | 'payable' | 'nonpayable'>;
+
+  /**
+   * The ID of the blockchain chain where the contract is deployed.
+   * This helps in identifying the correct network (e.g., Ethereum, Base, Optimism).
+   */
   chainId: ChainId;
-  data?: any;
 }
-
-export interface BlockchainActionV2<
-  ContractABI extends Abi, // El ABI específico
-  FunctionName extends ExtractAbiFunctionNames<ContractABI>, // La función debe existir en el ABI
-  StateMutability extends AbiStateMutability = AbiStateMutability // Opcionalmente restringimos mutabilidad
-> {
-  label: string; // Etiqueta para el botón o acción
-  contractAddress: `0x${string}`; // Dirección del contrato
-  contractABI: ContractABI; // ABI del contrato
-  functionName: FunctionName; // Función validada contra el ABI
-  blockchainActionType: "read" | "write"; // Tipo de acción
-  transactionParameters: Extract<
-    ExtractAbiFunctions<ContractABI, StateMutability>,
-    { name: FunctionName }
-  >["inputs"]; // Los parámetros se derivan automáticamente del ABI
-  chainId: number; // ID de la cadena
-  data?: any; // Información opcional adicional
-}
-
-const exampleAbi = [
-  {
-    name: 'balanceOf',
-    type: 'function',
-    stateMutability: 'view',
-    inputs: [{ name: 'owner', type: 'address' }],
-    outputs: [{ name: 'balance', type: 'uint256' }],
-  },
-  {
-    name: 'safeTransferFrom',
-    type: 'function',
-    stateMutability: 'nonpayable',
-    inputs: [
-      { name: 'from', type: 'address' },
-      { name: 'to', type: 'address' },
-      { name: 'tokenId', type: 'uint256' },
-    ],
-    outputs: [],
-  },
-] as const;
-
-
-type IsExampleAbiValid = IsAbi<typeof exampleAbi>;
-
-const invalidAction: BlockchainAction<typeof exampleAbi> = {
-  label: "Invalid Action",
-  contractAddress: "0x1234567890abcdef1234567890abcdef12345678",
-  contractABI: exampleAbi,
-  functionName: "balanceOf", // TypeScript debería marcar esto como error
-  blockchainActionType: "read",
-  transactionParameters: [],
-  chainId: "ethereum",
-  data: {}
-};
-
-
-declare function readContract<
+/**
+ * Function to perform a blockchain action.
+ * 
+ * @template abi - The ABI of the contract.
+ * @template functionName - The name of the function to call.
+ * @template abiFunction - The ABI function type.
+ * 
+ * @param config - The configuration object for the blockchain action.
+ * @param config.abi - The ABI of the contract.
+ * @param config.functionName - The name of the function to call.
+ * @param config.args - The arguments to pass to the function.
+ * 
+ * @returns The output parameters of the function.
+ */
+declare function blockchainAction<
   abi extends Abi,
   functionName extends ExtractAbiFunctionNames<abi, 'pure' | 'view'>,
   abiFunction extends AbiFunction = ExtractAbiFunction<abi, functionName>
@@ -81,15 +68,4 @@ declare function readContract<
       ExtractAbiFunction<abi, functionName>['inputs'],
       'inputs'
     >;
-}): AbiParametersToPrimitiveTypes<abiFunction['outputs'], 'outputs'>
-
-// Only Readable Actions
-const res = readContract({
-  abi: exampleAbi,
-  functionName: 'balanceOf',
-  args: ['0x'],
-})
-
-
-
-
+  }): AbiParametersToPrimitiveTypes<abiFunction['outputs'], 'outputs'>
