@@ -1,7 +1,7 @@
 // Export interfaces from `interface/index.ts`
 export * from './interface';
 
-// Export error classes from `errors/index.ts`
-export * from './customErrors';
+// Exports utilities from `utils/index.ts`
+export * from './utils';
 
 
