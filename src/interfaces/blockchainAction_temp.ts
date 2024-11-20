@@ -1,8 +1,8 @@
 import { Abi, AbiFunction, AbiParameter, AbiStateMutability } from "abitype";
 import { ContractFunctionName, isAddress } from "viem";
 import { ExtractAbiFunctionNames, ExtractAbiFunction } from "abitype";
-import { ChainId } from "./Chains";
-import { Metadata } from "./MetadataV2";
+import { ChainId } from "./chains_temp";
+import { Metadata } from "./metadata_temp";
 import { FunctionNotFoundError, InvalidAddress, NoActionDefinedError, ActionsNumberError } from "../errors/CustomErrors";
 
 
@@ -22,13 +22,14 @@ export interface BlockchainAction extends BlockchainActionMetadata {
   blockchainActionType: AbiStateMutability;
 }
 
-export function getParameters(action: BlockchainActionMetadata): readonly AbiParameter[] {
+export function getParameters(action: BlockchainActionMetadata): AbiParameter[] {
   const abi: Abi = action.contractABI;
   const functionName: ContractFunctionName = action.functionName;
 
   const abiFunction = getAbiFunction(abi, functionName);
 
-  const abiParameters: readonly AbiParameter[] = abiFunction!.inputs;
+  // Crear una copia profunda de los parámetros del ABI
+  const abiParameters: AbiParameter[] = abiFunction!.inputs.map(param => ({ ...param }));
   return abiParameters;
 }
 

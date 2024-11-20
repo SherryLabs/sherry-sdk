@@ -1,5 +1,5 @@
-import { createMetadata } from '../interfaces/BlockchainActionV2';
-import { Metadata } from '../interfaces/MetadataV2';
+import { createMetadata } from '../interfaces/blockchainAction_temp';
+import { Metadata } from '../interfaces/metadata_temp';
 
 async function main() {
     const exampleAbi = [
@@ -34,25 +34,21 @@ async function main() {
                 contractAddress: "0x1234567890abcdef1234567890abcdef12345678",
                 contractABI: exampleAbi,
                 functionName: "safeTransferFrom",
-                functionParamsLabel: ["From", "To", "Token ID"],
-                chainId: "ethereum"
+                functionParamsLabel: ["From"],
+                chainId: "fuji"
             },
             {
                 label: "Test Action 2",
                 contractAddress: "0x1234567890abcdef1234567890abcdef12345678",
                 contractABI: exampleAbi,
                 functionName: "safeTransferFrom",
-                //transactionParamsLabel: ["From", "To", "Token ID"],
-                chainId: "ethereum"
+                chainId: "fuji"
             }
         ]
     };
     try {
         const result = await createMetadata(metadata);
-
-        console.log('Metadata created successfully:', result);
         console.log('Metadata:', JSON.stringify(result, null, 2));
-
     } catch (error) {
         console.error('Error creating metadata:', error);
         throw error;

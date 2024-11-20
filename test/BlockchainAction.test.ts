@@ -1,13 +1,15 @@
 import { describe, expect, it } from "@jest/globals";
-import { BlockchainActionMetadata, 
-  BlockchainAction, 
-  getParameters, 
-  getAbiFunction, 
-  isValidFunction, 
-  validateActionParameters, 
-  getBlockchainActionType } from "../src/interfaces/BlockchainActionV2";
-import { Metadata } from "../src/interfaces/MetadataV2";
-import { createMetadata } from "../src/interfaces/BlockchainActionV2";
+import {
+  BlockchainActionMetadata,
+  BlockchainAction,
+  getParameters,
+  getAbiFunction,
+  isValidFunction,
+  validateActionParameters,
+  getBlockchainActionType
+} from "../src/interfaces/blockchainAction";
+import { Metadata } from "../src/interfaces/metadata";
+import { createMetadata } from "../src/interfaces/blockchainAction";
 
 describe('BlockchainActionV2 Functions', () => {
   const exampleAbi = [
@@ -42,14 +44,14 @@ describe('BlockchainActionV2 Functions', () => {
         contractAddress: "0x1234567890abcdef1234567890abcdef12345678",
         contractABI: exampleAbi,
         functionName: "balanceOf",
-        chainId: "ethereum"
+        chainId: "fuji"
       },
       {
         label: "Test Action 2",
         contractAddress: "0x1234567890abcdef1234567890abcdef12345678",
         contractABI: exampleAbi,
         functionName: "balanceOf",
-        chainId: "ethereum"
+        chainId: "fuji"
       }
     ]
   };
@@ -59,7 +61,7 @@ describe('BlockchainActionV2 Functions', () => {
     contractAddress: "0x1234567890abcdef1234567890abcdef12345678",
     contractABI: exampleAbi,
     functionName: "balanceOf",
-    chainId: "ethereum",
+    chainId: "fuji",
   };
 
   console.log("metadata");
