@@ -2,16 +2,18 @@ import { describe, expect, it } from "@jest/globals";
 import {
   BlockchainActionMetadata,
   BlockchainAction,
+} from "../src/interface/blockchainAction";
+import { Metadata } from "../src/interface/metadata";
+import {
+  createMetadata,
   getParameters,
   getAbiFunction,
   isValidFunction,
   validateActionParameters,
   getBlockchainActionType
-} from "../src/interfaces/BlockchainAction";
-import { Metadata } from "../src/interfaces/Metadata";
-import { createMetadata } from "../src/interfaces/BlockchainAction";
+} from "../src/utils";
 
-describe('BlockchainActionV2 Functions', () => {
+describe('BlockchainAction Functions', () => {
   const exampleAbi = [
     {
       name: 'balanceOf',

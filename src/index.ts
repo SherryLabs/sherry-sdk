@@ -1,7 +1,7 @@
-// Exportamos las interfaces desde `interfaces/index.ts`
-export * from './interfaces';
+// Export interfaces from `interface/index.ts`
+export * from './interface';
 
-// Exportamos las clases de errores desde `errors/index.ts`
-export * from './errors/CustomErrors';
+// Export error classes from `errors/index.ts`
+export * from './customErrors';
 
 
