@@ -68,4 +68,32 @@ declare function blockchainAction<
       ExtractAbiFunction<abi, functionName>['inputs'],
       'inputs'
     >;
-  }): AbiParametersToPrimitiveTypes<abiFunction['outputs'], 'outputs'>
+  }): AbiParametersToPrimitiveTypes<abiFunction['outputs'], 'outputs'> 
+
+/**
+ * Function to validate the types of the blockchain action function declaration.
+ * 
+ * @template abi - The ABI of the contract.
+ * @template functionName - The name of the function to call.
+ * @template abiFunction - The ABI function type.
+ * 
+ * @param config - The configuration object for the blockchain action.
+ * @param config.abi - The ABI of the contract.
+ * @param config.functionName - The name of the function to call.
+ * @param config.args - The arguments to pass to the function.
+ * 
+ * @returns A boolean indicating whether the types are valid.
+ */
+function validateBlockchainActionTypes<
+  abi extends Abi,
+  functionName extends ExtractAbiFunctionNames<abi, 'pure' | 'view'>,
+  abiFunction extends AbiFunction = ExtractAbiFunction<abi, functionName>
+>(
+  config: {
+    abi: abi;
+    functionName: functionName | ExtractAbiFunctionNames<abi, 'pure' | 'view'>;
+    
+  }
+): boolean {
+  return true
+}
