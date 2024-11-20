@@ -3,7 +3,7 @@ export type {
     BlockchainAction,
     BlockchainActionMetadata
 }
-from './blockchainAction';
+    from './blockchainAction';
 export type {
     ChainId
 } from './chains';
@@ -19,4 +19,10 @@ export type { Abi, AbiParameter, AbiStateMutability, AbiFunction } from 'abitype
  * @see {@link https://viem.sh/}
  */
 export type { ContractFunctionName } from 'viem';
+/**
+ * Re-export functions from `viem`
+ * 
+ * @see {@link https://viem.sh/}
+ */
+export { isAddress } from 'viem'
 

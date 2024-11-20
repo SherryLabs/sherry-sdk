@@ -1,5 +1,5 @@
-import { Abi, AbiFunction, AbiParameter, AbiStateMutability } from "abitype";
-import { ContractFunctionName, isAddress } from "viem";
+import { Abi, AbiFunction, AbiParameter, AbiStateMutability } from "../src/index";
+import { ContractFunctionName, isAddress } from "../src/index";
 import { Metadata } from "./interface/metadata";
 import {
   FunctionNotFoundError,
