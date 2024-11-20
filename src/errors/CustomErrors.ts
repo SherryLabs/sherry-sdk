@@ -5,13 +5,6 @@ export class FunctionNotFoundError extends Error {
     }
 }
 
-export class AbiFunctionNotFoundError extends FunctionNotFoundError {
-    constructor(functionName: string) {
-        super(functionName);
-        this.name = "AbiFunctionNotFoundError";
-    }
-}
-
 export class NoActionDefinedError extends Error {
     constructor() {
         super(`No action defined`);

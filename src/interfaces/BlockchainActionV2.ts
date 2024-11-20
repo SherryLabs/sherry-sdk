@@ -1,4 +1,3 @@
-import { BlockchainParameter } from "./BlockchainParameter";
 import { Abi, AbiFunction, AbiParameter, AbiStateMutability } from "abitype";
 import { ContractFunctionName, isAddress } from "viem";
 import { ExtractAbiFunctionNames, ExtractAbiFunction } from "abitype";
@@ -6,16 +5,6 @@ import { ChainId } from "./Chains";
 import { Metadata } from "./MetadataV2";
 import { FunctionNotFoundError, InvalidAddress, NoActionDefinedError, ActionsNumberError } from "../errors/CustomErrors";
 
-/*
-  * Date: 17-11-2024:
-  * By: Gilberts Ahumada
-  * This code is under development in order to improve the blockchain action interface.
-  * In order to facilitate the creation of blockchain actions, we are defining a new interface
-  * and some utility functions to help with the validation of the blockchain action.
-  * This file is used to define the metadata of a blockchain action and the final blockchain action
-  * that will be executed. It also defines some utility functions to help with the validation of the
-  * blockchain action.
-  */
 
 // This interface is used for DEVs to define the metadata of a blockchain action
 export interface BlockchainActionMetadata {
@@ -23,7 +12,7 @@ export interface BlockchainActionMetadata {
   contractAddress: `0x${string}`;
   contractABI: Abi;
   functionName: ContractFunctionName;
-  transactionParamsLabel?: string[];
+  functionParamsLabel?: string[];
   chainId: ChainId;
 }
 
@@ -73,54 +62,6 @@ export function getBlockchainActionType(action: BlockchainActionMetadata) {
 }
 
 /*
-export function getFinalBlockchainAction(action: BlockchainActionMetadata): BlockchainAction {
-  if (!isValidFunction(action.contractABI, action.functionName)) {
-    throw new Error(`Function ${action.functionName} not found in ABI`);
-  }
-
-  const blockchainActionType = getBlockchainActionType(action);
-
-  const finalMetadata: BlockchainAction = { ...action, blockchainActionType, transactionParameters: [] };
-  return finalMetadata;
-}
-*/
-
-/**
- * Function to validate the types of the blockchain action function declaration.
- * 
- * @template abi - The ABI of the contract.
- * @template functionName - The name of the function to call.
- * @template abiFunction - The ABI function type.
- * 
- * @param config - The configuration object for the blockchain action.
- * @param config.abi - The ABI of the contract.
- * @param config.functionName - The name of the function to call.
- * @param config.args - The arguments to pass to the function.
- * 
- * @returns A boolean indicating whether the types are valid.
- */
-function validateBlockchainActionTypes<
-  abi extends Abi,
-  functionName extends ExtractAbiFunctionNames<abi, 'pure' | 'view'>,
-  abiFunction extends AbiFunction = ExtractAbiFunction<abi, functionName>
->(
-  config: {
-    abi: abi;
-    functionName: functionName | ExtractAbiFunctionNames<abi, 'pure' | 'view'>;
-    action: BlockchainActionMetadata;
-
-  }
-): BlockchainAction {
-  const params = getParameters(config.action);
-  const action: BlockchainAction = {
-    ...config.action,
-    transactionParameters: [...params],
-    blockchainActionType: getBlockchainActionType(config.action),
-  }
-
-  return action;
-}
-
 export function createMetadata(metadata: Metadata): Metadata {
   if (metadata.actions.length === 0) {
     throw new NoActionDefinedError();
@@ -157,25 +98,62 @@ export function createMetadata(metadata: Metadata): Metadata {
             params[i]!.name = ac.transactionParamsLabel[i] ?? (params[i]!.name || "");
           }
         }
-
-        console.log("params[i] : ", params[i]);
       }
     }
 
-    console.log("params : ", params);
 
     const actionType = getBlockchainActionType(ac);
-
-    //console.log("theType : ", actionType);
-
     const blAction: BlockchainAction = { ...ac, transactionParameters: [...params], blockchainActionType: actionType };
-
-    //console.log("blAction : ", blAction);
-
     resultMetadata.actions.push(blAction);
   }
 
   return resultMetadata;
+}
+  */
+
+export function createMetadata(metadata: Metadata): Metadata {
+  validateMetadata(metadata);
+
+  const originalActions = [...metadata.actions];
+  const processedActions = originalActions.map(processAction);
+
+  return { ...metadata, actions: processedActions };
+}
+
+function validateMetadata(metadata: Metadata): void {
+  if (metadata.actions.length === 0) {
+    throw new NoActionDefinedError();
+  }
+
+  if (metadata.actions.length > 4) {
+    throw new ActionsNumberError(metadata.actions.length);
+  }
+
+  for (const action of metadata.actions) {
+    if (!isAddress(action.contractAddress)) {
+      throw new InvalidAddress(action.contractAddress);
+    }
+  }
+}
+
+function processAction(action: BlockchainActionMetadata): BlockchainAction {
+  const fnc = getAbiFunction(action.contractABI, action.functionName);
+  if (!fnc) {
+    throw new FunctionNotFoundError(action.functionName);
+  }
+
+  const params: readonly AbiParameter[] = getParameters(action);
+
+  if (action.functionParamsLabel) {
+    for (let i = 0; i < params.length; i++) {
+      if (params[i]) {
+        params[i]!.name = action.functionParamsLabel[i] ?? (params[i]!.name || "");
+      }
+    }
+  }
+
+  const actionType = getBlockchainActionType(action);
+  return { ...action, transactionParameters: [...params], blockchainActionType: actionType };
 }
 
 

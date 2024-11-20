@@ -30,28 +30,32 @@ async function main() {
         description: "description",
         actions: [
             {
-                label: "Test Action",
-                contractAddress: "0x1234567890abcdef1234567890abcdef1234567",
+                label: "Test Action 2",
+                contractAddress: "0x1234567890abcdef1234567890abcdef12345678",
                 contractABI: exampleAbi,
-                functionName: "balanceOf",
-                transactionParamsLabel: ["Owner"],
+                functionName: "safeTransferFrom",
+                functionParamsLabel: ["From", "To", "Token ID"],
                 chainId: "ethereum"
             },
             {
                 label: "Test Action 2",
                 contractAddress: "0x1234567890abcdef1234567890abcdef12345678",
                 contractABI: exampleAbi,
-                functionName: "balanceOf",
-                transactionParamsLabel: ["Owner Address"],
+                functionName: "safeTransferFrom",
+                //transactionParamsLabel: ["From", "To", "Token ID"],
                 chainId: "ethereum"
             }
         ]
     };
     try {
         const result = await createMetadata(metadata);
+
         console.log('Metadata created successfully:', result);
+        console.log('Metadata:', JSON.stringify(result, null, 2));
+
     } catch (error) {
         console.error('Error creating metadata:', error);
+        throw error;
     }
 }
 
