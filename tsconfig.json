@@ -10,6 +10,6 @@
     "forceConsistentCasingInFileNames": true,
     "noUncheckedIndexedAccess": true
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "test/utils.test.ts"],
   "exclude": ["node_modules", "dist"]
 }
