@@ -1,12 +1,6 @@
-export type { Metadata, ActionType } from './metadata';
-export type {
-    BlockchainAction,
-    BlockchainActionMetadata
-}
-    from './blockchainAction';
-export type {
-    ChainId
-} from './chains';
+export type * from './metadata';
+export type * from './blockchainAction';
+export type * from './chains';
 /**
  * Re-export types from `abitype`
  * 

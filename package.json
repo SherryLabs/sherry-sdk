@@ -1,6 +1,6 @@
 {
   "name": "@sherrylinks/sdk",
-  "version": "0.0.13-alpha.1",
+  "version": "0.0.14-alpha.1",
   "description": "SDK for Sherry Links",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -18,13 +18,14 @@
     "@babel/core": "^7.26.0",
     "@babel/preset-env": "^7.26.0",
     "@babel/preset-typescript": "^7.26.0",
-    "abitype": "^1.0.6",
     "babel-jest": "^29.7.0",
-    "jest": "^27.4.5",
-    "viem": "^2.21.45"
+    "jest": "^27.4.5"
+  
   },
   "dependencies": {
-    "typescript": "^5.6.3"
+    "viem": "^2.21.45",
+    "typescript": "^5.6.3",
+    "abitype": "^1.0.6"
   },
   "directories": {
     "test": "test"

@@ -11,7 +11,7 @@ import {
   isValidFunction,
   validateActionParameters,
   getBlockchainActionType
-} from "../src/utils";
+} from "../src/utils/helpers";
 
 describe('BlockchainAction Functions', () => {
   const exampleAbi = [

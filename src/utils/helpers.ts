@@ -1,13 +1,13 @@
-import { Abi, AbiFunction, AbiParameter, AbiStateMutability } from "../src/index";
-import { ContractFunctionName, isAddress } from "../src/index";
-import { Metadata } from "./interface/metadata";
+import { Abi, AbiFunction, AbiParameter, AbiStateMutability } from "../index";
+import { ContractFunctionName, isAddress } from "../index";
+import { Metadata } from "../interface/metadata";
 import {
   FunctionNotFoundError,
   InvalidAddress,
   NoActionDefinedError,
   ActionsNumberError
 } from "./customErrors";
-import { BlockchainActionMetadata, BlockchainAction } from "./interface/blockchainAction";
+import { BlockchainActionMetadata, BlockchainAction } from "../interface/blockchainAction";
 
 export function getParameters(action: BlockchainActionMetadata): AbiParameter[] {
     const abi: Abi = action.contractABI;
