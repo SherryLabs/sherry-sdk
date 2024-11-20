@@ -14,9 +14,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.validateMetadata = void 0;
 // Exportamos las interfaces desde `interfaces/index.ts`
 __exportStar(require("./interfaces"), exports);
-// Exportamos la función de validación desde `validate.ts`
-var validate_1 = require("./validate");
-Object.defineProperty(exports, "validateMetadata", { enumerable: true, get: function () { return validate_1.validateMetadata; } });
+// Exportamos las clases de errores desde `errors/index.ts`
+__exportStar(require("./errors/CustomErrors"), exports);

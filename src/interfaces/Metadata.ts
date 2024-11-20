@@ -1,4 +1,4 @@
-import { BlockchainActionMetadata } from "./blockchainAction_temp";
+import { BlockchainActionMetadata } from "./BlockchainAction";
 /**
  * Defines the type of action that can be performed.
  * - "action": Represents a blockchain action.

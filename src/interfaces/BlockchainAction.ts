@@ -1,8 +1,7 @@
 import { Abi, AbiFunction, AbiParameter, AbiStateMutability } from "abitype";
 import { ContractFunctionName, isAddress } from "viem";
-import { ExtractAbiFunctionNames, ExtractAbiFunction } from "abitype";
-import { ChainId } from "./chains_temp";
-import { Metadata } from "./metadata_temp";
+import { ChainId } from "./Chains";
+import { Metadata } from "./Metadata";
 import { FunctionNotFoundError, InvalidAddress, NoActionDefinedError, ActionsNumberError } from "../errors/CustomErrors";
 
 

@@ -1,5 +1,7 @@
 // Exportamos las interfaces desde `interfaces/index.ts`
 export * from './interfaces';
 
-// Exportamos la función de validación desde `validate.ts`
-export { validateMetadata } from './validate';
+// Exportamos las clases de errores desde `errors/index.ts`
+export * from './errors/CustomErrors';
+
+

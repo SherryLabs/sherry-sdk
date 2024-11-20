@@ -1,5 +1,5 @@
-import { createMetadata } from '../interfaces/blockchainAction_temp';
-import { Metadata } from '../interfaces/metadata_temp';
+import { createMetadata } from '../interfaces/BlockchainAction';
+import { Metadata } from '../interfaces/Metadata';
 
 async function main() {
     const exampleAbi = [

@@ -7,9 +7,9 @@ import {
   isValidFunction,
   validateActionParameters,
   getBlockchainActionType
-} from "../src/interfaces/blockchainAction";
-import { Metadata } from "../src/interfaces/metadata";
-import { createMetadata } from "../src/interfaces/blockchainAction";
+} from "../src/interfaces/BlockchainAction";
+import { Metadata } from "../src/interfaces/Metadata";
+import { createMetadata } from "../src/interfaces/BlockchainAction";
 
 describe('BlockchainActionV2 Functions', () => {
   const exampleAbi = [

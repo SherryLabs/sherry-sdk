@@ -1,2 +1,2 @@
 export * from './interfaces';
-export { validateMetadata } from './validate';
+export * from './errors/CustomErrors';
