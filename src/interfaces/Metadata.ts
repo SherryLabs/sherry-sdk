@@ -1,6 +1,4 @@
-import { BlockchainAction } from "./BlockchainAction";
-import { Abi } from "abitype";
-
+import { BlockchainActionMetadata } from "./BlockchainAction";
 /**
  * Defines the type of action that can be performed.
  * - "action": Represents a blockchain action.
@@ -18,15 +16,12 @@ export type ActionType = "action" | "external-link";
  * @template T - The type of action. Defaults to "action".
  * @template ContractABI - The ABI of the contract. Defaults to `Abi`.
  */
-export interface Metadata<
-  T extends ActionType = "action",
-  ContractABI extends Abi = Abi
-> {
+export interface Metadata {
   /**
    * The type of action.
    * Can be either "action" for blockchain actions or "external-link" for external links.
    */
-  type: T;
+  type: ActionType;
 
   /**
    * The icon representing the mini app.
@@ -50,5 +45,5 @@ export interface Metadata<
    * The actions that can be performed by the mini app.
    * This is an array of `BlockchainAction` objects, each defining a specific action.
    */
-  actions: BlockchainAction<ContractABI>[];
+  actions: BlockchainActionMetadata[];
 }
