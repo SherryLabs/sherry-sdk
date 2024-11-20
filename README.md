@@ -14,11 +14,11 @@ To install the Sherry SDK, use the following command:
 
 
 ```bash
-npm install sherry-sdk
+npm install @sherrylinks/sdk
 ```
 
 ```bash
-yarn add install sherry-sdk
+yarn add @sherrylinks/sdk
 ```
 
 ## Usage
