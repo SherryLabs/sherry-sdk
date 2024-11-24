@@ -28,46 +28,35 @@ Here is a basic example of how to use the Sherry SDK:
 Abi
 
 ```typescript
-  const exampleAbi = [
-    {
-      name: 'balanceOf',
-      type: 'function',
-      stateMutability: 'view',
-      inputs: [{ name: 'owner', type: 'address' }],
-      outputs: [{ name: 'balance', type: 'uint256' }],
-    },
-    {
-      name: 'safeTransferFrom',
-      type: 'function',
-      stateMutability: 'nonpayable',
-      inputs: [
-        { name: 'from', type: 'address' },
-        { name: 'to', type: 'address' },
-        { name: 'tokenId', type: 'uint256' },
-      ],
-      outputs: [],
-    },
-  ] as const
+
 ```
 
 Metadata definition
 
 ```typescript
-  const metadata: Metadata<"action", typeof exampleAbi> = {
+{
     type: "action",
     icon: "icon",
     title: "title",
     description: "description",
     actions: [
-      {
-        label: "Test Action",
-        contractAddress: "0x1234567890abcdef1234567890abcdef12345678",
-        contractABI: exampleAbi,
-        functionName: "safeTransferFrom",
-        chainId: "ethereum"
-      }
+        {
+           label: "Test Action 2",
+           contractAddress: "0x1234567890abcdef1234567890abcdef12345678",
+           contractABI: exampleAbi,
+           functionName: "safeTransferFrom",
+           functionParamsLabel: ["From"],
+           chainId: "fuji"
+        },
+        {
+          label: "Test Action 2",
+          contractAddress: "0x1234567890abcdef1234567890abcdef12345678",
+          contractABI: exampleAbi,
+          functionName: "safeTransferFrom",
+          chainId: "fuji"
+        }
     ]
-  };
+};
 ```
 
 More details in [ours docs](https://docs.getsherry.app/guides)
