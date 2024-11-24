@@ -1,6 +1,6 @@
 {
   "name": "@sherrylinks/sdk",
-  "version": "0.0.15-alpha.1",
+  "version": "0.0.17-alpha.1",
   "description": "SDK for Sherry Links",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

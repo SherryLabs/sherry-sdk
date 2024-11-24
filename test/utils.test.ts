@@ -1,16 +1,13 @@
-/* 
 
 import { describe, expect, it } from "@jest/globals";
-import { Abi, AbiFunction } from "../src/interface/index";
-import { ContractFunctionName } from "../src/interface/index";
-import { Metadata } from "../src/interface/metadata";
+import { Metadata, ValidatedMetadata } from "../src/interface/metadata";
 import { BlockchainActionMetadata, BlockchainAction } from "../src/interface/blockchainAction";
 import {
     FunctionNotFoundError,
     InvalidAddress,
     NoActionDefinedError,
     ActionsNumberError
-} from "../src/customErrors";
+} from "../src/index";
 import {
     getParameters,
     getAbiFunction,
@@ -45,22 +42,33 @@ describe("utils", () => {
     const mockAction: BlockchainActionMetadata = {
         contractABI: mockAbi,
         functionName: "balanceOf",
-        contractAddress: "0x123",
+        contractAddress: "0x0123456789012345678901234567890123456789",
         functionParamsLabel: ["param1"],
         label: "Test Action",
         chainId: "fuji"
     };
 
+    const mockActionv2: BlockchainAction = {
+        contractABI: mockAbi,
+        functionName: "balanceOf",
+        contractAddress: "0x0123456789012345678901234567890123456789",
+        functionParamsLabel: ["param1"],
+        label: "Test Action",
+        chainId: "fuji",
+        transactionParameters: [{ name: "owner", type: "address" }],
+        blockchainActionType: "view"
+    };
+
     describe("getParameters", () => {
         it("should return the parameters of the function", () => {
             const params = getParameters(mockAction);
-            expect(params).toEqual([{ name: "param1", type: "uint256" }]);
+            expect(params).toEqual([{ name: "owner", type: "address" }]);
         });
     });
 
     describe("getAbiFunction", () => {
         it("should return the ABI function", () => {
-            const abiFunction = getAbiFunction(mockAbi, "testFunction");
+            const abiFunction = getAbiFunction(mockAbi, "balanceOf");
             expect(abiFunction).toEqual(mockAbi[0]);
         });
 
@@ -71,7 +79,7 @@ describe("utils", () => {
 
     describe("isValidFunction", () => {
         it("should return true if function exists in ABI", () => {
-            expect(isValidFunction(mockAbi, "testFunction")).toBe(true);
+            expect(isValidFunction(mockAbi, "balanceOf")).toBe(true);
         });
 
         it("should return false if function does not exist in ABI", () => {
@@ -83,7 +91,8 @@ describe("utils", () => {
         it("should return true if parameters length matches", () => {
             const action: BlockchainAction = {
                 ...mockAction,
-                transactionParameters: [{ name: "param1", type: "uint256" }]
+                transactionParameters: [{ name: "param1", type: "uint256" }],
+                blockchainActionType: "nonpayable"
             };
             expect(validateActionParameters(action)).toBe(true);
         });
@@ -91,7 +100,8 @@ describe("utils", () => {
         it("should return false if parameters length does not match", () => {
             const action: BlockchainAction = {
                 ...mockAction,
-                transactionParameters: []
+                transactionParameters: [],
+                blockchainActionType: "pure"
             };
             expect(validateActionParameters(action)).toBe(false);
         });
@@ -100,7 +110,7 @@ describe("utils", () => {
     describe("getBlockchainActionType", () => {
         it("should return the state mutability of the function", () => {
             const actionType = getBlockchainActionType(mockAction);
-            expect(actionType).toBe("nonpayable");
+            expect(actionType).toBe("view");
         });
 
         it("should throw an error if function is not found", () => {
@@ -112,27 +122,37 @@ describe("utils", () => {
     describe("createMetadata", () => {
         it("should create metadata with processed actions", () => {
             const metadata: Metadata = {
-                actions: [mockAction]
+                type: "action",
+                title: "title",
+                description: "description",
+                icon: "icon",
+                actions: [mockActionv2]
             };
-            const result = createMetadata(metadata);
-            expect(result.actions[0].transactionParameters).toEqual([{ name: "param1", type: "uint256" }]);
+
+            const result: ValidatedMetadata = createMetadata(metadata);
+            expect(result.actions[0].transactionParameters[0]!).toEqual({ name: "param1", type: "address" });
         });
 
         it("should throw NoActionDefinedError if no actions are defined", () => {
-            const metadata: Metadata = { actions: [] };
+            const metadata: Metadata = {
+                type: "action",
+                title: "title",
+                description: "description",
+                icon: "icon",
+                actions: []
+            };
             expect(() => createMetadata(metadata)).toThrow(NoActionDefinedError);
         });
 
         it("should throw ActionsNumberError if more than 4 actions are defined", () => {
-            const metadata: Metadata = { actions: [mockAction, mockAction, mockAction, mockAction, mockAction] };
+            const metadata: Metadata = {
+                type: "action",
+                title: "title",
+                description: "description",
+                icon: "icon",
+                actions: [mockAction, mockAction, mockAction, mockAction, mockAction]
+            };
             expect(() => createMetadata(metadata)).toThrow(ActionsNumberError);
-        });
-
-        it("should throw InvalidAddress if an invalid address is provided", () => {
-            const invalidAction = { ...mockAction, contractAddress: "invalidAddress" };
-            const metadata: Metadata = { actions: [invalidAction] };
-            expect(() => createMetadata(metadata)).toThrow(InvalidAddress);
         });
     });
 });
-*/

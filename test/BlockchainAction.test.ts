@@ -70,12 +70,12 @@ describe('BlockchainAction Functions', () => {
   const m: Metadata = createMetadata(metadata);
   console.log("metadata con createMetadata() : ", m);
 
-  it.skip('should get parameters of a function', () => {
+  it('should get parameters of a function', () => {
     const parameters = getParameters(actionMetadata);
     expect(parameters).toEqual([{ name: 'owner', type: 'address' }]);
   });
 
-  it.skip('should get the ABI function', () => {
+  it('should get the ABI function', () => {
     const abiFunction = getAbiFunction(exampleAbi, "balanceOf");
     expect(abiFunction).toEqual({
       name: 'balanceOf',
@@ -86,7 +86,7 @@ describe('BlockchainAction Functions', () => {
     });
   });
 
-  it.skip('should validate if a function exists in the ABI', () => {
+  it('should validate if a function exists in the ABI', () => {
     const isValid = isValidFunction(exampleAbi, "balanceOf");
     expect(isValid).toBe(true);
 
@@ -94,7 +94,7 @@ describe('BlockchainAction Functions', () => {
     expect(isInvalid).toBe(false);
   });
 
-  it.skip('should validate action parameters', () => {
+  it('should validate action parameters', () => {
     const action: BlockchainAction = {
       ...actionMetadata,
       transactionParameters: [{ type: 'address' }],
@@ -113,29 +113,9 @@ describe('BlockchainAction Functions', () => {
     expect(isInvalid).toBe(false);
   });
 
-  it.skip('should get the blockchain action type', () => {
+  it('should get the blockchain action type', () => {
     const actionType = getBlockchainActionType(actionMetadata);
     expect(actionType).toBe('view');
   });
 
-  /*
-  it.skip('should get the final blockchain action', () => {
-    const finalAction = getFinalBlockchainAction(actionMetadata);
-    expect(finalAction).toEqual({
-      ...actionMetadata,
-      blockchainActionType: 'view',
-      transactionParameters: [],
-    });
-  });
-  */
-
-  /*
-  it.skip('should throw an error if function is not found in ABI', () => {
-    const invalidActionMetadata: BlockchainActionMetadata = {
-      ...actionMetadata,
-      functionName: "nonExistentFunction",
-    };
-    expect(() => getFinalBlockchainAction(invalidActionMetadata)).toThrowError(`Function nonExistentFunction not found in ABI`);
-  });
-  */
 });
