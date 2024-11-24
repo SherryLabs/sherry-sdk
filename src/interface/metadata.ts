@@ -45,7 +45,7 @@ export interface Metadata {
    * The actions that can be performed by the mini app.
    * This is an array of `BlockchainAction` objects, each defining a specific action.
    */
-  actions: BlockchainActionMetadata[] | BlockchainAction[];
+  actions: BlockchainActionMetadata[];
 }
 
 /**
