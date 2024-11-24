@@ -1,6 +1,6 @@
 # Sherry SDK
 
-Welcome to the Sherry SDK! This SDK allows you to create mini-apps that interact with any function of any smart contract.
+Welcome to the [Sherry SDK!](https://www.npmjs.com/package/@sherrylinks/sdk) This SDK allows you to create mini-apps that interact with any function of any smart contract.
 
 ## Features
 
