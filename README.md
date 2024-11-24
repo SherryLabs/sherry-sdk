@@ -1,6 +1,6 @@
 # Sherry SDK
 
-Welcome to the Sherry SDK! This SDK allows you to create mini-apps that interact with any function of any smart contract.
+Welcome to the [Sherry SDK!](https://www.npmjs.com/package/@sherrylinks/sdk) This SDK allows you to create mini-apps that interact with any function of any smart contract.
 
 ## Features
 
@@ -25,6 +25,7 @@ yarn add @sherrylinks/sdk
 ```
 
 ## Usage
+
 Here is a basic example of how to use the Sherry SDK:
 
 ## ABI Definition
@@ -97,6 +98,8 @@ console.log(validatedMetadata);
 
 ## Functions
 
+Several functions are available for the correct validation of the Metadata. You are free to define the metadata but remember that it will be validated, so in order to ensure the correct functioning of the mini-apps, the **`createMetadata`** function has been made available to obtain the validated Metadata as a result.
+
 ### createMetadata
 
 Creates the validated metadata for a mini app.
@@ -157,7 +160,6 @@ console.log(isValid);
 
 Gets the state mutability of a function in the ABI.
 
-
 ```typescript
 import { getBlockchainActionType } from '@sherrylinks/sdk';
 
@@ -165,19 +167,19 @@ const actionType = getBlockchainActionType(actionMetadata);
 console.log(actionType);
 ```
 
-# Documentation
+## Documentation
 
 For detailed documentation and API reference, please visit our official documentation.
 
-# Contributing
+## Contributing
 
 We welcome contributions! Please read our contributing guidelines to get started.
 
-# License
+## License
 
 This project is licensed under the MIT License. See the LICENSE file for more details.
 
-# Contact
+## Contact
 
 If you have any questions or need further assistance, feel free to reach out to our support team at our [discord channel](https://discord.gg/sherry).
 
