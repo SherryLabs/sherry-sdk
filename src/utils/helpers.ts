@@ -68,6 +68,7 @@ function validateMetadata(metadata: Metadata): void {
   }
 
   for (const action of metadata.actions) {
+    // it should get to this point, we'll validate it anyway though
     if (!isAddress(action.contractAddress)) {
       throw new InvalidAddress(action.contractAddress);
     }
@@ -81,28 +82,47 @@ function processAction(action: BlockchainActionMetadata): BlockchainAction {
   }
 
   const params: AbiParameter[] = getParameters(action).map(param => ({ ...param })); // Crear una copia mutable
-  const transactionParameters: AbiParameter[] = params;
 
   if (action.functionParamsLabel) {
+    /*
     for (let i = 0; i < params.length; i++) {
       if (params[i]) {
         params[i]!.name = action.functionParamsLabel[i] ?? (params[i]!.name || "");
       }
     }
+      */
+    replaceParameterNames(params, action.functionParamsLabel);
   }
 
   const actionType = getBlockchainActionType(action);
 
-  let finalAction: BlockchainAction = {
-    label: action.label,
-    contractAddress: action.contractAddress,
-    contractABI: action.contractABI,
-    functionName: action.functionName,
-    functionParamsLabel: action.functionParamsLabel,
-    chainId: action.chainId,
-    transactionParameters,
-    blockchainActionType: actionType
+  return { ...action, transactionParameters: params, blockchainActionType: actionType };
+}
+
+/**
+ * Replace param names in tuples
+ * @params {AbiParameter[]} params - Array of parameters
+ * @params {string[]} labels - Array of names
+ */
+function replaceParameterNames(params: AbiParameter[], labels: string[]): void {
+  for (let i = 0; i < params.length; i++) {
+    if (params[i]) {
+      const tupleParam = isTupleType(params[i]!);
+
+      if (tupleParam) {
+        replaceParameterNames(tupleParam.components, labels);
+      } else {
+        params[i]!.name = labels[i] ?? (params[i]!.name || "");
+      }
+    } else {
+      console.log('params[i] is undefined');
+    }
   }
-  //return { ...action, transactionParameters, blockchainActionType: actionType };
-  return finalAction;
+}
+
+function isTupleType(param: AbiParameter): (AbiParameter & { components: AbiParameter[] }) | null {
+  if (param.type === 'tuple' || param.type === 'tuple[]' && 'components' in param) {
+    return param as AbiParameter & { components: AbiParameter[] };
+  }
+  return null;
 }

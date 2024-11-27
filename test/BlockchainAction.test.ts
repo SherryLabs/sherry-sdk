@@ -12,51 +12,10 @@ import {
   validateActionParameters,
   getBlockchainActionType
 } from "../src/utils/helpers";
+import { simpleAbi } from "./abi";
 
 describe('BlockchainAction Functions', () => {
-  const exampleAbi = [
-    {
-      name: 'balanceOf',
-      type: 'function',
-      stateMutability: 'view',
-      inputs: [{ name: 'owner', type: 'address' }],
-      outputs: [{ name: 'balance', type: 'uint256' }],
-    },
-    {
-      name: 'safeTransferFrom',
-      type: 'function',
-      stateMutability: 'nonpayable',
-      inputs: [
-        { name: 'from', type: 'address' },
-        { name: 'to', type: 'address' },
-        { name: 'tokenId', type: 'uint256' },
-      ],
-      outputs: [],
-    },
-  ] as const
-
-  const metadata: Metadata = {
-    type: "action",
-    icon: "icon",
-    title: "title",
-    description: "description",
-    actions: [
-      {
-        label: "Test Action",
-        contractAddress: "0x1234567890abcdef1234567890abcdef12345678",
-        contractABI: exampleAbi,
-        functionName: "balanceOf",
-        chainId: "fuji"
-      },
-      {
-        label: "Test Action 2",
-        contractAddress: "0x1234567890abcdef1234567890abcdef12345678",
-        contractABI: exampleAbi,
-        functionName: "balanceOf",
-        chainId: "fuji"
-      }
-    ]
-  };
+  const exampleAbi = simpleAbi
 
   const actionMetadata: BlockchainActionMetadata = {
     label: "Test Action",
@@ -66,9 +25,6 @@ describe('BlockchainAction Functions', () => {
     chainId: "fuji",
   };
 
-  console.log("metadata");
-  const m: Metadata = createMetadata(metadata);
-  console.log("metadata con createMetadata() : ", m);
 
   it('should get parameters of a function', () => {
     const parameters = getParameters(actionMetadata);
