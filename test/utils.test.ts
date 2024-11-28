@@ -14,7 +14,8 @@ import {
     isValidFunction,
     validateActionParameters,
     getBlockchainActionType,
-    createMetadata
+    createMetadata,
+    isValidValidatedMetadata
 } from "../src/utils";
 import { complexAbi, simpleAbi } from "./abi";
 
@@ -156,7 +157,7 @@ describe("utils", () => {
             );
         });
 
-        it.skip("should throw NoActionDefinedError if no actions are defined", () => {
+        it("should throw NoActionDefinedError if no actions are defined", () => {
             const metadata: Metadata = {
                 type: "action",
                 title: "title",
@@ -167,7 +168,7 @@ describe("utils", () => {
             expect(() => createMetadata(metadata)).toThrow(NoActionDefinedError);
         });
 
-        it.skip("should throw ActionsNumberError if more than 4 actions are defined", () => {
+        it("should throw ActionsNumberError if more than 4 actions are defined", () => {
             const metadata: Metadata = {
                 type: "action",
                 title: "title",
@@ -176,6 +177,47 @@ describe("utils", () => {
                 actions: [mockAction, mockAction, mockAction, mockAction, mockAction]
             };
             expect(() => createMetadata(metadata)).toThrow(ActionsNumberError);
+        });
+
+        it("shouls return true if is valid validatedMetadata", () => { 
+            const metadata: Metadata = {
+                type: "action",
+                title: "title",
+                description: "description",
+                icon: "icon",
+                actions: [mockAction]
+            };
+            const result = createMetadata(metadata);
+            const isValid = isValidValidatedMetadata(result);
+            expect(isValid).toBe(true);
+        });
+
+        it("shouls return false if is not valid validatedMetadata", () => { 
+            const metadata: Metadata = {
+                type: "action",
+                title: "title",
+                description: "description",
+                icon: "icon",
+                actions: [mockAction]
+            };
+
+            const myOwnMetadata = {
+                tipo: "action",
+                titulo: "title",
+                describe: "description",
+                icono: "icon",
+                acciones: []
+            }
+
+            const result = createMetadata(metadata);
+            result.actions[0].transactionParameters = [];
+            
+            const isValid = isValidValidatedMetadata(result);
+            const isValid2 = isValidValidatedMetadata(metadata);
+            const isValid3 = isValidValidatedMetadata(myOwnMetadata);
+
+            expect(isValid2).toBe(false)
+            expect(isValid3).toBe(false);
         });
     });
 });
