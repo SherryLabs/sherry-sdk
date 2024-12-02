@@ -4,7 +4,6 @@ import { Metadata, ValidatedMetadata } from "../src/interface/metadata";
 import { BlockchainActionMetadata, BlockchainAction } from "../src/interface/blockchainAction";
 import {
     FunctionNotFoundError,
-    InvalidAddress,
     NoActionDefinedError,
     ActionsNumberError
 } from "../src/index";
@@ -212,7 +211,6 @@ describe("utils", () => {
             const result = createMetadata(metadata);
             result.actions[0].transactionParameters = [];
             
-            const isValid = isValidValidatedMetadata(result);
             const isValid2 = isValidValidatedMetadata(metadata);
             const isValid3 = isValidValidatedMetadata(myOwnMetadata);
 

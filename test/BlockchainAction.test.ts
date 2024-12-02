@@ -3,9 +3,7 @@ import {
   BlockchainActionMetadata,
   BlockchainAction,
 } from "../src/interface/blockchainAction";
-import { Metadata } from "../src/interface/metadata";
 import {
-  createMetadata,
   getParameters,
   getAbiFunction,
   isValidFunction,
