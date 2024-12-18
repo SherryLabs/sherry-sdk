@@ -1,6 +1,6 @@
 {
   "name": "@sherrylinks/sdk",
-  "version": "0.2.18-alpha.1",
+  "version": "0.3.0-alpha.1",
   "description": "SDK for Sherry Links",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -9,7 +9,8 @@
     "prepublishOnly": "npm run build",
     "test": "jest",
     "lint": "oxlint",
-    "prepare": "husky"
+    "prepare": "husky",
+    "publish": "npm publish --access public"
   },
   "files": [
     "dist"
