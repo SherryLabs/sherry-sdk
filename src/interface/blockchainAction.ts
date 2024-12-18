@@ -8,7 +8,8 @@ export interface BlockchainActionMetadata {
   contractAddress: `0x${string}`;
   contractABI: Abi;
   functionName: ContractFunctionName;
-  functionParamsLabel?: string[];
+  functionParamsLabel?: string[]; // Optional for DEVs to define the label of the parameters
+  functionParamsValue?: string[]; // Optional for DEVs to define the value of the parameters
   chainId: ChainId;
 }
 

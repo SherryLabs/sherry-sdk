@@ -20,6 +20,7 @@ describe('BlockchainAction Functions', () => {
     contractAddress: "0x1234567890abcdef1234567890abcdef12345678",
     contractABI: exampleAbi,
     functionName: "balanceOf",
+    functionParamsValue: ["0x1234567890abcdef1234567890abcdef12345678"],
     chainId: "fuji",
   };
 
