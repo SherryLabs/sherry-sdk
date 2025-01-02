@@ -3,6 +3,10 @@ import { ContractFunctionName } from "./index";
 import { ChainId } from "./chains";
 
 // This interface is used for DEVs to define the metadata of a blockchain action
+// Amount will be transfered to the contract
+// be aware that the amount is in WEI
+// be aware that the function should be payable in the contract
+// be aware to have a mechanism to transfer that amount to the contract
 export interface BlockchainActionMetadata {
   label: string;
   contractAddress: `0x${string}`;
