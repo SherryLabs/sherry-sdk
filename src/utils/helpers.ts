@@ -8,7 +8,11 @@ import {
   ActionsNumberError,
   InvalidTransactionParameters
 } from "./customErrors";
-import { BlockchainActionMetadata, BlockchainAction } from "../interface/blockchainAction";
+import {
+  BlockchainActionMetadata,
+  BlockchainAction,
+  TransferActionMetadata
+} from "../interface/blockchainAction";
 
 /**
  * Gets the parameters of a function in the ABI.
@@ -95,7 +99,16 @@ export function createMetadata(metadata: Metadata): ValidatedMetadata {
   validateMetadata(metadata);
 
   const originalActions = [...metadata.actions];
-  const processedActions: BlockchainAction[] = originalActions.map(processAction);
+  const processedActions: (BlockchainAction | TransferActionMetadata)[] = originalActions.map(action => {
+    if (isBlockchainActionMetadata(action)) {
+      return processAction(action);
+    } else if (isTransferActionMetadata(action)) {
+      return action;
+    } else {
+
+      throw new Error("Invalid action type");
+    }
+  });
 
   return { ...metadata, actions: processedActions };
 }
@@ -118,8 +131,10 @@ function validateMetadata(metadata: Metadata): void {
   }
 
   for (const action of metadata.actions) {
-    if (!isAddress(action.contractAddress)) {
-      throw new InvalidAddress(action.contractAddress);
+    if (isBlockchainActionMetadata(action)) {
+      if (!isAddress(action.contractAddress)) {
+        throw new InvalidAddress(action.contractAddress);
+      }
     }
   }
 }
@@ -197,3 +212,50 @@ export function isValidValidatedMetadata(obj: any): obj is ValidatedMetadata {
   }
   return true;
 }
+
+/**
+ * Type guard to check if an object is of type `BlockchainActionMetadata`.
+ * 
+ * @param obj - The object to check.
+ * @returns `true` if the object is of type `BlockchainActionMetadata`, otherwise `false`.
+ */
+export function isBlockchainActionMetadata(obj: any): obj is BlockchainActionMetadata {
+  return (
+    typeof obj === 'object' &&
+    obj !== null &&
+    typeof obj.label === 'string' &&
+    typeof obj.contractAddress === 'string' &&
+    typeof obj.contractABI === 'object' &&
+    typeof obj.functionName === 'string' &&
+    typeof obj.chainId === 'string'
+  );
+}
+
+
+/**
+ * Type guard to check if an object is of type `BlockchainAction`.
+ * 
+ * @param obj - The object to check.
+ * @returns `true` if the object is of type `BlockchainAction`, otherwise `false`.
+ */
+export function isBlockchainAction(obj: any): obj is BlockchainAction {
+  return (
+    Array.isArray(obj.transactionParameters) &&
+    obj.transactionParameters.every((param: any) => typeof param === 'object') &&
+    typeof obj.blockchainActionType === 'string'
+  );
+}
+
+// Type guard for TransferActionMetadata
+export function isTransferActionMetadata(obj: any): obj is TransferActionMetadata {
+  return (
+    typeof obj === 'object' &&
+    obj !== null &&
+    typeof obj.label === 'string' &&
+    typeof obj.recipientAddress === 'string' &&
+    typeof obj.amount === 'number' &&
+    typeof obj.chainId === 'string'
+  );
+}
+
+

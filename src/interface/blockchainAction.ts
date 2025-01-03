@@ -12,7 +12,7 @@ export interface BlockchainActionMetadata {
   contractAddress: `0x${string}`;
   contractABI: Abi;
   functionName: ContractFunctionName;
-  amount?: string; // Optional for DEVs to define the amount of the transaction - msg.value to be sent
+  amount?: number; // Optional for DEVs to define the amount of the transaction - msg.value to be sent
   functionParamsLabel?: string[]; // Optional for DEVs to define the label of the parameters
   functionParamsValue?: (string | number | bigint | null | boolean)[]; // Optional for DEVs to define the value of the parameters
   chainId: ChainId;
@@ -22,6 +22,13 @@ export interface BlockchainActionMetadata {
 export interface BlockchainAction extends BlockchainActionMetadata {
   transactionParameters: AbiParameter[];
   blockchainActionType: AbiStateMutability;
+}
+
+export interface TransferActionMetadata {
+  label: string;
+  recipientAddress?: `0x${string}`;
+  amount?: number;
+  chainId: ChainId;
 }
 
 
