@@ -2,6 +2,7 @@ import { describe, expect, it } from "@jest/globals";
 import {
   BlockchainActionMetadata,
   BlockchainAction,
+  TransferActionMetadata
 } from "../src/interface/blockchainAction";
 import {
   getParameters,
@@ -23,6 +24,14 @@ describe('BlockchainAction Functions', () => {
     functionParamsValue: ["0x1234567890abcdef1234567890abcdef12345678"],
     chainId: "fuji",
   };
+
+  const actionTransfer: TransferActionMetadata = { 
+    label: "Test Action",
+    chainId: "fuji",
+    recipientAddress: "0x1234567890abcdef1234567890abcdef12345678",
+    amount: 1000000000000000000,
+  }
+
 
 
   it('should get parameters of a function', () => {
