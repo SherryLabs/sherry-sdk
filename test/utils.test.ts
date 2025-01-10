@@ -114,7 +114,7 @@ describe("utils", () => {
             };
 
             const result: ValidatedMetadata = createMetadata(metadata);
-            expect(result.actions[0].transactionParameters[0]!).toEqual({ name: "param1", type: "address" });
+            expect((result.actions[0] as BlockchainAction).transactionParameters[0]!).toEqual({ name: "param1", type: "address" });
         });
 
         it("should create metadata with complex Abi", () => {
@@ -134,8 +134,8 @@ describe("utils", () => {
             };
 
             const result: ValidatedMetadata = createMetadata(metadata);
-            console.log("result: ", JSON.stringify(result, null, 2));
-            expect(result.actions[0].transactionParameters[0]!).toEqual(
+            //console.log("result: ", JSON.stringify(result, null, 2));
+            expect((result.actions[0] as BlockchainAction).transactionParameters[0]!).toEqual(
                 {
                     components: [
                         {
@@ -209,7 +209,7 @@ describe("utils", () => {
             }
 
             const result = createMetadata(metadata);
-            result.actions[0].transactionParameters = [];
+            (result.actions[0] as BlockchainAction).transactionParameters = [];
             
             const isValid2 = isValidValidatedMetadata(metadata);
             const isValid3 = isValidValidatedMetadata(myOwnMetadata);
