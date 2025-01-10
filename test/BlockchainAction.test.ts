@@ -27,12 +27,6 @@ describe('BlockchainAction Functions', () => {
     chainId: "fuji",
   };
 
-  const actionTransfer: TransferActionMetadata = { 
-    label: "Test Action",
-    chainId: "fuji",
-    recipientAddress: "0x1234567890abcdef1234567890abcdef12345678",
-    amount: 1000000000000000000,
-  }
 
   it('should get parameters of a function', () => {
     const parameters = getParameters(actionMetadata);
@@ -101,6 +95,12 @@ describe('BlockchainAction Functions', () => {
           recipientAddress: "0x5b1869D9A4C187F2EAa108f3062412ecf0526b24",
           amount: 1,
           chainId: "avalanche",
+      },
+      {
+        label: "Test Action",
+        chainId: "fuji",
+        recipientAddress: "0x1234567890abcdef1234567890abcdef12345678",
+        amount: 1000000000000000000,
       }
   ]
 
