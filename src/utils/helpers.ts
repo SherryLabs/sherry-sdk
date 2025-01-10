@@ -245,7 +245,12 @@ export function isBlockchainAction(obj: any): obj is BlockchainAction {
   );
 }
 
-// Type guard for TransferActionMetadata
+/**
+ * Type guard to check if an object is of type `TransferActionMetadata`.
+ * 
+ * @param obj - The object to check.
+ * @returns `true` if the object is of type `TransferActionMetadata`, otherwise `false`.
+ */
 export function isTransferActionMetadata(obj: any): obj is TransferActionMetadata {
   return (
     typeof obj === 'object' &&
@@ -253,8 +258,11 @@ export function isTransferActionMetadata(obj: any): obj is TransferActionMetadat
     typeof obj.label === 'string' &&
     (typeof obj.recipientAddress === 'undefined' || typeof obj.recipientAddress === 'string') &&
     (typeof obj.amount === 'undefined' || typeof obj.amount === 'number') &&
-    typeof obj.chainId === 'string'
+    typeof obj.chainId === 'string' &&
+    typeof obj.contractABI === 'undefined' &&
+    typeof obj.functionName === 'undefined' &&
+    typeof obj.functionParamsValue === 'undefined' &&
+    typeof obj.functionParamsLabel === 'undefined'
   );
 }
-
 
