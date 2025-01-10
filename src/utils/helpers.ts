@@ -105,7 +105,6 @@ export function createMetadata(metadata: Metadata): ValidatedMetadata {
     } else if (isTransferActionMetadata(action)) {
       return action;
     } else {
-
       throw new Error("Invalid action type");
     }
   });
@@ -252,8 +251,8 @@ export function isTransferActionMetadata(obj: any): obj is TransferActionMetadat
     typeof obj === 'object' &&
     obj !== null &&
     typeof obj.label === 'string' &&
-    typeof obj.recipientAddress === 'string' &&
-    typeof obj.amount === 'number' &&
+    (typeof obj.recipientAddress === 'undefined' || typeof obj.recipientAddress === 'string') &&
+    (typeof obj.amount === 'undefined' || typeof obj.amount === 'number') &&
     typeof obj.chainId === 'string'
   );
 }
