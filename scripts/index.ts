@@ -47,7 +47,7 @@ async function main() {
     };
     try {
         const result = await createMetadata(metadata);
-        //console.log('Metadata:', JSON.stringify(result, null, 2));
+        console.log('Metadata:', JSON.stringify(result, null, 2));
     } catch (error) {
         console.error('Error creating metadata:', error);
         throw error;

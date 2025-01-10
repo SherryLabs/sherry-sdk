@@ -1,5 +1,4 @@
 import {
-    BlockchainActionMetadata,
     TransferActionMetadata
 } from "../src/interface/blockchainAction";
 import {
@@ -18,8 +17,4 @@ describe("Type Guards", () => {
 
         expect(isTransferActionMetadata(action)).toBe(true);
     });
-
-
-
-
 });
