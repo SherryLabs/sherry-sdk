@@ -24,7 +24,7 @@ export interface BlockchainAction extends BlockchainActionMetadata {
   blockchainActionType: AbiStateMutability;
 }
 
-export interface TransferActionMetadata {
+export interface TransferAction {
   label: string;
   recipientAddress?: `0x${string}`;
   amount?: number;

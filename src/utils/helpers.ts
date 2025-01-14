@@ -11,7 +11,7 @@ import {
 import {
   BlockchainActionMetadata,
   BlockchainAction,
-  TransferActionMetadata
+  TransferAction
 } from "../interface/blockchainAction";
 
 /**
@@ -99,10 +99,10 @@ export function createMetadata(metadata: Metadata): ValidatedMetadata {
   validateMetadata(metadata);
 
   const originalActions = [...metadata.actions];
-  const processedActions: (BlockchainAction | TransferActionMetadata)[] = originalActions.map(action => {
+  const processedActions: (BlockchainAction | TransferAction)[] = originalActions.map(action => {
     if (isBlockchainActionMetadata(action)) {
       return processAction(action);
-    } else if (isTransferActionMetadata(action)) {
+    } else if (isTransferAction(action)) {
       return action;
     } else {
       throw new Error("Invalid action type");
@@ -246,12 +246,12 @@ export function isBlockchainAction(obj: any): obj is BlockchainAction {
 }
 
 /**
- * Type guard to check if an object is of type `TransferActionMetadata`.
+ * Type guard to check if an object is of type `TransferAction`.
  * 
  * @param obj - The object to check.
- * @returns `true` if the object is of type `TransferActionMetadata`, otherwise `false`.
+ * @returns `true` if the object is of type `TransferAction`, otherwise `false`.
  */
-export function isTransferActionMetadata(obj: any): obj is TransferActionMetadata {
+export function isTransferAction(obj: any): obj is TransferAction {
   return (
     typeof obj === 'object' &&
     obj !== null &&

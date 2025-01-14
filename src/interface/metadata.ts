@@ -1,7 +1,7 @@
 import {
   BlockchainAction,
   BlockchainActionMetadata,
-  TransferActionMetadata
+  TransferAction
 } from "./blockchainAction";
 /**
  * Defines the type of action that can be performed.
@@ -49,7 +49,7 @@ export interface Metadata {
    * The actions that can be performed by the mini app.
    * This is an array of `BlockchainAction` objects, each defining a specific action.
    */
-  actions: (BlockchainActionMetadata | TransferActionMetadata)[];
+  actions: (BlockchainActionMetadata | TransferAction)[];
 }
 
 /**
@@ -91,5 +91,5 @@ export interface Metadata {
  * ```
  */
 export interface ValidatedMetadata extends Omit<Metadata, 'actions'> {
-  actions: (BlockchainAction | TransferActionMetadata )[];
+  actions: (BlockchainAction | TransferAction )[];
 }

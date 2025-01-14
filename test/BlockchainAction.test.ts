@@ -2,7 +2,7 @@ import { describe, expect, it } from "@jest/globals";
 import {
   BlockchainActionMetadata,
   BlockchainAction,
-  TransferActionMetadata,
+  TransferAction,
 } from "../src/interface/blockchainAction";
 import { Metadata, ValidatedMetadata } from "../src/interface/metadata";
 import {
@@ -12,7 +12,7 @@ import {
   validateActionParameters,
   getBlockchainActionType,
   createMetadata,
-  isTransferActionMetadata,
+  isTransferAction,
   isBlockchainAction
 } from "../src/utils/helpers";
 import { simpleAbi } from "./abi";
@@ -100,12 +100,12 @@ describe('Metadata Functions', () => {
       ]
     };
 
-    expect(isTransferActionMetadata(metadataEleven.actions[0])).toBe(false);
+    expect(isTransferAction(metadataEleven.actions[0])).toBe(false);
     expect(isBlockchainAction(metadataEleven.actions[0])).toBe(false);
   })
 
   it('should return metadata formatted', () => {
-    const actions: TransferActionMetadata[] = [
+    const actions: TransferAction[] = [
       {
         label: "0.01 AVAX",
         recipientAddress: "0x5b1869D9A4C187F2EAa108f3062412ecf0526b24",
