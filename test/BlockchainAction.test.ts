@@ -22,11 +22,11 @@ describe('BlockchainAction Functions', () => {
 
   const actionMetadata: BlockchainActionMetadata = {
     label: "Test Action",
-    contractAddress: "0x1234567890abcdef1234567890abcdef12345678",
-    contractABI: exampleAbi,
+    address: "0x1234567890abcdef1234567890abcdef12345678",
+    abi: exampleAbi,
     functionName: "balanceOf",
-    functionParamsValue: ["0x1234567890abcdef1234567890abcdef12345678"],
-    chainId: "fuji",
+    paramsValue: ["0x1234567890abcdef1234567890abcdef12345678"],
+    chain: "fuji",
   };
 
 
@@ -57,7 +57,7 @@ describe('BlockchainAction Functions', () => {
   it('should validate action parameters', () => {
     const action: BlockchainAction = {
       ...actionMetadata,
-      transactionParameters: [{ type: 'address' }],
+      params: [{ type: 'address' }],
       blockchainActionType: 'view',
     };
 
@@ -66,7 +66,7 @@ describe('BlockchainAction Functions', () => {
 
     const invalidAction: BlockchainAction = {
       ...actionMetadata,
-      transactionParameters: [],
+      params: [],
       blockchainActionType: 'view',
     };
     const isInvalid = validateActionParameters(invalidAction);
@@ -90,12 +90,12 @@ describe('Metadata Functions', () => {
       actions: [
         {
           label: "NOT MINT",
-          contractAddress: '0x1234567890abcdef1234567890abcdef12345678',
-          contractABI: [],
+          address: '0x1234567890abcdef1234567890abcdef12345678',
+          abi: [],
           functionName: "mint",
-          chainId: "avalanche",
-          functionParamsValue: [0, "sender"],
-          functionParamsLabel: ["ID", "To"] // Si hay functionParamsLabel me da error
+          chain: "avalanche",
+          paramsValue: [0, "sender"],
+          paramsLabel: ["ID", "To"] // Si hay paramsLabel me da error
         }
       ]
     };
@@ -108,26 +108,26 @@ describe('Metadata Functions', () => {
     const actions: TransferAction[] = [
       {
         label: "0.01 AVAX",
-        recipientAddress: "0x5b1869D9A4C187F2EAa108f3062412ecf0526b24",
+        to: "0x5b1869D9A4C187F2EAa108f3062412ecf0526b24",
         amount: 0.01,
-        chainId: "avalanche",
+        chain: "avalanche",
       },
       {
         label: "1 AVAX",
-        recipientAddress: "0x5b1869D9A4C187F2EAa108f3062412ecf0526b24",
+        to: "0x5b1869D9A4C187F2EAa108f3062412ecf0526b24",
         amount: 1,
-        chainId: "avalanche",
+        chain: "avalanche",
       },
       {
         label: "SENT",
-        recipientAddress: "0x5b1869D9A4C187F2EAa108f3062412ecf0526b24",
+        to: "0x5b1869D9A4C187F2EAa108f3062412ecf0526b24",
         amount: 1,
-        chainId: "avalanche",
+        chain: "avalanche",
       },
       {
         label: "Test Action",
-        chainId: "fuji",
-        recipientAddress: "0x1234567890abcdef1234567890abcdef12345678",
+        chain: "fuji",
+        to: "0x1234567890abcdef1234567890abcdef12345678",
         amount: 1000000000000000000,
       }
     ]

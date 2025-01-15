@@ -1,2 +1,2 @@
 
-export type ChainId = "fuji" | "avalanche" | "alfajores" | "celo"
+export type Chain = "fuji" | "avalanche" | "alfajores" | "celo"

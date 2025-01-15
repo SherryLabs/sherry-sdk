@@ -30,18 +30,18 @@ async function main() {
         actions: [
             {
                 label: "Test Action 2",
-                contractAddress: "0x1234567890abcdef1234567890abcdef12345678",
-                contractABI: exampleAbi,
+                address: "0x1234567890abcdef1234567890abcdef12345678",
+                abi: exampleAbi,
                 functionName: "safeTransferFrom",
-                functionParamsLabel: ["From"],
-                chainId: "fuji"
+                paramsLabel: ["From"],
+                chain: "fuji"
             },
             {
                 label: "Test Action 2",
-                contractAddress: "0x1234567890abcdef1234567890abcdef12345678",
-                contractABI: exampleAbi,
+                address: "0x1234567890abcdef1234567890abcdef12345678",
+                abi: exampleAbi,
                 functionName: "safeTransferFrom",
-                chainId: "fuji"
+                chain: "fuji"
             }
         ]
     };

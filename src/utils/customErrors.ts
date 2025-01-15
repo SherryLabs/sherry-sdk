@@ -80,9 +80,9 @@ export class ActionsNumberError extends Error {
     }
 }
 
-export class InvalidTransactionParameters extends Error {
+export class Invalidparams extends Error {
     constructor() {
         super(`Invalid transaction parameters`);
-        this.name = "InvalidTransactionParameters";
+        this.name = "Invalidparams";
     }
 }

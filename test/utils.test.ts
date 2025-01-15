@@ -21,25 +21,25 @@ import { complexAbi, simpleAbi } from "./abi";
 describe("utils", () => {
     const mockAbi = simpleAbi;
 
-    // This action has the same transactionParameters as the mockAction
+    // This action has the same params as the mockAction
     const mockAction: BlockchainActionMetadata = {
-        contractABI: mockAbi,
+        abi: mockAbi,
         functionName: "balanceOf",
-        contractAddress: "0x0123456789012345678901234567890123456789",
-        functionParamsLabel: ["param1"],
+        address: "0x0123456789012345678901234567890123456789",
+        paramsLabel: ["param1"],
         label: "Test Action",
-        chainId: "fuji"
+        chain: "fuji"
     };
 
-    // This action has a different transactionParameters than the mockAction
+    // This action has a different params than the mockAction
     const mockActionv2: BlockchainAction = {
-        contractABI: mockAbi,
+        abi: mockAbi,
         functionName: "balanceOf",
-        contractAddress: "0x0123456789012345678901234567890123456789",
-        functionParamsLabel: ["param1"],
+        address: "0x0123456789012345678901234567890123456789",
+        paramsLabel: ["param1"],
         label: "Test Action",
-        chainId: "fuji",
-        transactionParameters: [{ name: "owner", type: "address" }],
+        chain: "fuji",
+        params: [{ name: "owner", type: "address" }],
         blockchainActionType: "view"
     };
 
@@ -75,7 +75,7 @@ describe("utils", () => {
         it("should return true if parameters length matches", () => {
             const action: BlockchainAction = {
                 ...mockAction,
-                transactionParameters: [{ name: "param1", type: "uint256" }],
+                params: [{ name: "param1", type: "uint256" }],
                 blockchainActionType: "nonpayable"
             };
             expect(validateActionParameters(action)).toBe(true);
@@ -84,7 +84,7 @@ describe("utils", () => {
         it("should return false if parameters length does not match", () => {
             const action: BlockchainAction = {
                 ...mockAction,
-                transactionParameters: [],
+                params: [],
                 blockchainActionType: "pure"
             };
             expect(validateActionParameters(action)).toBe(false);
@@ -114,7 +114,7 @@ describe("utils", () => {
             };
 
             const result: ValidatedMetadata = createMetadata(metadata);
-            expect((result.actions[0] as BlockchainAction).transactionParameters[0]!).toEqual({ name: "param1", type: "address" });
+            expect((result.actions[0] as BlockchainAction).params[0]!).toEqual({ name: "param1", type: "address" });
         });
 
         it("should create metadata with complex Abi", () => {
@@ -124,18 +124,18 @@ describe("utils", () => {
                 description: "description",
                 icon: "icon",
                 actions: [{
-                    contractABI: complexAbi,
+                    abi: complexAbi,
                     functionName: "updatePersonStruct",
-                    contractAddress: "0x0123456789012345678901234567890123456789",
-                    functionParamsLabel: ["param1"],
+                    address: "0x0123456789012345678901234567890123456789",
+                    paramsLabel: ["param1"],
                     label: "Test Action",
-                    chainId: "fuji"
+                    chain: "fuji"
                 }]
             };
 
             const result: ValidatedMetadata = createMetadata(metadata);
             //console.log("result: ", JSON.stringify(result, null, 2));
-            expect((result.actions[0] as BlockchainAction).transactionParameters[0]!).toEqual(
+            expect((result.actions[0] as BlockchainAction).params[0]!).toEqual(
                 {
                     components: [
                         {
@@ -209,7 +209,7 @@ describe("utils", () => {
             }
 
             const result = createMetadata(metadata);
-            (result.actions[0] as BlockchainAction).transactionParameters = [];
+            (result.actions[0] as BlockchainAction).params = [];
             
             const isValid2 = isValidValidatedMetadata(metadata);
             const isValid3 = isValidValidatedMetadata(myOwnMetadata);
