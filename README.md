@@ -84,10 +84,10 @@ const metadata: Metadata = {
   actions: [
     {
       label: "Test Action",
-      contractAddress: "0x1234567890abcdef1234567890abcdef12345678",
-      contractABI: exampleAbi,
+      address: "0x1234567890abcdef1234567890abcdef12345678",
+      abi: exampleAbi,
       functionName: "safeTransferFrom",
-      chainId: "ethereum"
+      chain: "ethereum"
     }
   ]
 };

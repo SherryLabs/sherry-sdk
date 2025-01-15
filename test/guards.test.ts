@@ -1,20 +1,20 @@
 import {
-    TransferActionMetadata
+    TransferAction
 } from "../src/interface/blockchainAction";
 import {
-    isTransferActionMetadata
+    isTransferAction
 } from "../src/utils/helpers";
 import { describe, expect, it } from "@jest/globals";
 
 describe("Type Guards", () => {
-    it("should identify TransferActionMetadata", () => {
-        const action: TransferActionMetadata = {
+    it("should identify TransferAction", () => {
+        const action: TransferAction = {
             label: "Transfer Action",
-            chainId: "avalanche",
-            recipientAddress: "0xabcdefabcdefabcdefabcdefabcdefabcdef",
+            chain: "avalanche",
+            to: "0xabcdefabcdefabcdefabcdefabcdefabcdef",
             amount: 1000
         };
 
-        expect(isTransferActionMetadata(action)).toBe(true);
+        expect(isTransferAction(action)).toBe(true);
     });
 });

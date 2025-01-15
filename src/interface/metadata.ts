@@ -1,14 +1,14 @@
 import {
   BlockchainAction,
   BlockchainActionMetadata,
-  TransferActionMetadata
+  TransferAction
 } from "./blockchainAction";
 /**
  * Defines the type of action that can be performed.
  * - "action": Represents a blockchain action.
- * - "external-link": Represents an external link.
+ * - "http-action": Represents an http-action.
  */
-export type ActionType = "action" | "external-link";
+export type ActionType = "action" | "http-action";
 
 /**
  * Interface representing the metadata for a mini app.
@@ -18,7 +18,7 @@ export type ActionType = "action" | "external-link";
  * that can be performed.
  * 
  * @template T - The type of action. Defaults to "action".
- * @template ContractABI - The ABI of the contract. Defaults to `Abi`.
+ * @template abi - The ABI of the contract. Defaults to `Abi`.
  */
 export interface Metadata {
   /**
@@ -47,9 +47,9 @@ export interface Metadata {
 
   /**
    * The actions that can be performed by the mini app.
-   * This is an array of `BlockchainAction` objects, each defining a specific action.
+   * This is an array of `BlockchainAction` or `TransferAction` objects, each defining a specific action.
    */
-  actions: (BlockchainActionMetadata | TransferActionMetadata)[];
+  actions: (BlockchainActionMetadata | TransferAction)[];
 }
 
 /**
@@ -75,11 +75,11 @@ export interface Metadata {
  *   actions: [
  *     {
  *       label: "Test Action",
- *       contractAddress: "0x1234567890abcdef1234567890abcdef12345678",
- *       contractABI: exampleAbi,
+ *       address: "0x1234567890abcdef1234567890abcdef12345678",
+ *       abi: exampleAbi,
  *       functionName: "safeTransferFrom",
- *       chainId: "ethereum",
- *       transactionParameters: [
+ *       chain: "ethereum",
+ *       params: [
  *         { name: "from", type: "address" },
  *         { name: "to", type: "address" },
  *         { name: "tokenId", type: "uint256" }
@@ -91,5 +91,5 @@ export interface Metadata {
  * ```
  */
 export interface ValidatedMetadata extends Omit<Metadata, 'actions'> {
-  actions: (BlockchainAction | TransferActionMetadata )[];
+  actions: (BlockchainAction | TransferAction )[];
 }

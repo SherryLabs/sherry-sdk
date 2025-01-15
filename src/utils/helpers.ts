@@ -6,12 +6,12 @@ import {
   InvalidAddress,
   NoActionDefinedError,
   ActionsNumberError,
-  InvalidTransactionParameters
+  Invalidparams
 } from "./customErrors";
 import {
   BlockchainActionMetadata,
   BlockchainAction,
-  TransferActionMetadata
+  TransferAction
 } from "../interface/blockchainAction";
 
 /**
@@ -21,7 +21,7 @@ import {
  * @returns {AbiParameter[]} - The function parameters.
  */
 export function getParameters(action: BlockchainActionMetadata): AbiParameter[] {
-  const abi: Abi = action.contractABI;
+  const abi: Abi = action.abi;
   const functionName: ContractFunctionName = action.functionName;
 
   const abiFunction = getAbiFunction(abi, functionName);
@@ -66,7 +66,7 @@ export function isValidFunction(abi: Abi, functionName: ContractFunctionName): b
  */
 export function validateActionParameters(action: BlockchainAction): boolean {
   const params = getParameters(action);
-  return params.length === action.transactionParameters.length;
+  return params.length === action.params.length;
 }
 
 /**
@@ -77,7 +77,7 @@ export function validateActionParameters(action: BlockchainAction): boolean {
  * @throws {Error} - If the function is not found in the ABI.
  */
 export function getBlockchainActionType(action: BlockchainActionMetadata): AbiStateMutability {
-  const abiFunction: AbiFunction | undefined = getAbiFunction(action.contractABI, action.functionName);
+  const abiFunction: AbiFunction | undefined = getAbiFunction(action.abi, action.functionName);
   if (!abiFunction) {
     throw new Error(action.functionName);
   }
@@ -99,10 +99,10 @@ export function createMetadata(metadata: Metadata): ValidatedMetadata {
   validateMetadata(metadata);
 
   const originalActions = [...metadata.actions];
-  const processedActions: (BlockchainAction | TransferActionMetadata)[] = originalActions.map(action => {
+  const processedActions: (BlockchainAction | TransferAction)[] = originalActions.map(action => {
     if (isBlockchainActionMetadata(action)) {
       return processAction(action);
-    } else if (isTransferActionMetadata(action)) {
+    } else if (isTransferAction(action)) {
       return action;
     } else {
       throw new Error("Invalid action type");
@@ -131,8 +131,8 @@ function validateMetadata(metadata: Metadata): void {
 
   for (const action of metadata.actions) {
     if (isBlockchainActionMetadata(action)) {
-      if (!isAddress(action.contractAddress)) {
-        throw new InvalidAddress(action.contractAddress);
+      if (!isAddress(action.address)) {
+        throw new InvalidAddress(action.address);
       }
     }
   }
@@ -146,20 +146,20 @@ function validateMetadata(metadata: Metadata): void {
  * @throws {FunctionNotFoundError} - If the function is not found in the ABI.
  */
 function processAction(action: BlockchainActionMetadata): BlockchainAction {
-  const fnc = getAbiFunction(action.contractABI, action.functionName);
+  const fnc = getAbiFunction(action.abi, action.functionName);
   if (!fnc) {
     throw new FunctionNotFoundError(action.functionName);
   }
 
   const params: AbiParameter[] = getParameters(action).map(param => ({ ...param })); // Create a mutable copy
 
-  if (action.functionParamsLabel) {
-    replaceParameterNames(params, action.functionParamsLabel);
+  if (action.paramsLabel) {
+    replaceParameterNames(params, action.paramsLabel);
   }
 
   const actionType = getBlockchainActionType(action);
 
-  return { ...action, transactionParameters: params, blockchainActionType: actionType };
+  return { ...action, params: params, blockchainActionType: actionType };
 }
 
 /**
@@ -178,7 +178,7 @@ function replaceParameterNames(params: AbiParameter[], labels: string[]): void {
         params[i]!.name = labels[i] ?? (params[i]!.name || "");
       }
     } else {
-      throw new InvalidTransactionParameters();
+      throw new Invalidparams();
     }
   }
 }
@@ -206,7 +206,7 @@ export function isValidValidatedMetadata(obj: any): obj is ValidatedMetadata {
   if (typeof obj !== 'object' || obj === null) return false;
   if (!Array.isArray(obj.actions)) return false;
   for (const action of obj.actions) {
-    if (!Array.isArray(action.transactionParameters)) return false;
+    if (!Array.isArray(action.params)) return false;
     if (typeof action.blockchainActionType !== 'string') return false;
   }
   return true;
@@ -223,10 +223,10 @@ export function isBlockchainActionMetadata(obj: any): obj is BlockchainActionMet
     typeof obj === 'object' &&
     obj !== null &&
     typeof obj.label === 'string' &&
-    typeof obj.contractAddress === 'string' &&
-    typeof obj.contractABI === 'object' &&
+    typeof obj.address === 'string' &&
+    typeof obj.abi === 'object' &&
     typeof obj.functionName === 'string' &&
-    typeof obj.chainId === 'string'
+    typeof obj.chain === 'string'
   );
 }
 
@@ -239,30 +239,30 @@ export function isBlockchainActionMetadata(obj: any): obj is BlockchainActionMet
  */
 export function isBlockchainAction(obj: any): obj is BlockchainAction {
   return (
-    Array.isArray(obj.transactionParameters) &&
-    obj.transactionParameters.every((param: any) => typeof param === 'object') &&
+    Array.isArray(obj.params) &&
+    obj.params.every((param: any) => typeof param === 'object') &&
     typeof obj.blockchainActionType === 'string'
   );
 }
 
 /**
- * Type guard to check if an object is of type `TransferActionMetadata`.
+ * Type guard to check if an object is of type `TransferAction`.
  * 
  * @param obj - The object to check.
- * @returns `true` if the object is of type `TransferActionMetadata`, otherwise `false`.
+ * @returns `true` if the object is of type `TransferAction`, otherwise `false`.
  */
-export function isTransferActionMetadata(obj: any): obj is TransferActionMetadata {
+export function isTransferAction(obj: any): obj is TransferAction {
   return (
     typeof obj === 'object' &&
     obj !== null &&
     typeof obj.label === 'string' &&
-    (typeof obj.recipientAddress === 'undefined' || typeof obj.recipientAddress === 'string') &&
+    (typeof obj.to === 'undefined' || typeof obj.to === 'string') &&
     (typeof obj.amount === 'undefined' || typeof obj.amount === 'number') &&
-    typeof obj.chainId === 'string' &&
-    typeof obj.contractABI === 'undefined' &&
+    typeof obj.chain === 'string' &&
+    typeof obj.abi === 'undefined' &&
     typeof obj.functionName === 'undefined' &&
     typeof obj.functionParamsValue === 'undefined' &&
-    typeof obj.functionParamsLabel === 'undefined'
+    typeof obj.paramsLabel === 'undefined'
   );
 }
 
