@@ -13,7 +13,6 @@ import {
   BlockchainAction,
   TransferAction
 } from "../interface/blockchainAction";
-import { Chain } from "../interface/chains";
 
 /**
  * Gets the parameters of a function in the ABI.
@@ -213,103 +212,57 @@ export function isValidValidatedMetadata(obj: any): obj is ValidatedMetadata {
   return true;
 }
 
-
-
-export function isBlockchainActionMetadata(action: any): action is BlockchainActionMetadata {
+/**
+ * Type guard to check if an object is of type `BlockchainActionMetadata`.
+ * 
+ * @param obj - The object to check.
+ * @returns `true` if the object is of type `BlockchainActionMetadata`, otherwise `false`.
+ */
+export function isBlockchainActionMetadata(obj: any): obj is BlockchainActionMetadata {
   return (
-      action &&
-      typeof action === "object" &&
-      typeof action.label === "string" &&
-      typeof action.address === "string" &&
-      Array.isArray(action.abi) &&
-      typeof action.functionName === "string" &&
-      typeof action.chain === "string"
+    typeof obj === 'object' &&
+    obj !== null &&
+    typeof obj.label === 'string' &&
+    typeof obj.address === 'string' &&
+    typeof obj.abi === 'object' &&
+    typeof obj.functionName === 'string' &&
+    typeof obj.chain === 'string'
   );
 }
 
-export function isBlockchainAction(action: any): action is BlockchainAction {
+
+/**
+ * Type guard to check if an object is of type `BlockchainAction`.
+ * 
+ * @param obj - The object to check.
+ * @returns `true` if the object is of type `BlockchainAction`, otherwise `false`.
+ */
+export function isBlockchainAction(obj: any): obj is BlockchainAction {
   return (
-      action &&
-      typeof action === "object" &&
-      typeof action.label === "string" &&
-      typeof action.address === "string" &&
-      action.address.startsWith("0x") && action.address.length === 42 &&
-      Array.isArray(action.abi) &&
-      typeof action.functionName === "string" &&
-      isValidChain(action.chain) &&
-      (action.amount === undefined || typeof action.amount === "number") &&
-      (action.paramsLabel === undefined ||
-          (Array.isArray(action.paramsLabel) &&
-              action.paramsLabel.every((label: any) => typeof label === "string"))) &&
-      (action.paramsValue === undefined ||
-          (Array.isArray(action.paramsValue) &&
-              action.paramsValue.every((value: any) =>
-                  typeof value === "string" ||
-                  typeof value === "number" ||
-                  typeof value === "bigint" ||
-                  value === null ||
-                  typeof value === "boolean"))) &&
-      Array.isArray(action.params) &&
-      action.params.every((param: any) =>
-          typeof param === "object" &&
-          typeof param.type === "string") &&
-      typeof action.blockchainActionType === "string"
+    Array.isArray(obj.params) &&
+    obj.params.every((param: any) => typeof param === 'object') &&
+    typeof obj.blockchainActionType === 'string'
   );
 }
 
-export function isTransferAction(action: any): action is TransferAction {
-  // First check if it has BlockchainActionMetadata specific properties
-  if (action.abi !== undefined || 
-      action.functionName !== undefined || 
-      action.paramsValue !== undefined || 
-      action.paramsLabel !== undefined) {
-      return false;
-  }
-
-  // Then check TransferAction properties
-  if (!action || typeof action !== 'object') return false;
-  if (typeof action.label !== 'string') return false;
-  if (!isValidChain(action.chain)) return false;
-  if (action.to !== undefined && (typeof action.to !== 'string' || !action.to.startsWith('0x'))) return false;
-  if (action.amount !== undefined && typeof action.amount !== 'number') return false;
-
-  return true;
-}
-
-export function isMetadata(json: any): json is Metadata {
+/**
+ * Type guard to check if an object is of type `TransferAction`.
+ * 
+ * @param obj - The object to check.
+ * @returns `true` if the object is of type `TransferAction`, otherwise `false`.
+ */
+export function isTransferAction(obj: any): obj is TransferAction {
   return (
-      json &&
-      typeof json === "object" &&
-      typeof json.type === "string" &&
-      typeof json.icon === "string" &&
-      typeof json.title === "string" &&
-      typeof json.description === "string" &&
-      Array.isArray(json.actions) &&
-      json.actions.every((action: any) =>
-          isBlockchainActionMetadata(action) || isTransferAction(action)
-      )
+    typeof obj === 'object' &&
+    obj !== null &&
+    typeof obj.label === 'string' &&
+    (typeof obj.to === 'undefined' || typeof obj.to === 'string') &&
+    (typeof obj.amount === 'undefined' || typeof obj.amount === 'number') &&
+    typeof obj.chain === 'string' &&
+    typeof obj.abi === 'undefined' &&
+    typeof obj.functionName === 'undefined' &&
+    typeof obj.functionParamsValue === 'undefined' &&
+    typeof obj.paramsLabel === 'undefined'
   );
 }
-
-export function isValidatedMetadata(json: any): json is ValidatedMetadata {
-  return (
-      json &&
-      typeof json === "object" &&
-      typeof json.type === "string" &&
-      typeof json.icon === "string" &&
-      typeof json.title === "string" &&
-      typeof json.description === "string" &&
-      Array.isArray(json.actions) &&
-      json.actions.every((action: any) => isBlockchainAction(action))
-  );
-}
-
-const isValidChain = (chain: any): chain is Chain => {
-  return typeof chain === "string" && [
-      "avalanche",
-      "fuji",
-      "celo",
-      "alfajores"
-  ].includes(chain);
-};
 
