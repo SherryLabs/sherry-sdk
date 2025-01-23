@@ -86,3 +86,10 @@ export class Invalidparams extends Error {
         this.name = "Invalidparams";
     }
 }
+
+export class InvalidMetadataError extends Error { 
+    constructor(msg: string) {
+        super(msg);
+        this.name = "InvalidMetadataError";
+    }
+}
