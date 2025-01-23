@@ -13,7 +13,8 @@ import {
   getBlockchainActionType,
   createMetadata,
   isTransferAction,
-  isBlockchainAction
+  isBlockchainAction,
+  isBlockchainActionMetadata
 } from "../src/utils/helpers";
 import { simpleAbi } from "./abi";
 
@@ -101,7 +102,7 @@ describe('Metadata Functions', () => {
     };
 
     expect(isTransferAction(metadataEleven.actions[0])).toBe(false);
-    expect(isBlockchainAction(metadataEleven.actions[0])).toBe(false);
+    expect(isBlockchainActionMetadata(metadataEleven.actions[0])).toBe(true);
   })
 
   it('should return metadata formatted', () => {
