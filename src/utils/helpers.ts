@@ -15,6 +15,7 @@ import {
   TransferAction
 } from "../interface/blockchainAction";
 import { Chain } from "../interface/chains";
+import { InvalidParameterError } from "abitype";
 
 /**
  * Gets the parameters of a function in the ABI.
@@ -103,8 +104,10 @@ export function createMetadata(metadata: Metadata): ValidatedMetadata {
   const originalActions = [...metadata.actions];
   const processedActions: (BlockchainAction | TransferAction)[] = originalActions.map(action => {
     if (isBlockchainActionMetadata(action)) {
+      console.log("isBlockchainActionMetadata");
       return processAction(action);
     } else if (isTransferAction(action)) {
+      console.log("isTransferAction");
       return action;
     } else {
       throw new Error("Invalid action type");
@@ -127,58 +130,58 @@ export function createMetadata(metadata: Metadata): ValidatedMetadata {
 function validateMetadata(metadata: Metadata): void {
   // Check if metadata exists and is an object
   if (!metadata || typeof metadata !== 'object') {
-      throw new InvalidMetadataError('Metadata must be a valid object');
+    throw new InvalidMetadataError('Metadata must be a valid object');
   }
 
   // Check required metadata properties
   if (typeof metadata.type !== 'string' || metadata.type !== 'action') {
-      throw new InvalidMetadataError('Metadata type must be "action"');
+    throw new InvalidMetadataError('Metadata type must be "action"');
   }
 
   if (typeof metadata.icon !== 'string' || !metadata.icon) {
-      throw new InvalidMetadataError('Metadata must have a valid icon URL');
+    throw new InvalidMetadataError('Metadata must have a valid icon URL');
   }
 
   if (typeof metadata.title !== 'string' || !metadata.title) {
-      throw new InvalidMetadataError('Metadata must have a title');
+    throw new InvalidMetadataError('Metadata must have a title');
   }
 
   if (typeof metadata.description !== 'string' || !metadata.description) {
-      throw new InvalidMetadataError('Metadata must have a description');
+    throw new InvalidMetadataError('Metadata must have a description');
   }
 
   // Validate actions array
   if (!Array.isArray(metadata.actions)) {
-      throw new NoActionDefinedError();
+    throw new NoActionDefinedError();
   }
 
   if (metadata.actions.length === 0) {
-      throw new NoActionDefinedError();
+    throw new NoActionDefinedError();
   }
 
   if (metadata.actions.length > 4) {
-      throw new ActionsNumberError(metadata.actions.length);
+    throw new ActionsNumberError(metadata.actions.length);
   }
 
   // Validate each action
   metadata.actions.forEach((action, index) => {
-      // Check if action is either BlockchainActionMetadata or TransferAction
-      if (!isBlockchainActionMetadata(action) && !isTransferAction(action)) {
-          throw new InvalidMetadataError(`Invalid action at index ${index}`);
-      }
+    // Check if action is either BlockchainActionMetadata or TransferAction
+    if (!isBlockchainActionMetadata(action) && !isTransferAction(action)) {
+      throw new InvalidMetadataError(`Invalid action at index ${index}`);
+    }
 
-      // Validate addresses in actions
-      if ('address' in action && !isAddress(action.address)) {
-          throw new InvalidAddress(action.address);
-      }
+    // Validate addresses in actions
+    if ('address' in action && !isAddress(action.address)) {
+      throw new InvalidAddress(action.address);
+    }
 
-      if ('to' in action && action.to && !isAddress(action.to)) {
-          throw new InvalidAddress(action.to);
-      }
+    if ('to' in action && action.to && !isAddress(action.to)) {
+      throw new InvalidAddress(action.to);
+    }
 
-      if (!isValidChain(action.chain)) {
-          throw new InvalidMetadataError(`Invalid chain in action at index ${index}`);
-      }
+    if (!isValidChain(action.chain)) {
+      throw new InvalidMetadataError(`Invalid chain in action at index ${index}`);
+    }
   });
 }
 
@@ -233,9 +236,82 @@ function processAction(action: BlockchainActionMetadata): BlockchainAction {
     replaceParameterNames(params, action.paramsLabel);
   }
 
+  validateParameters(params, action.paramsValue);
+
   const actionType = getBlockchainActionType(action);
 
   return { ...action, params: params, blockchainActionType: actionType };
+}
+
+
+function validateParameters(params: AbiParameter[], paramsValue?: (string | number | bigint | null | boolean)[]): void {
+  if (!paramsValue) return;
+
+  if (paramsValue.length > params.length) {
+    throw new InvalidParameterError({
+      param:
+        `Too many parameter values provided. Expected ${params.length}, got ${paramsValue.length}`
+    }
+    );
+  }
+
+  paramsValue.forEach((value, index) => {
+    const param = params[index];
+    if (!param) return;
+
+    validateSolidityType(value, param.type, param.name);
+  });
+}
+
+function validateSolidityType(value: string | number | bigint | null | boolean, type: string, name?: string): void {
+  // Handle null values
+  if (value === null) return;
+
+  if (type.startsWith("uint")) {
+    if (typeof value !== "number" && typeof value !== "bigint") {
+      throw new InvalidParameterError({
+        param: `Invalid value for type ${type} - name ${name ? name : "NOT FOUND"}, . Expected number or bigint, got ${typeof value} as ${value}`
+      });
+    }
+  } else if (type === "address") {
+    if (typeof value !== "string") {
+      throw new InvalidParameterError({
+        param: `Invalid value for type ${type} - name ${name ? name : "NOT FOUND"}. Expected string, got ${typeof value} as ${value}`
+      });
+    }
+
+    // Allow 'sender' as valid value
+    if (value !== "sender" && !isAddress(value)) {
+      throw new InvalidParameterError({
+        param: `Invalid value for type ${type} - name ${name ? name : "NOT FOUND"}. Expected valid address or 'sender', got ${value}`
+      });
+    }
+
+  } else if (type === "bool") {
+    if (typeof value !== "boolean") {
+      throw new InvalidParameterError({
+        param: `Invalid value for type ${type} - name ${name ? name : "NOT FOUND"}. Expected boolean, got ${typeof value} as ${value}`
+      });
+    }
+  } else if (type === "string") {
+    if (typeof value !== "string") {
+      throw new InvalidParameterError({
+        param: `Invalid value for type ${type} - name ${name ? name : "NOT FOUND"}. Expected string, got ${typeof value} as ${value}`
+      });
+    }
+  } else if (type === "bytes") {
+    if (typeof value !== "string") {
+      throw new InvalidParameterError({
+        param: `Invalid value for type ${type} - name ${name ? name : "NOT FOUND"}. Expected string, got ${typeof value} as ${value}`
+      });
+    }
+  } else if (type.startsWith("bytes")) {
+    if (typeof value !== "string") {
+      throw new InvalidParameterError({
+        param: `Invalid value for type ${type} - name ${name ? name : "NOT FOUND"}. Expected string, got ${typeof value} as ${value}`
+      });
+    }
+  }
 }
 
 /**

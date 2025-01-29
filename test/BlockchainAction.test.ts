@@ -85,6 +85,7 @@ describe('Metadata Functions', () => {
   it('should return and false when metadata is invalid', () => {
     const metadataEleven: Metadata = {
       type: "action",
+      url: "google.com",
       icon: "https://ipfs.io/ipfs/bafybeifto4kwihaup53m5pzi4g7iuypm3oajj4rdcm6gywjvfcaqdh3zsm/10.png",
       title: "Sparkling Connector Token",
       description: "Mint a special NFT for Javier Salomon, who connects communities with the sparkle of Christmas.",
@@ -135,6 +136,7 @@ describe('Metadata Functions', () => {
 
     const metadata: Metadata = {
       type: "action",
+      url: "google.com",
       icon: "https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExM21kajk5ODVzMmV2bXUzNzN5dGluMWJsejNtN2ptejBqYnhxcjByZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/5phvgzYzpqFL2N1lav/giphy.gif",
       title: "Sent me a tip",
       description: "Send me a tip to show your appreciation for my work",
@@ -143,6 +145,7 @@ describe('Metadata Functions', () => {
 
     const formattedMetadata: ValidatedMetadata = {
       type: metadata.type,
+      url: metadata.url,
       icon: metadata.icon,
       title: metadata.title,
       description: metadata.description,
