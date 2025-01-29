@@ -26,6 +26,11 @@ export interface Metadata {
    * Can be either "action" for blockchain actions or "external-link" for external links.
    */
   type: ActionType;
+  /**
+   * The URL of the mini app.
+   * This is the URL of the project.
+   */
+  url: string;
 
   /**
    * The icon representing the mini app.
@@ -91,5 +96,5 @@ export interface Metadata {
  * ```
  */
 export interface ValidatedMetadata extends Omit<Metadata, 'actions'> {
-  actions: (BlockchainAction | TransferAction )[];
+  actions: (BlockchainAction | TransferAction)[];
 }

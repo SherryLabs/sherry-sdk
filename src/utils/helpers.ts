@@ -6,7 +6,8 @@ import {
   InvalidAddress,
   NoActionDefinedError,
   ActionsNumberError,
-  Invalidparams
+  Invalidparams,
+  InvalidMetadataError
 } from "./customErrors";
 import {
   BlockchainActionMetadata,
@@ -14,6 +15,7 @@ import {
   TransferAction
 } from "../interface/blockchainAction";
 import { Chain } from "../interface/chains";
+import { InvalidParameterError } from "abitype";
 
 /**
  * Gets the parameters of a function in the ABI.
@@ -102,8 +104,10 @@ export function createMetadata(metadata: Metadata): ValidatedMetadata {
   const originalActions = [...metadata.actions];
   const processedActions: (BlockchainAction | TransferAction)[] = originalActions.map(action => {
     if (isBlockchainActionMetadata(action)) {
+      console.log("isBlockchainActionMetadata");
       return processAction(action);
     } else if (isTransferAction(action)) {
+      console.log("isTransferAction");
       return action;
     } else {
       throw new Error("Invalid action type");
@@ -116,12 +120,41 @@ export function createMetadata(metadata: Metadata): ValidatedMetadata {
 /**
  * Validates the metadata of a mini app.
  * 
- * @param {Metadata} metadata - The mini app metadata.
+ * @param {Metadata} metadata - The mini app metadata to validate.
  * @throws {NoActionDefinedError} - If no actions are defined.
  * @throws {ActionsNumberError} - If more than 4 actions are defined.
  * @throws {InvalidAddress} - If an invalid address is provided.
+ * @throws {InvalidMetadataError} - If metadata is invalid.
+ * @returns {void}
  */
 function validateMetadata(metadata: Metadata): void {
+  // Check if metadata exists and is an object
+  if (!metadata || typeof metadata !== 'object') {
+    throw new InvalidMetadataError('Metadata must be a valid object');
+  }
+
+  // Check required metadata properties
+  if (typeof metadata.type !== 'string' || metadata.type !== 'action') {
+    throw new InvalidMetadataError('Metadata type must be "action"');
+  }
+
+  if (typeof metadata.icon !== 'string' || !metadata.icon) {
+    throw new InvalidMetadataError('Metadata must have a valid icon URL');
+  }
+
+  if (typeof metadata.title !== 'string' || !metadata.title) {
+    throw new InvalidMetadataError('Metadata must have a title');
+  }
+
+  if (typeof metadata.description !== 'string' || !metadata.description) {
+    throw new InvalidMetadataError('Metadata must have a description');
+  }
+
+  // Validate actions array
+  if (!Array.isArray(metadata.actions)) {
+    throw new NoActionDefinedError();
+  }
+
   if (metadata.actions.length === 0) {
     throw new NoActionDefinedError();
   }
@@ -130,14 +163,59 @@ function validateMetadata(metadata: Metadata): void {
     throw new ActionsNumberError(metadata.actions.length);
   }
 
-  for (const action of metadata.actions) {
-    if (isBlockchainActionMetadata(action)) {
-      if (!isAddress(action.address)) {
-        throw new InvalidAddress(action.address);
-      }
+  // Validate each action
+  metadata.actions.forEach((action, index) => {
+    // Check if action is either BlockchainActionMetadata or TransferAction
+    if (!isBlockchainActionMetadata(action) && !isTransferAction(action)) {
+      throw new InvalidMetadataError(`Invalid action at index ${index}`);
     }
-  }
+
+    // Validate addresses in actions
+    if ('address' in action && !isAddress(action.address)) {
+      throw new InvalidAddress(action.address);
+    }
+
+    if ('to' in action && action.to && !isAddress(action.to)) {
+      throw new InvalidAddress(action.to);
+    }
+
+    if (!isValidChain(action.chain)) {
+      throw new InvalidMetadataError(`Invalid chain in action at index ${index}`);
+    }
+  });
 }
+
+export const helperValidateMetadata = (json: string): {
+  isValid: boolean;
+  type: "Metadata" | "ValidatedMetadata" | "Invalid";
+  data?: Metadata | ValidatedMetadata;
+} => {
+  try {
+    if (isValidatedMetadata(json)) {
+      return {
+        isValid: true,
+        type: "ValidatedMetadata",
+        data: json as ValidatedMetadata
+      };
+    } if (isMetadata(json)) {
+      return {
+        isValid: true,
+        type: "Metadata",
+        data: json as Metadata
+      };
+    }
+
+    return {
+      isValid: false,
+      type: "Invalid"
+    };
+  } catch (error) {
+    return {
+      isValid: false,
+      type: "Invalid"
+    };
+  }
+};
 
 /**
  * Processes a blockchain action.
@@ -158,9 +236,82 @@ function processAction(action: BlockchainActionMetadata): BlockchainAction {
     replaceParameterNames(params, action.paramsLabel);
   }
 
+  validateParameters(params, action.paramsValue);
+
   const actionType = getBlockchainActionType(action);
 
   return { ...action, params: params, blockchainActionType: actionType };
+}
+
+
+function validateParameters(params: AbiParameter[], paramsValue?: (string | number | bigint | null | boolean)[]): void {
+  if (!paramsValue) return;
+
+  if (paramsValue.length > params.length) {
+    throw new InvalidParameterError({
+      param:
+        `Too many parameter values provided. Expected ${params.length}, got ${paramsValue.length}`
+    }
+    );
+  }
+
+  paramsValue.forEach((value, index) => {
+    const param = params[index];
+    if (!param) return;
+
+    validateSolidityType(value, param.type, param.name);
+  });
+}
+
+function validateSolidityType(value: string | number | bigint | null | boolean, type: string, name?: string): void {
+  // Handle null values
+  if (value === null) return;
+
+  if (type.startsWith("uint")) {
+    if (typeof value !== "number" && typeof value !== "bigint") {
+      throw new InvalidParameterError({
+        param: `Invalid value for type ${type} - name ${name ? name : "NOT FOUND"}, . Expected number or bigint, got ${typeof value} as ${value}`
+      });
+    }
+  } else if (type === "address") {
+    if (typeof value !== "string") {
+      throw new InvalidParameterError({
+        param: `Invalid value for type ${type} - name ${name ? name : "NOT FOUND"}. Expected string, got ${typeof value} as ${value}`
+      });
+    }
+
+    // Allow 'sender' as valid value
+    if (value !== "sender" && !isAddress(value)) {
+      throw new InvalidParameterError({
+        param: `Invalid value for type ${type} - name ${name ? name : "NOT FOUND"}. Expected valid address or 'sender', got ${value}`
+      });
+    }
+
+  } else if (type === "bool") {
+    if (typeof value !== "boolean") {
+      throw new InvalidParameterError({
+        param: `Invalid value for type ${type} - name ${name ? name : "NOT FOUND"}. Expected boolean, got ${typeof value} as ${value}`
+      });
+    }
+  } else if (type === "string") {
+    if (typeof value !== "string") {
+      throw new InvalidParameterError({
+        param: `Invalid value for type ${type} - name ${name ? name : "NOT FOUND"}. Expected string, got ${typeof value} as ${value}`
+      });
+    }
+  } else if (type === "bytes") {
+    if (typeof value !== "string") {
+      throw new InvalidParameterError({
+        param: `Invalid value for type ${type} - name ${name ? name : "NOT FOUND"}. Expected string, got ${typeof value} as ${value}`
+      });
+    }
+  } else if (type.startsWith("bytes")) {
+    if (typeof value !== "string") {
+      throw new InvalidParameterError({
+        param: `Invalid value for type ${type} - name ${name ? name : "NOT FOUND"}. Expected string, got ${typeof value} as ${value}`
+      });
+    }
+  }
 }
 
 /**
@@ -217,53 +368,53 @@ export function isValidValidatedMetadata(obj: any): obj is ValidatedMetadata {
 
 export function isBlockchainActionMetadata(action: any): action is BlockchainActionMetadata {
   return (
-      action &&
-      typeof action === "object" &&
-      typeof action.label === "string" &&
-      typeof action.address === "string" &&
-      Array.isArray(action.abi) &&
-      typeof action.functionName === "string" &&
-      typeof action.chain === "string"
+    action &&
+    typeof action === "object" &&
+    typeof action.label === "string" &&
+    typeof action.address === "string" &&
+    Array.isArray(action.abi) &&
+    typeof action.functionName === "string" &&
+    typeof action.chain === "string"
   );
 }
 
 export function isBlockchainAction(action: any): action is BlockchainAction {
   return (
-      action &&
-      typeof action === "object" &&
-      typeof action.label === "string" &&
-      typeof action.address === "string" &&
-      action.address.startsWith("0x") && action.address.length === 42 &&
-      Array.isArray(action.abi) &&
-      typeof action.functionName === "string" &&
-      isValidChain(action.chain) &&
-      (action.amount === undefined || typeof action.amount === "number") &&
-      (action.paramsLabel === undefined ||
-          (Array.isArray(action.paramsLabel) &&
-              action.paramsLabel.every((label: any) => typeof label === "string"))) &&
-      (action.paramsValue === undefined ||
-          (Array.isArray(action.paramsValue) &&
-              action.paramsValue.every((value: any) =>
-                  typeof value === "string" ||
-                  typeof value === "number" ||
-                  typeof value === "bigint" ||
-                  value === null ||
-                  typeof value === "boolean"))) &&
-      Array.isArray(action.params) &&
-      action.params.every((param: any) =>
-          typeof param === "object" &&
-          typeof param.type === "string") &&
-      typeof action.blockchainActionType === "string"
+    action &&
+    typeof action === "object" &&
+    typeof action.label === "string" &&
+    typeof action.address === "string" &&
+    action.address.startsWith("0x") && action.address.length === 42 &&
+    Array.isArray(action.abi) &&
+    typeof action.functionName === "string" &&
+    isValidChain(action.chain) &&
+    (action.amount === undefined || typeof action.amount === "number") &&
+    (action.paramsLabel === undefined ||
+      (Array.isArray(action.paramsLabel) &&
+        action.paramsLabel.every((label: any) => typeof label === "string"))) &&
+    (action.paramsValue === undefined ||
+      (Array.isArray(action.paramsValue) &&
+        action.paramsValue.every((value: any) =>
+          typeof value === "string" ||
+          typeof value === "number" ||
+          typeof value === "bigint" ||
+          value === null ||
+          typeof value === "boolean"))) &&
+    Array.isArray(action.params) &&
+    action.params.every((param: any) =>
+      typeof param === "object" &&
+      typeof param.type === "string") &&
+    typeof action.blockchainActionType === "string"
   );
 }
 
 export function isTransferAction(action: any): action is TransferAction {
   // First check if it has BlockchainActionMetadata specific properties
-  if (action.abi !== undefined || 
-      action.functionName !== undefined || 
-      action.paramsValue !== undefined || 
-      action.paramsLabel !== undefined) {
-      return false;
+  if (action.abi !== undefined ||
+    action.functionName !== undefined ||
+    action.paramsValue !== undefined ||
+    action.paramsLabel !== undefined) {
+    return false;
   }
 
   // Then check TransferAction properties
@@ -278,38 +429,38 @@ export function isTransferAction(action: any): action is TransferAction {
 
 export function isMetadata(json: any): json is Metadata {
   return (
-      json &&
-      typeof json === "object" &&
-      typeof json.type === "string" &&
-      typeof json.icon === "string" &&
-      typeof json.title === "string" &&
-      typeof json.description === "string" &&
-      Array.isArray(json.actions) &&
-      json.actions.every((action: any) =>
-          isBlockchainActionMetadata(action) || isTransferAction(action)
-      )
+    json &&
+    typeof json === "object" &&
+    typeof json.type === "string" &&
+    typeof json.icon === "string" &&
+    typeof json.title === "string" &&
+    typeof json.description === "string" &&
+    Array.isArray(json.actions) &&
+    json.actions.every((action: any) =>
+      isBlockchainActionMetadata(action) || isTransferAction(action)
+    )
   );
 }
 
 export function isValidatedMetadata(json: any): json is ValidatedMetadata {
   return (
-      json &&
-      typeof json === "object" &&
-      typeof json.type === "string" &&
-      typeof json.icon === "string" &&
-      typeof json.title === "string" &&
-      typeof json.description === "string" &&
-      Array.isArray(json.actions) &&
-      json.actions.every((action: any) => isBlockchainAction(action))
+    json &&
+    typeof json === "object" &&
+    typeof json.type === "string" &&
+    typeof json.icon === "string" &&
+    typeof json.title === "string" &&
+    typeof json.description === "string" &&
+    Array.isArray(json.actions) &&
+    json.actions.every((action: any) => isBlockchainAction(action))
   );
 }
 
 const isValidChain = (chain: any): chain is Chain => {
   return typeof chain === "string" && [
-      "avalanche",
-      "fuji",
-      "celo",
-      "alfajores"
+    "avalanche",
+    "fuji",
+    "celo",
+    "alfajores"
   ].includes(chain);
 };
 

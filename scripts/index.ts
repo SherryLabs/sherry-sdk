@@ -24,6 +24,7 @@ async function main() {
 
     const metadata: Metadata = {
         type: "action",
+        url: "google.com",
         icon: "icon",
         title: "title",
         description: "description",
@@ -33,6 +34,7 @@ async function main() {
                 address: "0x1234567890abcdef1234567890abcdef12345678",
                 abi: exampleAbi,
                 functionName: "safeTransferFrom",
+                paramsValue: ["sender", "0x1234567890abcdef1234567890abcdef12345678", 1],
                 paramsLabel: ["From"],
                 chain: "fuji"
             },
@@ -47,7 +49,7 @@ async function main() {
     };
     try {
         const result = await createMetadata(metadata);
-        console.log('Metadata:', JSON.stringify(result, null, 2));
+        //console.log('Metadata:', JSON.stringify(result, null, 2));
     } catch (error) {
         console.error('Error creating metadata:', error);
         throw error;
