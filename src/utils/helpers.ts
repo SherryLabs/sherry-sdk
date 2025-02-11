@@ -16,6 +16,8 @@ import {
 } from "../interface/blockchainAction";
 import { Chain } from "../interface/chains";
 import { InvalidParameterError } from "abitype";
+import { HttpActionValidator } from '../validators/httpActionValidator';
+import { HttpAction } from '../interface/httpAction';
 
 /**
  * Gets the parameters of a function in the ABI.
@@ -101,14 +103,13 @@ export function getBlockchainActionType(action: BlockchainActionMetadata): AbiSt
 export function createMetadata(metadata: Metadata): ValidatedMetadata {
   validateMetadata(metadata);
 
-  const originalActions = [...metadata.actions];
-  const processedActions: (BlockchainAction | TransferAction)[] = originalActions.map(action => {
+  const processedActions = metadata.actions.map(action => {
     if (isBlockchainActionMetadata(action)) {
-      console.log("isBlockchainActionMetadata");
       return processAction(action);
     } else if (isTransferAction(action)) {
-      console.log("isTransferAction");
       return action;
+    } else if (HttpActionValidator.isHttpAction(action)) {
+      return HttpActionValidator.validateHttpAction(action);
     } else {
       throw new Error("Invalid action type");
     }
@@ -134,10 +135,6 @@ function validateMetadata(metadata: Metadata): void {
   }
 
   // Check required metadata properties
-  if (typeof metadata.type !== 'string' || metadata.type !== 'action') {
-    throw new InvalidMetadataError('Metadata type must be "action"');
-  }
-
   if (typeof metadata.icon !== 'string' || !metadata.icon) {
     throw new InvalidMetadataError('Metadata must have a valid icon URL');
   }
@@ -165,8 +162,10 @@ function validateMetadata(metadata: Metadata): void {
 
   // Validate each action
   metadata.actions.forEach((action, index) => {
-    // Check if action is either BlockchainActionMetadata or TransferAction
-    if (!isBlockchainActionMetadata(action) && !isTransferAction(action)) {
+    // Check if action is either BlockchainActionMetadata, TransferAction, or HttpActionMetadata
+    if (!isBlockchainActionMetadata(action) &&
+      !isTransferAction(action) &&
+      !HttpActionValidator.isHttpAction(action)) {
       throw new InvalidMetadataError(`Invalid action at index ${index}`);
     }
 
@@ -179,8 +178,10 @@ function validateMetadata(metadata: Metadata): void {
       throw new InvalidAddress(action.to);
     }
 
-    if (!isValidChain(action.chain)) {
-      throw new InvalidMetadataError(`Invalid chain in action at index ${index}`);
+    if (!HttpActionValidator.isHttpAction(action)) {
+      if (!isValidChain(action.chain)) {
+        throw new InvalidMetadataError(`Invalid chain in action at index ${index}`);
+      }
     }
   });
 }
@@ -443,15 +444,25 @@ export function isMetadata(json: any): json is Metadata {
 }
 
 export function isValidatedMetadata(json: any): json is ValidatedMetadata {
-  return (
-    json &&
-    typeof json === "object" &&
+  if (typeof json !== 'object' ||
+    json === null ||
+    !Array.isArray(json.actions)) return false;
+
+  // Check metadata base properties
+  const hasBaseProps = (
     typeof json.type === "string" &&
     typeof json.icon === "string" &&
     typeof json.title === "string" &&
-    typeof json.description === "string" &&
-    Array.isArray(json.actions) &&
-    json.actions.every((action: any) => isBlockchainAction(action))
+    typeof json.description === "string"
+  );
+
+  if (!hasBaseProps) return false;
+
+  // Validate each action
+  return json.actions.every((action: BlockchainAction | TransferAction | HttpAction) =>
+    isBlockchainAction(action) ||
+    isTransferAction(action) ||
+    HttpActionValidator.isHttpAction(action)
   );
 }
 
