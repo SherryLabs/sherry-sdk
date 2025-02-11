@@ -1,14 +1,5 @@
-import {
-  BlockchainAction,
-  BlockchainActionMetadata,
-  TransferAction
-} from "./blockchainAction";
-/**
- * Defines the type of action that can be performed.
- * - "action": Represents a blockchain action.
- * - "http-action": Represents an http-action.
- */
-export type ActionType = "action" | "http-action";
+import { BlockchainAction, BlockchainActionMetadata, TransferAction } from "./blockchainAction";
+import { HttpAction } from "./httpAction";
 
 /**
  * Interface representing the metadata for a mini app.
@@ -21,11 +12,6 @@ export type ActionType = "action" | "http-action";
  * @template abi - The ABI of the contract. Defaults to `Abi`.
  */
 export interface Metadata {
-  /**
-   * The type of action.
-   * Can be either "action" for blockchain actions or "external-link" for external links.
-   */
-  type: ActionType;
   /**
    * The URL of the mini app.
    * This is the URL of the project.
@@ -54,7 +40,7 @@ export interface Metadata {
    * The actions that can be performed by the mini app.
    * This is an array of `BlockchainAction` or `TransferAction` objects, each defining a specific action.
    */
-  actions: (BlockchainActionMetadata | TransferAction)[];
+  actions: (BlockchainActionMetadata | TransferAction | HttpAction)[];
 }
 
 /**
@@ -96,5 +82,5 @@ export interface Metadata {
  * ```
  */
 export interface ValidatedMetadata extends Omit<Metadata, 'actions'> {
-  actions: (BlockchainAction | TransferAction)[];
+  actions: (BlockchainAction | TransferAction | HttpAction)[];
 }
