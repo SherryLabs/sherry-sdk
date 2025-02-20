@@ -28,7 +28,7 @@ describe("utils", () => {
         address: "0x0123456789012345678901234567890123456789",
         paramsLabel: ["param1"],
         label: "Test Action",
-        chain: "fuji"
+        chains: { source: "fuji" }
     };
 
     // This action has a different params than the mockAction
@@ -38,7 +38,7 @@ describe("utils", () => {
         address: "0x0123456789012345678901234567890123456789",
         paramsLabel: ["param1"],
         label: "Test Action",
-        chain: "fuji",
+        chains: { source: "fuji" },
         params: [{ name: "owner", type: "address" }],
         blockchainActionType: "view"
     };
@@ -106,7 +106,6 @@ describe("utils", () => {
     describe("createMetadata", () => {
         it("should create metadata with processed actions", () => {
             const metadata: Metadata = {
-                type: "action",
                 url: "google.com",
                 title: "title",
                 description: "description",
@@ -120,7 +119,6 @@ describe("utils", () => {
 
         it("should create metadata with complex Abi", () => {
             const metadata: Metadata = {
-                type: "action",
                 url: "google.com",
                 title: "title",
                 description: "description",
@@ -131,7 +129,7 @@ describe("utils", () => {
                     address: "0x0123456789012345678901234567890123456789",
                     paramsLabel: ["param1"],
                     label: "Test Action",
-                    chain: "fuji"
+                    chains: { source: "fuji" }
                 }]
             };
 
@@ -160,7 +158,6 @@ describe("utils", () => {
 
         it("should throw NoActionDefinedError if no actions are defined", () => {
             const metadata: Metadata = {
-                type: "action",
                 url: "url",
                 title: "title",
                 description: "description",
@@ -172,7 +169,6 @@ describe("utils", () => {
 
         it("should throw ActionsNumberError if more than 4 actions are defined", () => {
             const metadata: Metadata = {
-                type: "action",
                 url: "google.com",
                 title: "title",
                 description: "description",
@@ -184,7 +180,6 @@ describe("utils", () => {
 
         it("shouls return true if is valid validatedMetadata", () => {
             const metadata: Metadata = {
-                type: "action",
                 url: "google.com",
                 title: "title",
                 description: "description",
@@ -198,7 +193,6 @@ describe("utils", () => {
 
         it("shouls return false if is not valid validatedMetadata", () => {
             const metadata: Metadata = {
-                type: "action",
                 url: "google.com",
                 title: "title",
                 description: "description",

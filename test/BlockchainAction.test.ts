@@ -27,7 +27,7 @@ describe('BlockchainAction Functions', () => {
     abi: exampleAbi,
     functionName: "balanceOf",
     paramsValue: ["0x1234567890abcdef1234567890abcdef12345678"],
-    chain: "fuji",
+    chains: { source: "fuji" },
   };
 
 
@@ -84,7 +84,6 @@ describe('BlockchainAction Functions', () => {
 describe('Metadata Functions', () => {
   it('should return and false when metadata is invalid', () => {
     const metadataEleven: Metadata = {
-      type: "action",
       url: "google.com",
       icon: "https://ipfs.io/ipfs/bafybeifto4kwihaup53m5pzi4g7iuypm3oajj4rdcm6gywjvfcaqdh3zsm/10.png",
       title: "Sparkling Connector Token",
@@ -95,7 +94,7 @@ describe('Metadata Functions', () => {
           address: '0x1234567890abcdef1234567890abcdef12345678',
           abi: [],
           functionName: "mint",
-          chain: "avalanche",
+          chains: { source: "fuji" },
           paramsValue: [0, "sender"],
           paramsLabel: ["ID", "To"] // Si hay paramsLabel me da error
         }
@@ -112,30 +111,29 @@ describe('Metadata Functions', () => {
         label: "0.01 AVAX",
         to: "0x5b1869D9A4C187F2EAa108f3062412ecf0526b24",
         amount: 0.01,
-        chain: "avalanche",
+        chains: { source: "avalanche" },
       },
       {
         label: "1 AVAX",
         to: "0x5b1869D9A4C187F2EAa108f3062412ecf0526b24",
         amount: 1,
-        chain: "avalanche",
+        chains: { source: "avalanche" },
       },
       {
         label: "SENT",
         to: "0x5b1869D9A4C187F2EAa108f3062412ecf0526b24",
         amount: 1,
-        chain: "avalanche",
+        chains: { source: "avalanche" },
       },
       {
         label: "Test Action",
-        chain: "fuji",
+        chains: { source: "avalanche" },
         to: "0x1234567890abcdef1234567890abcdef12345678",
         amount: 1000000000000000000,
       }
     ]
 
     const metadata: Metadata = {
-      type: "action",
       url: "google.com",
       icon: "https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExM21kajk5ODVzMmV2bXUzNzN5dGluMWJsejNtN2ptejBqYnhxcjByZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/5phvgzYzpqFL2N1lav/giphy.gif",
       title: "Sent me a tip",
@@ -144,7 +142,6 @@ describe('Metadata Functions', () => {
     };
 
     const formattedMetadata: ValidatedMetadata = {
-      type: metadata.type,
       url: metadata.url,
       icon: metadata.icon,
       title: metadata.title,
