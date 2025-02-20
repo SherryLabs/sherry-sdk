@@ -179,8 +179,9 @@ function validateMetadata(metadata: Metadata): void {
     }
 
     if (!HttpActionValidator.isHttpAction(action)) {
-      if (!isValidChain(action.chain)) {
-        throw new InvalidMetadataError(`Invalid chain in action at index ${index}`);
+      // Validar el ChainContext
+      if (!isValidChainContext(action.chains)) {
+        throw new InvalidMetadataError(`Invalid chains configuration in action at index ${index}`);
       }
     }
   });
@@ -375,42 +376,33 @@ export function isBlockchainActionMetadata(action: any): action is BlockchainAct
     typeof action.address === "string" &&
     Array.isArray(action.abi) &&
     typeof action.functionName === "string" &&
-    typeof action.chain === "string"
+    isValidChainContext(action.chains)
   );
 }
 
-export function isBlockchainAction(action: any): action is BlockchainAction {
+// Nueva función auxiliar para validar ChainContext
+function isValidChainContext(chains: any): boolean {
   return (
-    action &&
-    typeof action === "object" &&
-    typeof action.label === "string" &&
-    typeof action.address === "string" &&
-    action.address.startsWith("0x") && action.address.length === 42 &&
-    Array.isArray(action.abi) &&
-    typeof action.functionName === "string" &&
-    isValidChain(action.chain) &&
-    (action.amount === undefined || typeof action.amount === "number") &&
-    (action.paramsLabel === undefined ||
-      (Array.isArray(action.paramsLabel) &&
-        action.paramsLabel.every((label: any) => typeof label === "string"))) &&
-    (action.paramsValue === undefined ||
-      (Array.isArray(action.paramsValue) &&
-        action.paramsValue.every((value: any) =>
-          typeof value === "string" ||
-          typeof value === "number" ||
-          typeof value === "bigint" ||
-          value === null ||
-          typeof value === "boolean"))) &&
+    chains &&
+    typeof chains === "object" &&
+    isValidChain(chains.source) &&
+    (chains.destination === undefined || isValidChain(chains.destination))
+  );
+}
+
+export function isBlockchainAction(action: BlockchainAction): action is BlockchainAction {
+  return (
+    isBlockchainActionMetadata(action) &&
     Array.isArray(action.params) &&
     action.params.every((param: any) =>
       typeof param === "object" &&
-      typeof param.type === "string") &&
+      typeof param.type === "string"
+    ) &&
     typeof action.blockchainActionType === "string"
   );
 }
 
 export function isTransferAction(action: any): action is TransferAction {
-  // First check if it has BlockchainActionMetadata specific properties
   if (action.abi !== undefined ||
     action.functionName !== undefined ||
     action.paramsValue !== undefined ||
@@ -418,14 +410,14 @@ export function isTransferAction(action: any): action is TransferAction {
     return false;
   }
 
-  // Then check TransferAction properties
-  if (!action || typeof action !== 'object') return false;
-  if (typeof action.label !== 'string') return false;
-  if (!isValidChain(action.chain)) return false;
-  if (action.to !== undefined && (typeof action.to !== 'string' || !action.to.startsWith('0x'))) return false;
-  if (action.amount !== undefined && typeof action.amount !== 'number') return false;
-
-  return true;
+  return (
+    action &&
+    typeof action === "object" &&
+    typeof action.label === "string" &&
+    isValidChainContext(action.chains) &&
+    (action.to === undefined || (typeof action.to === "string" && action.to.startsWith("0x"))) &&
+    (action.amount === undefined || typeof action.amount === "number")
+  );
 }
 
 export function isMetadata(json: any): json is Metadata {
@@ -460,7 +452,7 @@ export function isValidatedMetadata(json: any): json is ValidatedMetadata {
 
   // Validate each action
   return json.actions.every((action: BlockchainAction | TransferAction | HttpAction) =>
-    isBlockchainAction(action) ||
+    isBlockchainAction(action as BlockchainAction) ||
     isTransferAction(action) ||
     HttpActionValidator.isHttpAction(action)
   );

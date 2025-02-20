@@ -10,7 +10,7 @@ describe("Type Guards", () => {
     it("should identify TransferAction", () => {
         const action: TransferAction = {
             label: "Transfer Action",
-            chain: "avalanche",
+            chains: { source: "avalanche"},
             to: "0xabcdefabcdefabcdefabcdefabcdefabcdef",
             amount: 1000
         };
