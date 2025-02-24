@@ -1,4 +1,5 @@
 import { describe, expect, it } from "@jest/globals";
+import fetch from 'node-fetch';
 import {
   BlockchainActionMetadata,
   BlockchainAction,
@@ -14,7 +15,8 @@ import {
   createMetadata,
   isTransferAction,
   isBlockchainAction,
-  isBlockchainActionMetadata
+  isBlockchainActionMetadata,
+  helperValidateMetadata
 } from "../src/utils/helpers";
 import { simpleAbi } from "./abi";
 
@@ -105,7 +107,7 @@ describe('Metadata Functions', () => {
     expect(isBlockchainActionMetadata(metadataEleven.actions[0])).toBe(true);
   })
 
-  it('should return metadata formatted', () => {
+  it('should return metadata formatted', async() => {
     const actions: TransferAction[] = [
       {
         label: "0.01 AVAX",
@@ -135,7 +137,7 @@ describe('Metadata Functions', () => {
 
     const metadata: Metadata = {
       url: "google.com",
-      icon: "https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExM21kajk5ODVzMmV2bXUzNzN5dGluMWJsejNtN2ptejBqYnhxcjByZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/5phvgzYzpqFL2N1lav/giphy.gif",
+      icon: "https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExM21kajk5ODVzMmV2bXUzNzN5dGluMWJsejNtN2ptejBqYnhxcjByZSZlcD12MV9pbnRlcm5naWZfYnlfaWQmY3Q9Zw/5phvgzYzpqFL2N1lav/giphy.gif",
       title: "Sent me a tip",
       description: "Send me a tip to show your appreciation for my work",
       actions: actions
@@ -151,5 +153,41 @@ describe('Metadata Functions', () => {
 
     const m = createMetadata(metadata);
     expect(m).toEqual(formattedMetadata);
+
+    // Primero validamos que la metadata local sea correcta
+    const localMetadataString = JSON.stringify(metadata);
+    console.log("Local metadata validation:");
+    const localValidation = helperValidateMetadata(localMetadataString);
+    expect(localValidation.isValid).toBe(true);
+
+    // Luego hacemos el fetch de Algun endpoint Valido
+    // Descomentar esto para probar la validación de la metadata de un endpoint
+    /*
+    const response = await fetch('http://localhost:3000/api/examples/poap', {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    */
+    
+    //const jsonResponse = await response.json(); // jsonResponse es ya un objeto JavaScript
+  
+  
+    // Validamos que la respuesta tenga la estructura correcta  
+    expect(m).toHaveProperty('url');
+    expect(m).toHaveProperty('actions');
+    
+    // Solo convertimos a string si helperValidateMetadata lo requiere
+    //const apiValidation = helperValidateMetadata(JSON.stringify(localValidation));
+
+    // Verificaciones más específicas    
+    if (!localValidation.isValid) {
+      console.error("Validation errors:", localValidation)
+    }
+
+    expect(localValidation.isValid).toBe(true);    
+    expect(localValidation.type).toBe("ValidatedMetadata");
+    expect(localValidation.data).toBeDefined();
   });
+
 })
