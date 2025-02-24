@@ -1,4 +1,5 @@
 import { describe, expect, it } from "@jest/globals";
+import fetch from 'node-fetch';
 import {
   BlockchainActionMetadata,
   BlockchainAction,
@@ -106,7 +107,7 @@ describe('Metadata Functions', () => {
     expect(isBlockchainActionMetadata(metadataEleven.actions[0])).toBe(true);
   })
 
-  it('should return metadata formatted', () => {
+  it('should return metadata formatted', async() => {
     const actions: TransferAction[] = [
       {
         label: "0.01 AVAX",
@@ -153,20 +154,40 @@ describe('Metadata Functions', () => {
     const m = createMetadata(metadata);
     expect(m).toEqual(formattedMetadata);
 
-    // Validar la metadata
-    const metadataString = JSON.stringify(m); // Usar 'm' en lugar de formattedMetadata
-    console.log("Metadata a validar:", metadataString);
-    
-    const validated = helperValidateMetadata(metadataString);
-    console.log("Resultado de validación:", validated);
+    // Primero validamos que la metadata local sea correcta
+    const localMetadataString = JSON.stringify(metadata);
+    console.log("Local metadata validation:");
+    const localValidation = helperValidateMetadata(localMetadataString);
+    expect(localValidation.isValid).toBe(true);
 
-    // Verificar la validación
-    expect(validated.isValid).toBe(true);
-    expect(validated.type).toBe("ValidatedMetadata");
-    expect(validated.data).toBeDefined();
+    // Luego hacemos el fetch de Algun endpoint Valido
+    // Descomentar esto para probar la validación de la metadata de un endpoint
+    /*
+    const response = await fetch('http://localhost:3000/api/examples/poap', {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    */
     
-    if (!validated.isValid) {
-      console.log("Errores de validación:", validated);
+    //const jsonResponse = await response.json(); // jsonResponse es ya un objeto JavaScript
+  
+  
+    // Validamos que la respuesta tenga la estructura correcta  
+    expect(m).toHaveProperty('url');
+    expect(m).toHaveProperty('actions');
+    
+    // Solo convertimos a string si helperValidateMetadata lo requiere
+    //const apiValidation = helperValidateMetadata(JSON.stringify(localValidation));
+
+    // Verificaciones más específicas    
+    if (!localValidation.isValid) {
+      console.error("Validation errors:", localValidation)
     }
+
+    expect(localValidation.isValid).toBe(true);    
+    expect(localValidation.type).toBe("ValidatedMetadata");
+    expect(localValidation.data).toBeDefined();
   });
+
 })
