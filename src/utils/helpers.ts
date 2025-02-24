@@ -384,7 +384,9 @@ export function isBlockchainActionMetadata(action: any): action is BlockchainAct
     typeof action.address === "string" &&
     Array.isArray(action.abi) &&
     typeof action.functionName === "string" &&
-    isValidChainContext(action.chains)
+    isValidChainContext(action.chains) &&
+    (!action.paramsValue || Array.isArray(action.paramsValue)) &&
+    (!action.paramsLabel || Array.isArray(action.paramsLabel))
   );
 }
 
@@ -404,9 +406,11 @@ export function isBlockchainAction(action: BlockchainAction): action is Blockcha
     Array.isArray(action.params) &&
     action.params.every((param: any) =>
       typeof param === "object" &&
-      typeof param.type === "string"
+      typeof param.type === "string" &&
+      typeof param.name === "string"
     ) &&
-    typeof action.blockchainActionType === "string"
+    typeof action.blockchainActionType === "string" &&
+    (!action.paramsValue || Array.isArray(action.paramsValue))
   );
 }
 
