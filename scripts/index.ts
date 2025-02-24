@@ -23,7 +23,6 @@ async function main() {
     ] as const
 
     const metadata: Metadata = {
-        type: "action",
         url: "google.com",
         icon: "icon",
         title: "title",
@@ -36,14 +35,14 @@ async function main() {
                 functionName: "safeTransferFrom",
                 paramsValue: ["sender", "0x1234567890abcdef1234567890abcdef12345678", 1],
                 paramsLabel: ["From"],
-                chain: "fuji"
+                chains: { source: "fuji" }
             },
             {
                 label: "Test Action 2",
                 address: "0x1234567890abcdef1234567890abcdef12345678",
                 abi: exampleAbi,
                 functionName: "safeTransferFrom",
-                chain: "fuji"
+                chains: { source: "fuji" }
             }
         ]
     };

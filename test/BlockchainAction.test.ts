@@ -156,7 +156,7 @@ describe('Metadata Functions', () => {
 
     // Primero validamos que la metadata local sea correcta
     const localMetadataString = JSON.stringify(metadata);
-    console.log("Local metadata validation:");
+    //console.log("Local metadata validation:");
     const localValidation = helperValidateMetadata(localMetadataString);
     expect(localValidation.isValid).toBe(true);
 

@@ -374,8 +374,6 @@ export function isValidValidatedMetadata(obj: any): obj is ValidatedMetadata {
   return true;
 }
 
-
-
 export function isBlockchainActionMetadata(action: any): action is BlockchainActionMetadata {
   return (
     action &&
@@ -400,9 +398,8 @@ function isValidChainContext(chains: any): boolean {
   );
 }
 
-export function isBlockchainAction(action: BlockchainAction): action is BlockchainAction {
+export function isBlockchainAction(action: any): action is BlockchainAction {
   return (
-    isBlockchainActionMetadata(action) &&
     Array.isArray(action.params) &&
     action.params.every((param: any) =>
       typeof param === "object" &&
