@@ -193,17 +193,24 @@ export const helperValidateMetadata = (json: string): {
   data?: Metadata | ValidatedMetadata;
 } => {
   try {
-    if (isValidatedMetadata(json)) {
+    // Primero parseamos el JSON string a objeto
+    const parsedData = JSON.parse(json);
+
+    // Validamos si es una ValidatedMetadata
+    if (isValidatedMetadata(parsedData)) {
       return {
         isValid: true,
         type: "ValidatedMetadata",
-        data: json as ValidatedMetadata
+        data: parsedData
       };
-    } if (isMetadata(json)) {
+    }
+
+    // Si no es ValidatedMetadata, validamos si es Metadata
+    if (isMetadata(parsedData)) {
       return {
         isValid: true,
         type: "Metadata",
-        data: json as Metadata
+        data: parsedData
       };
     }
 
@@ -212,6 +219,7 @@ export const helperValidateMetadata = (json: string): {
       type: "Invalid"
     };
   } catch (error) {
+    console.error("Error validating metadata:", error);
     return {
       isValid: false,
       type: "Invalid"
@@ -430,32 +438,38 @@ export function isMetadata(json: any): json is Metadata {
     typeof json.description === "string" &&
     Array.isArray(json.actions) &&
     json.actions.every((action: any) =>
-      isBlockchainActionMetadata(action) || isTransferAction(action)
+      isBlockchainActionMetadata(action) || isTransferAction(action) || HttpActionValidator.isHttpAction(action)
     )
   );
 }
 
 export function isValidatedMetadata(json: any): json is ValidatedMetadata {
-  if (typeof json !== 'object' ||
-    json === null ||
-    !Array.isArray(json.actions)) return false;
+  if (!json || typeof json !== 'object') return false;
 
-  // Check metadata base properties
-  const hasBaseProps = (
-    typeof json.type === "string" &&
+  // Validar propiedades básicas
+  const hasRequiredProps = 
+    typeof json.url === "string" &&
     typeof json.icon === "string" &&
     typeof json.title === "string" &&
-    typeof json.description === "string"
-  );
+    typeof json.description === "string" &&
+    Array.isArray(json.actions);
 
-  if (!hasBaseProps) return false;
+  if (!hasRequiredProps) return false;
 
-  // Validate each action
-  return json.actions.every((action: BlockchainAction | TransferAction | HttpAction) =>
-    isBlockchainAction(action as BlockchainAction) ||
-    isTransferAction(action) ||
-    HttpActionValidator.isHttpAction(action)
-  );
+  // Validar cada acción
+  return json.actions.every((action: any) => {
+    if (isTransferAction(action)) {
+      return true;
+    }
+    if (HttpActionValidator.isHttpAction(action)) {
+      return true;
+    }
+    // Para BlockchainAction, validar como BlockchainAction completo
+    if (isBlockchainAction(action)) {
+      return true;
+    }
+    return false;
+  });
 }
 
 const isValidChain = (chain: any): chain is Chain => {
@@ -463,7 +477,8 @@ const isValidChain = (chain: any): chain is Chain => {
     "avalanche",
     "fuji",
     "celo",
-    "alfajores"
+    "alfajores",
+    "monad-testnet"
   ].includes(chain);
 };
 

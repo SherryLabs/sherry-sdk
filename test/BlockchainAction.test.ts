@@ -14,7 +14,8 @@ import {
   createMetadata,
   isTransferAction,
   isBlockchainAction,
-  isBlockchainActionMetadata
+  isBlockchainActionMetadata,
+  helperValidateMetadata
 } from "../src/utils/helpers";
 import { simpleAbi } from "./abi";
 
@@ -135,7 +136,7 @@ describe('Metadata Functions', () => {
 
     const metadata: Metadata = {
       url: "google.com",
-      icon: "https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExM21kajk5ODVzMmV2bXUzNzN5dGluMWJsejNtN2ptejBqYnhxcjByZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/5phvgzYzpqFL2N1lav/giphy.gif",
+      icon: "https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExM21kajk5ODVzMmV2bXUzNzN5dGluMWJsejNtN2ptejBqYnhxcjByZSZlcD12MV9pbnRlcm5naWZfYnlfaWQmY3Q9Zw/5phvgzYzpqFL2N1lav/giphy.gif",
       title: "Sent me a tip",
       description: "Send me a tip to show your appreciation for my work",
       actions: actions
@@ -151,5 +152,21 @@ describe('Metadata Functions', () => {
 
     const m = createMetadata(metadata);
     expect(m).toEqual(formattedMetadata);
+
+    // Validar la metadata
+    const metadataString = JSON.stringify(m); // Usar 'm' en lugar de formattedMetadata
+    console.log("Metadata a validar:", metadataString);
+    
+    const validated = helperValidateMetadata(metadataString);
+    console.log("Resultado de validación:", validated);
+
+    // Verificar la validación
+    expect(validated.isValid).toBe(true);
+    expect(validated.type).toBe("ValidatedMetadata");
+    expect(validated.data).toBeDefined();
+    
+    if (!validated.isValid) {
+      console.log("Errores de validación:", validated);
+    }
   });
 })
