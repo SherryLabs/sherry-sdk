@@ -432,7 +432,6 @@ export function isMetadata(json: any): json is Metadata {
   return (
     json &&
     typeof json === "object" &&
-    typeof json.type === "string" &&
     typeof json.icon === "string" &&
     typeof json.title === "string" &&
     typeof json.description === "string" &&
