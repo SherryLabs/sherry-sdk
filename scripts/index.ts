@@ -20,36 +20,34 @@ async function main() {
             ],
             outputs: [],
         },
-    ] as const
+    ] as const;
 
     const metadata: Metadata = {
-        type: "action",
-        url: "google.com",
-        icon: "icon",
-        title: "title",
-        description: "description",
+        url: 'google.com',
+        icon: 'icon',
+        title: 'title',
+        description: 'description',
         actions: [
             {
-                label: "Test Action 2",
-                address: "0x1234567890abcdef1234567890abcdef12345678",
+                label: 'Test Action 2',
+                address: '0x1234567890abcdef1234567890abcdef12345678',
                 abi: exampleAbi,
-                functionName: "safeTransferFrom",
-                paramsValue: ["sender", "0x1234567890abcdef1234567890abcdef12345678", 1],
-                paramsLabel: ["From"],
-                chain: "fuji"
+                functionName: 'safeTransferFrom',
+                paramsValue: ['sender', '0x1234567890abcdef1234567890abcdef12345678', 1],
+                paramsLabel: ['From'],
+                chains: { source: 'fuji' },
             },
             {
-                label: "Test Action 2",
-                address: "0x1234567890abcdef1234567890abcdef12345678",
+                label: 'Test Action 2',
+                address: '0x1234567890abcdef1234567890abcdef12345678',
                 abi: exampleAbi,
-                functionName: "safeTransferFrom",
-                chain: "fuji"
-            }
-        ]
+                functionName: 'safeTransferFrom',
+                chains: { source: 'fuji' },
+            },
+        ],
     };
     try {
-        const result = await createMetadata(metadata);
-        //console.log('Metadata:', JSON.stringify(result, null, 2));
+        await createMetadata(metadata);
     } catch (error) {
         console.error('Error creating metadata:', error);
         throw error;

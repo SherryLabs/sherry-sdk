@@ -5,6 +5,9 @@ Welcome to the [Sherry SDK!](https://www.npmjs.com/package/@sherrylinks/sdk) Thi
 ## Features
 
 - **Smart Contract Interaction**: Easily interact with any function of any smart contract.
+- **Transfer Actions**: Simplified interface for token transfers.
+- **HTTP Actions**: Create forms and API integrations with HTTP endpoints.
+- **Cross-chain Support**: Define actions that work across multiple blockchains.
 - **Mini-App Creation**: Build mini-apps quickly and efficiently.
 - **Flexible and Extensible**: Designed to be flexible and easily extensible to meet your needs.
 
@@ -53,52 +56,127 @@ const exampleAbi = [
 ] as const;
 ```
 
+## Core Interfaces
+
 ```typescript
-import { Metadata, BlockchainActionMetadata } from '@sherrylinks/sdk';
+import {
+  Metadata,
+  ValidatedMetadata,
+  BlockchainAction,
+  TransferAction,
+  HttpAction,
+} from '@sherrylinks/sdk';
 ```
 
-```typescript
-export type ActionType = "action" | "external-link";
+### Metadata Interface
 
+```typescript
 export interface Metadata {
-  type: ActionType;
+  url: string;
   icon: string;
   title: string;
   description: string;
-  actions: BlockchainActionMetadata[] | BlockchainAction[];
+  actions: (BlockchainActionMetadata | TransferAction | HttpAction)[];
 }
 
 export interface ValidatedMetadata extends Omit<Metadata, 'actions'> {
-  actions: BlockchainAction[];
+  actions: (BlockchainAction | TransferAction | HttpAction)[];
 }
 ```
 
-## Example of Metadata Definition
+## Examples
+
+### Blockchain Action Example
 
 ```typescript
 const metadata: Metadata = {
-  type: "action",
-  icon: "icon",
-  title: "title",
-  description: "description",
+  url: 'https://myapp.com',
+  icon: 'https://example.com/icon.png',
+  title: 'Contract Interaction Example',
+  description: 'Interact with a smart contract',
   actions: [
     {
-      label: "Test Action",
-      address: "0x1234567890abcdef1234567890abcdef12345678",
+      label: 'Check Balance',
+      address: '0x1234567890abcdef1234567890abcdef12345678',
       abi: exampleAbi,
-      functionName: "safeTransferFrom",
-      chain: "ethereum"
-    }
-  ]
+      functionName: 'balanceOf',
+      paramsValue: ['0x1234567890abcdef1234567890abcdef12345678'],
+      chains: { source: 'fuji' },
+    },
+  ],
 };
-
-const validatedMetadata: ValidatedMetadata = createMetadata(metadata);
-console.log(validatedMetadata);
 ```
 
-## Functions
+### Transfer Action Example
 
-Several functions are available for the correct validation of the Metadata. You are free to define the metadata but remember that it will be validated, so in order to ensure the correct functioning of the mini-apps, the **`createMetadata`** function has been made available to obtain the validated Metadata as a result.
+```typescript
+const transferMetadata: Metadata = {
+  url: 'https://myapp.com',
+  icon: 'https://example.com/icon.png',
+  title: 'Transfer Example',
+  description: 'Transfer tokens to a recipient',
+  actions: [
+    {
+      label: 'Send 0.1 AVAX',
+      to: '0x5b1869D9A4C187F2EAa108f3062412ecf0526b24',
+      amount: 0.1,
+      chains: { source: 'avalanche' },
+    },
+  ],
+};
+```
+
+### HTTP Action Example
+
+```typescript
+const httpMetadata: Metadata = {
+  url: 'https://myapp.com',
+  icon: 'https://example.com/icon.png',
+  title: 'Form Example',
+  description: 'Submit data to an API',
+  actions: [
+    {
+      label: 'Subscribe to Newsletter',
+      endpoint: 'https://api.example.com/subscribe',
+      params: [
+        {
+          name: 'email',
+          label: 'Email Address',
+          type: 'email',
+          required: true,
+        },
+        {
+          name: 'name',
+          label: 'Full Name',
+          type: 'text',
+          required: false,
+        },
+      ],
+    },
+  ],
+};
+```
+
+### Cross-chain Action Example
+
+```typescript
+const crossChainMetadata: Metadata = {
+  url: 'https://myapp.com',
+  icon: 'https://example.com/icon.png',
+  title: 'Cross-chain Example',
+  description: 'Cross-chain operation',
+  actions: [
+    {
+      label: 'Bridge AVAX to Celo',
+      to: '0x5b1869D9A4C187F2EAa108f3062412ecf0526b24',
+      amount: 0.1,
+      chains: { source: 'fuji', destination: 'alfajores' },
+    },
+  ],
+};
+```
+
+## Core Functions
 
 ### createMetadata
 
@@ -111,61 +189,70 @@ const validatedMetadata = createMetadata(metadata);
 console.log(validatedMetadata);
 ```
 
-### getParameters
+### helperValidateMetadata
 
-Gets the parameters of a function in the ABI.
+Validates a JSON string to check if it conforms to the Metadata or ValidatedMetadata structure.
 
 ```typescript
-import { getParameters } from '@sherrylinks/sdk';
+import { helperValidateMetadata } from '@sherrylinks/sdk';
+
+const jsonString = JSON.stringify(metadata);
+const validation = helperValidateMetadata(jsonString);
+
+if (validation.isValid) {
+  console.log(`Valid ${validation.type}:`, validation.data);
+} else {
+  console.error('Invalid metadata');
+}
+```
+
+### ABI Helper Functions
+
+```typescript
+import {
+  getParameters,
+  getAbiFunction,
+  isValidFunction,
+  validateActionParameters,
+  getBlockchainActionType,
+} from '@sherrylinks/sdk';
 
 const parameters = getParameters(actionMetadata);
-console.log(parameters);
-```
-
-### getAbiFunction
-
-Gets a function from the ABI by its name.
-
-```typescript
-import { getAbiFunction } from '@sherrylinks/sdk';
-
-const abiFunction = getAbiFunction(exampleAbi, "balanceOf");
-console.log(abiFunction);
-```
-
-### isValidFunction
-
-Checks if a function exists in the ABI.
-
-```typescript
-import { isValidFunction } from '@sherrylinks/sdk';
-
-const isValid = isValidFunction(exampleAbi, "balanceOf");
-console.log(isValid);
-
-```
-
-### validateActionParameters
-
-Validates the parameters of an action.
-
-```typescript
-import { validateActionParameters } from '@sherrylinks/sdk';
-
-const isValid = validateActionParameters(action);
-console.log(isValid);
-```
-
-### getBlockchainActionType
-
-Gets the state mutability of a function in the ABI.
-
-```typescript
-import { getBlockchainActionType } from '@sherrylinks/sdk';
-
+const abiFunction = getAbiFunction(exampleAbi, 'balanceOf');
+const isValid = isValidFunction(exampleAbi, 'balanceOf');
+const isParametersValid = validateActionParameters(action);
 const actionType = getBlockchainActionType(actionMetadata);
-console.log(actionType);
 ```
+
+### Type Guards
+
+```typescript
+import {
+  isBlockchainAction,
+  isBlockchainActionMetadata,
+  isTransferAction,
+  isMetadata,
+  isValidatedMetadata,
+} from '@sherrylinks/sdk';
+
+if (isBlockchainActionMetadata(action)) {
+  // Action is a BlockchainActionMetadata
+}
+
+if (isTransferAction(action)) {
+  // Action is a TransferAction
+}
+```
+
+## Supported Chains
+
+The SDK currently supports the following chains:
+
+- `"fuji"` - Avalanche Fuji Testnet
+- `"avalanche"` - Avalanche Mainnet
+- `"alfajores"` - Celo Alfajores Testnet
+- `"celo"` - Celo Mainnet
+- `"monad-testnet"` - Monad Testnet
 
 ## Documentation
 
@@ -181,12 +268,8 @@ This project is licensed under the MIT License. See the LICENSE file for more de
 
 ## Contact
 
-If you have any questions or need further assistance, feel free to reach out to our support team at our [discord channel](https://discord.gg/sherry).
+If you have any questions or need further assistance, feel free to reach out to our support team at our [discord channel](https://discord.gg/AHP9Dfmz).
 
 Need more information? Visit our [docs](https://docs.sherry.social).
 
 Happy coding with Sherry SDK!
-
-
-
-
