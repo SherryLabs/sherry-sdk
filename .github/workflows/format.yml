@@ -2,9 +2,9 @@ name: Format Code
 
 on:
   push:
-    branches: [main, staging]
+    branches: [main, staging, develop]
   pull_request:
-    branches: [main, staging]
+    branches: [main, staging, develop]
 
 jobs:
   format:
@@ -25,7 +25,8 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Format with Prettier
-        run: yarn prettier --write .
+        # Usa npx para ejecutar prettier directamente
+        run: npx prettier --write .
 
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v4
