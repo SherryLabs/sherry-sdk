@@ -30,7 +30,6 @@ export interface BlockchainActionMetadata {
   paramsLabel?: string[]; // Optional for DEVs to define the label of the parameters
   paramsValue?: (string | number | bigint | null | boolean)[]; // Optional for DEVs to define the value of the parameters
   chains: ChainContext; // [sourceChain, destinationChain | null]
-  // New optional UI configuration
   ui?: BlockchainUIConfig;
 }
 

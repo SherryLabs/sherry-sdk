@@ -190,4 +190,20 @@ describe('Metadata Functions', () => {
     expect(localValidation.data).toBeDefined();
   });
 
+  it('should validate transfer actions correctly', () => {
+    const actionsTransfer: TransferAction[] = [
+      {
+        label: "0.01 CELO",
+        to: "0x5b1869D9A4C187F2EAa108f3062412ecf0526b24",
+        amount: 0.01,
+        chains: { source: "fuji", destination: "alfajores" },
+      },
+      // ...existing code...
+    ];
+
+    // Esto debería retornar true
+    expect(isTransferAction(actionsTransfer[0])).toBe(true);
+    expect(isBlockchainAction(actionsTransfer[0])).toBe(false); // Esto es falso porque no es un BlockchainAction
+  });
+
 })
