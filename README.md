@@ -59,7 +59,13 @@ const exampleAbi = [
 ## Core Interfaces
 
 ```typescript
-import { Metadata, ValidatedMetadata, BlockchainAction, TransferAction, HttpAction } from '@sherrylinks/sdk';
+import {
+  Metadata,
+  ValidatedMetadata,
+  BlockchainAction,
+  TransferAction,
+  HttpAction,
+} from '@sherrylinks/sdk';
 ```
 
 ### Metadata Interface
@@ -84,20 +90,20 @@ export interface ValidatedMetadata extends Omit<Metadata, 'actions'> {
 
 ```typescript
 const metadata: Metadata = {
-  url: "https://myapp.com",
-  icon: "https://example.com/icon.png",
-  title: "Contract Interaction Example",
-  description: "Interact with a smart contract",
+  url: 'https://myapp.com',
+  icon: 'https://example.com/icon.png',
+  title: 'Contract Interaction Example',
+  description: 'Interact with a smart contract',
   actions: [
     {
-      label: "Check Balance",
-      address: "0x1234567890abcdef1234567890abcdef12345678",
+      label: 'Check Balance',
+      address: '0x1234567890abcdef1234567890abcdef12345678',
       abi: exampleAbi,
-      functionName: "balanceOf",
-      paramsValue: ["0x1234567890abcdef1234567890abcdef12345678"],
-      chains: { source: "fuji" }
-    }
-  ]
+      functionName: 'balanceOf',
+      paramsValue: ['0x1234567890abcdef1234567890abcdef12345678'],
+      chains: { source: 'fuji' },
+    },
+  ],
 };
 ```
 
@@ -105,18 +111,18 @@ const metadata: Metadata = {
 
 ```typescript
 const transferMetadata: Metadata = {
-  url: "https://myapp.com",
-  icon: "https://example.com/icon.png",
-  title: "Transfer Example",
-  description: "Transfer tokens to a recipient",
+  url: 'https://myapp.com',
+  icon: 'https://example.com/icon.png',
+  title: 'Transfer Example',
+  description: 'Transfer tokens to a recipient',
   actions: [
     {
-      label: "Send 0.1 AVAX",
-      to: "0x5b1869D9A4C187F2EAa108f3062412ecf0526b24",
+      label: 'Send 0.1 AVAX',
+      to: '0x5b1869D9A4C187F2EAa108f3062412ecf0526b24',
       amount: 0.1,
-      chains: { source: "avalanche" }
-    }
-  ]
+      chains: { source: 'avalanche' },
+    },
+  ],
 };
 ```
 
@@ -124,30 +130,30 @@ const transferMetadata: Metadata = {
 
 ```typescript
 const httpMetadata: Metadata = {
-  url: "https://myapp.com",
-  icon: "https://example.com/icon.png",
-  title: "Form Example",
-  description: "Submit data to an API",
+  url: 'https://myapp.com',
+  icon: 'https://example.com/icon.png',
+  title: 'Form Example',
+  description: 'Submit data to an API',
   actions: [
     {
-      label: "Subscribe to Newsletter",
-      endpoint: "https://api.example.com/subscribe",
+      label: 'Subscribe to Newsletter',
+      endpoint: 'https://api.example.com/subscribe',
       params: [
         {
-          name: "email",
-          label: "Email Address",
-          type: "email",
-          required: true
+          name: 'email',
+          label: 'Email Address',
+          type: 'email',
+          required: true,
         },
         {
-          name: "name",
-          label: "Full Name",
-          type: "text",
-          required: false
-        }
-      ]
-    }
-  ]
+          name: 'name',
+          label: 'Full Name',
+          type: 'text',
+          required: false,
+        },
+      ],
+    },
+  ],
 };
 ```
 
@@ -155,18 +161,18 @@ const httpMetadata: Metadata = {
 
 ```typescript
 const crossChainMetadata: Metadata = {
-  url: "https://myapp.com",
-  icon: "https://example.com/icon.png",
-  title: "Cross-chain Example",
-  description: "Cross-chain operation",
+  url: 'https://myapp.com',
+  icon: 'https://example.com/icon.png',
+  title: 'Cross-chain Example',
+  description: 'Cross-chain operation',
   actions: [
     {
-      label: "Bridge AVAX to Celo",
-      to: "0x5b1869D9A4C187F2EAa108f3062412ecf0526b24",
+      label: 'Bridge AVAX to Celo',
+      to: '0x5b1869D9A4C187F2EAa108f3062412ecf0526b24',
       amount: 0.1,
-      chains: { source: "fuji", destination: "alfajores" }
-    }
-  ]
+      chains: { source: 'fuji', destination: 'alfajores' },
+    },
+  ],
 };
 ```
 
@@ -196,18 +202,24 @@ const validation = helperValidateMetadata(jsonString);
 if (validation.isValid) {
   console.log(`Valid ${validation.type}:`, validation.data);
 } else {
-  console.error("Invalid metadata");
+  console.error('Invalid metadata');
 }
 ```
 
 ### ABI Helper Functions
 
 ```typescript
-import { getParameters, getAbiFunction, isValidFunction, validateActionParameters, getBlockchainActionType } from '@sherrylinks/sdk';
+import {
+  getParameters,
+  getAbiFunction,
+  isValidFunction,
+  validateActionParameters,
+  getBlockchainActionType,
+} from '@sherrylinks/sdk';
 
 const parameters = getParameters(actionMetadata);
-const abiFunction = getAbiFunction(exampleAbi, "balanceOf");
-const isValid = isValidFunction(exampleAbi, "balanceOf");
+const abiFunction = getAbiFunction(exampleAbi, 'balanceOf');
+const isValid = isValidFunction(exampleAbi, 'balanceOf');
 const isParametersValid = validateActionParameters(action);
 const actionType = getBlockchainActionType(actionMetadata);
 ```
@@ -215,7 +227,13 @@ const actionType = getBlockchainActionType(actionMetadata);
 ### Type Guards
 
 ```typescript
-import { isBlockchainAction, isBlockchainActionMetadata, isTransferAction, isMetadata, isValidatedMetadata } from '@sherrylinks/sdk';
+import {
+  isBlockchainAction,
+  isBlockchainActionMetadata,
+  isTransferAction,
+  isMetadata,
+  isValidatedMetadata,
+} from '@sherrylinks/sdk';
 
 if (isBlockchainActionMetadata(action)) {
   // Action is a BlockchainActionMetadata
@@ -255,7 +273,3 @@ If you have any questions or need further assistance, feel free to reach out to 
 Need more information? Visit our [docs](https://docs.sherry.social).
 
 Happy coding with Sherry SDK!
-
-
-
-

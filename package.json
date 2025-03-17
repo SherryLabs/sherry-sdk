@@ -10,7 +10,8 @@
     "test": "jest",
     "lint": "oxlint",
     "prepare": "husky",
-    "publish": "npm run build && npm publish --access public"
+    "publish": "npm run build && npm publish --access public",
+    "format": "prettier --write ."
   },
   "files": [
     "dist"
