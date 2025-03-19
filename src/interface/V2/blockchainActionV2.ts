@@ -11,13 +11,11 @@ export type BaseInputType =
     | 'url'
     | 'datetime'
     | 'textarea'
-    | 'address'  // Blockchain specific type
-   // | 'bytes'    // Blockchain specific type
-   // | 'hidden';  // Oculto en UI
+    | 'address'; // Blockchain specific type
+// | 'bytes'    // Blockchain specific type
+// | 'hidden';  // Oculto en UI
 
-export type SelectionInputType = 
-    | 'select'
-    | 'radio';
+export type SelectionInputType = 'select' | 'radio';
 
 // Option for selects and radios
 export interface SelectOption {
@@ -28,23 +26,23 @@ export interface SelectOption {
 
 // Base parameter that all share
 export interface BaseParameter {
-    name: string;           // Nombre del parámetro, debe coincidir con el ABI
-    label: string;          // Etiqueta para mostrar en UI
-    description?: string;   // Descripción - Ayuda
-    placeholder?: string;   // Placeholder para inputs
-    required?: boolean;     // Si es requerido
-    fixed?: boolean;        // Si el valor es fijo, no editable
-    value?: any;            // Valor por defecto
+    name: string; // Nombre del parámetro, debe coincidir con el ABI
+    label: string; // Etiqueta para mostrar en UI
+    description?: string; // Descripción - Ayuda
+    placeholder?: string; // Placeholder para inputs
+    required?: boolean; // Si es requerido
+    fixed?: boolean; // Si el valor es fijo, no editable
+    value?: any; // Valor por defecto
 }
 
 // Parámetros standard (text, number, boolean, email, url, datetime, textarea)
-export interface StandardParameter extends BaseParameter { 
+export interface StandardParameter extends BaseParameter {
     type: BaseInputType;
-    minLength?: number;     // Longitud mínima Texto
-    maxLength?: number;     // Longitud máxima Texto
-    pattern?: string;       // Para validaciones con regex
-    min?: number;           // Para inputs numéricos y datetime
-    max?: number;           // Para inputs numéricos y datetime
+    minLength?: number; // Longitud mínima Texto
+    maxLength?: number; // Longitud máxima Texto
+    pattern?: string; // Para validaciones con regex
+    min?: number; // Para inputs numéricos y datetime
+    max?: number; // Para inputs numéricos y datetime
 }
 
 // Parámetro de selección (select, radio)
@@ -64,23 +62,21 @@ export type BlockchainParameter = StandardParameter | SelectParameter | RadioPar
 
 // Base Action Interface
 export interface BaseAction {
-    label: string;          // Etiqueta para mostrar en UI
-    title: string;          // Título para mostrar en UI
-    description: string;    // Descripción - Ayuda
-    chains: ChainContext;   // [sourceChain, destinationChain | null]
+    label: string; // Etiqueta para mostrar en UI
+    title: string; // Título para mostrar en UI
+    description: string; // Descripción - Ayuda
+    chains: ChainContext; // [sourceChain, destinationChain | null]
 }
 
-export interface BlockchainActionMetadataV2 extends BaseAction { 
-    label: string;                          // Etiqueta para mostrar en UI
-    address: `0x${string}`;                 // Dirección del contrato
-    abi: Abi;                               // ABI del contrato
-    functionName: ContractFunctionName;     // Nombre de la función
-    amount?: number;                        // If function is payable, amount to send, set proper value as number - will be converted to WEI
+export interface BlockchainActionMetadataV2 extends BaseAction {
+    label: string; // Etiqueta para mostrar en UI
+    address: `0x${string}`; // Dirección del contrato
+    abi: Abi; // ABI del contrato
+    functionName: ContractFunctionName; // Nombre de la función
+    amount?: number; // If function is payable, amount to send, set proper value as number - will be converted to WEI
 }
 
-export interface BlockchainActionV2 extends BlockchainActionMetadataV2 { 
-    abiParams: AbiParameter[];    // Processed ABI parameters
+export interface BlockchainActionV2 extends BlockchainActionMetadataV2 {
+    abiParams: AbiParameter[]; // Processed ABI parameters
     blockchainActionType: AbiStateMutability; // Function mutability
 }
-
-

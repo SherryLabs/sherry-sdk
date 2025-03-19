@@ -257,36 +257,74 @@ function validateSelectParameter(param: SelectParameter): boolean {
 }
 
 /**
- * Valida que un parámetro de radio sea válido
+ * Valida que un parámetro de tipo radio sea válido
+ * @param param El parámetro radio a validar
+ * @returns true si el parámetro es válido
+ * @throws ActionValidationError si el parámetro no es válido
  */
 function validateRadioParameter(param: RadioParameter): boolean {
-    if (!Array.isArray(param.options) || param.options.length === 0) {
-        throw new ActionValidationError(`El parámetro "${param.name}" debe tener opciones válidas`);
+    // Verificar que existan opciones y sean un array
+    if (!Array.isArray(param.options)) {
+        throw new ActionValidationError(`El parámetro radio "${param.name}" debe tener un array de opciones`);
     }
-
-    // Validar cada opción
+    
+    // Verificar que haya al menos dos opciones (un radio button típicamente necesita múltiples opciones)
+    if (param.options.length < 2) {
+        throw new ActionValidationError(`El parámetro radio "${param.name}" debe tener al menos 2 opciones`);
+    }
+    
+    // Validar cada opción individualmente
     for (const option of param.options) {
-        if (typeof option.label !== 'string' || !option.label) {
+        // Validar etiqueta
+        if (typeof option.label !== 'string' || !option.label.trim()) {
             throw new ActionValidationError(
-                `El parámetro "${param.name}" tiene una opción con etiqueta inválida`,
+                `El parámetro "${param.name}" tiene una opción con etiqueta vacía o inválida`
             );
         }
-
-        if (option.value === undefined) {
+        
+        // Validar valor
+        if (option.value === undefined || option.value === null) {
             throw new ActionValidationError(
-                `El parámetro "${param.name}" tiene una opción sin valor`,
+                `El parámetro "${param.name}" tiene una opción sin valor definido`
+            );
+        }
+        
+        // Verificar que el tipo de valor sea compatible (string, number o boolean)
+        if (typeof option.value !== 'string' && 
+            typeof option.value !== 'number' && 
+            typeof option.value !== 'boolean') {
+            throw new ActionValidationError(
+                `El parámetro "${param.name}" tiene una opción con valor de tipo inválido. Debe ser string, number o boolean`
             );
         }
     }
-
-    // Validar que no haya opciones duplicadas
+    
+    // Validar que no haya opciones duplicadas (por valor)
     const values = param.options.map(o => o.value);
     if (new Set(values).size !== values.length) {
         throw new ActionValidationError(
-            `El parámetro "${param.name}" tiene opciones con valores duplicados`,
+            `El parámetro "${param.name}" tiene opciones con valores duplicados`
         );
     }
-
+    
+    // Validar que no haya etiquetas duplicadas
+    const labels = param.options.map(o => o.label);
+    if (new Set(labels).size !== labels.length) {
+        throw new ActionValidationError(
+            `El parámetro "${param.name}" tiene opciones con etiquetas duplicadas`
+        );
+    }
+    
+    // Validar que el valor por defecto (si existe) sea una de las opciones válidas
+    if (param.value !== undefined) {
+        const isValidValue = param.options.some(option => option.value === param.value);
+        if (!isValidValue) {
+            throw new ActionValidationError(
+                `El valor por defecto "${param.value}" del parámetro "${param.name}" no está entre las opciones disponibles`
+            );
+        }
+    }
+    
     return true;
 }
 
