@@ -59,7 +59,6 @@ export interface Metadata {
  * @example
  * ```typescript
  * const validatedMetadata: ValidatedMetadata = {
- *   type: "action",
  *   icon: "icon.png",
  *   title: "My Mini App",
  *   description: "This is a mini app example",
