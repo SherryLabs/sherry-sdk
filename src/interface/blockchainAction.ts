@@ -5,19 +5,14 @@ import { ChainContext } from './chains';
 export interface UIParameter {
     label: string;
     description?: string;
-    //placeholder?: string;
-    //pattern?: string;
     minValue?: number;
     maxValue?: number;
     defaultValue?: any;
-    //errorMessage?: string;
 }
 
 export interface BlockchainUIConfig {
     title?: string;
     description?: string;
-    //successMessage?: string;
-    //errorMessage?: string;
     parameters?: Record<string, UIParameter>;
 }
 
