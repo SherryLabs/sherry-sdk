@@ -139,6 +139,7 @@ export class HttpActionValidator {
                     }
                     break;
                 // ... otros casos para los demás tipos
+                // TODO: Agregar los demás tipos
             }
         }
 

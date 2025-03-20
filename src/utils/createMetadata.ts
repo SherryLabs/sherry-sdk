@@ -584,12 +584,13 @@ export function createMetadata(metadata: Metadata): ValidatedMetadata {
 
         // Procesar cada acción
         const processedActions = metadata.actions.map(action => {
-            if (isBlockchainActionMetadata(action)){
+            if (isBlockchainActionMetadata(action)) {
                 return processBlockchainAction(action);
             } else {
-                throw new SherryValidationError('createMetadata Error; it could be TransferAction o HTTPAction or either none of them')
+                throw new SherryValidationError(
+                    'createMetadata Error; it could be TransferAction o HTTPAction or either none of them',
+                );
             }
-
         });
 
         // Devolver los metadatos procesados
