@@ -10,6 +10,8 @@ import {
     BaseParameter,
 } from '../../interface/V2/blockchainActionV2';
 import { ChainContext } from '../../interface/chains';
+import { MetadataV2, ValidatedMetadataV2 } from '../../interface/V2/metadataV2';
+import { isBlockchainActionMetadata } from './createMetadataV2';
 
 /**
  * Error personalizado para validación de acciones
@@ -91,7 +93,7 @@ export function validateBlockchainActionMetadata(action: any): boolean {
 /**
  * Valida que el contexto de cadena sea válido
  */
-function validateChainContext(chains: any): boolean {
+function validateChainContext(chains: ChainContext): boolean {
     if (!chains || typeof chains !== 'object') {
         return false;
     }
@@ -265,66 +267,72 @@ function validateSelectParameter(param: SelectParameter): boolean {
 function validateRadioParameter(param: RadioParameter): boolean {
     // Verificar que existan opciones y sean un array
     if (!Array.isArray(param.options)) {
-        throw new ActionValidationError(`El parámetro radio "${param.name}" debe tener un array de opciones`);
+        throw new ActionValidationError(
+            `El parámetro radio "${param.name}" debe tener un array de opciones`,
+        );
     }
-    
+
     // Verificar que haya al menos dos opciones (un radio button típicamente necesita múltiples opciones)
     if (param.options.length < 2) {
-        throw new ActionValidationError(`El parámetro radio "${param.name}" debe tener al menos 2 opciones`);
+        throw new ActionValidationError(
+            `El parámetro radio "${param.name}" debe tener al menos 2 opciones`,
+        );
     }
-    
+
     // Validar cada opción individualmente
     for (const option of param.options) {
         // Validar etiqueta
         if (typeof option.label !== 'string' || !option.label.trim()) {
             throw new ActionValidationError(
-                `El parámetro "${param.name}" tiene una opción con etiqueta vacía o inválida`
+                `El parámetro "${param.name}" tiene una opción con etiqueta vacía o inválida`,
             );
         }
-        
+
         // Validar valor
         if (option.value === undefined || option.value === null) {
             throw new ActionValidationError(
-                `El parámetro "${param.name}" tiene una opción sin valor definido`
+                `El parámetro "${param.name}" tiene una opción sin valor definido`,
             );
         }
-        
+
         // Verificar que el tipo de valor sea compatible (string, number o boolean)
-        if (typeof option.value !== 'string' && 
-            typeof option.value !== 'number' && 
-            typeof option.value !== 'boolean') {
+        if (
+            typeof option.value !== 'string' &&
+            typeof option.value !== 'number' &&
+            typeof option.value !== 'boolean'
+        ) {
             throw new ActionValidationError(
-                `El parámetro "${param.name}" tiene una opción con valor de tipo inválido. Debe ser string, number o boolean`
+                `El parámetro "${param.name}" tiene una opción con valor de tipo inválido. Debe ser string, number o boolean`,
             );
         }
     }
-    
+
     // Validar que no haya opciones duplicadas (por valor)
     const values = param.options.map(o => o.value);
     if (new Set(values).size !== values.length) {
         throw new ActionValidationError(
-            `El parámetro "${param.name}" tiene opciones con valores duplicados`
+            `El parámetro "${param.name}" tiene opciones con valores duplicados`,
         );
     }
-    
+
     // Validar que no haya etiquetas duplicadas
     const labels = param.options.map(o => o.label);
     if (new Set(labels).size !== labels.length) {
         throw new ActionValidationError(
-            `El parámetro "${param.name}" tiene opciones con etiquetas duplicadas`
+            `El parámetro "${param.name}" tiene opciones con etiquetas duplicadas`,
         );
     }
-    
+
     // Validar que el valor por defecto (si existe) sea una de las opciones válidas
     if (param.value !== undefined) {
         const isValidValue = param.options.some(option => option.value === param.value);
         if (!isValidValue) {
             throw new ActionValidationError(
-                `El valor por defecto "${param.value}" del parámetro "${param.name}" no está entre las opciones disponibles`
+                `El valor por defecto "${param.value}" del parámetro "${param.name}" no está entre las opciones disponibles`,
             );
         }
     }
-    
+
     return true;
 }
 
@@ -512,4 +520,87 @@ export function createValidatedActions<T extends BlockchainActionMetadataV2>(
             return action; // Devolver la acción original en caso de error
         }
     });
+}
+
+/**
+ * Valida los metadatos básicos de una mini app
+ */
+export function validateBasicMetadata(metadata: MetadataV2): boolean {
+    if (!metadata.url || typeof metadata.url !== 'string') {
+        throw new ActionValidationError("Metadata debe tener un campo 'url' válido");
+    }
+
+    if (!metadata.icon || typeof metadata.icon !== 'string') {
+        throw new ActionValidationError("Metadata debe tener un campo 'icon' válido");
+    }
+
+    if (!metadata.title || typeof metadata.title !== 'string') {
+        throw new ActionValidationError("Metadata debe tener un campo 'title' válido");
+    }
+
+    if (!metadata.description || typeof metadata.description !== 'string') {
+        throw new ActionValidationError("Metadata debe tener un campo 'description' válido");
+    }
+
+    if (!Array.isArray(metadata.actions)) {
+        throw new ActionValidationError('Metadata debe tener un array de acciones');
+    }
+
+    if (metadata.actions.length === 0) {
+        throw new ActionValidationError('Metadata debe incluir al menos una acción');
+    }
+
+    if (metadata.actions.length > 4) {
+        throw new ActionValidationError(
+            `Se permiten máximo 4 acciones, se recibieron ${metadata.actions.length}`,
+        );
+    }
+
+    return true;
+}
+
+/**
+ * Crea y valida un objeto MetadataV2 completo
+ * Esta función centraliza la validación y creación de metadatos usando el validator
+ *
+ * @param metadata Los metadatos sin procesar
+ * @returns Los metadatos procesados y validados
+ * @throws ActionValidationError si hay algún error de validación
+ */
+export function createMetadataV2(metadata: MetadataV2): ValidatedMetadataV2 {
+    try {
+        // Validar metadatos básicos
+        validateBasicMetadata(metadata);
+
+        // Procesar cada acción con la validación de esta clase
+        const processedActions = metadata.actions.map(action => {
+            if (isBlockchainActionMetadata(action)) {
+                return processBlockchainAction(action);
+            } /*else if(isHttpActionMetadata(action)){
+                return action;
+            }else if(isTransferActionMetadata(action)){ 
+
+            }*/ else {
+                throw new ActionValidationError(`Tipo de Action desconocido: ${action}`);
+            }
+        });
+
+        // Devolver los metadatos procesados
+        return {
+            url: metadata.url,
+            icon: metadata.icon,
+            title: metadata.title,
+            description: metadata.description,
+            actions: processedActions,
+        };
+    } catch (error) {
+        // Mejorar mensajes de error con contexto
+        if (error instanceof ActionValidationError) {
+            throw error;
+        } else if (error instanceof Error) {
+            throw new ActionValidationError(`Error al procesar metadata: ${error.message}`);
+        } else {
+            throw new Error('unknown error');
+        }
+    }
 }

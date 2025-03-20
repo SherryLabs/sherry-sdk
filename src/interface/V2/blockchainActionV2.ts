@@ -63,7 +63,6 @@ export type BlockchainParameter = StandardParameter | SelectParameter | RadioPar
 // Base Action Interface
 export interface BaseAction {
     label: string; // Etiqueta para mostrar en UI
-    title: string; // Título para mostrar en UI
     description: string; // Descripción - Ayuda
     chains: ChainContext; // [sourceChain, destinationChain | null]
 }
@@ -74,6 +73,7 @@ export interface BlockchainActionMetadataV2 extends BaseAction {
     abi: Abi; // ABI del contrato
     functionName: ContractFunctionName; // Nombre de la función
     amount?: number; // If function is payable, amount to send, set proper value as number - will be converted to WEI
+    params?: BlockchainParameter[]; // Array de parámetros configurados
 }
 
 export interface BlockchainActionV2 extends BlockchainActionMetadataV2 {

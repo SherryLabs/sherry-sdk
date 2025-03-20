@@ -1,11 +1,15 @@
 // example-miniapps.ts
-import { BlockchainActionMetadataV2, BlockchainParameter, StandardParameter } from './blockchainActionV2';
+import {
+    BlockchainActionMetadataV2,
+    BlockchainParameter,
+    StandardParameter,
+} from './blockchainActionV2';
 import {
     PARAM_TEMPLATES,
     createRadioParam,
     createSelectOptions,
     createSelectParam,
-    createParameter
+    createParameter,
 } from './templates';
 import { AbiParameter } from 'abitype';
 
@@ -93,7 +97,7 @@ export const tokenSwapMiniApp = {
             label: 'Swap Tokens',
             title: 'Swap Your Tokens',
             description: 'Trade tokens at the best available rates',
-            address: '0xUniswapRouterAddress' as `0x${string}`,
+            address: '0x5ee75a1B1648C023e885E58bD3735Ae273f2cc52' as `0x${string}`, // 0xUniswapRouterAddress
             abi: uniswapRouterAbi,
             functionName: 'swapExactTokensForTokens',
             chains: { source: 'avalanche' },
@@ -142,7 +146,7 @@ export const tokenSwapMiniApp = {
             label: 'Swap AVAX for Tokens',
             title: 'Swap AVAX for Tokens',
             description: 'Trade AVAX for tokens at the best rates',
-            address: '0xUniswapRouterAddress' as `0x${string}`,
+            address: '0x5ee75a1B1648C023e885E58bD3735Ae273f2cc52' as `0x${string}`, // 0xUniswapRouterAddress
             abi: uniswapRouterAbi,
             functionName: 'swapExactAVAXForTokens',
             chains: { source: 'avalanche' },
