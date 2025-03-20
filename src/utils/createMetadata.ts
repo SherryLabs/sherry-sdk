@@ -1,47 +1,24 @@
 // create-metadata.ts
+import { Metadata, ValidatedMetadata } from '../interface/metadata';
 import {
-    BlockchainActionMetadataV2,
-    BlockchainActionV2,
+    BlockchainActionMetadata,
+    BlockchainAction,
     BlockchainParameter,
-    BaseAction,
     StandardParameter,
     SelectParameter,
     RadioParameter,
     BaseInputType,
-    SelectionInputType,
-} from '../../interface/V2/blockchainActionV2';
+} from '../interface/blockchainAction';
 import { Abi, AbiFunction, AbiParameter, AbiStateMutability } from 'abitype';
 import { ContractFunctionName, isAddress } from 'viem';
-import { ChainContext } from '../../interface/chains';
-import { SherryValidationError } from '../customErrors';
+import { ChainContext } from '../interface/chains';
+import { SherryValidationError } from './customErrors';
 
 // Extend AbiParameter with our custom properties using type intersection
 type ExtendedAbiParameter = AbiParameter & {
     originalName?: string;
     value?: any;
 };
-
-/**
- * Interfaz para metadatos sin procesar
- */
-export interface MetadataV2 {
-    url: string;
-    icon: string;
-    title: string;
-    description: string;
-    actions: BlockchainActionMetadataV2[];
-}
-
-/**
- * Interfaz para metadatos procesados y validados
- */
-export interface ValidatedMetadataV2 {
-    url: string;
-    icon: string;
-    title: string;
-    description: string;
-    actions: BlockchainActionV2[];
-}
 
 /**
  * Verifica si una función existe en el ABI.
@@ -68,7 +45,7 @@ export function getAbiFunction(abi: Abi, functionName: ContractFunctionName): Ab
 /**
  * Obtiene los parámetros de una función en el ABI.
  */
-export function getAbiParameters(action: BlockchainActionMetadataV2): ExtendedAbiParameter[] {
+export function getAbiParameters(action: BlockchainActionMetadata): ExtendedAbiParameter[] {
     const abiFunction = getAbiFunction(action.abi, action.functionName);
     // Crear una copia profunda de los parámetros ABI
     return abiFunction.inputs.map(param => ({ ...param }) as ExtendedAbiParameter);
@@ -77,7 +54,7 @@ export function getAbiParameters(action: BlockchainActionMetadataV2): ExtendedAb
 /**
  * Obtiene el tipo de mutabilidad de una función en el ABI.
  */
-export function getBlockchainActionType(action: BlockchainActionMetadataV2): AbiStateMutability {
+export function getBlockchainActionType(action: BlockchainActionMetadata): AbiStateMutability {
     const abiFunction = getAbiFunction(action.abi, action.functionName);
     return abiFunction.stateMutability;
 }
@@ -435,7 +412,7 @@ function applyParamLabels(abiParams: ExtendedAbiParameter[], paramsLabel?: strin
 /**
  * Valida una acción blockchain.
  */
-export function validateBlockchainAction(action: BlockchainActionMetadataV2): void {
+export function validateBlockchainAction(action: BlockchainActionMetadata): void {
     try {
         if (isBlockchainActionMetadata(action)) {
             // Validar campos básicos
@@ -525,7 +502,7 @@ export function validateBlockchainAction(action: BlockchainActionMetadataV2): vo
 /**
  * Procesa una acción blockchain.
  */
-export function processBlockchainAction(action: BlockchainActionMetadataV2): BlockchainActionV2 {
+export function processBlockchainAction(action: BlockchainActionMetadata): BlockchainAction {
     try {
         // Validar la acción
         validateBlockchainAction(action);
@@ -564,7 +541,7 @@ export function processBlockchainAction(action: BlockchainActionMetadataV2): Blo
 /**
  * Valida los metadatos básicos.
  */
-function validateBasicMetadata(metadata: MetadataV2): void {
+function validateBasicMetadata(metadata: Metadata): void {
     if (!metadata.url) {
         throw new SherryValidationError("Metadata missing required 'url' field");
     }
@@ -600,14 +577,19 @@ function validateBasicMetadata(metadata: MetadataV2): void {
  * Función principal para crear metadatos validados.
  * Valida y procesa metadatos y sus acciones.
  */
-export function createMetadataV2(metadata: MetadataV2): ValidatedMetadataV2 {
+export function createMetadata(metadata: Metadata): ValidatedMetadata {
     try {
         // Validar metadatos básicos
         validateBasicMetadata(metadata);
 
         // Procesar cada acción
         const processedActions = metadata.actions.map(action => {
-            return processBlockchainAction(action);
+            if (isBlockchainActionMetadata(action)){
+                return processBlockchainAction(action);
+            } else {
+                throw new SherryValidationError('createMetadata Error; it could be TransferAction o HTTPAction or either none of them')
+            }
+
         });
 
         // Devolver los metadatos procesados
@@ -631,7 +613,7 @@ export function createMetadataV2(metadata: MetadataV2): ValidatedMetadataV2 {
 /**
  * Verifica si un objeto es una acción blockchain válida.
  */
-export function isBlockchainActionMetadata(obj: any): obj is BlockchainActionMetadataV2 {
+export function isBlockchainActionMetadata(obj: any): obj is BlockchainActionMetadata {
     return (
         obj &&
         typeof obj === 'object' &&
@@ -648,7 +630,7 @@ export function isBlockchainActionMetadata(obj: any): obj is BlockchainActionMet
 /**
  * Verifica si un objeto es de tipo BlockchainAction.
  */
-export function isBlockchainAction(obj: any): obj is BlockchainActionV2 {
+export function isBlockchainAction(obj: any): obj is BlockchainAction {
     return (
         isBlockchainActionMetadata(obj) &&
         'abiParams' in obj &&

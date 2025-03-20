@@ -1,16 +1,16 @@
 // example-miniapps.ts
 import {
-    BlockchainActionMetadataV2,
+    BlockchainActionMetadata,
     BlockchainParameter,
     StandardParameter,
-} from './blockchainActionV2';
+} from '../interface/blockchainAction';
 import {
     PARAM_TEMPLATES,
     createRadioParam,
     createSelectOptions,
     createSelectParam,
     createParameter,
-} from './templates';
+} from '../templates/templates';
 import { AbiParameter } from 'abitype';
 
 // ============== 1. TOKEN SWAP MINI-APP ==============

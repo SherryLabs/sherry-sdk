@@ -6,19 +6,19 @@ import {
     isStandardParameter,
     isSelectParameter,
     isRadioParameter,
-} from '../../../src/utils/V2/validator';
+} from '../../src/utils/validator';
 import {
-    BlockchainActionMetadataV2,
+    BlockchainActionMetadata,
     StandardParameter,
     SelectParameter,
     RadioParameter,
-} from '../../../src/interface/V2/blockchainActionV2';
+} from '../../src/interface/blockchainAction';
 import {
     tokenSwapMiniApp,
     nftMarketplaceMiniApp,
     daoVotingMiniApp,
-} from '../../../src/interface/V2/examplesV2';
-import { PARAM_TEMPLATES } from '../../../src/interface/V2/templates';
+} from '../../src/examples/example-miniapps';
+import { PARAM_TEMPLATES } from '../../src/templates/templates';
 
 // Basic ABI for testing
 const simpleAbi = [
@@ -37,10 +37,9 @@ const simpleAbi = [
 ] as const;
 
 // Helper function to create a valid base action
-function createValidBaseAction(): BlockchainActionMetadataV2 {
+function createValidBaseAction(): BlockchainActionMetadata {
     return {
         label: 'Test Action',
-        title: 'Test Title',
         description: 'Test Description',
         address: '0x1234567890123456789012345678901234567890',
         abi: simpleAbi,

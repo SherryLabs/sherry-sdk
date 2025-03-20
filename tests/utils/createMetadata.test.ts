@@ -1,10 +1,11 @@
-import { createMetadataV2, MetadataV2 } from '../../../src/utils/V2/createMetadataV2';
-import { BlockchainActionMetadataV2 } from '../../../src/interface/V2/blockchainActionV2';
-import { SherryValidationError } from '../../../src/utils/customErrors';
+import { createMetadata } from '../../src/utils/createMetadata';
+import { Metadata } from '../../src/interface';
+import { BlockchainActionMetadata } from '../../src/interface/blockchainAction';
+import { SherryValidationError } from '../../src/utils/customErrors';
 import { Abi } from 'abitype';
 import { describe, test, expect } from '@jest/globals';
 
-describe('createMetadataV2', () => {
+describe('createMetadata', () => {
     // Sample ABI for testing
     const sampleAbi: Abi = [
         {
@@ -38,7 +39,7 @@ describe('createMetadataV2', () => {
     ];
 
     // Valid blockchain action
-    const validBlockchainAction: BlockchainActionMetadataV2 = {
+    const validBlockchainAction: BlockchainActionMetadata = {
         label: 'Transfer Tokens',
         description: 'Transfer tokens to another address',
         address: '0x1234567890123456789012345678901234567890',
@@ -67,7 +68,7 @@ describe('createMetadataV2', () => {
     };
 
     // Second valid blockchain action (using deposit - payable function)
-    const validPayableAction: BlockchainActionMetadataV2 = {
+    const validPayableAction: BlockchainActionMetadata = {
         label: 'Deposit Funds',
         description: 'Deposit ETH to the contract',
         address: '0x1234567890123456789012345678901234567890',
@@ -80,7 +81,7 @@ describe('createMetadataV2', () => {
     };
 
     // Valid metadata with a blockchain action
-    const validMetadata: MetadataV2 = {
+    const validMetadata: Metadata = {
         url: 'https://example.com',
         icon: 'https://example.com/icon.png',
         title: 'Test dApp',
@@ -90,7 +91,7 @@ describe('createMetadataV2', () => {
 
     // Test for successful validation
     test('should validate and process valid metadata with blockchain action', () => {
-        const result = createMetadataV2(validMetadata);
+        const result = createMetadata(validMetadata);
 
         expect(result).toEqual(
             expect.objectContaining({
@@ -115,12 +116,12 @@ describe('createMetadataV2', () => {
 
     // Test with multiple blockchain actions
     test('should validate and process metadata with multiple blockchain actions', () => {
-        const multiActionMetadata: MetadataV2 = {
+        const multiActionMetadata: Metadata = {
             ...validMetadata,
             actions: [validBlockchainAction, validPayableAction],
         };
 
-        const result = createMetadataV2(multiActionMetadata);
+        const result = createMetadata(multiActionMetadata);
 
         expect(result.actions).toHaveLength(2);
         // First action should be processed blockchain action with nonpayable type
@@ -135,11 +136,11 @@ describe('createMetadataV2', () => {
         const invalidMetadata = { ...validMetadata, url: '' };
 
         expect(() => {
-            createMetadataV2(invalidMetadata);
+            createMetadata(invalidMetadata);
         }).toThrow(SherryValidationError);
 
         expect(() => {
-            createMetadataV2(invalidMetadata);
+            createMetadata(invalidMetadata);
         }).toThrow("Metadata missing required 'url' field");
     });
 
@@ -148,11 +149,11 @@ describe('createMetadataV2', () => {
         const invalidMetadata = { ...validMetadata, icon: '' };
 
         expect(() => {
-            createMetadataV2(invalidMetadata);
+            createMetadata(invalidMetadata);
         }).toThrow(SherryValidationError);
 
         expect(() => {
-            createMetadataV2(invalidMetadata);
+            createMetadata(invalidMetadata);
         }).toThrow("Metadata missing required 'icon' field");
     });
 
@@ -161,11 +162,11 @@ describe('createMetadataV2', () => {
         const invalidMetadata = { ...validMetadata, title: '' };
 
         expect(() => {
-            createMetadataV2(invalidMetadata);
+            createMetadata(invalidMetadata);
         }).toThrow(SherryValidationError);
 
         expect(() => {
-            createMetadataV2(invalidMetadata);
+            createMetadata(invalidMetadata);
         }).toThrow("Metadata missing required 'title' field");
     });
 
@@ -174,11 +175,11 @@ describe('createMetadataV2', () => {
         const invalidMetadata = { ...validMetadata, description: '' };
 
         expect(() => {
-            createMetadataV2(invalidMetadata);
+            createMetadata(invalidMetadata);
         }).toThrow(SherryValidationError);
 
         expect(() => {
-            createMetadataV2(invalidMetadata);
+            createMetadata(invalidMetadata);
         }).toThrow("Metadata missing required 'description' field");
     });
 
@@ -187,11 +188,11 @@ describe('createMetadataV2', () => {
         const invalidMetadata = { ...validMetadata, actions: [] };
 
         expect(() => {
-            createMetadataV2(invalidMetadata);
+            createMetadata(invalidMetadata);
         }).toThrow(SherryValidationError);
 
         expect(() => {
-            createMetadataV2(invalidMetadata);
+            createMetadata(invalidMetadata);
         }).toThrow('Metadata must include at least one action');
     });
 
@@ -208,11 +209,11 @@ describe('createMetadataV2', () => {
         const invalidMetadata = { ...validMetadata, actions: tooManyActions };
 
         expect(() => {
-            createMetadataV2(invalidMetadata);
+            createMetadata(invalidMetadata);
         }).toThrow(SherryValidationError);
 
         expect(() => {
-            createMetadataV2(invalidMetadata);
+            createMetadata(invalidMetadata);
         }).toThrow('Maximum 4 actions allowed');
     });
 
@@ -229,7 +230,7 @@ describe('createMetadataV2', () => {
         };
 
         expect(() => {
-            createMetadataV2(invalidMetadata);
+            createMetadata(invalidMetadata);
         }).toThrow(SherryValidationError);
     });
 
@@ -246,17 +247,17 @@ describe('createMetadataV2', () => {
         };
 
         expect(() => {
-            createMetadataV2(invalidMetadata);
+            createMetadata(invalidMetadata);
         }).toThrow(SherryValidationError);
 
         expect(() => {
-            createMetadataV2(invalidMetadata);
+            createMetadata(invalidMetadata);
         }).toThrow(/Function.*not found/);
     });
 
     // Test for invalid parameter type compatibility
     test('should throw error for invalid parameter type compatibility', () => {
-        const invalidBlockchainAction: BlockchainActionMetadataV2 = {
+        const invalidBlockchainAction: BlockchainActionMetadata = {
             label: 'Transfer Tokens',
             description: 'Transfer tokens to another address',
             address: '0x1234567890123456789012345678901234567890' as `0x${string}`,
@@ -289,11 +290,11 @@ describe('createMetadataV2', () => {
         };
 
         expect(() => {
-            createMetadataV2(invalidMetadata);
+            createMetadata(invalidMetadata);
         }).toThrow(SherryValidationError);
 
         expect(() => {
-            createMetadataV2(invalidMetadata);
+            createMetadata(invalidMetadata);
         }).toThrow(/not compatible with ABI type/);
     });
 
@@ -310,11 +311,11 @@ describe('createMetadataV2', () => {
         };
 
         expect(() => {
-            createMetadataV2(invalidMetadata);
+            createMetadata(invalidMetadata);
         }).toThrow(SherryValidationError);
 
         expect(() => {
-            createMetadataV2(invalidMetadata);
+            createMetadata(invalidMetadata);
         }).toThrow(/amount.*specified for non-payable function/);
     });
 });

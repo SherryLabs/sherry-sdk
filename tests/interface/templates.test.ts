@@ -5,7 +5,7 @@ import {
     createSelectParam,
     createRadioParam,
     createParameter,
-} from '../../../src/interface/V2/templates';
+} from '../../src/templates/templates';
 
 describe('Template parameters', () => {
     it('includes all expected template types', () => {

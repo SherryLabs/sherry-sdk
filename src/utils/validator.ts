@@ -1,17 +1,16 @@
 import { Abi, AbiFunction, AbiParameter, AbiStateMutability } from 'abitype';
 import { ContractFunctionName, isAddress } from 'viem';
 import {
-    BlockchainActionMetadataV2,
-    BlockchainActionV2,
+    BlockchainActionMetadata,
+    BlockchainAction,
     BlockchainParameter,
     StandardParameter,
     SelectParameter,
     RadioParameter,
-    BaseParameter,
-} from '../../interface/V2/blockchainActionV2';
-import { ChainContext } from '../../interface/chains';
-import { MetadataV2, ValidatedMetadataV2 } from '../../interface/V2/metadataV2';
-import { isBlockchainActionMetadata } from './createMetadataV2';
+} from '../interface/blockchainAction';
+import { ChainContext } from '../interface/chains';
+import { Metadata, ValidatedMetadata } from '../interface/metadata';
+import { isBlockchainActionMetadata } from './createMetadata';
 
 /**
  * Error personalizado para validación de acciones
@@ -34,10 +33,6 @@ export function validateBlockchainActionMetadata(action: any): boolean {
 
     if (typeof action.label !== 'string' || !action.label) {
         throw new ActionValidationError('La acción debe tener una etiqueta válida');
-    }
-
-    if (typeof action.title !== 'string' || !action.title) {
-        throw new ActionValidationError('La acción debe tener un título válido');
     }
 
     if (typeof action.description !== 'string' || !action.description) {
@@ -471,7 +466,7 @@ export function isValidFunction(abi: Abi, functionName: ContractFunctionName): b
 /**
  * Obtiene los parámetros de una función del ABI
  */
-export function getAbiParameters(action: BlockchainActionMetadataV2): AbiParameter[] {
+export function getAbiParameters(action: BlockchainActionMetadata): AbiParameter[] {
     const abiFunction = getAbiFunction(action.abi, action.functionName);
     // Crear una copia profunda de los parámetros del ABI
     return abiFunction.inputs.map(param => ({ ...param }));
@@ -480,7 +475,7 @@ export function getAbiParameters(action: BlockchainActionMetadataV2): AbiParamet
 /**
  * Obtiene el tipo de mutabilidad de una función del ABI
  */
-export function getBlockchainActionType(action: BlockchainActionMetadataV2): AbiStateMutability {
+export function getBlockchainActionType(action: BlockchainActionMetadata): AbiStateMutability {
     const abiFunction = getAbiFunction(action.abi, action.functionName);
     return abiFunction.stateMutability;
 }
@@ -488,7 +483,7 @@ export function getBlockchainActionType(action: BlockchainActionMetadataV2): Abi
 /**
  * Procesa una BlockchainActionMetadataV2 en una BlockchainActionV2 completa
  */
-export function processBlockchainAction(action: BlockchainActionMetadataV2): BlockchainActionV2 {
+export function processBlockchainAction(action: BlockchainActionMetadata): BlockchainAction {
     // Validar primero
     validateBlockchainActionMetadata(action);
 
@@ -509,9 +504,9 @@ export function processBlockchainAction(action: BlockchainActionMetadataV2): Blo
 /**
  * Crea metadata validada a partir de un array de acciones
  */
-export function createValidatedActions<T extends BlockchainActionMetadataV2>(
+export function createValidatedActions<T extends BlockchainActionMetadata>(
     actions: T[],
-): (T | BlockchainActionV2)[] {
+): (T | BlockchainAction)[] {
     return actions.map(action => {
         try {
             return processBlockchainAction(action);
@@ -525,7 +520,7 @@ export function createValidatedActions<T extends BlockchainActionMetadataV2>(
 /**
  * Valida los metadatos básicos de una mini app
  */
-export function validateBasicMetadata(metadata: MetadataV2): boolean {
+export function validateBasicMetadata(metadata: Metadata): boolean {
     if (!metadata.url || typeof metadata.url !== 'string') {
         throw new ActionValidationError("Metadata debe tener un campo 'url' válido");
     }
@@ -567,7 +562,7 @@ export function validateBasicMetadata(metadata: MetadataV2): boolean {
  * @returns Los metadatos procesados y validados
  * @throws ActionValidationError si hay algún error de validación
  */
-export function createMetadataV2(metadata: MetadataV2): ValidatedMetadataV2 {
+export function createMetadataV2(metadata: Metadata): ValidatedMetadata {
     try {
         // Validar metadatos básicos
         validateBasicMetadata(metadata);
