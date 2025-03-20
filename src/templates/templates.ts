@@ -4,7 +4,7 @@ import {
     RadioParameter,
     BlockchainParameter,
     SelectOption,
-} from './blockchainActionV2';
+} from '../interface/blockchainAction';
 
 /**
  * Plantillas para parámetros comunes
