@@ -93,3 +93,11 @@ export class InvalidMetadataError extends Error {
         this.name = 'InvalidMetadataError';
     }
 }
+
+// Clase personalizada para errores de validación
+export class SherryValidationError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'SherryValidationError';
+    }
+}

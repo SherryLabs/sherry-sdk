@@ -58,8 +58,8 @@ export interface TransferUIConfig {
 
 export interface TransferAction {
     label: string;
-    to?: `0x${string}`;
-    amount?: number;
+    to?: `0x${string}`; // Recipient Address - IF NOT SENT Input will be shown
+    amount?: number; // Amount to transfer
     chains: ChainContext; // [sourceChain, destinationChain | null]
     // New optional UI configuration
     ui?: TransferUIConfig;
