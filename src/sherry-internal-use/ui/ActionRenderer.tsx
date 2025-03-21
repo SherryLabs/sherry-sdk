@@ -9,17 +9,17 @@ import TransferActionComponent from './TransferActionComponent';
 import HttpActionComponent from './HttpActionComponent';
 
 interface ActionRendererProps {
-  action: BlockchainAction | TransferAction | HttpAction;
+    action: BlockchainAction | TransferAction | HttpAction;
 }
 
 export const ActionRenderer: React.FC<ActionRendererProps> = ({ action }) => {
-  if (isBlockchainAction(action)) {
-    return <BlockchainActionComponent action={action} />;
-  } else if (isTransferAction(action)) {
-    return <TransferActionComponent action={action} />;
-  } else if (isHttpAction(action)) {
-    return <HttpActionComponent action={action} />;
-  }
-  
-  return <div>Unknown action type</div>;
+    if (isBlockchainAction(action)) {
+        return <BlockchainActionComponent action={action} />;
+    } else if (isTransferAction(action)) {
+        return <TransferActionComponent action={action} />;
+    } else if (isHttpAction(action)) {
+        return <HttpActionComponent action={action} />;
+    }
+
+    return <div>Unknown action type</div>;
 };

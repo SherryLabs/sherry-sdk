@@ -34,9 +34,9 @@ describe('ETH Denver Raffle Metadata', () => {
 
         //Create Metadata
         const createdMetadata = createMetadata(ethDenverMetadata);
-        // Validate metadata 
+        // Validate metadata
         const validationResult = validateMetadata(createdMetadata);
-        
+
         // Test validation result structure
         expect(validationResult.isValid).toBe(true);
         expect(validationResult.type).toBe('ValidatedMetadata');
@@ -56,12 +56,11 @@ describe('ETH Denver Raffle Metadata', () => {
         expect(action.address).toBe('0xB7cfa4c519a8508900c02d21b6C8B5310f63D53b');
         expect(action.functionName).toBe('checkAndRegister');
         expect(action.blockchainActionType).toBe('nonpayable');
-        
+
         // Validate chains field
         expect(action.chains).toEqual({ source: 'fuji', destination: 'alfajores' });
-        
     });
-    
+
     it('should reject invalid metadata', () => {
         // Creating metadata with missing required fields
         const invalidMetadata = {
@@ -77,10 +76,10 @@ describe('ETH Denver Raffle Metadata', () => {
                 },
             ],
         };
-        
+
         // Attempt to validate invalid metadata
         const validationResult = validateMetadata(invalidMetadata as Metadata);
-        
+
         // Should be invalid
         expect(validationResult.isValid).toBe(false);
         expect(validationResult.type).toBe('Error');

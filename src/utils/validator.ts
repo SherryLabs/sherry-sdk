@@ -10,7 +10,7 @@ import {
 } from '../interface/blockchainAction';
 import { ChainContext } from '../interface/chains';
 import { Metadata, ValidatedMetadata } from '../interface/metadata';
-import { isBlockchainAction , isBlockchainActionMetadata} from './createMetadata';
+import { isBlockchainAction, isBlockchainActionMetadata } from './createMetadata';
 import { TransferAction } from '../interface/transferAction';
 import { HttpAction } from '../interface/httpAction';
 import { HttpActionValidator } from '../validators/httpActionValidator';
@@ -629,29 +629,27 @@ export function isBlockchainActionMetadata(obj: any): obj is BlockchainActionMet
  */
 export function isTransferAction(obj: any): obj is TransferAction {
     // Check basic required properties
-    const hasBaseProperties = 
+    const hasBaseProperties =
         obj &&
         typeof obj === 'object' &&
         typeof obj.label === 'string' &&
         obj.chains &&
         typeof obj.chains === 'object' &&
         typeof obj.chains.source === 'string';
-    
+
     if (!hasBaseProperties) return false;
-    
+
     // Ensure it has at least one of the transfer-specific properties
-    const hasTransferSpecificProperties = 
+    const hasTransferSpecificProperties =
         obj.to !== undefined ||
         obj.amount !== undefined ||
         obj.recipient !== undefined ||
         obj.amountConfig !== undefined;
-    
+
     // Ensure it doesn't have blockchain-specific properties
-    const hasNoBlockchainSpecificProperties = 
-        obj.address === undefined &&
-        obj.abi === undefined && 
-        obj.functionName === undefined;
-    
+    const hasNoBlockchainSpecificProperties =
+        obj.address === undefined && obj.abi === undefined && obj.functionName === undefined;
+
     return hasTransferSpecificProperties && hasNoBlockchainSpecificProperties;
 }
 
