@@ -10,7 +10,10 @@ import {
 } from '../interface/blockchainAction';
 import { ChainContext } from '../interface/chains';
 import { Metadata, ValidatedMetadata } from '../interface/metadata';
-import { isBlockchainActionMetadata } from './createMetadata';
+import { isBlockchainAction, isBlockchainActionMetadata } from './createMetadata';
+import { TransferAction } from '../interface/transferAction';
+import { HttpAction } from '../interface/httpAction';
+import { HttpActionValidator } from '../validators/httpActionValidator';
 
 /**
  * Error personalizado para validación de acciones
@@ -571,11 +574,13 @@ export function createMetadataV2(metadata: Metadata): ValidatedMetadata {
         const processedActions = metadata.actions.map(action => {
             if (isBlockchainActionMetadata(action)) {
                 return processBlockchainAction(action);
-            } /*else if(isHttpActionMetadata(action)){
+            } else if (isTransferAction(action)) {
+                // TransferActions don't need additional processing
                 return action;
-            }else if(isTransferActionMetadata(action)){ 
-
-            }*/ else {
+            } else if (isHttpAction(action)) {
+                // Validate HTTP actions using the dedicated validator
+                return HttpActionValidator.validateHttpAction(action);
+            } else {
                 throw new ActionValidationError(`Tipo de Action desconocido: ${action}`);
             }
         });
@@ -598,4 +603,60 @@ export function createMetadataV2(metadata: Metadata): ValidatedMetadata {
             throw new Error('unknown error');
         }
     }
+}
+
+/**
+ * Verifica si un objeto es una acción blockchain válida.
+ */
+/*
+export function isBlockchainActionMetadata(obj: any): obj is BlockchainActionMetadata {
+    return (
+        obj &&
+        typeof obj === 'object' &&
+        typeof obj.label === 'string' &&
+        typeof obj.address === 'string' &&
+        Array.isArray(obj.abi) &&
+        typeof obj.functionName === 'string' &&
+        obj.chains &&
+        typeof obj.chains === 'object' &&
+        typeof obj.chains.source === 'string'
+    );
+}
+*/
+
+/**
+ * Verifica si un objeto es una acción de transferencia válida.
+ */
+export function isTransferAction(obj: any): obj is TransferAction {
+    // Check basic required properties
+    const hasBaseProperties =
+        obj &&
+        typeof obj === 'object' &&
+        typeof obj.label === 'string' &&
+        obj.chains &&
+        typeof obj.chains === 'object' &&
+        typeof obj.chains.source === 'string';
+
+    if (!hasBaseProperties) return false;
+
+    // Ensure it has at least one of the transfer-specific properties
+    const hasTransferSpecificProperties =
+        obj.to !== undefined ||
+        obj.amount !== undefined ||
+        obj.recipient !== undefined ||
+        obj.amountConfig !== undefined;
+
+    // Ensure it doesn't have blockchain-specific properties
+    const hasNoBlockchainSpecificProperties =
+        obj.address === undefined && obj.abi === undefined && obj.functionName === undefined;
+
+    return hasTransferSpecificProperties && hasNoBlockchainSpecificProperties;
+}
+
+/**
+ * Verifica si un objeto es una acción HTTP válida.
+ * Reusa la implementación de HttpActionValidator.
+ */
+export function isHttpAction(obj: any): obj is HttpAction {
+    return HttpActionValidator.isHttpAction(obj);
 }

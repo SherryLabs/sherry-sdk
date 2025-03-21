@@ -1,2 +1,1 @@
-
-export * from './customErrors';
+export * from '../errors/customErrors';

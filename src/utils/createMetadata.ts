@@ -12,7 +12,7 @@ import {
 import { Abi, AbiFunction, AbiParameter, AbiStateMutability } from 'abitype';
 import { ContractFunctionName, isAddress } from 'viem';
 import { ChainContext } from '../interface/chains';
-import { SherryValidationError } from './customErrors';
+import { SherryValidationError } from '../errors/customErrors';
 
 // Extend AbiParameter with our custom properties using type intersection
 type ExtendedAbiParameter = AbiParameter & {
@@ -584,12 +584,13 @@ export function createMetadata(metadata: Metadata): ValidatedMetadata {
 
         // Procesar cada acción
         const processedActions = metadata.actions.map(action => {
-            if (isBlockchainActionMetadata(action)){
+            if (isBlockchainActionMetadata(action)) {
                 return processBlockchainAction(action);
             } else {
-                throw new SherryValidationError('createMetadata Error; it could be TransferAction o HTTPAction or either none of them')
+                throw new SherryValidationError(
+                    'createMetadata Error; it could be TransferAction o HTTPAction or either none of them',
+                );
             }
-
         });
 
         // Devolver los metadatos procesados

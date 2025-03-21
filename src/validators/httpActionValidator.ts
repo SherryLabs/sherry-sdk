@@ -5,7 +5,7 @@ import {
     RadioParameter,
     StandardParameter,
 } from '../interface/httpAction';
-import { InvalidMetadataError } from '../utils/customErrors';
+import { InvalidMetadataError } from '../errors/customErrors';
 
 export class HttpActionValidator {
     static validateHttpAction(action: HttpAction): HttpAction {
@@ -139,6 +139,7 @@ export class HttpActionValidator {
                     }
                     break;
                 // ... otros casos para los demás tipos
+                // TODO: Agregar los demás tipos
             }
         }
 
