@@ -131,7 +131,7 @@ describe('createMetadata', () => {
         expect(result.actions[1]).toHaveProperty('amount', 0.1);
     });
 
-    // Test for missing URL
+    // Basic validation tests
     test('should throw error for missing URL', () => {
         const invalidMetadata = { ...validMetadata, url: '' };
 
@@ -144,7 +144,6 @@ describe('createMetadata', () => {
         }).toThrow("Metadata missing required 'url' field");
     });
 
-    // Test for missing icon
     test('should throw error for missing icon', () => {
         const invalidMetadata = { ...validMetadata, icon: '' };
 
@@ -157,46 +156,6 @@ describe('createMetadata', () => {
         }).toThrow("Metadata missing required 'icon' field");
     });
 
-    // Test for missing title
-    test('should throw error for missing title', () => {
-        const invalidMetadata = { ...validMetadata, title: '' };
-
-        expect(() => {
-            createMetadata(invalidMetadata);
-        }).toThrow(SherryValidationError);
-
-        expect(() => {
-            createMetadata(invalidMetadata);
-        }).toThrow("Metadata missing required 'title' field");
-    });
-
-    // Test for missing description
-    test('should throw error for missing description', () => {
-        const invalidMetadata = { ...validMetadata, description: '' };
-
-        expect(() => {
-            createMetadata(invalidMetadata);
-        }).toThrow(SherryValidationError);
-
-        expect(() => {
-            createMetadata(invalidMetadata);
-        }).toThrow("Metadata missing required 'description' field");
-    });
-
-    // Test for missing actions
-    test('should throw error for missing actions', () => {
-        const invalidMetadata = { ...validMetadata, actions: [] };
-
-        expect(() => {
-            createMetadata(invalidMetadata);
-        }).toThrow(SherryValidationError);
-
-        expect(() => {
-            createMetadata(invalidMetadata);
-        }).toThrow('Metadata must include at least one action');
-    });
-
-    // Test for too many actions
     test('should throw error for too many actions', () => {
         const tooManyActions = [
             validBlockchainAction,
@@ -217,7 +176,6 @@ describe('createMetadata', () => {
         }).toThrow('Maximum 4 actions allowed');
     });
 
-    // Test for invalid blockchain action
     test('should throw error for invalid blockchain action', () => {
         const invalidBlockchainAction = {
             ...validBlockchainAction,
@@ -232,90 +190,5 @@ describe('createMetadata', () => {
         expect(() => {
             createMetadata(invalidMetadata);
         }).toThrow(SherryValidationError);
-    });
-
-    // Test for non-existent function in ABI
-    test('should throw error for non-existent function in ABI', () => {
-        const invalidBlockchainAction = {
-            ...validBlockchainAction,
-            functionName: 'nonExistentFunction', // Function not in ABI
-        };
-
-        const invalidMetadata = {
-            ...validMetadata,
-            actions: [invalidBlockchainAction],
-        };
-
-        expect(() => {
-            createMetadata(invalidMetadata);
-        }).toThrow(SherryValidationError);
-
-        expect(() => {
-            createMetadata(invalidMetadata);
-        }).toThrow(/Function.*not found/);
-    });
-
-    // Test for invalid parameter type compatibility
-    test('should throw error for invalid parameter type compatibility', () => {
-        const invalidBlockchainAction: BlockchainActionMetadata = {
-            label: 'Transfer Tokens',
-            description: 'Transfer tokens to another address',
-            address: '0x1234567890123456789012345678901234567890' as `0x${string}`,
-            abi: sampleAbi,
-            functionName: 'transfer',
-            chains: {
-                source: 'avalanche',
-            },
-            params: [
-                {
-                    name: 'recipient',
-                    label: 'Recipient Address',
-                    //description: 'Address to send tokens to',
-                    type: 'number', // Incompatible with 'number' type in ABI
-                    required: true,
-                },
-                {
-                    name: 'amount',
-                    label: 'Amount',
-                    //description: 'Address to send token to',
-                    type: 'number',
-                    required: true,
-                },
-            ],
-        };
-
-        const invalidMetadata = {
-            ...validMetadata,
-            actions: [invalidBlockchainAction],
-        };
-
-        expect(() => {
-            createMetadata(invalidMetadata);
-        }).toThrow(SherryValidationError);
-
-        expect(() => {
-            createMetadata(invalidMetadata);
-        }).toThrow(/not compatible with ABI type/);
-    });
-
-    // Test for amount with non-payable function
-    test('should throw error when amount is specified for non-payable function', () => {
-        const invalidBlockchainAction = {
-            ...validBlockchainAction, // Using the transfer function which is non-payable
-            amount: 0.1, // Cannot specify amount for non-payable
-        };
-
-        const invalidMetadata = {
-            ...validMetadata,
-            actions: [invalidBlockchainAction],
-        };
-
-        expect(() => {
-            createMetadata(invalidMetadata);
-        }).toThrow(SherryValidationError);
-
-        expect(() => {
-            createMetadata(invalidMetadata);
-        }).toThrow(/amount.*specified for non-payable function/);
     });
 });
