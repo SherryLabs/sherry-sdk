@@ -65,14 +65,18 @@ describe('Validator utils', () => {
         it('rejects metadata with empty actions', () => {
             const invalidMetadata = { ...validMetadata, actions: [] };
             expect(() => validateBasicMetadata(invalidMetadata)).toThrow(ActionValidationError);
-            expect(() => validateBasicMetadata(invalidMetadata)).toThrow(/must include at least one action/);
+            expect(() => validateBasicMetadata(invalidMetadata)).toThrow(
+                /must include at least one action/,
+            );
         });
 
         it('rejects metadata with too many actions', () => {
             const tooManyActions = Array(5).fill(validMetadata.actions[0]);
             const invalidMetadata = { ...validMetadata, actions: tooManyActions };
             expect(() => validateBasicMetadata(invalidMetadata)).toThrow(ActionValidationError);
-            expect(() => validateBasicMetadata(invalidMetadata)).toThrow(/Maximum 4 actions allowed/);
+            expect(() => validateBasicMetadata(invalidMetadata)).toThrow(
+                /Maximum 4 actions allowed/,
+            );
         });
     });
 

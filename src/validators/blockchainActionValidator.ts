@@ -96,7 +96,9 @@ export class BlockchainActionValidator {
             action.amount !== undefined &&
             (typeof action.amount !== 'number' || action.amount < 0)
         ) {
-            throw new ActionValidationError('If "amount" is provided, it must be a positive number');
+            throw new ActionValidationError(
+                'If "amount" is provided, it must be a positive number',
+            );
         }
 
         // Validate parameters if present
@@ -250,7 +252,9 @@ export class BlockchainActionValidator {
      */
     static validateSelectParameter(param: SelectParameter): boolean {
         if (!Array.isArray(param.options) || param.options.length === 0) {
-            throw new ActionValidationError(`The parameter "${param.name}" must have valid options`);
+            throw new ActionValidationError(
+                `The parameter "${param.name}" must have valid options`,
+            );
         }
 
         // Validate each option
