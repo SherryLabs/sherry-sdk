@@ -5,7 +5,7 @@ import {
     RadioParameter,
     StandardParameter,
 } from '../interface/httpAction';
-import { InvalidMetadataError } from '../utils/customErrors';
+import { InvalidMetadataError } from '../errors/customErrors';
 
 export class HttpActionValidator {
     static validateHttpAction(action: HttpAction): HttpAction {
@@ -139,6 +139,7 @@ export class HttpActionValidator {
                     }
                     break;
                 // ... otros casos para los demás tipos
+                // TODO: Agregar los demás tipos
             }
         }
 
@@ -174,42 +175,51 @@ export class HttpActionValidator {
     }
 
     static isHttpAction(action: any): action is HttpAction {
-        // First check if it has blockchain or transfer specific properties
+        // First we check if the object exists and is actually an object
+        if (!action || typeof action !== 'object') {
+            return false;
+        }
+
+        // Check if this might be another action type (blockchain or transfer)
+        // This helps disambiguate between action types
         if (
+            // Properties specific to blockchain actions
             action.abi !== undefined ||
             action.functionName !== undefined ||
-            action.to !== undefined ||
-            action.address !== undefined
+            action.address !== undefined ||
+            // Properties specific to transfer actions
+            action.to !== undefined
         ) {
             return false;
         }
 
-        // Then validate HTTP action specific properties
+        // Then validate HTTP action required properties
         const hasRequiredProps =
-            action &&
-            typeof action === 'object' &&
-            typeof action.label === 'string' &&
-            typeof action.endpoint === 'string'; //&&
-        //action.method === 'POST'
+            typeof action.label === 'string' && typeof action.endpoint === 'string';
 
         if (!hasRequiredProps) return false;
 
         // Validate headers if present
-        if (action.headers && typeof action.headers !== 'object') {
+        if (action.headers !== undefined && typeof action.headers !== 'object') {
             return false;
         }
 
-        // Validate parameters if present
-        if (action.validatedParams) {
-            if (!Array.isArray(action.validatedParams)) return false;
+        // Validate params if present
+        if (action.params !== undefined) {
+            if (!Array.isArray(action.params)) return false;
 
-            return action.validatedParams.every(
-                (param: HttpParameter) =>
+            // We don't do deep validation here as that's handled by validateHttpAction
+            // Just ensure basic structure is present
+            const allParamsValid = action.params.every(
+                (param: any) =>
                     param &&
+                    typeof param === 'object' &&
                     typeof param.name === 'string' &&
-                    ['string', 'number', 'boolean'].includes(param.type) &&
-                    typeof param.required === 'boolean',
+                    typeof param.label === 'string' &&
+                    typeof param.type === 'string',
             );
+
+            if (!allParamsValid) return false;
         }
 
         return true;
