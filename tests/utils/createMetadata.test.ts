@@ -1,7 +1,7 @@
 import { createMetadata } from '../../src/utils/createMetadata';
 import { Metadata } from '../../src/interface';
 import { BlockchainActionMetadata } from '../../src/interface/blockchainAction';
-import { SherryValidationError } from '../../src/utils/customErrors';
+import { SherryValidationError } from '../../src/errors/customErrors';
 import { Abi } from 'abitype';
 import { describe, test, expect } from '@jest/globals';
 

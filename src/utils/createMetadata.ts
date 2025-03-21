@@ -12,7 +12,7 @@ import {
 import { Abi, AbiFunction, AbiParameter, AbiStateMutability } from 'abitype';
 import { ContractFunctionName, isAddress } from 'viem';
 import { ChainContext } from '../interface/chains';
-import { SherryValidationError } from './customErrors';
+import { SherryValidationError } from '../errors/customErrors';
 
 // Extend AbiParameter with our custom properties using type intersection
 type ExtendedAbiParameter = AbiParameter & {
