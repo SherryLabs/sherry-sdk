@@ -179,7 +179,7 @@ export class HttpActionValidator {
         if (!action || typeof action !== 'object') {
             return false;
         }
-        
+
         // Check if this might be another action type (blockchain or transfer)
         // This helps disambiguate between action types
         if (
@@ -195,9 +195,8 @@ export class HttpActionValidator {
 
         // Then validate HTTP action required properties
         const hasRequiredProps =
-            typeof action.label === 'string' &&
-            typeof action.endpoint === 'string';
-        
+            typeof action.label === 'string' && typeof action.endpoint === 'string';
+
         if (!hasRequiredProps) return false;
 
         // Validate headers if present
@@ -208,18 +207,18 @@ export class HttpActionValidator {
         // Validate params if present
         if (action.params !== undefined) {
             if (!Array.isArray(action.params)) return false;
-            
+
             // We don't do deep validation here as that's handled by validateHttpAction
             // Just ensure basic structure is present
             const allParamsValid = action.params.every(
-                (param: any) => 
-                    param && 
+                (param: any) =>
+                    param &&
                     typeof param === 'object' &&
                     typeof param.name === 'string' &&
                     typeof param.label === 'string' &&
-                    typeof param.type === 'string'
+                    typeof param.type === 'string',
             );
-            
+
             if (!allParamsValid) return false;
         }
 

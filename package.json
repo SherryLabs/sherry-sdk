@@ -56,7 +56,13 @@
       "!src/**/*.d.ts",
       "!src/**/index.ts"
     ],
-    "coverageReporters": ["text", "lcov", "html"],
-    "setupFiles": ["./tests/setup.js"]
+    "coverageReporters": [
+      "text",
+      "lcov",
+      "html"
+    ],
+    "setupFiles": [
+      "./tests/setup.js"
+    ]
   }
 }

@@ -29,7 +29,7 @@ const simpleAbi: Abi = [
         stateMutability: 'payable',
         inputs: [],
         outputs: [],
-    }
+    },
 ];
 
 // Helper function to create a valid base action
@@ -109,7 +109,12 @@ describe('BlockchainActionValidator', () => {
 
             const abiParams = [{ name: 'testRadio', type: 'uint256' }] as const;
 
-            expect(() => BlockchainActionValidator.validateBlockchainParameters([validRadioParam], abiParams)).not.toThrow();
+            expect(() =>
+                BlockchainActionValidator.validateBlockchainParameters(
+                    [validRadioParam],
+                    abiParams,
+                ),
+            ).not.toThrow();
         });
 
         it('throws error when radio parameter has less than 2 options', () => {
@@ -123,12 +128,18 @@ describe('BlockchainActionValidator', () => {
 
             const abiParams = [{ name: 'testRadio', type: 'uint256' }] as const;
 
-            expect(() => BlockchainActionValidator.validateBlockchainParameters([invalidRadioParam], abiParams)).toThrow(
-                ActionValidationError,
-            );
-            expect(() => BlockchainActionValidator.validateBlockchainParameters([invalidRadioParam], abiParams)).toThrow(
-                /debe tener al menos 2 opciones/,
-            );
+            expect(() =>
+                BlockchainActionValidator.validateBlockchainParameters(
+                    [invalidRadioParam],
+                    abiParams,
+                ),
+            ).toThrow(ActionValidationError);
+            expect(() =>
+                BlockchainActionValidator.validateBlockchainParameters(
+                    [invalidRadioParam],
+                    abiParams,
+                ),
+            ).toThrow(/must have at least 2 options/);
         });
 
         it('throws error when radio parameter has duplicate values', () => {
@@ -145,19 +156,27 @@ describe('BlockchainActionValidator', () => {
 
             const abiParams = [{ name: 'testRadio', type: 'uint256' }] as const;
 
-            expect(() => BlockchainActionValidator.validateBlockchainParameters([invalidRadioParam], abiParams)).toThrow(
-                ActionValidationError,
-            );
-            expect(() => BlockchainActionValidator.validateBlockchainParameters([invalidRadioParam], abiParams)).toThrow(
-                /valores duplicados/,
-            );
+            expect(() =>
+                BlockchainActionValidator.validateBlockchainParameters(
+                    [invalidRadioParam],
+                    abiParams,
+                ),
+            ).toThrow(ActionValidationError);
+            expect(() =>
+                BlockchainActionValidator.validateBlockchainParameters(
+                    [invalidRadioParam],
+                    abiParams,
+                ),
+            ).toThrow(/has options with duplicate values/);
         });
     });
 
     describe('Block Action Metadata Validation', () => {
         it('validates a correct action metadata', () => {
             const validAction = createValidBaseAction();
-            expect(() => BlockchainActionValidator.validateBlockchainActionMetadata(validAction)).not.toThrow();
+            expect(() =>
+                BlockchainActionValidator.validateBlockchainActionMetadata(validAction),
+            ).not.toThrow();
         });
 
         it('throws error for invalid address', () => {
@@ -166,10 +185,12 @@ describe('BlockchainActionValidator', () => {
                 address: '0xinvalid',
             };
 
-            expect(() => BlockchainActionValidator.validateBlockchainActionMetadata(invalidAction)).toThrow(
-                ActionValidationError,
-            );
-            expect(() => BlockchainActionValidator.validateBlockchainActionMetadata(invalidAction)).toThrow(/Dirección inválida/);
+            expect(() =>
+                BlockchainActionValidator.validateBlockchainActionMetadata(invalidAction),
+            ).toThrow(ActionValidationError);
+            expect(() =>
+                BlockchainActionValidator.validateBlockchainActionMetadata(invalidAction),
+            ).toThrow(/Invalid address/);
         });
 
         it('throws error for non-existent function in ABI', () => {
@@ -178,12 +199,12 @@ describe('BlockchainActionValidator', () => {
                 functionName: 'nonExistentFunction',
             };
 
-            expect(() => BlockchainActionValidator.validateBlockchainActionMetadata(invalidAction)).toThrow(
-                ActionValidationError,
-            );
-            expect(() => BlockchainActionValidator.validateBlockchainActionMetadata(invalidAction)).toThrow(
-                /no existe en el ABI/,
-            );
+            expect(() =>
+                BlockchainActionValidator.validateBlockchainActionMetadata(invalidAction),
+            ).toThrow(ActionValidationError);
+            expect(() =>
+                BlockchainActionValidator.validateBlockchainActionMetadata(invalidAction),
+            ).toThrow(/does not exist in/);
         });
 
         it('validates action with valid parameters', () => {
@@ -217,7 +238,9 @@ describe('BlockchainActionValidator', () => {
                 ],
             };
 
-            expect(() => BlockchainActionValidator.validateBlockchainActionMetadata(actionWithParams)).not.toThrow();
+            expect(() =>
+                BlockchainActionValidator.validateBlockchainActionMetadata(actionWithParams),
+            ).not.toThrow();
         });
 
         it('throws error for parameter that does not exist in ABI', () => {
@@ -233,14 +256,14 @@ describe('BlockchainActionValidator', () => {
                 ],
             };
 
-            expect(() => BlockchainActionValidator.validateBlockchainActionMetadata(invalidAction)).toThrow(
-                ActionValidationError,
-            );
-            expect(() => BlockchainActionValidator.validateBlockchainActionMetadata(invalidAction)).toThrow(
-                /no existe en el ABI/,
-            );
+            expect(() =>
+                BlockchainActionValidator.validateBlockchainActionMetadata(invalidAction),
+            ).toThrow(ActionValidationError);
+            expect(() =>
+                BlockchainActionValidator.validateBlockchainActionMetadata(invalidAction),
+            ).toThrow(/does not exist in the function's ABI/);
         });
-        
+
         it('throws error for amount with non-payable function', () => {
             const invalidAction = {
                 ...createValidBaseAction(),
@@ -250,8 +273,11 @@ describe('BlockchainActionValidator', () => {
             expect(() => BlockchainActionValidator.validateBlockchainAction(invalidAction)).toThrow(
                 ActionValidationError,
             );
+            expect(() => BlockchainActionValidator.validateBlockchainAction(invalidAction)).toThrow(
+                /not payable/,
+            );
         });
-        
+
         it('allows amount with payable function', () => {
             const payableAction = {
                 ...createValidBaseAction(),
@@ -259,15 +285,17 @@ describe('BlockchainActionValidator', () => {
                 amount: 0.1,
             };
 
-            expect(() => BlockchainActionValidator.validateBlockchainActionMetadata(payableAction)).not.toThrow();
+            expect(() =>
+                BlockchainActionValidator.validateBlockchainActionMetadata(payableAction),
+            ).not.toThrow();
         });
     });
-    
+
     describe('validateBlockchainAction - Full Action Processing', () => {
         it('processes blockchain action correctly', () => {
             const validAction = createValidBaseAction();
             const processedAction = BlockchainActionValidator.validateBlockchainAction(validAction);
-            
+
             expect(processedAction.blockchainActionType).toBe('nonpayable');
             expect(Array.isArray(processedAction.abiParams)).toBe(true);
             expect(processedAction.abiParams).toHaveLength(4);

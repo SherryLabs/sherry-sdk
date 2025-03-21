@@ -131,18 +131,18 @@ describe('HttpActionValidator', () => {
         const validatedAction = HttpActionValidator.validateHttpAction(actionWithRadio);
         expect(validatedAction.params[0].type).toBe('radio');
     });
-    
+
     it('should identify valid HTTP actions', () => {
         expect(HttpActionValidator.isHttpAction(validHttpAction)).toBe(true);
     });
-    
+
     it('should reject blockchain actions as HTTP actions', () => {
         const blockchainAction = {
             label: 'Call Contract',
             address: '0x1234',
             abi: [],
             functionName: 'test',
-            chains: { source: 'avalanche' }
+            chains: { source: 'avalanche' },
         };
         expect(HttpActionValidator.isHttpAction(blockchainAction)).toBe(false);
     });
