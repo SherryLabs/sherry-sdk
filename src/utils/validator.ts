@@ -17,50 +17,59 @@ import { BlockchainActionValidator } from '../validators/blockchainActionValidat
 import { TransferActionValidator } from '../validators/transferActionValidator';
 import { ActionValidationError } from '../errors/customErrors';
 
-
 // Export functions as wrappers around the validator classes for backward compatibility
-export const validateBlockchainActionMetadata = BlockchainActionValidator.validateBlockchainActionMetadata.bind(BlockchainActionValidator);
-export const validateBlockchainParameters = BlockchainActionValidator.validateBlockchainParameters.bind(BlockchainActionValidator);
-export const isStandardParameter = BlockchainActionValidator.isStandardParameter.bind(BlockchainActionValidator);
-export const isSelectParameter = BlockchainActionValidator.isSelectParameter.bind(BlockchainActionValidator);
-export const isRadioParameter = BlockchainActionValidator.isRadioParameter.bind(BlockchainActionValidator);
-export const getAbiFunction = BlockchainActionValidator.getAbiFunction.bind(BlockchainActionValidator);
-export const isValidFunction = BlockchainActionValidator.isValidFunction.bind(BlockchainActionValidator);
-export const getAbiParameters = BlockchainActionValidator.getAbiParameters.bind(BlockchainActionValidator);
-export const getBlockchainActionType = BlockchainActionValidator.getBlockchainActionType.bind(BlockchainActionValidator);
-export const processBlockchainAction = BlockchainActionValidator.validateBlockchainAction.bind(BlockchainActionValidator);
+export const validateBlockchainActionMetadata =
+    BlockchainActionValidator.validateBlockchainActionMetadata.bind(BlockchainActionValidator);
+export const validateBlockchainParameters =
+    BlockchainActionValidator.validateBlockchainParameters.bind(BlockchainActionValidator);
+export const isStandardParameter =
+    BlockchainActionValidator.isStandardParameter.bind(BlockchainActionValidator);
+export const isSelectParameter =
+    BlockchainActionValidator.isSelectParameter.bind(BlockchainActionValidator);
+export const isRadioParameter =
+    BlockchainActionValidator.isRadioParameter.bind(BlockchainActionValidator);
+export const getAbiFunction =
+    BlockchainActionValidator.getAbiFunction.bind(BlockchainActionValidator);
+export const isValidFunction =
+    BlockchainActionValidator.isValidFunction.bind(BlockchainActionValidator);
+export const getAbiParameters =
+    BlockchainActionValidator.getAbiParameters.bind(BlockchainActionValidator);
+export const getBlockchainActionType =
+    BlockchainActionValidator.getBlockchainActionType.bind(BlockchainActionValidator);
+export const processBlockchainAction =
+    BlockchainActionValidator.validateBlockchainAction.bind(BlockchainActionValidator);
 
 /**
- * Valida los metadatos básicos de una mini app
+ * Validates the basic metadata of a mini app
  */
 export function validateBasicMetadata(metadata: Metadata): boolean {
     if (!metadata.url || typeof metadata.url !== 'string') {
-        throw new ActionValidationError("Metadata debe tener un campo 'url' válido");
+        throw new ActionValidationError("Metadata must have a valid 'url' field");
     }
 
     if (!metadata.icon || typeof metadata.icon !== 'string') {
-        throw new ActionValidationError("Metadata debe tener un campo 'icon' válido");
+        throw new ActionValidationError("Metadata must have a valid 'icon' field");
     }
 
     if (!metadata.title || typeof metadata.title !== 'string') {
-        throw new ActionValidationError("Metadata debe tener un campo 'title' válido");
+        throw new ActionValidationError("Metadata must have a valid 'title' field");
     }
 
     if (!metadata.description || typeof metadata.description !== 'string') {
-        throw new ActionValidationError("Metadata debe tener un campo 'description' válido");
+        throw new ActionValidationError("Metadata must have a valid 'description' field");
     }
 
     if (!Array.isArray(metadata.actions)) {
-        throw new ActionValidationError('Metadata debe tener un array de acciones');
+        throw new ActionValidationError('Metadata must have an array of actions');
     }
 
     if (metadata.actions.length === 0) {
-        throw new ActionValidationError('Metadata debe incluir al menos una acción');
+        throw new ActionValidationError('Metadata must include at least one action');
     }
 
     if (metadata.actions.length > 4) {
         throw new ActionValidationError(
-            `Se permiten máximo 4 acciones, se recibieron ${metadata.actions.length}`,
+            `Maximum 4 actions allowed, received ${metadata.actions.length}`,
         );
     }
 
@@ -68,19 +77,19 @@ export function validateBasicMetadata(metadata: Metadata): boolean {
 }
 
 /**
- * Crea y valida un objeto MetadataV2 completo
- * Esta función centraliza la validación y creación de metadatos usando el validator
+ * Creates and validates a complete MetadataV2 object
+ * This function centralizes the validation and creation of metadata using the validator
  *
- * @param metadata Los metadatos sin procesar
- * @returns Los metadatos procesados y validados
- * @throws ActionValidationError si hay algún error de validación
+ * @param metadata The unprocessed metadata
+ * @returns The processed and validated metadata
+ * @throws ActionValidationError if there is any validation error
  */
 export function createMetadata(metadata: Metadata): ValidatedMetadata {
     try {
-        // Validar metadatos básicos
+        // Validate basic metadata
         validateBasicMetadata(metadata);
 
-        // Procesar cada acción con la validación de esta clase
+        // Process each action with the validation from this class
         const processedActions = metadata.actions.map(action => {
             if (BlockchainActionValidator.isBlockchainActionMetadata(action)) {
                 return BlockchainActionValidator.validateBlockchainAction(action);
@@ -93,7 +102,7 @@ export function createMetadata(metadata: Metadata): ValidatedMetadata {
             }
         });
 
-        // Devolver los metadatos procesados
+        // Return the processed metadata
         return {
             url: metadata.url,
             icon: metadata.icon,
@@ -102,15 +111,16 @@ export function createMetadata(metadata: Metadata): ValidatedMetadata {
             actions: processedActions,
         };
     } catch (error) {
-        //console.log('Error en createMetadata');
-        throw error
+        //console.log('Error in createMetadata');
+        throw error;
     }
 }
 
 /**
  * Verifica si un objeto es una acción de transferencia válida.
  */
-export const isTransferAction = TransferActionValidator.isTransferAction.bind(TransferActionValidator);
+export const isTransferAction =
+    TransferActionValidator.isTransferAction.bind(TransferActionValidator);
 
 /**
  * Verifica si un objeto es una acción HTTP válida.
@@ -123,5 +133,3 @@ export const isHttpAction = HttpActionValidator.isHttpAction.bind(HttpActionVali
  * Reusa la implementación de TransferActionValidator.
  */
 export { ActionValidationError } from '../errors/customErrors';
-
-

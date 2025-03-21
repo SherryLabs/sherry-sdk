@@ -1,68 +1,64 @@
-
 <!doctype html>
 <html lang="en">
-
-<head>
+  <head>
     <title>Code coverage report for validators/blockchainActionValidator.ts</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../prettify.css" />
     <link rel="stylesheet" href="../base.css" />
     <link rel="shortcut icon" type="image/x-icon" href="../favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <style type='text/css'>
-        .coverage-summary .sorter {
-            background-image: url(../sort-arrow-sprite.png);
-        }
+    <style type="text/css">
+      .coverage-summary .sorter {
+        background-image: url(../sort-arrow-sprite.png);
+      }
     </style>
-</head>
-    
-<body>
-<div class='wrapper'>
-    <div class='pad1'>
-        <h1><a href="../index.html">All files</a> / <a href="index.html">validators</a> blockchainActionValidator.ts</h1>
-        <div class='clearfix'>
-            
-            <div class='fl pad1y space-right2'>
-                <span class="strong">51.26% </span>
-                <span class="quiet">Statements</span>
-                <span class='fraction'>81/158</span>
-            </div>
-        
-            
-            <div class='fl pad1y space-right2'>
-                <span class="strong">52.05% </span>
-                <span class="quiet">Branches</span>
-                <span class='fraction'>114/219</span>
-            </div>
-        
-            
-            <div class='fl pad1y space-right2'>
-                <span class="strong">76.92% </span>
-                <span class="quiet">Functions</span>
-                <span class='fraction'>20/26</span>
-            </div>
-        
-            
-            <div class='fl pad1y space-right2'>
-                <span class="strong">51.31% </span>
-                <span class="quiet">Lines</span>
-                <span class='fraction'>78/152</span>
-            </div>
-        
-            
+  </head>
+
+  <body>
+    <div class="wrapper">
+      <div class="pad1">
+        <h1>
+          <a href="../index.html">All files</a> /
+          <a href="index.html">validators</a> blockchainActionValidator.ts
+        </h1>
+        <div class="clearfix">
+          <div class="fl pad1y space-right2">
+            <span class="strong">50.64% </span>
+            <span class="quiet">Statements</span>
+            <span class="fraction">79/156</span>
+          </div>
+
+          <div class="fl pad1y space-right2">
+            <span class="strong">51.16% </span>
+            <span class="quiet">Branches</span>
+            <span class="fraction">110/215</span>
+          </div>
+
+          <div class="fl pad1y space-right2">
+            <span class="strong">76.92% </span>
+            <span class="quiet">Functions</span>
+            <span class="fraction">20/26</span>
+          </div>
+
+          <div class="fl pad1y space-right2">
+            <span class="strong">50.66% </span>
+            <span class="quiet">Lines</span>
+            <span class="fraction">76/150</span>
+          </div>
         </div>
         <p class="quiet">
-            Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
+          Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>,
+          <em>p</em> or <em>k</em> for the previous block.
         </p>
         <template id="filterTemplate">
-            <div class="quiet">
-                Filter:
-                <input type="search" id="fileSearch">
-            </div>
+          <div class="quiet">
+            Filter:
+            <input type="search" id="fileSearch" />
+          </div>
         </template>
-    </div>
-    <div class='status-line medium'></div>
-    <pre><table class="coverage">
+      </div>
+      <div class="status-line medium"></div>
+      <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
 <a name='L3'></a><a href='#L3'>3</a>
@@ -586,7 +582,38 @@
 <a name='L521'></a><a href='#L521'>521</a>
 <a name='L522'></a><a href='#L522'>522</a>
 <a name='L523'></a><a href='#L523'>523</a>
-<a name='L524'></a><a href='#L524'>524</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L524'></a><a href='#L524'>524</a>
+<a name='L525'></a><a href='#L525'>525</a>
+<a name='L526'></a><a href='#L526'>526</a>
+<a name='L527'></a><a href='#L527'>527</a>
+<a name='L528'></a><a href='#L528'>528</a>
+<a name='L529'></a><a href='#L529'>529</a>
+<a name='L530'></a><a href='#L530'>530</a>
+<a name='L531'></a><a href='#L531'>531</a>
+<a name='L532'></a><a href='#L532'>532</a>
+<a name='L533'></a><a href='#L533'>533</a>
+<a name='L534'></a><a href='#L534'>534</a>
+<a name='L535'></a><a href='#L535'>535</a>
+<a name='L536'></a><a href='#L536'>536</a>
+<a name='L537'></a><a href='#L537'>537</a>
+<a name='L538'></a><a href='#L538'>538</a>
+<a name='L539'></a><a href='#L539'>539</a>
+<a name='L540'></a><a href='#L540'>540</a>
+<a name='L541'></a><a href='#L541'>541</a>
+<a name='L542'></a><a href='#L542'>542</a>
+<a name='L543'></a><a href='#L543'>543</a>
+<a name='L544'></a><a href='#L544'>544</a>
+<a name='L545'></a><a href='#L545'>545</a>
+<a name='L546'></a><a href='#L546'>546</a>
+<a name='L547'></a><a href='#L547'>547</a>
+<a name='L548'></a><a href='#L548'>548</a>
+<a name='L549'></a><a href='#L549'>549</a>
+<a name='L550'></a><a href='#L550'>550</a>
+<a name='L551'></a><a href='#L551'>551</a>
+<a name='L552'></a><a href='#L552'>552</a>
+<a name='L553'></a><a href='#L553'>553</a>
+<a name='L554'></a><a href='#L554'>554</a>
+<a name='L555'></a><a href='#L555'>555</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -610,113 +637,122 @@
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">12x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">12x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">12x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">11x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">11x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">9x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">9x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">9x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -787,6 +823,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -794,12 +832,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
@@ -810,6 +842,16 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -830,6 +872,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -946,6 +990,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1026,6 +1074,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1044,16 +1099,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1061,7 +1106,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">9x</span>
-<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">13x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1069,16 +1127,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1131,17 +1189,19 @@ export class BlockchainActionValidator {
      */
     static validateBlockchainAction(action: BlockchainActionMetadata): BlockchainAction {
         this.validateBlockchainActionMetadata(action);
-        
+&nbsp;
         // Get the ABI parameters
         const abiParams = this.getAbiParameters(action);
-        
+&nbsp;
         // Get the blockchain action type
         const blockchainActionType = this.getBlockchainActionType(action);
 &nbsp;
-        if(blockchainActionType !== 'payable' &amp;&amp; action.amount !== undefined ) { 
-            throw new ActionValidationError('La acción no es payable, no se debe proporcionar "amount"');
+        if (blockchainActionType !== 'payable' &amp;&amp; action.amount !== undefined) {
+            throw new ActionValidationError(
+                'La acción no es payable, no se debe proporcionar "amount"',
+            );
         }
-        
+&nbsp;
         // Return the processed action with additional info
         return {
             ...action,
@@ -1149,7 +1209,7 @@ export class BlockchainActionValidator {
             blockchainActionType,
         };
     }
-    
+&nbsp;
     /**
      * Validates that an object is a valid BlockchainActionMetadata
      */
@@ -1163,12 +1223,12 @@ export class BlockchainActionValidator {
 <span class="cstat-no" title="statement not covered" >            throw new ActionValidationError('La acción debe tener una etiqueta válida');</span>
         }
 &nbsp;
-        if (typeof action.description !== 'string' || !action.description) {
-            throw new ActionValidationError('La acción debe tener una descripción válida');
-        }
-&nbsp;
         // Validate contract address
-        <span class="missing-if-branch" title="if path not taken" >I</span>if (!action.address || typeof action.address !== 'string' || !action.address.startsWith('0x')) {
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (
+            !action.address ||
+            typeof action.address !== 'string' ||
+            !action.address.startsWith('0x')
+        ) {
 <span class="cstat-no" title="statement not covered" >            throw new ActionValidationError(</span>
                 'La acción debe tener una dirección de contrato válida (formato 0x...)',
             );
@@ -1197,12 +1257,19 @@ export class BlockchainActionValidator {
 &nbsp;
         // Validate chains
         <span class="missing-if-branch" title="if path not taken" >I</span>if (!this.validateChainContext(action.chains)) {
-<span class="cstat-no" title="statement not covered" >            throw new ActionValidationError('La acción debe tener una configuración de chains válida');</span>
+<span class="cstat-no" title="statement not covered" >            throw new ActionValidationError(</span>
+                'La acción debe tener una configuración de chains válida',
+            );
         }
 &nbsp;
         // Validate amount if present
-        <span class="missing-if-branch" title="if path not taken" >I</span>if (action.amount !== undefined &amp;&amp; (typeof action.amount !== 'number' || action.amount &lt; 0)) {
-<span class="cstat-no" title="statement not covered" >            throw new ActionValidationError('Si se proporciona "amount", debe ser un número positivo');</span>
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (
+            action.amount !== undefined &amp;&amp;
+            (typeof action.amount !== 'number' || action.amount &lt; 0)
+        ) {
+<span class="cstat-no" title="statement not covered" >            throw new ActionValidationError(</span>
+                'Si se proporciona "amount", debe ser un número positivo',
+            );
         }
 &nbsp;
         // Validate parameters if present
@@ -1212,7 +1279,7 @@ export class BlockchainActionValidator {
 &nbsp;
         return true;
     }
-    
+&nbsp;
     /**
      * Validates that the chain context is valid
      */
@@ -1233,7 +1300,7 @@ export class BlockchainActionValidator {
 &nbsp;
         return true;
     }
-    
+&nbsp;
     /**
      * Validates that a chain is valid
      */
@@ -1241,7 +1308,7 @@ export class BlockchainActionValidator {
         const validChains = ['fuji', 'avalanche', 'alfajores', 'celo', 'monad-testnet', 'ethereum'];
         return typeof chain === 'string' &amp;&amp; validChains.includes(chain);
     }
-    
+&nbsp;
     /**
      * Validates that blockchain parameters are valid
      */
@@ -1297,7 +1364,7 @@ export class BlockchainActionValidator {
 &nbsp;
         return true;
     }
-    
+&nbsp;
     /**
      * Validates that a standard parameter is valid
      */
@@ -1307,14 +1374,18 @@ export class BlockchainActionValidator {
             param.minLength !== undefined &amp;&amp;
             (<span class="branch-1 cbranch-no" title="branch not covered" >typeof param.minLength !== 'number' </span>|| <span class="branch-2 cbranch-no" title="branch not covered" >param.minLength &lt; 0)</span>
         ) {
-<span class="cstat-no" title="statement not covered" >            throw new ActionValidationError(`El parámetro "${param.name}" tiene un minLength inválido`);</span>
+<span class="cstat-no" title="statement not covered" >            throw new ActionValidationError(</span>
+                `El parámetro "${param.name}" tiene un minLength inválido`,
+            );
         }
 &nbsp;
         <span class="missing-if-branch" title="if path not taken" >I</span>if (
             param.maxLength !== undefined &amp;&amp;
             (<span class="branch-1 cbranch-no" title="branch not covered" >typeof param.maxLength !== 'number' </span>|| <span class="branch-2 cbranch-no" title="branch not covered" >param.maxLength &lt; 0)</span>
         ) {
-<span class="cstat-no" title="statement not covered" >            throw new ActionValidationError(`El parámetro "${param.name}" tiene un maxLength inválido`);</span>
+<span class="cstat-no" title="statement not covered" >            throw new ActionValidationError(</span>
+                `El parámetro "${param.name}" tiene un maxLength inválido`,
+            );
         }
 &nbsp;
         <span class="missing-if-branch" title="if path not taken" >I</span>if (param.min !== undefined &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >typeof param.min !== 'number')</span> {
@@ -1330,7 +1401,9 @@ export class BlockchainActionValidator {
         }
 &nbsp;
         <span class="missing-if-branch" title="if path not taken" >I</span>if (param.pattern !== undefined &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >typeof param.pattern !== 'string')</span> {
-<span class="cstat-no" title="statement not covered" >            throw new ActionValidationError(`El parámetro "${param.name}" tiene un pattern inválido`);</span>
+<span class="cstat-no" title="statement not covered" >            throw new ActionValidationError(</span>
+                `El parámetro "${param.name}" tiene un pattern inválido`,
+            );
         }
 &nbsp;
         // Validate that the pattern is a valid regex
@@ -1346,13 +1419,15 @@ export class BlockchainActionValidator {
 &nbsp;
         return true;
     }
-    
+&nbsp;
     /**
      * Validates that a selection parameter is valid
      */
 <span class="fstat-no" title="function not covered" >    st</span>atic validateSelectParameter(param: SelectParameter): boolean {
 <span class="cstat-no" title="statement not covered" >        if (!Array.isArray(param.options) || param.options.length === 0) {</span>
-<span class="cstat-no" title="statement not covered" >            throw new ActionValidationError(`El parámetro "${param.name}" debe tener opciones válidas`);</span>
+<span class="cstat-no" title="statement not covered" >            throw new ActionValidationError(</span>
+                `El parámetro "${param.name}" debe tener opciones válidas`,
+            );
         }
 &nbsp;
         // Validate each option
@@ -1380,7 +1455,7 @@ export class BlockchainActionValidator {
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        return true;</span>
     }
-    
+&nbsp;
     /**
      * Validates that a radio parameter is valid
      */
@@ -1455,7 +1530,7 @@ export class BlockchainActionValidator {
 &nbsp;
         return true;
     }
-    
+&nbsp;
     /**
      * Validates that a value is compatible with a Solidity type
      */
@@ -1468,7 +1543,11 @@ export class BlockchainActionValidator {
         // Validate according to Solidity type
 <span class="cstat-no" title="statement not covered" >        if (type.startsWith('uint') || type.startsWith('int')) {</span>
             // For numeric types
-<span class="cstat-no" title="statement not covered" >            if (typeof value !== 'number' &amp;&amp; typeof value !== 'string' &amp;&amp; typeof value !== 'bigint') {</span>
+<span class="cstat-no" title="statement not covered" >            if (</span>
+                typeof value !== 'number' &amp;&amp;
+                typeof value !== 'string' &amp;&amp;
+                typeof value !== 'bigint'
+            ) {
 <span class="cstat-no" title="statement not covered" >                throw new ActionValidationError(</span>
                     `El valor para "${paramName}" debe ser un número (tipo ${type})`,
                 );
@@ -1530,7 +1609,7 @@ export class BlockchainActionValidator {
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        return true;</span>
     }
-    
+&nbsp;
     /**
      * Checks if an object is a standard parameter
      */
@@ -1539,9 +1618,16 @@ export class BlockchainActionValidator {
             param &amp;&amp;
             typeof param === 'object' &amp;&amp;
             typeof param.type === 'string' &amp;&amp;
-            ['text', 'number', 'boolean', 'email', 'url', 'datetime', 'textarea', 'address'].includes(
-                param.type,
-            )
+            [
+                'text',
+                'number',
+                'boolean',
+                'email',
+                'url',
+                'datetime',
+                'textarea',
+                'address',
+            ].includes(param.type)
         );
     }
 &nbsp;
@@ -1562,7 +1648,10 @@ export class BlockchainActionValidator {
      */
     static isRadioParameter(param: any): param is RadioParameter {
         return (
-            param &amp;&amp; typeof param === 'object' &amp;&amp; param.type === 'radio' &amp;&amp; Array.isArray(param.options)
+            param &amp;&amp;
+            typeof param === 'object' &amp;&amp;
+            param.type === 'radio' &amp;&amp;
+            Array.isArray(param.options)
         );
     }
 &nbsp;
@@ -1587,7 +1676,7 @@ export class BlockchainActionValidator {
             (item): item is AbiFunction =&gt; item.type === 'function' &amp;&amp; item.name === functionName,
         );
     }
-    
+&nbsp;
     /**
      * Gets the parameters of a function from the ABI
      */
@@ -1595,7 +1684,7 @@ export class BlockchainActionValidator {
         const abiFunction = this.getAbiFunction(action.abi, action.functionName);
         return abiFunction.inputs;
     }
-    
+&nbsp;
     /**
      * Gets the state mutability type of a function from the ABI
      */
@@ -1603,7 +1692,7 @@ export class BlockchainActionValidator {
         const abiFunction = this.getAbiFunction(action.abi, action.functionName);
         return abiFunction.stateMutability;
     }
-    
+&nbsp;
     /**
      * Checks if an object is a valid BlockchainActionMetadata
      */
@@ -1620,7 +1709,7 @@ export class BlockchainActionValidator {
             typeof obj.chains.source === 'string'
         );
     }
-    
+&nbsp;
     /**
      * Checks if an object is a BlockchainAction
      */
@@ -1634,21 +1723,22 @@ export class BlockchainActionValidator {
 }
 &nbsp;</pre></td></tr></table></pre>
 
-                <div class='push'></div><!-- for sticky footer -->
-            </div><!-- /wrapper -->
-            <div class='footer quiet pad2 space-top1 center small'>
-                Code coverage generated by
-                <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-03-21T13:10:29.227Z
-            </div>
-        <script src="../prettify.js"></script>
-        <script>
-            window.onload = function () {
-                prettyPrint();
-            };
-        </script>
-        <script src="../sorter.js"></script>
-        <script src="../block-navigation.js"></script>
-    </body>
+      <div class="push"></div>
+      <!-- for sticky footer -->
+    </div>
+    <!-- /wrapper -->
+    <div class="footer quiet pad2 space-top1 center small">
+      Code coverage generated by
+      <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
+      at 2025-03-21T14:25:51.937Z
+    </div>
+    <script src="../prettify.js"></script>
+    <script>
+      window.onload = function () {
+        prettyPrint();
+      };
+    </script>
+    <script src="../sorter.js"></script>
+    <script src="../block-navigation.js"></script>
+  </body>
 </html>
-    
