@@ -1,389 +1,142 @@
-import { describe, expect, it, test } from '@jest/globals';
-import {
-    validateBlockchainActionMetadata,
-    validateBlockchainParameters,
-    ActionValidationError,
-    isStandardParameter,
-    isSelectParameter,
-    isRadioParameter,
+import { describe, expect, it } from '@jest/globals';
+import { 
+    validateBasicMetadata,
+    createMetadata,
+    isTransferAction,
+    isHttpAction
 } from '../../src/utils/validator';
-import {
-    BlockchainActionMetadata,
-    StandardParameter,
-    SelectParameter,
-    RadioParameter,
-} from '../../src/interface/blockchainAction';
-import {
-    tokenSwapMiniApp,
-    nftMarketplaceMiniApp,
-    daoVotingMiniApp,
-} from '../../src/examples/example-miniapps';
-import { PARAM_TEMPLATES } from '../../src/templates/templates';
+import { ActionValidationError } from '../../src/errors/customErrors';
+import { Metadata } from '../../src/interface/metadata';
 
-// Basic ABI for testing
-const simpleAbi = [
-    {
-        name: 'testFunction',
-        type: 'function',
-        stateMutability: 'nonpayable',
-        inputs: [
-            { name: 'param1', type: 'string' },
-            { name: 'param2', type: 'uint256' },
-            { name: 'param3', type: 'bool' },
-            { name: 'param4', type: 'address' },
-        ],
-        outputs: [],
-    },
-] as const;
-
-// Helper function to create a valid base action
-function createValidBaseAction(): BlockchainActionMetadata {
-    return {
-        label: 'Test Action',
-        description: 'Test Description',
-        address: '0x1234567890123456789012345678901234567890',
-        abi: simpleAbi,
-        functionName: 'testFunction',
-        chains: { source: 'fuji' },
-    };
-}
-
-describe('Parameter Type Detection', () => {
-    it('correctly identifies standard parameters', () => {
-        const standardParam: StandardParameter = {
-            name: 'testParam',
-            label: 'Test Param',
-            type: 'text',
-            required: true,
-        };
-
-        expect(isStandardParameter(standardParam)).toBe(true);
-        expect(isSelectParameter(standardParam)).toBe(false);
-        expect(isRadioParameter(standardParam)).toBe(false);
-    });
-
-    it('correctly identifies select parameters', () => {
-        const selectParam: SelectParameter = {
-            name: 'testParam',
-            label: 'Test Param',
-            type: 'select',
-            required: true,
-            options: [
-                { label: 'Option 1', value: 1 },
-                { label: 'Option 2', value: 2 },
-            ],
-        };
-
-        expect(isStandardParameter(selectParam)).toBe(false);
-        expect(isSelectParameter(selectParam)).toBe(true);
-        expect(isRadioParameter(selectParam)).toBe(false);
-    });
-
-    it('correctly identifies radio parameters', () => {
-        const radioParam: RadioParameter = {
-            name: 'testParam',
-            label: 'Test Param',
-            type: 'radio',
-            required: true,
-            options: [
-                { label: 'Option 1', value: 1 },
-                { label: 'Option 2', value: 2 },
-            ],
-        };
-
-        expect(isStandardParameter(radioParam)).toBe(false);
-        expect(isSelectParameter(radioParam)).toBe(false);
-        expect(isRadioParameter(radioParam)).toBe(true);
-    });
-});
-
-describe('Radio Parameter Validation', () => {
-    it('validates a correct radio parameter', () => {
-        const validRadioParam: RadioParameter = {
-            name: 'testRadio',
-            label: 'Test Radio',
-            type: 'radio',
-            required: true,
-            options: [
-                { label: 'Option 1', value: 1 },
-                { label: 'Option 2', value: 2 },
-            ],
-        };
-
-        // This should not throw any error
-        const action = createValidBaseAction();
-        const abiParams = [{ name: 'testRadio', type: 'uint256' }];
-
-        expect(() => validateBlockchainParameters([validRadioParam], abiParams)).not.toThrow();
-    });
-
-    it('throws error when radio parameter has less than 2 options', () => {
-        const invalidRadioParam: RadioParameter = {
-            name: 'testRadio',
-            label: 'Test Radio',
-            type: 'radio',
-            required: true,
-            options: [{ label: 'Option 1', value: 1 }],
-        };
-
-        const abiParams = [{ name: 'testRadio', type: 'uint256' }];
-
-        expect(() => validateBlockchainParameters([invalidRadioParam], abiParams)).toThrow(
-            ActionValidationError,
-        );
-        expect(() => validateBlockchainParameters([invalidRadioParam], abiParams)).toThrow(
-            /debe tener al menos 2 opciones/,
-        );
-    });
-
-    it('throws error when radio parameter has duplicate values', () => {
-        const invalidRadioParam: RadioParameter = {
-            name: 'testRadio',
-            label: 'Test Radio',
-            type: 'radio',
-            required: true,
-            options: [
-                { label: 'Option 1', value: 1 },
-                { label: 'Option 2', value: 1 }, // Duplicate value
-            ],
-        };
-
-        const abiParams = [{ name: 'testRadio', type: 'uint256' }];
-
-        expect(() => validateBlockchainParameters([invalidRadioParam], abiParams)).toThrow(
-            ActionValidationError,
-        );
-        expect(() => validateBlockchainParameters([invalidRadioParam], abiParams)).toThrow(
-            /valores duplicados/,
-        );
-    });
-
-    it('throws error when radio parameter has duplicate labels', () => {
-        const invalidRadioParam: RadioParameter = {
-            name: 'testRadio',
-            label: 'Test Radio',
-            type: 'radio',
-            required: true,
-            options: [
-                { label: 'Same Label', value: 1 },
-                { label: 'Same Label', value: 2 }, // Duplicate label
-            ],
-        };
-
-        const abiParams = [{ name: 'testRadio', type: 'uint256' }];
-
-        expect(() => validateBlockchainParameters([invalidRadioParam], abiParams)).toThrow(
-            ActionValidationError,
-        );
-        expect(() => validateBlockchainParameters([invalidRadioParam], abiParams)).toThrow(
-            /etiquetas duplicadas/,
-        );
-    });
-
-    it('throws error when radio parameter default value is not in options', () => {
-        const invalidRadioParam: RadioParameter = {
-            name: 'testRadio',
-            label: 'Test Radio',
-            type: 'radio',
-            required: true,
-            options: [
-                { label: 'Option 1', value: 1 },
-                { label: 'Option 2', value: 2 },
-            ],
-            value: 3, // Not in options
-        };
-
-        const abiParams = [{ name: 'testRadio', type: 'uint256' }];
-
-        expect(() => validateBlockchainParameters([invalidRadioParam], abiParams)).toThrow(
-            ActionValidationError,
-        );
-        expect(() => validateBlockchainParameters([invalidRadioParam], abiParams)).toThrow(
-            /no está entre las opciones disponibles/,
-        );
-    });
-
-    it('validates a radio parameter with a valid default value', () => {
-        const validRadioParam: RadioParameter = {
-            name: 'testRadio',
-            label: 'Test Radio',
-            type: 'radio',
-            required: true,
-            options: [
-                { label: 'Option 1', value: 1 },
-                { label: 'Option 2', value: 2 },
-            ],
-            value: 2, // Valid option value
-        };
-
-        const abiParams = [{ name: 'testRadio', type: 'uint256' }];
-
-        expect(() => validateBlockchainParameters([validRadioParam], abiParams)).not.toThrow();
-    });
-});
-
-describe('Block Action Metadata Validation', () => {
-    it('validates a correct action metadata', () => {
-        const validAction = createValidBaseAction();
-        expect(() => validateBlockchainActionMetadata(validAction)).not.toThrow();
-    });
-
-    it('throws error for invalid address', () => {
-        const invalidAction = {
-            ...createValidBaseAction(),
-            address: '0xinvalid',
-        };
-
-        expect(() => validateBlockchainActionMetadata(invalidAction)).toThrow(
-            ActionValidationError,
-        );
-        expect(() => validateBlockchainActionMetadata(invalidAction)).toThrow(/Dirección inválida/);
-    });
-
-    it('throws error for non-existent function in ABI', () => {
-        const invalidAction = {
-            ...createValidBaseAction(),
-            functionName: 'nonExistentFunction',
-        };
-
-        expect(() => validateBlockchainActionMetadata(invalidAction)).toThrow(
-            ActionValidationError,
-        );
-        expect(() => validateBlockchainActionMetadata(invalidAction)).toThrow(
-            /no existe en el ABI/,
-        );
-    });
-
-    it('throws error for invalid chain', () => {
-        const invalidAction = {
-            ...createValidBaseAction(),
-            chains: { source: 'invalid-chain' },
-        };
-
-        expect(() => validateBlockchainActionMetadata(invalidAction)).toThrow(
-            ActionValidationError,
-        );
-        expect(() => validateBlockchainActionMetadata(invalidAction)).toThrow(/chains válida/);
-    });
-
-    it('validates action with valid parameters', () => {
-        const actionWithParams = {
-            ...createValidBaseAction(),
-            params: [
+describe('Validator utils', () => {
+    describe('validateBasicMetadata', () => {
+        const validMetadata: Metadata = {
+            url: 'https://example.com',
+            icon: 'https://example.com/icon.png',
+            title: 'Test Metadata',
+            description: 'This is a test',
+            actions: [
                 {
-                    name: 'param1',
-                    label: 'Text Parameter',
-                    type: 'text',
-                    required: true,
-                },
-                {
-                    name: 'param2',
-                    label: 'Number Parameter',
-                    type: 'number',
-                    required: true,
-                },
-                {
-                    name: 'param3',
-                    label: 'Boolean Parameter',
-                    type: 'boolean',
-                    required: true,
-                },
-                {
-                    name: 'param4',
-                    label: 'Address Parameter',
-                    type: 'address',
-                    required: true,
-                },
-            ],
+                    label: 'Test Action',
+                    address: '0x1234567890123456789012345678901234567890',
+                    abi: [],
+                    functionName: 'test',
+                    chains: { source: 'avalanche' }
+                }
+            ]
         };
 
-        expect(() => validateBlockchainActionMetadata(actionWithParams)).not.toThrow();
+        it('validates correct metadata', () => {
+            expect(() => validateBasicMetadata(validMetadata)).not.toThrow();
+        });
+
+        it('rejects metadata without url', () => {
+            const invalidMetadata = { ...validMetadata, url: '' };
+            expect(() => validateBasicMetadata(invalidMetadata as Metadata)).toThrow(ActionValidationError);
+            expect(() => validateBasicMetadata(invalidMetadata as Metadata)).toThrow(/url/);
+        });
+
+        it('rejects metadata without icon', () => {
+            const invalidMetadata = { ...validMetadata, icon: '' };
+            expect(() => validateBasicMetadata(invalidMetadata as Metadata)).toThrow(ActionValidationError);
+            expect(() => validateBasicMetadata(invalidMetadata as Metadata)).toThrow(/icon/);
+        });
+
+        it('rejects metadata without title', () => {
+            const invalidMetadata = { ...validMetadata, title: '' };
+            expect(() => validateBasicMetadata(invalidMetadata as Metadata)).toThrow(ActionValidationError);
+            expect(() => validateBasicMetadata(invalidMetadata as Metadata)).toThrow(/title/);
+        });
+
+        it('rejects metadata without description', () => {
+            const invalidMetadata = { ...validMetadata, description: '' };
+            expect(() => validateBasicMetadata(invalidMetadata as Metadata)).toThrow(ActionValidationError);
+            expect(() => validateBasicMetadata(invalidMetadata as Metadata)).toThrow(/description/);
+        });
+
+        it('rejects metadata with empty actions', () => {
+            const invalidMetadata = { ...validMetadata, actions: [] };
+            expect(() => validateBasicMetadata(invalidMetadata)).toThrow(ActionValidationError);
+            expect(() => validateBasicMetadata(invalidMetadata)).toThrow(/al menos una acción/);
+        });
+
+        it('rejects metadata with too many actions', () => {
+            const tooManyActions = Array(5).fill(validMetadata.actions[0]);
+            const invalidMetadata = { ...validMetadata, actions: tooManyActions };
+            expect(() => validateBasicMetadata(invalidMetadata)).toThrow(ActionValidationError);
+            expect(() => validateBasicMetadata(invalidMetadata)).toThrow(/máximo 4 acciones/);
+        });
     });
 
-    it('throws error for parameter that does not exist in ABI', () => {
-        const invalidAction = {
-            ...createValidBaseAction(),
-            params: [
-                {
-                    name: 'nonExistentParam',
-                    label: 'Invalid Param',
-                    type: 'text',
-                    required: true,
-                },
-            ],
-        };
-
-        expect(() => validateBlockchainActionMetadata(invalidAction)).toThrow(
-            ActionValidationError,
-        );
-        expect(() => validateBlockchainActionMetadata(invalidAction)).toThrow(
-            /no existe en el ABI/,
-        );
-    });
-});
-
-describe('Integration with example actions', () => {
-    it('validates token swap mini app actions', () => {
-        for (const action of tokenSwapMiniApp.actions) {
-            expect(() => validateBlockchainActionMetadata(action)).not.toThrow();
-        }
-    });
-
-    it('validates NFT marketplace mini app actions', () => {
-        for (const action of nftMarketplaceMiniApp.actions) {
-            expect(() => validateBlockchainActionMetadata(action)).not.toThrow();
-        }
-    });
-
-    it('validates DAO voting mini app actions', () => {
-        for (const action of daoVotingMiniApp.actions) {
-            expect(() => validateBlockchainActionMetadata(action)).not.toThrow();
-        }
-    });
-});
-
-describe('Template parameters validation', () => {
-    it('validates standard parameter templates', () => {
-        const abiParams = [{ name: 'testParam', type: 'string' }];
-        expect(() =>
-            validateBlockchainParameters(
-                [{ ...PARAM_TEMPLATES.TEXT, name: 'testParam' }],
-                abiParams,
-            ),
-        ).not.toThrow();
-
-        expect(() =>
-            validateBlockchainParameters(
-                [{ ...PARAM_TEMPLATES.EMAIL, name: 'testParam' }],
-                abiParams,
-            ),
-        ).not.toThrow();
+    describe('createMetadata', () => {
+        it('processes valid metadata', () => {
+            const validMetadata: Metadata = {
+                url: 'https://example.com',
+                icon: 'https://example.com/icon.png',
+                title: 'Test Metadata',
+                description: 'This is a test',
+                actions: [
+                    {
+                        label: 'Test Action',
+                        address: '0x1234567890123456789012345678901234567890',
+                        abi: [{
+                            name: 'test',
+                            type: 'function',
+                            stateMutability: 'nonpayable',
+                            inputs: [],
+                            outputs: []
+                        }],
+                        functionName: 'test',
+                        chains: { source: 'avalanche' }
+                    }
+                ]
+            };
+            
+            const result = createMetadata(validMetadata);
+            expect(result).toHaveProperty('actions');
+            expect(result.actions[0]).toHaveProperty('blockchainActionType');
+        });
+        
+        it('handles errors during processing', () => {
+            const invalidMetadata = {
+                url: 'https://example.com',
+                icon: 'https://example.com/icon.png',
+                title: 'Test Metadata',
+                description: 'This is a test',
+                actions: [{ 
+                    // This is an invalid action without proper properties
+                    label: 'Test' 
+                }]
+            };
+            
+            expect(() => createMetadata(invalidMetadata as Metadata)).toThrow(ActionValidationError);
+        });
     });
 
-    it('validates select parameter templates', () => {
-        const abiParams = [{ name: 'testParam', type: 'string' }];
-        expect(() =>
-            validateBlockchainParameters(
-                [{ ...PARAM_TEMPLATES.TOKEN_SELECT, name: 'testParam' }],
-                abiParams,
-            ),
-        ).not.toThrow();
-    });
-
-    it('validates radio parameter templates', () => {
-        const abiParams = [{ name: 'testParam', type: 'bool' }];
-        expect(() =>
-            validateBlockchainParameters(
-                [{ ...PARAM_TEMPLATES.YES_NO, name: 'testParam' }],
-                abiParams,
-            ),
-        ).not.toThrow();
-
-        expect(() =>
-            validateBlockchainParameters(
-                [{ ...PARAM_TEMPLATES.PRIORITY, name: 'testParam' }],
-                abiParams,
-            ),
-        ).not.toThrow();
+    describe('Type guards', () => {
+        it('isTransferAction should correctly identify transfer actions', () => {
+            const transferAction = {
+                label: 'Send AVAX',
+                chains: { source: 'avalanche' },
+                to: '0x1234567890123456789012345678901234567890',
+                amount: 0.1
+            };
+            
+            expect(isTransferAction(transferAction)).toBe(true);
+            expect(isTransferAction({})).toBe(false);
+            expect(isTransferAction(null)).toBe(false);
+        });
+        
+        it('isHttpAction should correctly identify HTTP actions', () => {
+            const httpAction = {
+                label: 'API Call',
+                endpoint: 'https://api.example.com/data',
+                params: []
+            };
+            
+            expect(isHttpAction(httpAction)).toBe(true);
+            expect(isHttpAction({})).toBe(false);
+            expect(isHttpAction(null)).toBe(false);
+        });
     });
 });

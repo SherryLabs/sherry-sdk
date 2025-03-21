@@ -8,6 +8,7 @@
     "build": "tsc",
     "prepublishOnly": "npm run build",
     "test": "jest",
+    "test:coverage": "jest --coverage",
     "lint": "oxlint",
     "prepare": "husky",
     "publish": "npm run build && npm publish --access public",
@@ -46,5 +47,16 @@
   "bugs": {
     "url": "https://github.com/SherryLabs/sherry-sdk/issues"
   },
-  "homepage": "https://github.com/SherryLabs/sherry-sdk#readme"
+  "homepage": "https://github.com/SherryLabs/sherry-sdk#readme",
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "collectCoverageFrom": [
+      "src/**/*.{ts,tsx}",
+      "!src/**/*.d.ts",
+      "!src/**/index.ts"
+    ],
+    "coverageReporters": ["text", "lcov", "html"],
+    "setupFiles": ["./tests/setup.js"]
+  }
 }
