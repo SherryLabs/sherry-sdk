@@ -1,12 +1,12 @@
-import { 
-    ActionFlow, 
-    NestedAction, 
+import {
+    ActionFlow,
+    NestedAction,
     NestedBlockchainAction,
     NestedTransferAction,
     NestedHttpAction,
     DecisionAction,
     CompletionAction,
-    NextActionDefinition 
+    NextActionDefinition,
 } from '../interface/nestedAction';
 import { InvalidMetadataError } from '../errors/customErrors';
 import { HttpActionValidator } from './httpActionValidator';
@@ -50,7 +50,7 @@ export class FlowValidator {
 
         return {
             ...flow,
-            actions: validatedActions
+            actions: validatedActions,
         };
     }
 
@@ -83,7 +83,9 @@ export class FlowValidator {
             case 'completion':
                 return this.validateCompletionAction(action as CompletionAction, flow);
             default:
-                throw new InvalidMetadataError(`Unknown action type for action '${(action as NestedAction).id}'`);
+                throw new InvalidMetadataError(
+                    `Unknown action type for action '${(action as NestedAction).id}'`,
+                );
         }
     }
 
@@ -91,8 +93,8 @@ export class FlowValidator {
      * Validates a blockchain type action.
      */
     private static validateBlockchainAction(
-        action: NestedBlockchainAction, 
-        flow: ActionFlow
+        action: NestedBlockchainAction,
+        flow: ActionFlow,
     ): NestedBlockchainAction {
         // Validate basic properties of a blockchain action
         if (!action.address) {
@@ -100,19 +102,27 @@ export class FlowValidator {
         }
 
         if (!isAddress(action.address)) {
-            throw new InvalidMetadataError(`Blockchain action '${action.id}' has invalid address: ${action.address}`);
+            throw new InvalidMetadataError(
+                `Blockchain action '${action.id}' has invalid address: ${action.address}`,
+            );
         }
 
         if (!action.functionName) {
-            throw new InvalidMetadataError(`Blockchain action '${action.id}' must have a functionName`);
+            throw new InvalidMetadataError(
+                `Blockchain action '${action.id}' must have a functionName`,
+            );
         }
 
         if (!action.abi || !Array.isArray(action.abi) || action.abi.length === 0) {
-            throw new InvalidMetadataError(`Blockchain action '${action.id}' must have a valid ABI`);
+            throw new InvalidMetadataError(
+                `Blockchain action '${action.id}' must have a valid ABI`,
+            );
         }
 
         if (!action.chains || !action.chains.source) {
-            throw new InvalidMetadataError(`Blockchain action '${action.id}' must have a source chain`);
+            throw new InvalidMetadataError(
+                `Blockchain action '${action.id}' must have a source chain`,
+            );
         }
 
         // Validate the next actions
@@ -127,20 +137,26 @@ export class FlowValidator {
      * Validates a transfer type action.
      */
     private static validateTransferAction(
-        action: NestedTransferAction, 
-        flow: ActionFlow
+        action: NestedTransferAction,
+        flow: ActionFlow,
     ): NestedTransferAction {
         // If to is not a placeholder, validate that it is a valid address
         if (action.to && !action.to.includes('{{') && !isAddress(action.to)) {
-            throw new InvalidMetadataError(`Transfer action '${action.id}' has invalid address: ${action.to}`);
+            throw new InvalidMetadataError(
+                `Transfer action '${action.id}' has invalid address: ${action.to}`,
+            );
         }
 
         if (action.amount === undefined || action.amount <= 0) {
-            throw new InvalidMetadataError(`Transfer action '${action.id}' must have a positive amount`);
+            throw new InvalidMetadataError(
+                `Transfer action '${action.id}' must have a positive amount`,
+            );
         }
 
         if (!action.chains || !action.chains.source) {
-            throw new InvalidMetadataError(`Transfer action '${action.id}' must have a source chain`);
+            throw new InvalidMetadataError(
+                `Transfer action '${action.id}' must have a source chain`,
+            );
         }
 
         // Validate the next actions
@@ -155,31 +171,33 @@ export class FlowValidator {
      * Validates an HTTP type action.
      */
     private static validateHttpAction(
-        action: NestedHttpAction, 
-        flow: ActionFlow
+        action: NestedHttpAction,
+        flow: ActionFlow,
     ): NestedHttpAction {
         try {
             // Use the existing HTTP validator
             const httpAction = {
                 label: action.label,
                 endpoint: action.endpoint,
-                params: action.params || []
+                params: action.params || [],
             };
-            
+
             const validatedHttpAction = HttpActionValidator.validateHttpAction(httpAction);
-            
+
             // Update the validated parameters
             action.params = validatedHttpAction.params;
-            
+
             // Validate the next actions
             if (action.nextActions) {
                 this.validateNextActions(action.nextActions, action.id, flow);
             }
-            
+
             return action;
         } catch (error) {
             if (error instanceof Error) {
-                throw new InvalidMetadataError(`HTTP action '${action.id}' validation failed: ${error.message}`);
+                throw new InvalidMetadataError(
+                    `HTTP action '${action.id}' validation failed: ${error.message}`,
+                );
             }
             throw error;
         }
@@ -189,8 +207,8 @@ export class FlowValidator {
      * Validates a decision type action.
      */
     private static validateDecisionAction(
-        action: DecisionAction, 
-        flow: ActionFlow
+        action: DecisionAction,
+        flow: ActionFlow,
     ): DecisionAction {
         if (!action.title) {
             throw new InvalidMetadataError(`Decision action '${action.id}' must have a title`);
@@ -203,21 +221,29 @@ export class FlowValidator {
         // Validate each option
         action.options.forEach(option => {
             if (!option.label) {
-                throw new InvalidMetadataError(`Option in decision action '${action.id}' must have a label`);
+                throw new InvalidMetadataError(
+                    `Option in decision action '${action.id}' must have a label`,
+                );
             }
-            
+
             if (option.value === undefined) {
-                throw new InvalidMetadataError(`Option '${option.label}' in decision action '${action.id}' must have a value`);
+                throw new InvalidMetadataError(
+                    `Option '${option.label}' in decision action '${action.id}' must have a value`,
+                );
             }
-            
+
             if (!option.nextActionId) {
-                throw new InvalidMetadataError(`Option '${option.label}' in decision action '${action.id}' must have a nextActionId`);
+                throw new InvalidMetadataError(
+                    `Option '${option.label}' in decision action '${action.id}' must have a nextActionId`,
+                );
             }
-            
+
             // Verify that the next action exists
             const nextAction = flow.actions.find(a => a.id === option.nextActionId);
             if (!nextAction) {
-                throw new InvalidMetadataError(`Next action '${option.nextActionId}' from option '${option.label}' in decision action '${action.id}' not found`);
+                throw new InvalidMetadataError(
+                    `Next action '${option.nextActionId}' from option '${option.label}' in decision action '${action.id}' not found`,
+                );
             }
         });
 
@@ -228,20 +254,24 @@ export class FlowValidator {
      * Validates a completion type action.
      */
     private static validateCompletionAction(
-        action: CompletionAction, 
-        flow: ActionFlow
+        action: CompletionAction,
+        flow: ActionFlow,
     ): CompletionAction {
         if (!action.message) {
             throw new InvalidMetadataError(`Completion action '${action.id}' must have a message`);
         }
 
         if (!['success', 'error', 'info'].includes(action.status)) {
-            throw new InvalidMetadataError(`Completion action '${action.id}' must have a valid status (success, error, or info)`);
+            throw new InvalidMetadataError(
+                `Completion action '${action.id}' must have a valid status (success, error, or info)`,
+            );
         }
 
         // Completion actions should not have nextActions
         if (action.nextActions && action.nextActions.length > 0) {
-            throw new InvalidMetadataError(`Completion action '${action.id}' should not have nextActions`);
+            throw new InvalidMetadataError(
+                `Completion action '${action.id}' should not have nextActions`,
+            );
         }
 
         return action;
@@ -251,34 +281,48 @@ export class FlowValidator {
      * Validates the definition of next actions.
      */
     private static validateNextActions(
-        nextActions: NextActionDefinition[], 
-        actionId: string, 
-        flow: ActionFlow
+        nextActions: NextActionDefinition[],
+        actionId: string,
+        flow: ActionFlow,
     ): void {
         nextActions.forEach(nextAction => {
             if (!nextAction.actionId) {
-                throw new InvalidMetadataError(`NextAction in action '${actionId}' must have an actionId`);
+                throw new InvalidMetadataError(
+                    `NextAction in action '${actionId}' must have an actionId`,
+                );
             }
-            
+
             // Verify that the next action exists
             const targetAction = flow.actions.find(a => a.id === nextAction.actionId);
             if (!targetAction) {
-                throw new InvalidMetadataError(`Next action '${nextAction.actionId}' from action '${actionId}' not found`);
+                throw new InvalidMetadataError(
+                    `Next action '${nextAction.actionId}' from action '${actionId}' not found`,
+                );
             }
-            
+
             // Validate conditions if they exist
             if (nextAction.conditions) {
                 nextAction.conditions.forEach(condition => {
                     if (!condition.field) {
-                        throw new InvalidMetadataError(`Condition in nextAction '${nextAction.actionId}' from action '${actionId}' must have a field`);
+                        throw new InvalidMetadataError(
+                            `Condition in nextAction '${nextAction.actionId}' from action '${actionId}' must have a field`,
+                        );
                     }
-                    
-                    if (!['eq', 'ne', 'gt', 'lt', 'gte', 'lte', 'contains'].includes(condition.operator)) {
-                        throw new InvalidMetadataError(`Condition in nextAction '${nextAction.actionId}' from action '${actionId}' has invalid operator: ${condition.operator}`);
+
+                    if (
+                        !['eq', 'ne', 'gt', 'lt', 'gte', 'lte', 'contains'].includes(
+                            condition.operator,
+                        )
+                    ) {
+                        throw new InvalidMetadataError(
+                            `Condition in nextAction '${nextAction.actionId}' from action '${actionId}' has invalid operator: ${condition.operator}`,
+                        );
                     }
-                    
+
                     if (condition.value === undefined) {
-                        throw new InvalidMetadataError(`Condition in nextAction '${nextAction.actionId}' from action '${actionId}' must have a value`);
+                        throw new InvalidMetadataError(
+                            `Condition in nextAction '${nextAction.actionId}' from action '${actionId}' must have a value`,
+                        );
                     }
                 });
             }
@@ -292,16 +336,16 @@ export class FlowValidator {
         // Verify that all actions are reachable from the initial action
         const reachableActions = new Set<string>();
         const actionsToCheck = [flow.initialActionId];
-        
+
         while (actionsToCheck.length > 0) {
             const currentActionId = actionsToCheck.pop()!;
             if (reachableActions.has(currentActionId)) continue;
-            
+
             reachableActions.add(currentActionId);
-            
+
             const currentAction = flow.actions.find(a => a.id === currentActionId);
             if (!currentAction) continue;
-            
+
             // Add the next actions to the verification list
             if (currentAction.type === 'decision') {
                 currentAction.options.forEach(option => {
@@ -317,12 +361,34 @@ export class FlowValidator {
                 });
             }
         }
-        
+
         // Check for unreachable actions
         const unreachableActions = flow.actions.filter(a => !reachableActions.has(a.id));
         if (unreachableActions.length > 0) {
             const unreachableIds = unreachableActions.map(a => a.id).join(', ');
-            throw new InvalidMetadataError(`The following actions are unreachable: ${unreachableIds}`);
+            throw new InvalidMetadataError(
+                `The following actions are unreachable: ${unreachableIds}`,
+            );
         }
     }
+
+    /**
+     * Tipo guard para verificar si un objeto es un ActionFlow
+     */
+    static isActionFlow(obj: any): obj is ActionFlow {
+        return (
+            obj &&
+            typeof obj === 'object' &&
+            obj.type === 'flow' &&
+            typeof obj.label === 'string' &&
+            typeof obj.initialActionId === 'string' &&
+            Array.isArray(obj.actions) &&
+            obj.actions.length > 0
+        );
+    }
+}
+
+// Export the type guard separately for backward compatibility
+export function isActionFlow(obj: any): obj is ActionFlow {
+    return FlowValidator.isActionFlow(obj);
 }
