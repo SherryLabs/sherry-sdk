@@ -55,9 +55,9 @@ const metadata: Metadata = {
       description: 'Transfer 0.1 AVAX to recipient',
       to: '0x1234567890123456789012345678901234567890',
       amount: 0.1,
-      chains: { source: 'avalanche' }
-    }
-  ]
+      chains: { source: 'avalanche' },
+    },
+  ],
 };
 
 // Validate and process metadata
@@ -84,11 +84,9 @@ const swapFlow: ActionFlow = {
       params: [
         // Token selection parameters...
       ],
-      nextActions: [
-        { actionId: 'review-quote' }
-      ]
+      nextActions: [{ actionId: 'review-quote' }],
     },
-    
+
     // Step 2: Review and decide
     {
       id: 'review-quote',
@@ -97,10 +95,10 @@ const swapFlow: ActionFlow = {
       title: 'Review Your Swap',
       options: [
         { label: 'Confirm', value: 'confirm', nextActionId: 'execute-swap' },
-        { label: 'Cancel', value: 'cancel', nextActionId: 'cancelled' }
-      ]
+        { label: 'Cancel', value: 'cancel', nextActionId: 'cancelled' },
+      ],
     },
-    
+
     // Step 3: Execute swap
     {
       id: 'execute-swap',
@@ -111,40 +109,40 @@ const swapFlow: ActionFlow = {
       nextActions: [
         {
           actionId: 'success',
-          conditions: [{ field: 'lastResult.status', operator: 'eq', value: 'success' }]
+          conditions: [{ field: 'lastResult.status', operator: 'eq', value: 'success' }],
         },
         {
           actionId: 'failed',
-          conditions: [{ field: 'lastResult.status', operator: 'eq', value: 'error' }]
-        }
-      ]
+          conditions: [{ field: 'lastResult.status', operator: 'eq', value: 'error' }],
+        },
+      ],
     },
-    
+
     // Completion states
     {
       id: 'success',
       type: 'completion',
       label: 'Swap Complete',
       message: 'Your swap was successful!',
-      status: 'success'
+      status: 'success',
     },
-    
+
     {
       id: 'failed',
       type: 'completion',
       label: 'Swap Failed',
       message: 'Your swap failed. Please try again.',
-      status: 'error'
+      status: 'error',
     },
-    
+
     {
       id: 'cancelled',
       type: 'completion',
       label: 'Swap Cancelled',
       message: 'You cancelled the swap.',
-      status: 'info'
-    }
-  ]
+      status: 'info',
+    },
+  ],
 };
 
 // Add to metadata
@@ -153,7 +151,7 @@ const flowMetadata: Metadata = {
   icon: 'https://example.com/swap-icon.png',
   title: 'Advanced Token Swap',
   description: 'Swap tokens with our guided flow',
-  actions: [swapFlow]
+  actions: [swapFlow],
 };
 
 // Validate and process
@@ -202,10 +200,10 @@ Send native tokens or assets:
   label: 'Donate',
   description: 'Support our project',
   chains: { source: 'ethereum' },
-  
+
   // Fixed recipient
   to: '0xRecipientAddress',
-  
+
   // Or let the user choose
   recipient: {
     inputType: 'select',
@@ -215,10 +213,10 @@ Send native tokens or assets:
       { label: 'Climate Action', value: '0xAddress2' }
     ]
   },
-  
+
   // Fixed amount
   amount: 0.1,
-  
+
   // Or let the user choose
   amountConfig: {
     inputType: 'radio',
@@ -346,17 +344,17 @@ const result = await executor.executeCurrentAction();
 
 // For decision steps, provide user choice
 const decisionResult = await executor.executeCurrentAction({
-  userChoice: selectedValue
+  userChoice: selectedValue,
 });
 
 // Continue until completion
 while (!executor.isCompleted()) {
   // Get current step
   const currentStep = executor.getCurrentAction();
-  
+
   // Execute with appropriate data
   const stepResult = await executor.executeCurrentAction(stepData);
-  
+
   // Check result and handle accordingly
   if (stepResult.status === 'waiting') {
     // Request user input
@@ -379,7 +377,7 @@ import { createParameter, PARAM_TEMPLATES } from '@sherrylinks/sdk';
 const emailParam = createParameter(PARAM_TEMPLATES.EMAIL, {
   name: 'email',
   label: 'Your Email',
-  required: true
+  required: true,
 });
 
 // Create a select parameter with custom options
@@ -389,8 +387,8 @@ const tokenParam = createParameter(PARAM_TEMPLATES.TOKEN_SELECT, {
   // Override default options
   options: [
     { label: 'USDC', value: 'usdc' },
-    { label: 'DAI', value: 'dai' }
-  ]
+    { label: 'DAI', value: 'dai' },
+  ],
 });
 ```
 
@@ -408,6 +406,7 @@ const tokenParam = createParameter(PARAM_TEMPLATES.TOKEN_SELECT, {
 The SDK includes several example mini-apps to help you get started:
 
 ### Single Action Examples
+
 - Token Swap mini-app
 - NFT Marketplace mini-app
 - DAO Voting mini-app
@@ -415,6 +414,7 @@ The SDK includes several example mini-apps to help you get started:
 - Cross-chain Bridge mini-app
 
 ### Flow Examples
+
 - User Onboarding Flow
 - DeFi Token Swap Flow
 - DAO Governance Flow
@@ -428,7 +428,7 @@ The SDK provides extensive validation to ensure your mini-apps work correctly:
 ```typescript
 import { validateMetadata } from '@sherrylinks/sdk';
 
-// Validate metadata 
+// Validate metadata
 const validationResult = validateMetadata(myMetadata);
 
 if (validationResult.isValid) {
