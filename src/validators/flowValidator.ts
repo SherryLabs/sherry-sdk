@@ -46,7 +46,9 @@ export class FlowValidator {
         const actionIds = new Set<string>();
         for (const action of flow.actions) {
             if (actionIds.has(action.id)) {
-                throw new InvalidMetadataError(`Flow contains actions with duplicate ID: ${action.id}`);
+                throw new InvalidMetadataError(
+                    `Flow contains actions with duplicate ID: ${action.id}`,
+                );
             }
             actionIds.add(action.id);
         }
