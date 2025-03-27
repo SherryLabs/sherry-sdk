@@ -1,8 +1,8 @@
-import { 
-    BlockchainParameter, 
-    StandardParameter, 
-    SelectParameter, 
-    RadioParameter 
+import {
+    BlockchainParameter,
+    StandardParameter,
+    SelectParameter,
+    RadioParameter,
 } from '../interface/blockchainAction';
 import { SherryValidationError } from '../errors/customErrors';
 import { isAddress } from 'viem';
@@ -21,7 +21,9 @@ export class ParameterValidator {
         }
 
         if (!param.label) {
-            throw new SherryValidationError(`Parameter '${param.name}' missing required 'label' field`);
+            throw new SherryValidationError(
+                `Parameter '${param.name}' missing required 'label' field`,
+            );
         }
 
         // Verificar tipo
@@ -101,7 +103,11 @@ export class ParameterValidator {
         }
 
         // Validar tipos específicos
-        if (param.type === 'email' && param.value !== undefined && typeof param.value === 'string') {
+        if (
+            param.type === 'email' &&
+            param.value !== undefined &&
+            typeof param.value === 'string'
+        ) {
             const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
             if (!emailRegex.test(param.value)) {
                 throw new SherryValidationError(
@@ -120,7 +126,11 @@ export class ParameterValidator {
             }
         }
 
-        if (param.type === 'address' && param.value !== undefined && typeof param.value === 'string') {
+        if (
+            param.type === 'address' &&
+            param.value !== undefined &&
+            typeof param.value === 'string'
+        ) {
             // Permitir 'sender' como valor especial
             if (param.value !== 'sender' && !isAddress(param.value)) {
                 throw new SherryValidationError(

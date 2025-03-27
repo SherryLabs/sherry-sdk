@@ -3,10 +3,10 @@ import { Metadata, ValidatedMetadata } from '../interface/metadata';
 import { ValidatedAction } from '../interface/action';
 import { ActionFlow } from '../interface/nestedAction';
 import { isActionFlow } from '../validators/flowValidator';
-import { 
+import {
     BlockchainActionValidator,
-    isBlockchainAction, 
-    isBlockchainActionMetadata
+    isBlockchainAction,
+    isBlockchainActionMetadata,
 } from '../validators/blockchainActionValidator';
 import { validateChainContext } from '../validators/chainValidator';
 import { validateParameter } from '../validators/parameterValidator';
@@ -19,5 +19,5 @@ export {
     validateChainContext,
     validateParameter,
     createMetadata,
-    isActionFlow
+    isActionFlow,
 };
