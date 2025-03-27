@@ -2,7 +2,7 @@ import { describe, expect, it } from '@jest/globals';
 import { Metadata } from '../src/interface/metadata';
 import { BlockchainAction } from '../src/interface/blockchainAction';
 import { createMetadata } from '../src/utils/createMetadata';
-import { validateMetadata } from '../src/utils/validateMetadata';
+import { validateMetadata } from '../src/validators/validateMetadata';
 
 describe('ETH Denver Raffle Metadata', () => {
     it('should validate ETH Denver raffle metadata correctly', () => {

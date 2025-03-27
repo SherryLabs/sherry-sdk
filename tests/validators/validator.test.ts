@@ -4,7 +4,7 @@ import {
     createMetadata,
     isTransferAction,
     isHttpAction,
-} from '../../src/utils/validator';
+} from '../../src/validators/validator';
 import { ActionValidationError } from '../../src/errors/customErrors';
 import { Metadata } from '../../src/interface/metadata';
 

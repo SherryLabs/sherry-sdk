@@ -334,80 +334,6 @@ function validateParameterTypeCompatibility(
     }
 }
 
-/**
- * Aplica valores de parámetros a los parámetros del ABI (para compatibilidad con paramsValue).
- */
-function applyParamValues(abiParams: ExtendedAbiParameter[], paramsValue?: any[]): void {
-    try {
-        if (!paramsValue || paramsValue.length === 0) return;
-
-        if (paramsValue.length > abiParams.length) {
-            throw new SherryValidationError(
-                `Too many parameter values provided: expected ${abiParams.length}, got ${paramsValue.length}`,
-            );
-        }
-
-        // Efectivamente aplicar y validar los valores a los parámetros
-        for (let i = 0; i < paramsValue.length; i++) {
-            if (abiParams[i] && paramsValue[i] !== undefined) {
-                // Solo validar sin arrojar errores - comentar para pasar a un enfoque menos estricto
-                // validateValueType(paramsValue[i], abiParams[i]);
-
-                // Asignar el valor al parámetro
-                abiParams[i]!.value = paramsValue[i];
-            }
-        }
-    } catch (error) {
-        if (error instanceof SherryValidationError) {
-            throw error;
-        } else {
-            throw new SherryValidationError(`Error applying parameter values: ${error}`);
-        }
-    }
-}
-
-/**
- * Aplica etiquetas de parámetros a los parámetros del ABI (para compatibilidad con paramsLabel).
- */
-/*
-function applyParamLabels(abiParams: ExtendedAbiParameter[], paramsLabel?: string[]): void {
-    try {
-        if (!paramsLabel || paramsLabel.length === 0) return;
-
-        if (paramsLabel.length > abiParams.length) {
-            throw new SherryValidationError(
-                `Too many parameter labels provided: expected ${abiParams.length}, got ${paramsLabel.length}`,
-            );
-        }
-
-        // Aplicar etiquetas a los parámetros del ABI
-        for (let i = 0; i < abiParams.length && i < paramsLabel.length; i++) {
-            if (
-                abiParams[i] &&
-                paramsLabel[i] &&
-                abiParams[i] !== undefined &&
-                paramsLabel[i] !== undefined &&
-                abiParams !== undefined &&
-                paramsLabel !== undefined
-            ) {
-                // Guardamos el nombre original y aplicamos la etiqueta como nombre visible
-                if (abiParams[i]?.name !== undefined) {
-                    abiParams[i]!.originalName = abiParams[i]!.name;
-                    abiParams[i]!.name = paramsLabel[i]!;
-                } else {
-                    throw new SherryValidationError('Error in applyParamLabels');
-                }
-            }
-        }
-    } catch (error) {
-        if (error instanceof SherryValidationError) {
-            throw error;
-        } else {
-            throw new SherryValidationError(`Error applying parameter labels: ${error}`);
-        }
-    }
-}
-*/
 
 /**
  * Valida una acción blockchain.
@@ -465,16 +391,6 @@ export function validateBlockchainAction(action: BlockchainActionMetadata): void
                 validateParametersMatchAbi(abiParams, action.params);
             }
 
-            // Validar enfoque legacy
-            /*
-            if (action.paramsValue) {
-                applyParamValues(abiParams, action.paramsValue);
-            }
-
-            if (action.paramsLabel) {
-                applyParamLabels(abiParams, action.paramsLabel);
-            }
-            */
 
             // Validar amount para funciones payable
             const actionType = getBlockchainActionType(action);
@@ -509,18 +425,6 @@ export function processBlockchainAction(action: BlockchainActionMetadata): Block
 
         // Obtener los parámetros del ABI
         const abiParams = getAbiParameters(action);
-
-        // Aplicar labels si se proporcionan (enfoque legacy)
-        /*
-        if (action.paramsLabel) {
-            applyParamLabels(abiParams, action.paramsLabel);
-        }
-
-        // Aplicar valores si se proporcionan (enfoque legacy)
-        if (action.paramsValue) {
-            applyParamValues(abiParams, action.paramsValue);
-        }
-        */
 
         // Obtener el tipo de mutabilidad de la acción
         const blockchainActionType = getBlockchainActionType(action);
@@ -577,6 +481,7 @@ function validateBasicMetadata(metadata: Metadata): void {
  * Función principal para crear metadatos validados.
  * Valida y procesa metadatos y sus acciones.
  */
+
 export function createMetadata(metadata: Metadata): ValidatedMetadata {
     try {
         // Validar metadatos básicos
@@ -610,6 +515,8 @@ export function createMetadata(metadata: Metadata): ValidatedMetadata {
         }
     }
 }
+
+
 
 /**
  * Verifica si un objeto es una acción blockchain válida.

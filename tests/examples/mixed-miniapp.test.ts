@@ -1,8 +1,8 @@
 import { describe, expect, it } from '@jest/globals';
 import { mixedActionMiniApp } from '../../src/examples/mixed-miniapp';
-import { createMetadata } from '../../src/utils/validator';
+import { createMetadata } from '../../src/validators/validator';
 import { BlockchainActionValidator } from '../../src/validators/blockchainActionValidator';
-import { isTransferAction, isHttpAction } from '../../src/utils/validator';
+import { isTransferAction, isHttpAction } from '../../src/validators/validator';
 import { HttpAction } from '../../src/interface/httpAction';
 import { TransferAction } from '../../src/interface/transferAction';
 import { BlockchainAction, BlockchainActionMetadata, ValidatedMetadata } from '../../src/interface';
