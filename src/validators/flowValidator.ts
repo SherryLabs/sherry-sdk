@@ -42,6 +42,15 @@ export class FlowValidator {
             throw new InvalidMetadataError(`Initial action '${flow.initialActionId}' not found`);
         }
 
+        // Check for duplicate action IDs
+        const actionIds = new Set<string>();
+        for (const action of flow.actions) {
+            if (actionIds.has(action.id)) {
+                throw new InvalidMetadataError(`Flow contains actions with duplicate ID: ${action.id}`);
+            }
+            actionIds.add(action.id);
+        }
+
         // Validate each action
         const validatedActions = flow.actions.map(action => this.validateAction(action, flow));
 

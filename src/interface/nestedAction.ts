@@ -37,7 +37,7 @@ export interface NestedActionBase {
  * Blockchain Action con capacidad de anidación
  */
 export interface NestedBlockchainAction
-    extends Omit<BlockchainActionMetadata, 'label'>,
+    extends Omit<BlockchainActionMetadata, 'label' | 'description'>,
         NestedActionBase {
     type: 'blockchain';
 }
