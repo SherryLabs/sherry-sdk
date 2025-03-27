@@ -1,275 +1,171 @@
 # Sherry SDK
 
-Welcome to the [Sherry SDK!](https://www.npmjs.com/package/@sherrylinks/sdk) This SDK allows you to create mini-apps that interact with any function of any smart contract.
+[![npm version](https://img.shields.io/npm/v/@sherrylinks/sdk.svg)](https://www.npmjs.com/package/@sherrylinks/sdk)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+
+A powerful SDK for creating and validating metadata for blockchain interactions through Sherry Links.
+
+## Overview
+
+Sherry SDK provides a simple and flexible way to build mini-apps that can interact with multiple blockchains. It supports various types of actions including blockchain contract calls, token transfers, and HTTP requests, all with built-in validation and metadata management.
 
 ## Features
 
-- **Smart Contract Interaction**: Easily interact with any function of any smart contract.
-- **Transfer Actions**: Simplified interface for token transfers.
-- **HTTP Actions**: Create forms and API integrations with HTTP endpoints.
-- **Cross-chain Support**: Define actions that work across multiple blockchains.
-- **Mini-App Creation**: Build mini-apps quickly and efficiently.
-- **Flexible and Extensible**: Designed to be flexible and easily extensible to meet your needs.
+- 🔗 Multi-chain support (Avalanche, Celo, Monad, etc.)
+- 🧩 Create blockchain mini-apps with minimal code
+- 💸 Support for token transfers with configurable options
+- 🌐 HTTP action support for API interactions
+- ✅ Built-in validation for all metadata types
+- 🔄 Cross-chain transaction support
+- 📊 Metadata analysis tools
 
 ## Installation
 
-To install the Sherry SDK, use the following command:
-
-npm:
+Install the SDK via yarn or npm:
 
 ```bash
+# Using yarn
+yarn add @sherrylinks/sdk
+
+# Using npm
 npm install @sherrylinks/sdk
 ```
 
-yarn
-
-```bash
-yarn add @sherrylinks/sdk
-```
-
-## Usage
-
-Here is a basic example of how to use the Sherry SDK:
-
-## ABI Definition
+## Quick Start
 
 ```typescript
-const exampleAbi = [
-  {
-    name: 'balanceOf',
-    type: 'function',
-    stateMutability: 'view',
-    inputs: [{ name: 'owner', type: 'address' }],
-    outputs: [{ name: 'balance', type: 'uint256' }],
-  },
-  {
-    name: 'safeTransferFrom',
-    type: 'function',
-    stateMutability: 'nonpayable',
-    inputs: [
-      { name: 'from', type: 'address' },
-      { name: 'to', type: 'address' },
-      { name: 'tokenId', type: 'uint256' },
-    ],
-    outputs: [],
-  },
-] as const;
+import { createMetadata, Metadata } from '@sherrylinks/sdk';
+
+// Create a simple blockchain interaction metadata
+const metadata: Metadata = {
+  url: 'https://myapp.example',
+  icon: 'https://example.com/icon.png',
+  title: 'My First Sherry App',
+  description: 'A simple app to demonstrate the SDK',
+  actions: [
+    {
+      label: 'Execute Action',
+      address: '0xContractAddress',
+      abi: [...],  // Your contract ABI
+      functionName: 'myFunction',
+      chains: { source: 'avalanche' }
+    }
+  ]
+};
+
+// Validate and process metadata
+const validatedMetadata = createMetadata(metadata);
 ```
 
-## Core Interfaces
+## Supported Chains
+
+- Ethereum Mainnet (`ethereum`)
+- Avalanche C-Chain (`avalanche`)
+- Celo Mainnet (`celo`)
+- Avalanche Fuji Testnet (`fuji`)
+- Celo Alfajores Testnet (`alfajores`)
+- Monad Testnet (`monad-testnet`)
+
+## Action Types
+
+### Blockchain Actions
+
+Interact with smart contract functions:
 
 ```typescript
-import {
-  Metadata,
-  ValidatedMetadata,
-  BlockchainAction,
-  TransferAction,
-  HttpAction,
-} from '@sherrylinks/sdk';
-```
-
-### Metadata Interface
-
-```typescript
-export interface Metadata {
-  url: string;
-  icon: string;
-  title: string;
-  description: string;
-  actions: (BlockchainActionMetadata | TransferAction | HttpAction)[];
+{
+  label: 'Call Contract',
+  address: '0xContractAddress',
+  abi: [...],  // Contract ABI
+  functionName: 'myFunction',
+  chains: { source: 'avalanche' },
+  params: [
+    // Optional parameter definitions
+  ]
 }
+```
 
-export interface ValidatedMetadata extends Omit<Metadata, 'actions'> {
-  actions: (BlockchainAction | TransferAction | HttpAction)[];
+### Transfer Actions
+
+Send native tokens or assets:
+
+```typescript
+{
+  label: 'Send Tokens',
+  description: 'Transfer tokens to another address',
+  to: '0xRecipientAddress',  // Or use recipient selection config
+  amount: 0.1,  // Or use amount configuration
+  chains: { source: 'avalanche' }
+}
+```
+
+### HTTP Actions
+
+Make API calls:
+
+```typescript
+{
+  label: 'Fetch Data',
+  endpoint: 'https://api.example.com/data',
+  params: [
+    {
+      name: 'userId',
+      label: 'User ID',
+      type: 'text',
+      required: true
+    }
+  ]
 }
 ```
 
 ## Examples
 
-### Blockchain Action Example
+Multiple examples are available in the SDK:
 
-```typescript
-const metadata: Metadata = {
-  url: 'https://myapp.com',
-  icon: 'https://example.com/icon.png',
-  title: 'Contract Interaction Example',
-  description: 'Interact with a smart contract',
-  actions: [
-    {
-      label: 'Check Balance',
-      address: '0x1234567890abcdef1234567890abcdef12345678',
-      abi: exampleAbi,
-      functionName: 'balanceOf',
-      paramsValue: ['0x1234567890abcdef1234567890abcdef12345678'],
-      chains: { source: 'fuji' },
-    },
-  ],
-};
+- Token Swap mini-app
+- NFT Marketplace mini-app
+- DAO Voting mini-app
+- Fundraising mini-app
+- Cross-chain Bridge mini-app
+- Charity Donation mini-app
+- Payment Splitting mini-app
+
+Check the `src/examples` directory for complete implementations.
+
+## API Reference
+
+### Core Functions
+
+- `createMetadata(metadata)`: Validates and processes metadata
+- `validateMetadata(input)`: Validates metadata and returns detailed results
+
+### Utility Functions
+
+- `isBlockchainActionMetadata(action)`: Type guard for blockchain actions
+- `isTransferAction(action)`: Type guard for transfer actions
+- `isHttpAction(action)`: Type guard for HTTP actions
+- `createParameter(template, customizations)`: Helper for parameter creation
+
+## Development
+
+```bash
+# Install dependencies
+yarn install
+
+# Run tests
+yarn test
+
+# Build the package
+yarn build
+
+# Format code
+yarn format
 ```
-
-### Transfer Action Example
-
-```typescript
-const transferMetadata: Metadata = {
-  url: 'https://myapp.com',
-  icon: 'https://example.com/icon.png',
-  title: 'Transfer Example',
-  description: 'Transfer tokens to a recipient',
-  actions: [
-    {
-      label: 'Send 0.1 AVAX',
-      to: '0x5b1869D9A4C187F2EAa108f3062412ecf0526b24',
-      amount: 0.1,
-      chains: { source: 'avalanche' },
-    },
-  ],
-};
-```
-
-### HTTP Action Example
-
-```typescript
-const httpMetadata: Metadata = {
-  url: 'https://myapp.com',
-  icon: 'https://example.com/icon.png',
-  title: 'Form Example',
-  description: 'Submit data to an API',
-  actions: [
-    {
-      label: 'Subscribe to Newsletter',
-      endpoint: 'https://api.example.com/subscribe',
-      params: [
-        {
-          name: 'email',
-          label: 'Email Address',
-          type: 'email',
-          required: true,
-        },
-        {
-          name: 'name',
-          label: 'Full Name',
-          type: 'text',
-          required: false,
-        },
-      ],
-    },
-  ],
-};
-```
-
-### Cross-chain Action Example
-
-```typescript
-const crossChainMetadata: Metadata = {
-  url: 'https://myapp.com',
-  icon: 'https://example.com/icon.png',
-  title: 'Cross-chain Example',
-  description: 'Cross-chain operation',
-  actions: [
-    {
-      label: 'Bridge AVAX to Celo',
-      to: '0x5b1869D9A4C187F2EAa108f3062412ecf0526b24',
-      amount: 0.1,
-      chains: { source: 'fuji', destination: 'alfajores' },
-    },
-  ],
-};
-```
-
-## Core Functions
-
-### createMetadata
-
-Creates the validated metadata for a mini app.
-
-```typescript
-import { createMetadata } from '@sherrylinks/sdk';
-
-const validatedMetadata = createMetadata(metadata);
-console.log(validatedMetadata);
-```
-
-### helperValidateMetadata
-
-Validates a JSON string to check if it conforms to the Metadata or ValidatedMetadata structure.
-
-```typescript
-import { helperValidateMetadata } from '@sherrylinks/sdk';
-
-const jsonString = JSON.stringify(metadata);
-const validation = helperValidateMetadata(jsonString);
-
-if (validation.isValid) {
-  console.log(`Valid ${validation.type}:`, validation.data);
-} else {
-  console.error('Invalid metadata');
-}
-```
-
-### ABI Helper Functions
-
-```typescript
-import {
-  getParameters,
-  getAbiFunction,
-  isValidFunction,
-  validateActionParameters,
-  getBlockchainActionType,
-} from '@sherrylinks/sdk';
-
-const parameters = getParameters(actionMetadata);
-const abiFunction = getAbiFunction(exampleAbi, 'balanceOf');
-const isValid = isValidFunction(exampleAbi, 'balanceOf');
-const isParametersValid = validateActionParameters(action);
-const actionType = getBlockchainActionType(actionMetadata);
-```
-
-### Type Guards
-
-```typescript
-import {
-  isBlockchainAction,
-  isBlockchainActionMetadata,
-  isTransferAction,
-  isMetadata,
-  isValidatedMetadata,
-} from '@sherrylinks/sdk';
-
-if (isBlockchainActionMetadata(action)) {
-  // Action is a BlockchainActionMetadata
-}
-
-if (isTransferAction(action)) {
-  // Action is a TransferAction
-}
-```
-
-## Supported Chains
-
-The SDK currently supports the following chains:
-
-- `"fuji"` - Avalanche Fuji Testnet
-- `"avalanche"` - Avalanche Mainnet
-- `"alfajores"` - Celo Alfajores Testnet
-- `"celo"` - Celo Mainnet
-- `"monad-testnet"` - Monad Testnet
-
-## Documentation
-
-For detailed documentation and API reference, please visit our official documentation.
 
 ## Contributing
 
-We welcome contributions! Please read our contributing guidelines to get started.
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
-This project is licensed under the MIT License. See the LICENSE file for more details.
-
-## Contact
-
-If you have any questions or need further assistance, feel free to reach out to our support team at our [discord channel](https://discord.gg/AHP9Dfmz).
-
-Need more information? Visit our [docs](https://docs.sherry.social).
-
-Happy coding with Sherry SDK!
+This project is licensed under the MIT License - see the LICENSE file for details.
