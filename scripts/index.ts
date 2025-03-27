@@ -1,6 +1,5 @@
 import { createMetadata, Metadata } from '../src/index';
 
-
 async function main() {
     const exampleAbi = [
         {

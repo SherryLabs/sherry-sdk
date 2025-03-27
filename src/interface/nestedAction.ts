@@ -10,7 +10,7 @@ import { ChainContext } from './chains';
  * Permite bifurcaciones basadas en resultados de acciones previas.
  */
 export interface ActionCondition {
-    field: string;         // Campo en el contexto a evaluar (ej: "lastResult.status")
+    field: string; // Campo en el contexto a evaluar (ej: "lastResult.status")
     operator: 'eq' | 'ne' | 'gt' | 'lt' | 'gte' | 'lte' | 'contains'; // Operador de comparación
     value: string | number | boolean; // Valor a comparar
 }
@@ -19,7 +19,7 @@ export interface ActionCondition {
  * Definición de una acción siguiente con condiciones opcionales.
  */
 export interface NextActionDefinition {
-    actionId: string;         // ID de la acción siguiente
+    actionId: string; // ID de la acción siguiente
     conditions?: ActionCondition[]; // Condiciones opcionales (todas deben cumplirse)
 }
 
@@ -28,15 +28,17 @@ export interface NextActionDefinition {
  * Proporciona identificación única y capacidad de encadenamiento.
  */
 export interface NestedActionBase {
-    id: string;          // Identificador único para la acción
-    label: string;       // Etiqueta para mostrar
+    id: string; // Identificador único para la acción
+    label: string; // Etiqueta para mostrar
     nextActions?: NextActionDefinition[]; // Posibles acciones siguientes
 }
 
 /**
  * Blockchain Action con capacidad de anidación
  */
-export interface NestedBlockchainAction extends Omit<BlockchainActionMetadata, 'label'>, NestedActionBase {
+export interface NestedBlockchainAction
+    extends Omit<BlockchainActionMetadata, 'label' | 'description'>,
+        NestedActionBase {
     type: 'blockchain';
 }
 
@@ -44,7 +46,7 @@ export interface NestedBlockchainAction extends Omit<BlockchainActionMetadata, '
  * Transfer Action con capacidad de anidación
  */
 export interface NestedTransferAction extends Omit<TransferAction, 'label'>, NestedActionBase {
-    type: 'transfer';  
+    type: 'transfer';
 }
 
 /**
@@ -59,7 +61,7 @@ export interface NestedHttpAction extends Omit<HttpAction, 'label'>, NestedActio
  */
 export interface CompletionAction extends NestedActionBase {
     type: 'completion';
-    message: string;    // Mensaje de finalización
+    message: string; // Mensaje de finalización
     status: 'success' | 'error' | 'info'; // Estado de la finalización
 }
 
@@ -68,11 +70,12 @@ export interface CompletionAction extends NestedActionBase {
  */
 export interface DecisionAction extends NestedActionBase {
     type: 'decision';
-    title: string;      // Título de la decisión
+    title: string; // Título de la decisión
     description?: string; // Descripción opcional
-    options: {          // Opciones a mostrar al usuario
-        label: string;  // Etiqueta de la opción
-        value: string;  // Valor de la opción
+    options: {
+        // Opciones a mostrar al usuario
+        label: string; // Etiqueta de la opción
+        value: string; // Valor de la opción
         nextActionId: string; // ID de la siguiente acción
     }[];
 }
@@ -80,10 +83,10 @@ export interface DecisionAction extends NestedActionBase {
 /**
  * Tipo unión para cualquier tipo de acción anidada
  */
-export type NestedAction = 
-    | NestedBlockchainAction 
-    | NestedTransferAction 
-    | NestedHttpAction 
+export type NestedAction =
+    | NestedBlockchainAction
+    | NestedTransferAction
+    | NestedHttpAction
     | CompletionAction
     | DecisionAction;
 
@@ -93,23 +96,11 @@ export type NestedAction =
  * con bifurcaciones condicionales.
  */
 export interface ActionFlow {
-    type: 'flow';         // Tipo para identificarlo como un flujo
-    label: string;        // Etiqueta para mostrar (compatible con otras acciones)
-    initialActionId: string;   // ID de la acción inicial
-    actions: NestedAction[];   // Todas las acciones del flujo
+    type: 'flow'; // Tipo para identificarlo como un flujo
+    label: string; // Etiqueta para mostrar (compatible con otras acciones)
+    initialActionId: string; // ID de la acción inicial
+    actions: NestedAction[]; // Todas las acciones del flujo
 }
 
-/**
- * Tipo guard para verificar si un objeto es un ActionFlow
- */
-export function isActionFlow(obj: any): obj is ActionFlow {
-    return (
-        obj &&
-        typeof obj === 'object' &&
-        obj.type === 'flow' &&
-        typeof obj.label === 'string' &&
-        typeof obj.initialActionId === 'string' &&
-        Array.isArray(obj.actions) &&
-        obj.actions.length > 0
-    );
-}
+// isActionFlow function has been moved to flowValidator.ts
+// Import it from there if needed in this file

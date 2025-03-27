@@ -548,3 +548,12 @@ export class BlockchainActionValidator {
         );
     }
 }
+
+// Export standalone functions for backward compatibility
+export function isBlockchainActionMetadata(obj: any): obj is BlockchainActionMetadata {
+    return BlockchainActionValidator.isBlockchainActionMetadata(obj);
+}
+
+export function isBlockchainAction(obj: any): obj is BlockchainAction {
+    return BlockchainActionValidator.isBlockchainAction(obj);
+}
