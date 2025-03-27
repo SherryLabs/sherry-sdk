@@ -12,10 +12,10 @@ The `ActionFlow` is the container that holds and manages a collection of nested 
 
 ```typescript
 interface ActionFlow {
-    type: 'flow';
-    label: string;
-    initialActionId: string;
-    actions: NestedAction[];
+  type: 'flow';
+  label: string;
+  initialActionId: string;
+  actions: NestedAction[];
 }
 ```
 
@@ -38,9 +38,9 @@ Each action type extends the `NestedActionBase` interface providing a common str
 
 ```typescript
 interface NestedActionBase {
-    id: string;
-    label: string;
-    nextActions?: NextActionDefinition[];
+  id: string;
+  label: string;
+  nextActions?: NextActionDefinition[];
 }
 ```
 
@@ -50,8 +50,8 @@ Actions connect through the `nextActions` array, which can contain multiple pote
 
 ```typescript
 interface NextActionDefinition {
-    actionId: string;
-    conditions?: ActionCondition[];
+  actionId: string;
+  conditions?: ActionCondition[];
 }
 ```
 
@@ -59,9 +59,9 @@ The `conditions` array allows for conditional execution based on previous action
 
 ```typescript
 interface ActionCondition {
-    field: string;
-    operator: 'eq' | 'ne' | 'gt' | 'lt' | 'gte' | 'lte' | 'contains';
-    value: string | number | boolean;
+  field: string;
+  operator: 'eq' | 'ne' | 'gt' | 'lt' | 'gte' | 'lte' | 'contains';
+  value: string | number | boolean;
 }
 ```
 
@@ -81,32 +81,32 @@ Template placeholders in action parameters (like `{{userAddress}}`) are automati
 
 ```typescript
 const linearFlow: ActionFlow = {
-    type: 'flow',
-    label: 'Token Purchase Flow',
-    initialActionId: 'approve',
-    actions: [
-        {
-            id: 'approve',
-            type: 'blockchain',
-            label: 'Approve Token',
-            // Blockchain action properties...
-            nextActions: [{ actionId: 'transfer' }]
-        },
-        {
-            id: 'transfer',
-            type: 'transfer',
-            label: 'Transfer Token',
-            // Transfer action properties...
-            nextActions: [{ actionId: 'completion' }]
-        },
-        {
-            id: 'completion',
-            type: 'completion',
-            label: 'Purchase Complete',
-            message: 'Your purchase was successful!',
-            status: 'success'
-        }
-    ]
+  type: 'flow',
+  label: 'Token Purchase Flow',
+  initialActionId: 'approve',
+  actions: [
+    {
+      id: 'approve',
+      type: 'blockchain',
+      label: 'Approve Token',
+      // Blockchain action properties...
+      nextActions: [{ actionId: 'transfer' }],
+    },
+    {
+      id: 'transfer',
+      type: 'transfer',
+      label: 'Transfer Token',
+      // Transfer action properties...
+      nextActions: [{ actionId: 'completion' }],
+    },
+    {
+      id: 'completion',
+      type: 'completion',
+      label: 'Purchase Complete',
+      message: 'Your purchase was successful!',
+      status: 'success',
+    },
+  ],
 };
 ```
 
@@ -114,42 +114,42 @@ const linearFlow: ActionFlow = {
 
 ```typescript
 const decisionFlow: ActionFlow = {
-    type: 'flow',
-    label: 'Payment Options',
-    initialActionId: 'choose_payment',
-    actions: [
-        {
-            id: 'choose_payment',
-            type: 'decision',
-            label: 'Choose Payment Method',
-            title: 'Select Payment Method',
-            options: [
-                { label: 'Credit Card', value: 'card', nextActionId: 'card_payment' },
-                { label: 'Crypto', value: 'crypto', nextActionId: 'crypto_payment' }
-            ]
-        },
-        {
-            id: 'card_payment',
-            type: 'http',
-            label: 'Card Payment',
-            // HTTP action properties...
-            nextActions: [{ actionId: 'completion_success' }]
-        },
-        {
-            id: 'crypto_payment',
-            type: 'blockchain',
-            label: 'Crypto Payment',
-            // Blockchain action properties...
-            nextActions: [{ actionId: 'completion_success' }]
-        },
-        {
-            id: 'completion_success',
-            type: 'completion',
-            label: 'Payment Successful',
-            message: 'Thank you for your payment!',
-            status: 'success'
-        }
-    ]
+  type: 'flow',
+  label: 'Payment Options',
+  initialActionId: 'choose_payment',
+  actions: [
+    {
+      id: 'choose_payment',
+      type: 'decision',
+      label: 'Choose Payment Method',
+      title: 'Select Payment Method',
+      options: [
+        { label: 'Credit Card', value: 'card', nextActionId: 'card_payment' },
+        { label: 'Crypto', value: 'crypto', nextActionId: 'crypto_payment' },
+      ],
+    },
+    {
+      id: 'card_payment',
+      type: 'http',
+      label: 'Card Payment',
+      // HTTP action properties...
+      nextActions: [{ actionId: 'completion_success' }],
+    },
+    {
+      id: 'crypto_payment',
+      type: 'blockchain',
+      label: 'Crypto Payment',
+      // Blockchain action properties...
+      nextActions: [{ actionId: 'completion_success' }],
+    },
+    {
+      id: 'completion_success',
+      type: 'completion',
+      label: 'Payment Successful',
+      message: 'Thank you for your payment!',
+      status: 'success',
+    },
+  ],
 };
 ```
 
@@ -157,48 +157,48 @@ const decisionFlow: ActionFlow = {
 
 ```typescript
 const conditionalFlow: ActionFlow = {
-    type: 'flow',
-    label: 'NFT Purchase with Approval Check',
-    initialActionId: 'check_allowance',
-    actions: [
+  type: 'flow',
+  label: 'NFT Purchase with Approval Check',
+  initialActionId: 'check_allowance',
+  actions: [
+    {
+      id: 'check_allowance',
+      type: 'blockchain',
+      label: 'Check Allowance',
+      // Blockchain action properties...
+      nextActions: [
         {
-            id: 'check_allowance',
-            type: 'blockchain',
-            label: 'Check Allowance',
-            // Blockchain action properties...
-            nextActions: [
-                {
-                    actionId: 'approve_tokens',
-                    conditions: [{ field: 'lastResult.data.allowance', operator: 'lt', value: 1000 }]
-                },
-                {
-                    actionId: 'purchase_nft',
-                    conditions: [{ field: 'lastResult.data.allowance', operator: 'gte', value: 1000 }]
-                }
-            ]
+          actionId: 'approve_tokens',
+          conditions: [{ field: 'lastResult.data.allowance', operator: 'lt', value: 1000 }],
         },
         {
-            id: 'approve_tokens',
-            type: 'blockchain',
-            label: 'Approve Tokens',
-            // Blockchain action properties...
-            nextActions: [{ actionId: 'purchase_nft' }]
+          actionId: 'purchase_nft',
+          conditions: [{ field: 'lastResult.data.allowance', operator: 'gte', value: 1000 }],
         },
-        {
-            id: 'purchase_nft',
-            type: 'blockchain',
-            label: 'Purchase NFT',
-            // Blockchain action properties...
-            nextActions: [{ actionId: 'completion_success' }]
-        },
-        {
-            id: 'completion_success',
-            type: 'completion',
-            label: 'Purchase Complete',
-            message: 'Your NFT purchase was successful!',
-            status: 'success'
-        }
-    ]
+      ],
+    },
+    {
+      id: 'approve_tokens',
+      type: 'blockchain',
+      label: 'Approve Tokens',
+      // Blockchain action properties...
+      nextActions: [{ actionId: 'purchase_nft' }],
+    },
+    {
+      id: 'purchase_nft',
+      type: 'blockchain',
+      label: 'Purchase NFT',
+      // Blockchain action properties...
+      nextActions: [{ actionId: 'completion_success' }],
+    },
+    {
+      id: 'completion_success',
+      type: 'completion',
+      label: 'Purchase Complete',
+      message: 'Your NFT purchase was successful!',
+      status: 'success',
+    },
+  ],
 };
 ```
 
