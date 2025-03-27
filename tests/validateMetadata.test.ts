@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
-import { validateMetadata } from '../src/utils/validateMetadata';
+import { validateMetadata } from '../src/validators/validateMetadata';
 import { Metadata } from '../src/interface/metadata';
 
 describe('validateMetadata', () => {

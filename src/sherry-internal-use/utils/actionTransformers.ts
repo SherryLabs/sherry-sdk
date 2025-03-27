@@ -2,7 +2,7 @@ import { BlockchainActionMetadata } from '../../interface/blockchainAction';
 import { HttpAction } from '../../interface/httpAction';
 import { TransferAction } from '../../interface/transferAction';
 import { isBlockchainActionMetadata } from '../../utils/createMetadata';
-import { isTransferAction, isHttpAction } from '../../utils/validator';
+import { isTransferAction, isHttpAction } from '../../validators/validator';
 
 type AnyAction = BlockchainActionMetadata | TransferAction | HttpAction;
 

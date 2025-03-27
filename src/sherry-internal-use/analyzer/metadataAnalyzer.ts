@@ -1,6 +1,6 @@
 import { Metadata } from '../../interface/metadata';
 import { isBlockchainActionMetadata } from '../../utils/createMetadata';
-import { isTransferAction, isHttpAction } from '../../utils/validator';
+import { isTransferAction, isHttpAction } from '../../validators/validator';
 
 export function analyzeMetadata(metadata: Metadata): Record<string, any> {
     const actions = metadata.actions;

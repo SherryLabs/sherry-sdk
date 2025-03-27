@@ -1,5 +1,6 @@
 import { createMetadata, Metadata } from '../src/index';
 
+
 async function main() {
     const exampleAbi = [
         {
@@ -33,8 +34,6 @@ async function main() {
                 address: '0x1234567890abcdef1234567890abcdef12345678',
                 abi: exampleAbi,
                 functionName: 'safeTransferFrom',
-                paramsValue: ['sender', '0x1234567890abcdef1234567890abcdef12345678', 1],
-                paramsLabel: ['From'],
                 chains: { source: 'fuji' },
             },
             {

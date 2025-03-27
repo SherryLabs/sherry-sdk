@@ -1,5 +1,4 @@
 import { Metadata } from '../interface/metadata';
-import { BlockchainAction } from '../interface/blockchainAction';
 
 /**
  * Resultado de la validación de metadata
