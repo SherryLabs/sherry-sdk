@@ -225,3 +225,7 @@ export class HttpActionValidator {
         return true;
     }
 }
+
+export function isHttpAction(obj: any): obj is HttpAction {
+    return HttpActionValidator.isHttpAction(obj);
+}
