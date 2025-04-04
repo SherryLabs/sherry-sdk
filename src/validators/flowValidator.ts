@@ -23,7 +23,7 @@ export class FlowValidator {
      * @returns Validated flow
      * @throws InvalidMetadataError if there are errors
      */
-    static validateFlow (flow: ActionFlow): ActionFlow {
+    static validateFlow(flow: ActionFlow): ActionFlow {
         if (!flow.label) {
             throw new InvalidMetadataError('Flow must have a label');
         }
@@ -72,7 +72,7 @@ export class FlowValidator {
      * @returns Validated action
      * @throws InvalidMetadataError if there are errors
      */
-    private static validateAction (action: NestedAction, flow: ActionFlow): NestedAction {
+    private static validateAction(action: NestedAction, flow: ActionFlow): NestedAction {
         if (!action.id) {
             throw new InvalidMetadataError('Action must have an id');
         }
@@ -103,7 +103,7 @@ export class FlowValidator {
     /**
      * Validates a blockchain type action.
      */
-    private static validateBlockchainAction (
+    private static validateBlockchainAction(
         action: NestedBlockchainAction,
         flow: ActionFlow,
     ): NestedBlockchainAction {
@@ -147,7 +147,7 @@ export class FlowValidator {
     /**
      * Validates a transfer type action.
      */
-    private static validateTransferAction (
+    private static validateTransferAction(
         action: NestedTransferAction,
         flow: ActionFlow,
     ): NestedTransferAction {
@@ -181,7 +181,7 @@ export class FlowValidator {
     /**
      * Validates an HTTP type action.
      */
-    private static validateHttpAction (
+    private static validateHttpAction(
         action: NestedHttpAction,
         flow: ActionFlow,
     ): NestedHttpAction {
@@ -217,7 +217,7 @@ export class FlowValidator {
     /**
      * Validates a decision type action.
      */
-    private static validateDecisionAction (
+    private static validateDecisionAction(
         action: DecisionAction,
         flow: ActionFlow,
     ): DecisionAction {
@@ -264,7 +264,7 @@ export class FlowValidator {
     /**
      * Validates a completion type action.
      */
-    private static validateCompletionAction (
+    private static validateCompletionAction(
         action: CompletionAction,
         _flow: ActionFlow,
     ): CompletionAction {
@@ -291,7 +291,7 @@ export class FlowValidator {
     /**
      * Validates the definition of next actions.
      */
-    private static validateNextActions (
+    private static validateNextActions(
         nextActions: NextActionDefinition[],
         actionId: string,
         flow: ActionFlow,
@@ -343,7 +343,7 @@ export class FlowValidator {
     /**
      * Validates the integrity of the action graph (detects cycles, unreachable nodes, etc.)
      */
-    private static validateActionGraph (flow: ActionFlow): void {
+    private static validateActionGraph(flow: ActionFlow): void {
         // Verify that all actions are reachable from the initial action
         const reachableActions = new Set<string>();
         const actionsToCheck = [flow.initialActionId];
@@ -386,7 +386,7 @@ export class FlowValidator {
     /**
      * Tipo guard para verificar si un objeto es un ActionFlow
      */
-    static isActionFlow (obj: any): obj is ActionFlow {
+    static isActionFlow(obj: any): obj is ActionFlow {
         return (
             obj &&
             typeof obj === 'object' &&
@@ -400,6 +400,6 @@ export class FlowValidator {
 }
 
 // Export the type guard separately for backward compatibility
-export function isActionFlow (obj: any): obj is ActionFlow {
+export function isActionFlow(obj: any): obj is ActionFlow {
     return FlowValidator.isActionFlow(obj);
 }
