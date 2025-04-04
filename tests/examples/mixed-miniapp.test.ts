@@ -5,7 +5,7 @@ import { BlockchainActionValidator } from '../../src/validators/blockchainAction
 import { isTransferAction, isHttpAction } from '../../src/validators/validator';
 import { HttpAction } from '../../src/interface/httpAction';
 import { TransferAction } from '../../src/interface/transferAction';
-import { BlockchainAction, BlockchainActionMetadata, ValidatedMetadata } from '../../src/interface';
+import { BlockchainAction, ValidatedMetadata } from '../../src/interface';
 
 describe('Mixed Action Mini-App', () => {
     it('should have the correct structure and properties', () => {

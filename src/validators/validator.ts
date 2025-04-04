@@ -42,7 +42,7 @@ export const processBlockchainAction =
 /**
  * Validates the basic metadata of a mini app
  */
-export function validateBasicMetadata(metadata: Metadata): boolean {
+export function validateBasicMetadata (metadata: Metadata): boolean {
     if (!metadata.url || typeof metadata.url !== 'string') {
         throw new ActionValidationError("Metadata must have a valid 'url' field");
     }
@@ -84,7 +84,7 @@ export function validateBasicMetadata(metadata: Metadata): boolean {
  * @returns The processed and validated metadata
  * @throws ActionValidationError if there is any validation error
  */
-export function createMetadata(metadata: Metadata): ValidatedMetadata {
+export function createMetadata (metadata: Metadata): ValidatedMetadata {
     try {
         // Validate basic metadata
         validateBasicMetadata(metadata);
@@ -111,7 +111,7 @@ export function createMetadata(metadata: Metadata): ValidatedMetadata {
             actions: processedActions,
         };
     } catch (error) {
-        //console.log('Error in createMetadata');
+        console.log('Error in createMetadata: ', error);
         throw error;
     }
 }

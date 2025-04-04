@@ -1,4 +1,4 @@
-import { describe, expect, it, test } from '@jest/globals';
+import { describe, expect, it } from '@jest/globals';
 import { BlockchainActionValidator } from '../../src/validators/blockchainActionValidator';
 import {
     BlockchainActionMetadata,
@@ -33,7 +33,7 @@ const simpleAbi: Abi = [
 ];
 
 // Helper function to create a valid base action
-function createValidBaseAction(): BlockchainActionMetadata {
+function createValidBaseAction (): BlockchainActionMetadata {
     return {
         label: 'Test Action',
         description: 'Test Description',

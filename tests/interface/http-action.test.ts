@@ -1,8 +1,6 @@
 import { describe, expect, it } from '@jest/globals';
 import { HttpAction } from '../../src/interface/httpAction';
 import { HttpActionValidator } from '../../src/validators/httpActionValidator';
-import { Metadata } from '../../src/interface/metadata';
-import { createMetadata } from '../../src/utils/createMetadata';
 import { InvalidMetadataError } from '../../src/errors/customErrors';
 
 describe('HttpAction Validation', () => {
