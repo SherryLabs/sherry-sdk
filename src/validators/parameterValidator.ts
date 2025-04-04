@@ -14,7 +14,7 @@ export class ParameterValidator {
     /**
      * Valida los parámetros base.
      */
-    static validateBaseParameter(param: BlockchainParameter): void {
+    static validateBaseParameter (param: BlockchainParameter): void {
         // Verificar campos requeridos
         if (!param.name) {
             throw new SherryValidationError(`Parameter missing required 'name' field`);
@@ -35,7 +35,7 @@ export class ParameterValidator {
     /**
      * Valida parámetros de selección (select, radio).
      */
-    static validateSelectionParameter(param: SelectParameter | RadioParameter): void {
+    static validateSelectionParameter (param: SelectParameter | RadioParameter): void {
         this.validateBaseParameter(param);
 
         if (!param.options || !Array.isArray(param.options) || param.options.length === 0) {
@@ -71,7 +71,7 @@ export class ParameterValidator {
     /**
      * Valida parámetros estándar.
      */
-    static validateStandardParameter(param: StandardParameter): void {
+    static validateStandardParameter (param: StandardParameter): void {
         this.validateBaseParameter(param);
 
         // Verificar límites mínimos y máximos
@@ -108,7 +108,7 @@ export class ParameterValidator {
             param.value !== undefined &&
             typeof param.value === 'string'
         ) {
-            const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+            const emailRegex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/;
             if (!emailRegex.test(param.value)) {
                 throw new SherryValidationError(
                     `Invalid email format for parameter '${param.name}': ${param.value}`,
@@ -143,7 +143,7 @@ export class ParameterValidator {
     /**
      * Valida cualquier parámetro.
      */
-    static validateParameter(param: BlockchainParameter): void {
+    static validateParameter (param: BlockchainParameter): void {
         if (param.type === 'select' || param.type === 'radio') {
             this.validateSelectionParameter(param as SelectParameter | RadioParameter);
         } else {
@@ -153,6 +153,6 @@ export class ParameterValidator {
 }
 
 // Export standalone functions for backward compatibility
-export function validateParameter(param: BlockchainParameter): void {
+export function validateParameter (param: BlockchainParameter): void {
     return ParameterValidator.validateParameter(param);
 }

@@ -1,6 +1,3 @@
-import { BlockchainActionMetadata, BlockchainAction } from '../interface/blockchainAction';
-import { HttpAction } from './httpAction';
-import { TransferAction } from './transferAction';
 import { Action, ValidatedAction } from './action';
 
 export interface Metadata {

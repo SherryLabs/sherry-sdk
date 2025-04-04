@@ -2,7 +2,7 @@ import { Metadata } from '../../interface/metadata';
 import { isBlockchainActionMetadata } from '../../utils/createMetadata';
 import { isTransferAction, isHttpAction } from '../../validators/validator';
 
-export function analyzeMetadata(metadata: Metadata): Record<string, any> {
+export function analyzeMetadata (metadata: Metadata): Record<string, any> {
     const actions = metadata.actions;
     const blockchainActions = actions.filter(isBlockchainActionMetadata);
     const transferActions = actions.filter(isTransferAction);
@@ -20,7 +20,7 @@ export function analyzeMetadata(metadata: Metadata): Record<string, any> {
     };
 }
 
-function getChainDistribution(chainActions: any[]): Record<string, number> {
+function getChainDistribution (chainActions: any[]): Record<string, number> {
     const distribution: Record<string, number> = {};
 
     chainActions.forEach(action => {
@@ -33,7 +33,7 @@ function getChainDistribution(chainActions: any[]): Record<string, number> {
     return distribution;
 }
 
-function calculateComplexityScore(metadata: Metadata): number {
+function calculateComplexityScore (_metadata: Metadata): number {
     // Calculate complexity based on number and types of actions
     // (implementation details)
     return 0;

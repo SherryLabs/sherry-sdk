@@ -3,7 +3,6 @@
 import {
     ActionFlow,
     NestedAction,
-    NextActionDefinition,
     ActionCondition,
     CompletionAction,
 } from '../interface/nestedAction';
@@ -43,7 +42,7 @@ export class FlowExecutor {
      * @param flow Flujo a ejecutar
      * @param initialContext Contexto inicial opcional
      */
-    constructor(flow: ActionFlow, initialContext: ActionContext = {}) {
+    constructor (flow: ActionFlow, initialContext: ActionContext = {}) {
         this.flow = flow;
         this.context = { ...initialContext };
         this.currentActionId = flow.initialActionId;
@@ -55,7 +54,7 @@ export class FlowExecutor {
      * Obtiene la acción actual en ejecución.
      * @returns La acción actual o null si el flujo ha terminado
      */
-    getCurrentAction(): NestedAction | null {
+    getCurrentAction (): NestedAction | null {
         if (!this.currentActionId) return null;
         return this.flow.actions.find(a => a.id === this.currentActionId) || null;
     }
@@ -64,7 +63,7 @@ export class FlowExecutor {
      * Obtiene el contexto actual de ejecución.
      * @returns Copia del contexto actual
      */
-    getContext(): ActionContext {
+    getContext (): ActionContext {
         return { ...this.context };
     }
 
@@ -72,7 +71,7 @@ export class FlowExecutor {
      * Verifica si el flujo ha sido completado.
      * @returns true si el flujo ha terminado, false en caso contrario
      */
-    isCompleted(): boolean {
+    isCompleted (): boolean {
         return this.completed;
     }
 
@@ -80,7 +79,7 @@ export class FlowExecutor {
      * Obtiene el historial de ejecución del flujo.
      * @returns Array de resultados de acciones ejecutadas
      */
-    getHistory(): ActionResult[] {
+    getHistory (): ActionResult[] {
         return [...this.history];
     }
 
@@ -89,7 +88,7 @@ export class FlowExecutor {
      * @param actionData Datos proporcionados para la acción actual
      * @returns Resultado de la ejecución
      */
-    async executeCurrentAction(actionData?: any): Promise<ActionResult> {
+    async executeCurrentAction (actionData?: any): Promise<ActionResult> {
         if (!this.currentActionId || this.completed) {
             return {
                 actionId: 'none',
@@ -188,7 +187,7 @@ export class FlowExecutor {
      * @param action Acción actual
      * @returns ID de la siguiente acción o null si no hay
      */
-    private determineNextAction(action: NestedAction): string | null {
+    private determineNextAction (action: NestedAction): string | null {
         // Si es una acción de decisión, necesitamos la decisión del usuario
         if (action.type === 'decision') {
             // La decisión del usuario debe proporcionarse en executeCurrentAction
@@ -231,7 +230,7 @@ export class FlowExecutor {
      * @param conditions Condiciones a evaluar
      * @returns true si todas las condiciones se cumplen, false en caso contrario
      */
-    private evaluateConditions(conditions: ActionCondition[]): boolean {
+    private evaluateConditions (conditions: ActionCondition[]): boolean {
         return conditions.every(condition => this.evaluateCondition(condition));
     }
 
@@ -240,7 +239,7 @@ export class FlowExecutor {
      * @param condition Condición a evaluar
      * @returns true si la condición se cumple, false en caso contrario
      */
-    private evaluateCondition(condition: ActionCondition): boolean {
+    private evaluateCondition (condition: ActionCondition): boolean {
         const fieldValue = this.getFieldValue(condition.field);
         const conditionValue = condition.value;
 
@@ -275,7 +274,7 @@ export class FlowExecutor {
      * @param field Campo a obtener (puede ser anidado con notación de punto)
      * @returns Valor del campo o undefined si no existe
      */
-    private getFieldValue(field: string): any {
+    private getFieldValue (field: string): any {
         // Si el campo tiene formato de path (ej: "result.status"), acceder a la propiedad anidada
         const parts = field.split('.');
         let value: any = this.context;
@@ -295,7 +294,7 @@ export class FlowExecutor {
      * @param value Valor que puede contener placeholders
      * @returns Valor con placeholders reemplazados
      */
-    private replaceContextValues(value: any): any {
+    private replaceContextValues (value: any): any {
         if (typeof value !== 'string') {
             return value;
         }
@@ -313,7 +312,7 @@ export class FlowExecutor {
      * @param actionData Datos adicionales proporcionados
      * @returns Resultado de la ejecución
      */
-    private async executeBlockchainAction(
+    private async executeBlockchainAction (
         action: NestedAction,
         actionData?: any,
     ): Promise<ActionResult> {
@@ -330,8 +329,8 @@ export class FlowExecutor {
         const processedParams = action.params
             ? action.params.map(param => this.replaceContextValues(param))
             : actionData?.params
-              ? actionData.params
-              : [];
+            ? actionData.params
+            : [];
 
         // En una implementación real, aquí realizarías la llamada a la blockchain
         // Por ahora, simular una respuesta exitosa
@@ -359,9 +358,9 @@ export class FlowExecutor {
      * @param actionData Datos adicionales proporcionados
      * @returns Resultado de la ejecución
      */
-    private async executeTransferAction(
+    private async executeTransferAction (
         action: NestedAction,
-        actionData?: any,
+        _actionData?: any,
     ): Promise<ActionResult> {
         if (action.type !== 'transfer') {
             return {
@@ -399,7 +398,7 @@ export class FlowExecutor {
      * @param actionData Datos proporcionados (típicamente datos de formulario)
      * @returns Resultado de la ejecución
      */
-    private async executeHttpAction(action: NestedAction, actionData?: any): Promise<ActionResult> {
+    private async executeHttpAction (action: NestedAction, actionData?: any): Promise<ActionResult> {
         if (action.type !== 'http') {
             return {
                 actionId: action.id,
@@ -431,7 +430,7 @@ export class FlowExecutor {
      * @param actionData Datos con la elección del usuario
      * @returns Resultado de la ejecución
      */
-    private executeDecisionAction(action: NestedAction, actionData?: any): ActionResult {
+    private executeDecisionAction (action: NestedAction, actionData?: any): ActionResult {
         if (action.type !== 'decision') {
             return {
                 actionId: action.id,
@@ -485,7 +484,7 @@ export class FlowExecutor {
      * @param action Acción de finalización
      * @returns Resultado de la ejecución
      */
-    private executeCompletionAction(action: CompletionAction): ActionResult {
+    private executeCompletionAction (action: CompletionAction): ActionResult {
         return {
             actionId: action.id,
             status: 'success',

@@ -18,7 +18,7 @@ export class BlockchainActionValidator {
     /**
      * Validates a blockchain action and returns it if valid
      */
-    static validateBlockchainAction(action: BlockchainActionMetadata): BlockchainAction {
+    static validateBlockchainAction (action: BlockchainActionMetadata): BlockchainAction {
         this.validateBlockchainActionMetadata(action);
 
         // Get the ABI parameters
@@ -44,7 +44,7 @@ export class BlockchainActionValidator {
     /**
      * Validates that an object is a valid BlockchainActionMetadata
      */
-    static validateBlockchainActionMetadata(action: any): boolean {
+    static validateBlockchainActionMetadata (action: any): boolean {
         // Validate basic properties
         if (!action || typeof action !== 'object') {
             throw new ActionValidationError('The action must be a valid object');
@@ -112,7 +112,7 @@ export class BlockchainActionValidator {
     /**
      * Validates that the chain context is valid
      */
-    static validateChainContext(chains: ChainContext): boolean {
+    static validateChainContext (chains: ChainContext): boolean {
         if (!chains || typeof chains !== 'object') {
             return false;
         }
@@ -133,7 +133,7 @@ export class BlockchainActionValidator {
     /**
      * Validates that a chain is valid
      */
-    static isValidChain(chain: any): boolean {
+    static isValidChain (chain: any): boolean {
         const validChains = ['fuji', 'avalanche', 'alfajores', 'celo', 'monad-testnet', 'ethereum'];
         return typeof chain === 'string' && validChains.includes(chain);
     }
@@ -141,7 +141,7 @@ export class BlockchainActionValidator {
     /**
      * Validates that blockchain parameters are valid
      */
-    static validateBlockchainParameters(
+    static validateBlockchainParameters (
         params: BlockchainParameter[],
         abiParams: readonly AbiParameter[],
     ): boolean {
@@ -197,7 +197,7 @@ export class BlockchainActionValidator {
     /**
      * Validates that a standard parameter is valid
      */
-    static validateStandardParameter(param: StandardParameter): boolean {
+    static validateStandardParameter (param: StandardParameter): boolean {
         // Validate type-specific properties
         if (
             param.minLength !== undefined &&
@@ -238,6 +238,7 @@ export class BlockchainActionValidator {
             try {
                 new RegExp(param.pattern);
             } catch (e) {
+                console.error('Error in validateStandardParameter: ', e);
                 throw new ActionValidationError(
                     `The parameter "${param.name}" has a pattern that is not a valid regex`,
                 );
@@ -250,7 +251,7 @@ export class BlockchainActionValidator {
     /**
      * Validates that a selection parameter is valid
      */
-    static validateSelectParameter(param: SelectParameter): boolean {
+    static validateSelectParameter (param: SelectParameter): boolean {
         if (!Array.isArray(param.options) || param.options.length === 0) {
             throw new ActionValidationError(
                 `The parameter "${param.name}" must have valid options`,
@@ -286,7 +287,7 @@ export class BlockchainActionValidator {
     /**
      * Validates that a radio parameter is valid
      */
-    static validateRadioParameter(param: RadioParameter): boolean {
+    static validateRadioParameter (param: RadioParameter): boolean {
         // Verify that options exist and are an array
         if (!Array.isArray(param.options)) {
             throw new ActionValidationError(
@@ -361,7 +362,7 @@ export class BlockchainActionValidator {
     /**
      * Validates that a value is compatible with a Solidity type
      */
-    static validateParameterValue(value: any, type: string, paramName: string): boolean {
+    static validateParameterValue (value: any, type: string, paramName: string): boolean {
         // Null values are valid (for optional parameters)
         if (value === null || value === undefined) {
             return true;
@@ -440,7 +441,7 @@ export class BlockchainActionValidator {
     /**
      * Checks if an object is a standard parameter
      */
-    static isStandardParameter(param: any): param is StandardParameter {
+    static isStandardParameter (param: any): param is StandardParameter {
         return (
             param &&
             typeof param === 'object' &&
@@ -461,7 +462,7 @@ export class BlockchainActionValidator {
     /**
      * Checks if an object is a selection parameter
      */
-    static isSelectParameter(param: any): param is SelectParameter {
+    static isSelectParameter (param: any): param is SelectParameter {
         return (
             param &&
             typeof param === 'object' &&
@@ -473,7 +474,7 @@ export class BlockchainActionValidator {
     /**
      * Checks if an object is a radio parameter
      */
-    static isRadioParameter(param: any): param is RadioParameter {
+    static isRadioParameter (param: any): param is RadioParameter {
         return (
             param &&
             typeof param === 'object' &&
@@ -485,7 +486,7 @@ export class BlockchainActionValidator {
     /**
      * Gets a function from the ABI by its name
      */
-    static getAbiFunction(abi: Abi, functionName: ContractFunctionName): AbiFunction {
+    static getAbiFunction (abi: Abi, functionName: ContractFunctionName): AbiFunction {
         const abiFunction = abi.find(
             (item): item is AbiFunction => item.type === 'function' && item.name === functionName,
         );
@@ -498,7 +499,7 @@ export class BlockchainActionValidator {
     /**
      * Checks if a function exists in the ABI
      */
-    static isValidFunction(abi: Abi, functionName: ContractFunctionName): boolean {
+    static isValidFunction (abi: Abi, functionName: ContractFunctionName): boolean {
         return abi.some(
             (item): item is AbiFunction => item.type === 'function' && item.name === functionName,
         );
@@ -507,7 +508,7 @@ export class BlockchainActionValidator {
     /**
      * Gets the parameters of a function from the ABI
      */
-    static getAbiParameters(action: BlockchainActionMetadata): readonly AbiParameter[] {
+    static getAbiParameters (action: BlockchainActionMetadata): readonly AbiParameter[] {
         const abiFunction = this.getAbiFunction(action.abi, action.functionName);
         return abiFunction.inputs;
     }
@@ -515,7 +516,7 @@ export class BlockchainActionValidator {
     /**
      * Gets the state mutability type of a function from the ABI
      */
-    static getBlockchainActionType(action: BlockchainActionMetadata): AbiStateMutability {
+    static getBlockchainActionType (action: BlockchainActionMetadata): AbiStateMutability {
         const abiFunction = this.getAbiFunction(action.abi, action.functionName);
         return abiFunction.stateMutability;
     }
@@ -523,7 +524,7 @@ export class BlockchainActionValidator {
     /**
      * Checks if an object is a valid BlockchainActionMetadata
      */
-    static isBlockchainActionMetadata(obj: any): obj is BlockchainActionMetadata {
+    static isBlockchainActionMetadata (obj: any): obj is BlockchainActionMetadata {
         return (
             obj &&
             typeof obj === 'object' &&
@@ -540,7 +541,7 @@ export class BlockchainActionValidator {
     /**
      * Checks if an object is a BlockchainAction
      */
-    static isBlockchainAction(obj: any): obj is BlockchainAction {
+    static isBlockchainAction (obj: any): obj is BlockchainAction {
         return (
             this.isBlockchainActionMetadata(obj) &&
             'blockchainActionType' in obj &&
@@ -550,10 +551,10 @@ export class BlockchainActionValidator {
 }
 
 // Export standalone functions for backward compatibility
-export function isBlockchainActionMetadata(obj: any): obj is BlockchainActionMetadata {
+export function isBlockchainActionMetadata (obj: any): obj is BlockchainActionMetadata {
     return BlockchainActionValidator.isBlockchainActionMetadata(obj);
 }
 
-export function isBlockchainAction(obj: any): obj is BlockchainAction {
+export function isBlockchainAction (obj: any): obj is BlockchainAction {
     return BlockchainActionValidator.isBlockchainAction(obj);
 }

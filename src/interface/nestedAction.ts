@@ -3,7 +3,6 @@
 import { BlockchainActionMetadata } from './blockchainAction';
 import { TransferAction } from './transferAction';
 import { HttpAction } from './httpAction';
-import { ChainContext } from './chains';
 
 /**
  * Condición para evaluación de caminos en flujos de acciones.
