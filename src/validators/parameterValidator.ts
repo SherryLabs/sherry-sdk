@@ -108,7 +108,7 @@ export class ParameterValidator {
             param.value !== undefined &&
             typeof param.value === 'string'
         ) {
-            const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+            const emailRegex = /^[\w\-.]+@([\w-]+\.)+[\w-]{2,4}$/;
             if (!emailRegex.test(param.value)) {
                 throw new SherryValidationError(
                     `Invalid email format for parameter '${param.name}': ${param.value}`,

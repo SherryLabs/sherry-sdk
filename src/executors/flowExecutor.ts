@@ -3,7 +3,6 @@
 import {
     ActionFlow,
     NestedAction,
-    NextActionDefinition,
     ActionCondition,
     CompletionAction,
 } from '../interface/nestedAction';
@@ -361,7 +360,7 @@ export class FlowExecutor {
      */
     private async executeTransferAction(
         action: NestedAction,
-        actionData?: any,
+        _actionData?: any,
     ): Promise<ActionResult> {
         if (action.type !== 'transfer') {
             return {

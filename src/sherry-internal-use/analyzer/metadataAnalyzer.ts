@@ -33,7 +33,7 @@ function getChainDistribution(chainActions: any[]): Record<string, number> {
     return distribution;
 }
 
-function calculateComplexityScore(metadata: Metadata): number {
+function calculateComplexityScore(_metadata: Metadata): number {
     // Calculate complexity based on number and types of actions
     // (implementation details)
     return 0;

@@ -111,7 +111,7 @@ export function createMetadata(metadata: Metadata): ValidatedMetadata {
             actions: processedActions,
         };
     } catch (error) {
-        //console.log('Error in createMetadata');
+        console.log('Error in createMetadata: ', error);
         throw error;
     }
 }

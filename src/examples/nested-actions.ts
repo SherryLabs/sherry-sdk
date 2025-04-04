@@ -2,7 +2,6 @@
 import {
     ActionFlow,
     NestedBlockchainAction,
-    NestedTransferAction,
     NestedHttpAction,
     CompletionAction,
     DecisionAction,

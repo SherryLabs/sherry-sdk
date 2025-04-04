@@ -238,6 +238,7 @@ export class BlockchainActionValidator {
             try {
                 new RegExp(param.pattern);
             } catch (e) {
+                console.error('Error in validateStandardParameter: ', e);
                 throw new ActionValidationError(
                     `The parameter "${param.name}" has a pattern that is not a valid regex`,
                 );

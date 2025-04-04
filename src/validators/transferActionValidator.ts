@@ -181,3 +181,7 @@ export class TransferActionValidator {
         return hasTransferSpecificProperties && hasNoBlockchainSpecificProperties;
     }
 }
+
+export function isTransferAction(obj: any): obj is TransferAction {
+    return TransferActionValidator.isTransferAction(obj);
+}

@@ -266,7 +266,7 @@ export class FlowValidator {
      */
     private static validateCompletionAction(
         action: CompletionAction,
-        flow: ActionFlow,
+        _flow: ActionFlow,
     ): CompletionAction {
         if (!action.message) {
             throw new InvalidMetadataError(`Completion action '${action.id}' must have a message`);
