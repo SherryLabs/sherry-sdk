@@ -751,9 +751,21 @@ export const simpleTransferMiniApp = {
                 label: 'Select Recipient',
                 required: true,
                 options: [
-                    { label: 'Alice', value: '0x1111111111111111111111111111111111111111', description: 'Project Lead' },
-                    { label: 'Bob', value: '0x2222222222222222222222222222222222222222', description: 'Developer' },
-                    { label: 'Charlie', value: '0x3333333333333333333333333333333333333333', description: 'Designer' },
+                    {
+                        label: 'Alice',
+                        value: '0x1111111111111111111111111111111111111111',
+                        description: 'Project Lead',
+                    },
+                    {
+                        label: 'Bob',
+                        value: '0x2222222222222222222222222222222222222222',
+                        description: 'Developer',
+                    },
+                    {
+                        label: 'Charlie',
+                        value: '0x3333333333333333333333333333333333333333',
+                        description: 'Designer',
+                    },
                 ],
             },
             amountConfig: {

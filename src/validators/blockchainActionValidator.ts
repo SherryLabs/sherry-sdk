@@ -27,7 +27,12 @@ export class BlockchainActionValidator {
         // Get the blockchain action type
         const blockchainActionType = this.getBlockchainActionType(action);
 
-        if (blockchainActionType !== 'payable' && action.amount !== undefined) {
+        // Check if there's an ABI parameter named 'amount' to avoid confusion with top-level amount
+        const hasAmountParameter = abiParams.some(param => param.name === 'amount');
+
+        // Only throw error if function is not payable, has top-level amount property,
+        // and doesn't have a parameter named 'amount' in its ABI
+        if (blockchainActionType !== 'payable' && action.amount !== undefined && !hasAmountParameter) {
             throw new ActionValidationError(
                 'The action is not payable, "amount" should not be provided',
             );
