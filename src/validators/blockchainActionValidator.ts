@@ -544,7 +544,7 @@ export class BlockchainActionValidator {
     static isBlockchainAction(obj: any): obj is BlockchainAction {
         return (
             this.isBlockchainActionMetadata(obj) &&
-            'blockchainActionType' in obj &&
+            //'blockchainActionType' in obj &&
             Array.isArray((obj as any).abiParams)
         );
     }

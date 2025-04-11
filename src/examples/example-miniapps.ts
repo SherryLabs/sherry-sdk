@@ -724,6 +724,52 @@ export const bridgeMiniApp = {
     ],
 };
 
+// ============== 7. SIMPLE TRANSFER MINI-APP ==============
+// Adding a simple transfer app as example for transfer actions
+
+export const simpleTransferMiniApp = {
+    url: 'https://transfer.sherry.social',
+    icon: 'https://example.com/transfer-icon.png',
+    title: 'Simple Transfer',
+    description: 'Transfer tokens to another address',
+    actions: [
+        // Action: Simple Transfer
+        {
+            label: 'Transfer AVAX',
+            description: 'Send AVAX to another address',
+            chains: { source: 'fuji' },
+            to: '0x1234567890123456789012345678901234567890',
+            amount: 0.1,
+        },
+        // Action: Transfer with recipient selection
+        {
+            label: 'Send to Recipient',
+            description: 'Choose a recipient from the list',
+            chains: { source: 'avalanche' },
+            recipient: {
+                inputType: 'select',
+                label: 'Select Recipient',
+                required: true,
+                options: [
+                    { label: 'Alice', value: '0x1111111111111111111111111111111111111111', description: 'Project Lead' },
+                    { label: 'Bob', value: '0x2222222222222222222222222222222222222222', description: 'Developer' },
+                    { label: 'Charlie', value: '0x3333333333333333333333333333333333333333', description: 'Designer' },
+                ],
+            },
+            amountConfig: {
+                inputType: 'radio',
+                label: 'Amount',
+                required: true,
+                options: [
+                    { label: 'Small', value: 0.01, description: '0.01 AVAX' },
+                    { label: 'Medium', value: 0.05, description: '0.05 AVAX' },
+                    { label: 'Large', value: 0.1, description: '0.1 AVAX' },
+                ],
+            },
+        },
+    ],
+};
+
 // Export all mini-apps
 export const miniApps = {
     tokenSwap: tokenSwapMiniApp,
@@ -732,4 +778,5 @@ export const miniApps = {
     fundraising: fundraisingMiniApp,
     marketCreation: marketCreationMiniApp,
     bridge: bridgeMiniApp,
+    simpleTransfer: simpleTransferMiniApp,
 };
