@@ -1,5 +1,6 @@
 import { Metadata } from '../interface/metadata';
 import { TransferAction } from '../interface/transferAction';
+import { BlockchainActionMetadata } from '../interface/blockchainAction';
 import { HttpAction } from '../interface/httpAction';
 import { PARAM_TEMPLATES, createParameter } from '../templates/templates';
 
@@ -100,7 +101,7 @@ export const mixedActionMiniApp: Metadata = {
                     min: 1,
                 }),
             ],
-        },
+        } as BlockchainActionMetadata,
     ],
 };
 
