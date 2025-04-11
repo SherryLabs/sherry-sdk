@@ -32,7 +32,11 @@ export class BlockchainActionValidator {
 
         // Only throw error if function is not payable, has top-level amount property,
         // and doesn't have a parameter named 'amount' in its ABI
-        if (blockchainActionType !== 'payable' && action.amount !== undefined && !hasAmountParameter) {
+        if (
+            blockchainActionType !== 'payable' &&
+            action.amount !== undefined &&
+            !hasAmountParameter
+        ) {
             throw new ActionValidationError(
                 'The action is not payable, "amount" should not be provided',
             );
