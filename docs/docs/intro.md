@@ -31,6 +31,7 @@ Con Sherry, puedes transformar cualquier publicación en una dApp interactiva qu
 ## 🚀 ¿Para quién es este SDK?
 
 Este SDK está dirigido a desarrolladores que:
+
 - Desean integrar funcionalidades blockchain en plataformas sociales
 - Buscan crear experiencias Web3 interactivas sin que los usuarios abandonen su contexto actual
 - Necesitan construir flujos de trabajo multi-paso con lógica condicional
