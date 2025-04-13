@@ -23,6 +23,8 @@ With Sherry, you can transform any post into an interactive dApp that allows use
 - ⚡ **Type Safety**: Full TypeScript support with comprehensive type definitions
 - 🔄 **Cross-chain Interactions**: Enable transactions across multiple blockchains
 - 📊 **Metadata Templates**: Ready-to-use templates for common Web3 use cases
+- 💻 **Developer Tools**: Built-in metadata analysis and action transformation utilities
+- 📱 **User-friendly Parameter Configuration**: Flexible UI specifications for better user experience
 
 ## 📦 Installation
 

@@ -6,18 +6,6 @@ import { AbiType, SolidityTuple } from 'abitype';
 // Input Types
 export type BaseInputType = AbiType | UIInputType | SelectionInputType;
 
-/*
-export type BaseInputType =
-
-    | 'text'
-    | 'number'
-    | 'boolean'
-    | 'email'
-    | 'url'
-    | 'datetime'
-    | 'textarea'
-    | 'address';
-    */
 
 // UI-specific input types (no tienen equivalente directo en Solidity)
 export type UIInputType =
@@ -28,8 +16,6 @@ export type UIInputType =
     | 'datetime' // Especialización de string para fecha
     | 'textarea'; // Especialización de string para texto largo
 
-// | 'bytes'    // Blockchain specific type
-// | 'hidden';  // Oculto en UI
 
 export type SelectionInputType = 'select' | 'radio';
 
@@ -54,7 +40,7 @@ export interface BaseParameter {
 
 // Parámetros standard (text, number, boolean, email, url, datetime, textarea)
 export interface StandardParameter extends BaseParameter {
-    type?: BaseInputType; // Si agregas un param y no seteas el type, tomamos el del ABI para renderizar input
+    type: BaseInputType; // Si agregas un param y no seteas el type, tomamos el del ABI para renderizar input
     minLength?: number; // Longitud mínima Texto
     maxLength?: number; // Longitud máxima Texto
     pattern?: string; // Para validaciones con regex
@@ -90,7 +76,7 @@ export interface BlockchainActionMetadata extends BaseAction {
     abi: Abi; // ABI del contrato
     functionName: ContractFunctionName; // Nombre de la función
     amount?: number; // If function is payable, amount to send, set proper value as number - will be converted to WEI
-    params?: BlockchainParameter[]; // Array de parámetros configurados
+    params?: BlockchainParameter[]; // Array de parámetros configurados - DEBES ENVIARLOS EN EL MISMO ORDEN QUE EN EL ABI
 }
 
 export interface BlockchainAction extends BlockchainActionMetadata {
