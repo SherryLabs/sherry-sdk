@@ -6,7 +6,6 @@ import { AbiType, SolidityTuple } from 'abitype';
 // Input Types
 export type BaseInputType = AbiType | UIInputType | SelectionInputType;
 
-
 // UI-specific input types (no tienen equivalente directo en Solidity)
 export type UIInputType =
     | 'text' // Especialización de string con validación
@@ -15,7 +14,6 @@ export type UIInputType =
     | 'url' // Especialización de string para url
     | 'datetime' // Especialización de string para fecha
     | 'textarea'; // Especialización de string para texto largo
-
 
 export type SelectionInputType = 'select' | 'radio';
 
