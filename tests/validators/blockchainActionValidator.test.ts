@@ -43,7 +43,7 @@ const erc20Abi: Abi = [
             { name: 'amount', type: 'uint256' },
         ],
         outputs: [{ name: '', type: 'bool' }],
-    }
+    },
 ] as const;
 
 // Router ABI for swapExactIn testing
@@ -66,7 +66,7 @@ const routerAbi: Abi = [
             { name: 'totalIn', type: 'uint256' },
             { name: 'totalOut', type: 'uint256' },
         ],
-    }
+    },
 ] as const;
 
 // Helper function to create a valid base action
@@ -332,7 +332,7 @@ describe('BlockchainActionValidator', () => {
         const ROUTER_ADDRESS = '0x45A62B090DF48243F12A21897e7ed91863E2c86b';
         const USDC_ADDRESS = '0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E';
         const LOGIC_ADDRESS = '0xC04f291347D21DC663f7646056db22bFf8CE8430';
-        
+
         it('validates ERC20 approve action with fixed parameters', () => {
             const approveAction: BlockchainActionMetadata = {
                 label: 'Aprobar USDC',
@@ -360,11 +360,13 @@ describe('BlockchainActionValidator', () => {
                     },
                 ],
             };
-            
+
             // This should not throw any error
-            expect(() => BlockchainActionValidator.validateBlockchainAction(approveAction)).not.toThrow();
+            expect(() =>
+                BlockchainActionValidator.validateBlockchainAction(approveAction),
+            ).not.toThrow();
         });
-        
+
         it('validates swapExactIn with native token input (AVAX)', () => {
             const swapAction: BlockchainActionMetadata = {
                 label: 'Swap AVAX por USDC',
@@ -440,17 +442,19 @@ describe('BlockchainActionValidator', () => {
                     },
                 ],
             };
-            
+
             // This should not throw any error with our new validation logic
-            expect(() => BlockchainActionValidator.validateBlockchainAction(swapAction)).not.toThrow();
+            expect(() =>
+                BlockchainActionValidator.validateBlockchainAction(swapAction),
+            ).not.toThrow();
         });
-        
+
         it('throws error for amount with non-payable function when not related to swaps', () => {
             const invalidAction = {
                 ...createValidBaseAction(),
                 amount: 0.1, // Cannot specify amount for non-payable
             };
-            
+
             // This should still throw an error as it's not a token swap
             expect(() => BlockchainActionValidator.validateBlockchainAction(invalidAction)).toThrow(
                 ActionValidationError,
