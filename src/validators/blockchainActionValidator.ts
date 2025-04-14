@@ -13,6 +13,12 @@ import {
 import { ChainContext } from '../interface/chains';
 import { SherryValidationError, ActionValidationError } from '../errors/customErrors';
 import { ParameterValidator } from './parameterValidator';
+import {
+    isStandardParameter,
+    isSelectParameter,
+    isRadioParameter,
+    getInputTypeFromAbiType,
+} from './paramTypeUtils';
 
 /**
  * Validator class for Blockchain Actions
@@ -197,15 +203,19 @@ export class BlockchainActionValidator {
                 );
             }
 
-            // Validate according to parameter type
-            if (this.isStandardParameter(param)) {
+            // Validate according to parameter type using our utility functions
+            if (isStandardParameter(param)) {
                 this.validateStandardParameter(param);
-            } else if (this.isSelectParameter(param)) {
+            } else if (isSelectParameter(param)) {
                 this.validateSelectParameter(param);
-            } else if (this.isRadioParameter(param)) {
+            } else if (isRadioParameter(param)) {
                 this.validateRadioParameter(param);
             } else {
-                throw new ActionValidationError(`Unknown parameter type for "${param}"`);
+                // Improved error message with parameter info
+                const typedParam = param as { name: string; type?: string };
+                throw new ActionValidationError(
+                    `Unknown parameter type "${typedParam.type}" for parameter "${typedParam.name}"`,
+                );
             }
 
             // Validate default value according to the parameter type in the ABI
@@ -470,14 +480,7 @@ export class BlockchainActionValidator {
      */
     static getValidInputTypes(): string[] {
         // Include all UI-specific input types
-        const uiTypes: string[] = [
-            'text',
-            'number',
-            'email',
-            'url',
-            'datetime',
-            'textarea',
-        ];
+        const uiTypes: string[] = ['text', 'number', 'email', 'url', 'datetime', 'textarea'];
 
         // Include all Solidity types from AbiType (which is a union type)
         const solidityTypes: string[] = [
@@ -509,19 +512,17 @@ export class BlockchainActionValidator {
     static isStandardParameter(param: any): param is StandardParameter {
         // Get all valid types
         const validTypes = this.getValidInputTypes();
-        
+
         return (
             param &&
             typeof param === 'object' &&
             typeof param.type === 'string' &&
-            (
-                // Check if it's one of our recognized types
-                validTypes.includes(param.type) ||
+            // Check if it's one of our recognized types
+            (validTypes.includes(param.type) ||
                 // Allow array types like uint256[] that might not be in our list
                 param.type.endsWith('[]') ||
                 // Special case for tuples
-                param.type === 'tuple'
-            )
+                param.type === 'tuple')
         );
     }
 
@@ -621,27 +622,7 @@ export class BlockchainActionValidator {
      * @returns Input type
      */
     static getInputTypeFromAbiParam(abiParam: AbiParameter): BaseInputType {
-        // First check the main type
-        if (abiParam.type.startsWith('uint') || abiParam.type.startsWith('int')) {
-            return 'number';
-        } else if (abiParam.type === 'address') {
-            return 'address';
-        } else if (abiParam.type === 'bool') {
-            return 'bool';
-        } else if (abiParam.type === 'string') {
-            return 'text';
-        } else if (abiParam.type === 'tuple') {
-            return 'tuple';
-        } else if (abiParam.type.endsWith('[]')) {
-            // For arrays, use the base type
-            return this.getInputTypeFromAbiParam({
-                ...abiParam,
-                type: abiParam.type.substring(0, abiParam.type.length - 2) as AbiType,
-            });
-        }
-
-        // Default to text for other types
-        return 'text';
+        return getInputTypeFromAbiType(abiParam.type);
     }
 
     /**
@@ -657,7 +638,7 @@ export class BlockchainActionValidator {
         // For each ABI param, find or create the corresponding param
         return abiParams.map((abiParam, i) => {
             const inputType = this.getInputTypeFromAbiParam(abiParam);
-            
+
             // Check if there's a matching param in the action
             let param = action.params?.find(p => p.name === abiParam.name);
 
@@ -684,13 +665,13 @@ export class BlockchainActionValidator {
             }
 
             // For standard parameters, ensure they have a type
-            if (this.isStandardParameter(param) && !param.type) {
+            if (isStandardParameter(param) && !param.type) {
                 (param as StandardParameter).type = inputType;
             }
 
             // Validate the parameter
             ParameterValidator.validateParameter(param);
-            
+
             return param;
         });
     }

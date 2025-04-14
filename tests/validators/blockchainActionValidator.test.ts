@@ -263,7 +263,7 @@ describe('BlockchainActionValidator', () => {
                     {
                         name: 'param3',
                         label: 'Boolean Parameter',
-                        type: 'boolean',
+                        type: 'bool',
                         required: true,
                     },
                     {
