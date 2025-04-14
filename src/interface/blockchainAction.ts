@@ -1,7 +1,7 @@
 import { Abi, AbiStateMutability, AbiParameter } from './index';
 import { ContractFunctionName } from './index';
 import { ChainContext } from './chains';
-import { AbiType, SolidityTuple } from 'abitype';
+import { AbiType } from 'abitype';
 
 // Input Types
 export type BaseInputType = AbiType | UIInputType | SelectionInputType;

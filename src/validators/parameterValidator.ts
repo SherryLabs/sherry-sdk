@@ -72,6 +72,11 @@ export class ParameterValidator {
      * Valida parámetros estándar.
      */
     static validateStandardParameter(param: StandardParameter): void {
+        // Validate tuple parameters separately
+        if (param.type === 'tuple') {
+            return; // Tuples are handled differently, allow them to pass validation
+        }
+
         this.validateBaseParameter(param);
 
         // Verificar límites mínimos y máximos

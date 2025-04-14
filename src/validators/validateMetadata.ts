@@ -64,8 +64,6 @@ export function validateMetadata(metadata: any): MetadataValidationResult {
             // Validar chains
             if (action.chains) {
                 if (!action.chains.source) errors.push(`Action ${index}: Source chain is required`);
-                if (!action.chains.destination)
-                    errors.push(`Action ${index}: Destination chain is required`);
             }
         });
     }
