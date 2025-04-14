@@ -36,7 +36,7 @@ import { SherryClient } from '@sherrylabs/sherry-sdk';
 const sherryClient = new SherryClient({
   chainId: 43114, // Avalanche C-Chain
   apiKey: 'YOUR_API_KEY', // Get this from the Sherry developer portal
-  environment: 'production' // or 'development' for testing
+  environment: 'production', // or 'development' for testing
 });
 ```
 
@@ -49,7 +49,7 @@ For better security, we recommend storing sensitive information like API keys in
 const sherryClient = new SherryClient({
   chainId: process.env.CHAIN_ID,
   apiKey: process.env.SHERRY_API_KEY,
-  environment: process.env.NODE_ENV === 'production' ? 'production' : 'development'
+  environment: process.env.NODE_ENV === 'production' ? 'production' : 'development',
 });
 ```
 

@@ -36,7 +36,7 @@ import { SherryClient } from '@sherrylabs/sherry-sdk';
 // Initialize the SDK
 const client = new SherryClient({
   chainId: 43114, // Avalanche C-Chain
-  apiKey: 'YOUR_API_KEY'
+  apiKey: 'YOUR_API_KEY',
 });
 
 // Use the SDK functionality

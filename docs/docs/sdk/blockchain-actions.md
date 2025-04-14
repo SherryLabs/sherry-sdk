@@ -34,10 +34,10 @@ const tokenTransferAction: BlockchainActionMetadata = {
       stateMutability: 'nonpayable',
       inputs: [
         { name: 'to', type: 'address' },
-        { name: 'amount', type: 'uint256' }
+        { name: 'amount', type: 'uint256' },
       ],
-      outputs: [{ name: '', type: 'bool' }]
-    }
+      outputs: [{ name: '', type: 'bool' }],
+    },
   ],
   functionName: 'transfer',
   chains: { source: 'avalanche' },
@@ -46,15 +46,15 @@ const tokenTransferAction: BlockchainActionMetadata = {
       name: 'to',
       label: 'Recipient Address',
       type: 'address',
-      required: true
+      required: true,
     },
     {
       name: 'amount',
       label: 'Amount to Send',
       type: 'number',
-      required: true
-    }
-  ]
+      required: true,
+    },
+  ],
 };
 ```
 
@@ -86,7 +86,7 @@ const textParam = {
   name: 'message',
   label: 'Message',
   type: 'text',
-  required: true
+  required: true,
 };
 
 // Number input
@@ -94,7 +94,7 @@ const numberParam = {
   name: 'amount',
   label: 'Amount',
   type: 'number',
-  required: true
+  required: true,
 };
 
 // Boolean input
@@ -102,7 +102,7 @@ const boolParam = {
   name: 'confirmed',
   label: 'Confirm Action',
   type: 'bool',
-  required: true
+  required: true,
 };
 
 // Address input
@@ -110,7 +110,7 @@ const addressParam = {
   name: 'recipient',
   label: 'Recipient Address',
   type: 'address',
-  required: true
+  required: true,
 };
 ```
 
@@ -125,8 +125,8 @@ const selectParam = {
   options: [
     { label: 'Option 1', value: 1 },
     { label: 'Option 2', value: 2 },
-    { label: 'Option 3', value: 3 }
-  ]
+    { label: 'Option 3', value: 3 },
+  ],
 };
 ```
 
@@ -140,8 +140,8 @@ const radioParam = {
   required: true,
   options: [
     { label: 'Yes', value: true },
-    { label: 'No', value: false }
-  ]
+    { label: 'No', value: false },
+  ],
 };
 ```
 
@@ -161,7 +161,7 @@ const swapAction = {
   params: [
     // Router parameters with fixed and dynamic values
     // ...
-  ]
+  ],
 };
 ```
 

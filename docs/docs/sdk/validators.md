@@ -28,9 +28,9 @@ const myAction = {
       name: 'amount',
       label: 'Amount to Stake',
       type: 'number',
-      required: true
-    }
-  ]
+      required: true,
+    },
+  ],
 };
 
 // Validate the action
@@ -91,7 +91,7 @@ import { TransactionValidator } from '@sherrylabs/sherry-sdk';
 const isValid = TransactionValidator.validateTransaction({
   to: '0x1234567890123456789012345678901234567890',
   value: '0.1',
-  data: '0x...'
+  data: '0x...',
 });
 
 if (isValid) {
@@ -116,7 +116,7 @@ class MyCustomValidator extends BaseValidator {
     }
     return true;
   }
-  
+
   static isValidFormat(data) {
     // Implementation of format checking
     return true; // or false if invalid
