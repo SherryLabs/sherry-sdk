@@ -200,7 +200,7 @@ export const PARAM_TEMPLATES = {
 
     // Booleano
     BOOLEAN: {
-        type: 'boolean' as const,
+        type: 'bool' as const,
         label: 'Enable/Disable',
         required: true,
         description: 'Toggle this setting',
