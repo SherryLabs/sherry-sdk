@@ -6,6 +6,7 @@ import {
 } from '../interface/blockchainAction';
 import { SherryValidationError } from '../errors/customErrors';
 import { isAddress } from 'viem';
+import { isStandardParameter, isSelectParameter, isRadioParameter } from './paramTypeUtils';
 
 /**
  * Validator for blockchain parameters
@@ -72,6 +73,11 @@ export class ParameterValidator {
      * Valida parámetros estándar.
      */
     static validateStandardParameter(param: StandardParameter): void {
+        // Validate tuple parameters separately
+        if (param.type === 'tuple') {
+            return; // Tuples are handled differently, allow them to pass validation
+        }
+
         this.validateBaseParameter(param);
 
         // Verificar límites mínimos y máximos
@@ -144,10 +150,15 @@ export class ParameterValidator {
      * Valida cualquier parámetro.
      */
     static validateParameter(param: BlockchainParameter): void {
-        if (param.type === 'select' || param.type === 'radio') {
+        if (isSelectParameter(param) || isRadioParameter(param)) {
             this.validateSelectionParameter(param as SelectParameter | RadioParameter);
-        } else {
+        } else if (isStandardParameter(param)) {
             this.validateStandardParameter(param as StandardParameter);
+        } else {
+            // Improved error message that provides more details
+            throw new SherryValidationError(
+                `Unknown parameter type: ${(param as any).type ? `"${(param as any).type}"` : 'undefined'} for parameter "${(param as any).name || 'unnamed'}"`,
+            );
         }
     }
 }
