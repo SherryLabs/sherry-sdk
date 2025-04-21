@@ -4,7 +4,7 @@ import {
     SelectParameter,
     RadioParameter,
     INPUT_TYPES,
-} from '../interface/httpAction';
+} from '../interface/actions/httpAction';
 
 export function isSelectParameter(param: HttpParameter): param is SelectParameter {
     return param.type === INPUT_TYPES.SELECT;

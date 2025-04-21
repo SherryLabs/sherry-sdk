@@ -1,7 +1,7 @@
-import { BlockchainAction } from '../../interface/blockchainAction';
-import { HttpAction } from '../../interface/httpAction';
-import { TransferAction } from '../../interface/transferAction';
-import { isBlockchainAction } from '../../utils/createMetadata';
+import { BlockchainAction } from '../../interface/actions/blockchainAction';
+import { HttpAction } from '../../interface/actions/httpAction';
+import { TransferAction } from '../../interface/actions/transferAction';
+import { BlockchainActionValidator } from '../../validators/blockchainActionValidator';
 import { isTransferAction, isHttpAction } from '../../validators/validator';
 
 type AnyAction = BlockchainAction | TransferAction | HttpAction;
@@ -11,7 +11,7 @@ export function filterActionsByType(
     type: 'blockchain' | 'transfer' | 'http',
 ): AnyAction[] {
     return actions.filter(action => {
-        if (type === 'blockchain') return isBlockchainAction(action);
+        if (type === 'blockchain') return BlockchainActionValidator.isBlockchainAction(action);
         if (type === 'transfer') return isTransferAction(action);
         if (type === 'http') return isHttpAction(action);
         return false;
@@ -20,7 +20,7 @@ export function filterActionsByType(
 
 export function categorizeActions(actions: AnyAction[]): Record<string, AnyAction[]> {
     return {
-        blockchain: actions.filter(isBlockchainAction),
+        blockchain: actions.filter(BlockchainActionValidator.isBlockchainAction),
         transfer: actions.filter(isTransferAction),
         http: actions.filter(isHttpAction),
     };

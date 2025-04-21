@@ -1,10 +1,10 @@
 import { Metadata } from '../../interface/metadata';
-import { isBlockchainActionMetadata } from '../../utils/createMetadata';
+import { BlockchainActionValidator } from '../../validators/blockchainActionValidator';
 import { isTransferAction, isHttpAction } from '../../validators/validator';
 
 export function analyzeMetadata(metadata: Metadata): Record<string, any> {
     const actions = metadata.actions;
-    const blockchainActions = actions.filter(isBlockchainActionMetadata);
+    const blockchainActions = actions.filter(BlockchainActionValidator.isBlockchainActionMetadata);
     const transferActions = actions.filter(isTransferAction);
     const httpActions = actions.filter(isHttpAction);
 

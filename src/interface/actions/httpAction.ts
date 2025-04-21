@@ -19,7 +19,6 @@ export interface BaseParameter {
     label: string;
     required: boolean;
     description?: string;
-    placeholder?: string;
     defaultValue?: any;
 }
 

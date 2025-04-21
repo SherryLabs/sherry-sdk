@@ -481,6 +481,50 @@ yarn build
 # Generate documentation
 yarn docs
 ```
+## Browser Usage
+
+When using Sherry SDK in browser environments, you'll need to configure your bundler (Webpack, Rollup, etc.) to handle Node.js built-ins:
+
+### Webpack
+
+```javascript
+// webpack.config.js
+module.exports = {
+  // ...your other config
+  resolve: {
+    fallback: {
+      crypto: require.resolve('crypto-browserify'),
+      stream: require.resolve('stream-browserify'),
+      buffer: require.resolve('buffer/')
+    }
+  },
+  plugins: [
+    new webpack.ProvidePlugin({
+      Buffer: ['buffer', 'Buffer']
+    })
+  ]
+};
+```
+
+### Vite
+
+```javascript
+// vite.config.js
+import { defineConfig } from 'vite';
+import { nodePolyfills } from 'vite-plugin-node-polyfills';
+
+export default defineConfig({
+  plugins: [
+    nodePolyfills({
+      globals: {
+        Buffer: true,
+        process: true
+      },
+      include: ['crypto', 'stream', 'buffer']
+    })
+  ]
+});
+```
 
 ## 🤝 Contributing
 

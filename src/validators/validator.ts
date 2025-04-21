@@ -1,33 +1,12 @@
-//import { Abi, AbiFunction, AbiParameter, AbiStateMutability } from 'abitype';
-//import { ContractFunctionName, isAddress } from 'viem';
-//import {
-//    BlockchainActionMetadata,
-//    BlockchainAction,
-//    BlockchainParameter,
-//    StandardParameter,
-//    SelectParameter,
-//    RadioParameter,
-//} from '../interface/blockchainAction';
-//import { ChainContext } from '../interface/chains';
 import { Metadata, ValidatedMetadata } from '../interface/metadata';
-//import { TransferAction } from '../interface/transferAction';
-//import { HttpAction } from '../interface/httpAction';
 import { HttpActionValidator } from './httpActionValidator';
 import { BlockchainActionValidator } from './blockchainActionValidator';
 import { TransferActionValidator } from './transferActionValidator';
 import { ActionValidationError } from '../errors/customErrors';
 
 // Export functions as wrappers around the validator classes for backward compatibility
-export const validateBlockchainActionMetadata =
-    BlockchainActionValidator.validateBlockchainActionMetadata.bind(BlockchainActionValidator);
 export const validateBlockchainParameters =
     BlockchainActionValidator.validateBlockchainParameters.bind(BlockchainActionValidator);
-export const isStandardParameter =
-    BlockchainActionValidator.isStandardParameter.bind(BlockchainActionValidator);
-export const isSelectParameter =
-    BlockchainActionValidator.isSelectParameter.bind(BlockchainActionValidator);
-export const isRadioParameter =
-    BlockchainActionValidator.isRadioParameter.bind(BlockchainActionValidator);
 export const getAbiFunction =
     BlockchainActionValidator.getAbiFunction.bind(BlockchainActionValidator);
 export const isValidFunction =

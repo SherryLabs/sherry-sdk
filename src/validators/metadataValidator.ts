@@ -1,10 +1,33 @@
 import { Metadata, ValidatedMetadata } from '../interface/metadata';
 import { SherryValidationError } from '../errors/customErrors';
-import { ValidatedAction } from '../interface/action';
-import { FlowValidator, isActionFlow } from './flowValidator';
+import { ValidatedAction } from '../interface/actions/action';
+import { FlowValidator } from './flowValidator';
 import { BlockchainActionValidator } from './blockchainActionValidator';
 import { TransferActionValidator } from '../validators/transferActionValidator';
 import { HttpActionValidator } from '../validators/httpActionValidator';
+import { ActionFlow } from '../interface/actions/flowAction';
+import { BlockchainActionMetadata } from '../interface/actions/blockchainAction';
+import { TransferAction } from '../interface/actions/transferAction';
+import { HttpAction } from '../interface/actions/httpAction';
+
+
+// Define the structure for our validator mapping
+interface ActionValidatorConfig {
+    // The type guard function
+    guard: (action: any) => boolean;
+    // The validation function, accepting the specific action type it handles
+    validate: (action: any) => ValidatedAction; // Use 'any' or refine with generics/overloads if possible
+}
+
+// Create the lookup table (array) of validators
+const actionValidators: ActionValidatorConfig[] = [
+    { guard: FlowValidator.isActionFlow, validate: FlowValidator.validateFlow as (action: ActionFlow) => ValidatedAction },
+    { guard: BlockchainActionValidator.isBlockchainActionMetadata, validate: BlockchainActionValidator.validateBlockchainAction as (action: BlockchainActionMetadata) => ValidatedAction },
+    { guard: TransferActionValidator.isTransferAction, validate: TransferActionValidator.validateTransferAction as (action: TransferAction) => ValidatedAction },
+    { guard: HttpActionValidator.isHttpAction, validate: HttpActionValidator.validateHttpAction as (action: HttpAction) => ValidatedAction },
+    // --- Add new action types here ---
+    // { guard: NewActionValidator.isNewAction, validate: NewActionValidator.validateNewAction },
+];
 
 /**
  * Metadata validator class
@@ -62,7 +85,7 @@ export class MetadataValidator {
 
             // Process each action with the appropriate validator
             const processedActions = metadata.actions.map(action => {
-                if (isActionFlow(action)) {
+                if (FlowValidator.isActionFlow(action)) {
                     return FlowValidator.validateFlow(action);
                 } else if (BlockchainActionValidator.isBlockchainActionMetadata(action)) {
                     return BlockchainActionValidator.validateBlockchainAction(action);

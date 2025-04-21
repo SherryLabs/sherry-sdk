@@ -5,7 +5,7 @@ import {
     NestedAction,
     ActionCondition,
     CompletionAction,
-} from '../interface/nestedAction';
+} from '../interface/actions/flowAction';
 
 /**
  * Contexto de ejecución para un flujo.

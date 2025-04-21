@@ -1,4 +1,4 @@
-import { ChainContext } from './chains';
+import { ChainContext } from '../chains';
 
 // Option for selects and radios
 export interface SelectOption {

@@ -1,4 +1,4 @@
-import { TransferAction } from '../interface/transferAction';
+import { TransferAction } from '../interface/actions/transferAction';
 import { Metadata } from '../interface/metadata';
 
 // ============== 1. SIMPLE DONATION MINI-APP ==============

@@ -14,17 +14,13 @@ export {
 } from './templates/templates';
 
 // Export validators
-export {
-    isBlockchainAction,
-    isBlockchainActionMetadata,
-    BlockchainActionValidator,
-} from './validators/blockchainActionValidator';
+export { BlockchainActionValidator,} from './validators/blockchainActionValidator';
 
-export { isTransferAction, TransferActionValidator } from './validators/transferActionValidator';
+export { TransferActionValidator } from './validators/transferActionValidator';
 
-export { isHttpAction, HttpActionValidator } from './validators/httpActionValidator';
+export { HttpActionValidator } from './validators/httpActionValidator';
 
-export { isActionFlow } from './validators/flowValidator';
+export { FlowValidator } from './validators/flowValidator';
 
 // Export flow executors and utilities
 export { FlowExecutor } from './executors/flowExecutor';

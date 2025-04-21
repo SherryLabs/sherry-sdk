@@ -1,10 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
-import { TransferActionValidator } from '../../src/validators/transferActionValidator';
 import { BlockchainActionValidator } from '../../src/validators/blockchainActionValidator';
-import { HttpActionValidator } from '../../src/validators/httpActionValidator';
 import { isTransferAction, isHttpAction, createMetadata } from '../../src/validators/validator';
-import { isBlockchainAction } from '../../src/utils/createMetadata';
-import { BlockchainActionMetadata } from '../../src/interface/blockchainAction';
+import { BlockchainActionMetadata } from '../../src/interface/actions/blockchainAction';
 import { Metadata } from '../../src/interface';
 
 describe('Action Validators', () => {
@@ -62,7 +59,7 @@ describe('Action Validators', () => {
         const validated = createMetadata(metadata);
 
         // This should be true - it's a blockchain action
-        expect(isBlockchainAction(validated.actions[0])).toBe(true);
+        expect(BlockchainActionValidator.isBlockchainAction(validated.actions[0])).toBe(true);
 
         // These should be false - it's NOT a transfer or HTTP action
         expect(isTransferAction(blockchainAction)).toBe(false);
@@ -82,7 +79,7 @@ describe('Action Validators', () => {
         expect(isTransferAction(transferAction)).toBe(true);
 
         // These should be false - it's NOT a blockchain or HTTP action
-        expect(isBlockchainAction(transferAction)).toBe(false);
+        expect(BlockchainActionValidator.isBlockchainAction(transferAction)).toBe(false);
         expect(isHttpAction(transferAction)).toBe(false);
     });
 });
