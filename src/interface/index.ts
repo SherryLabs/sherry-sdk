@@ -26,7 +26,12 @@ export type { TransferAction, RecipientConfig, AmountConfig } from './actions/tr
 
 // Re-export HTTP action types
 export type * from './actions/httpAction';
-export type { HttpAction, HttpParameter, BaseInputType, AdvancedInputType } from './actions/httpAction';
+export type {
+    HttpAction,
+    HttpParameter,
+    BaseInputType,
+    AdvancedInputType,
+} from './actions/httpAction';
 export { INPUT_TYPES } from './actions/httpAction';
 
 // Re-export nested action types

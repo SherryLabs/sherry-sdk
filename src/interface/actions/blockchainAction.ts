@@ -15,7 +15,7 @@ export type UIInputType =
     | 'datetime' // Especialización de string para fecha
     | 'textarea'; // Especialización de string para texto largo
 
-    /*
+/*
     - bytes all types and string could be used as text
     - address could be used as text
     - boolean could be used as radio

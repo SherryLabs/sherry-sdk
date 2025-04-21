@@ -7,9 +7,7 @@ import { TransferActionValidator } from '../../validators/transferActionValidato
 import { HttpActionValidator } from '../../validators/httpActionValidator';
 import { FlowValidator } from '../../validators/flowValidator';
 
-export async function executeAction(
-    action: Action,
-): Promise<any> {
+export async function executeAction(action: Action): Promise<any> {
     try {
         if (BlockchainActionValidator.isBlockchainAction(action)) {
             return await executeBlockchainAction(action);

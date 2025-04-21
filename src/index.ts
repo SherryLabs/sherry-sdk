@@ -14,7 +14,7 @@ export {
 } from './templates/templates';
 
 // Export validators
-export { BlockchainActionValidator,} from './validators/blockchainActionValidator';
+export { BlockchainActionValidator } from './validators/blockchainActionValidator';
 
 export { TransferActionValidator } from './validators/transferActionValidator';
 

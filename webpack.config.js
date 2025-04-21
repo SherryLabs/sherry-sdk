@@ -21,7 +21,7 @@ module.exports = {
             name: 'SherrySDK',
             type: 'umd',
         },
-        globalObject: 'this'
+        globalObject: 'this',
     },
     resolve: {
         extensions: ['.ts', '.js'],
@@ -29,18 +29,18 @@ module.exports = {
             crypto: require.resolve('crypto-browserify'),
             stream: require.resolve('stream-browserify'),
             buffer: require.resolve('buffer/'),
-            vm: require.resolve('vm-browserify')  // Añade esta línea
-        }
+            vm: require.resolve('vm-browserify'), // Añade esta línea
+        },
     },
     plugins: [
         new webpack.ProvidePlugin({
-            Buffer: ['buffer', 'Buffer']
+            Buffer: ['buffer', 'Buffer'],
         }),
         new webpack.ProvidePlugin({
-            crypto: ['crypto-browserify']
+            crypto: ['crypto-browserify'],
         }),
         new webpack.DefinePlugin({
-            'process.env': JSON.stringify({})
-        })
-    ]
+            'process.env': JSON.stringify({}),
+        }),
+    ],
 };

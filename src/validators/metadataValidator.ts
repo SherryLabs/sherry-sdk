@@ -10,7 +10,6 @@ import { BlockchainActionMetadata } from '../interface/actions/blockchainAction'
 import { TransferAction } from '../interface/actions/transferAction';
 import { HttpAction } from '../interface/actions/httpAction';
 
-
 // Define the structure for our validator mapping
 interface ActionValidatorConfig {
     // The type guard function
@@ -21,10 +20,26 @@ interface ActionValidatorConfig {
 
 // Create the lookup table (array) of validators
 const actionValidators: ActionValidatorConfig[] = [
-    { guard: FlowValidator.isActionFlow, validate: FlowValidator.validateFlow as (action: ActionFlow) => ValidatedAction },
-    { guard: BlockchainActionValidator.isBlockchainActionMetadata, validate: BlockchainActionValidator.validateBlockchainAction as (action: BlockchainActionMetadata) => ValidatedAction },
-    { guard: TransferActionValidator.isTransferAction, validate: TransferActionValidator.validateTransferAction as (action: TransferAction) => ValidatedAction },
-    { guard: HttpActionValidator.isHttpAction, validate: HttpActionValidator.validateHttpAction as (action: HttpAction) => ValidatedAction },
+    {
+        guard: FlowValidator.isActionFlow,
+        validate: FlowValidator.validateFlow as (action: ActionFlow) => ValidatedAction,
+    },
+    {
+        guard: BlockchainActionValidator.isBlockchainActionMetadata,
+        validate: BlockchainActionValidator.validateBlockchainAction as (
+            action: BlockchainActionMetadata,
+        ) => ValidatedAction,
+    },
+    {
+        guard: TransferActionValidator.isTransferAction,
+        validate: TransferActionValidator.validateTransferAction as (
+            action: TransferAction,
+        ) => ValidatedAction,
+    },
+    {
+        guard: HttpActionValidator.isHttpAction,
+        validate: HttpActionValidator.validateHttpAction as (action: HttpAction) => ValidatedAction,
+    },
     // --- Add new action types here ---
     // { guard: NewActionValidator.isNewAction, validate: NewActionValidator.validateNewAction },
 ];
