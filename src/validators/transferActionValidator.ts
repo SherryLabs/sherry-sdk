@@ -1,5 +1,5 @@
 import { isAddress } from 'viem';
-import { TransferAction } from '../interface/transferAction';
+import { TransferAction } from '../interface/actions/transferAction';
 import { ChainContext } from '../interface/chains';
 import { InvalidMetadataError } from '../errors/customErrors';
 
@@ -180,8 +180,4 @@ export class TransferActionValidator {
 
         return hasTransferSpecificProperties && hasNoBlockchainSpecificProperties;
     }
-}
-
-export function isTransferAction(obj: any): obj is TransferAction {
-    return TransferActionValidator.isTransferAction(obj);
 }

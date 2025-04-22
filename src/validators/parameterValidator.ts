@@ -3,7 +3,7 @@ import {
     StandardParameter,
     SelectParameter,
     RadioParameter,
-} from '../interface/blockchainAction';
+} from '../interface/actions/blockchainAction';
 import { SherryValidationError } from '../errors/customErrors';
 import { isAddress } from 'viem';
 import { isStandardParameter, isSelectParameter, isRadioParameter } from './paramTypeUtils';
@@ -161,9 +161,4 @@ export class ParameterValidator {
             );
         }
     }
-}
-
-// Export standalone functions for backward compatibility
-export function validateParameter(param: BlockchainParameter): void {
-    return ParameterValidator.validateParameter(param);
 }

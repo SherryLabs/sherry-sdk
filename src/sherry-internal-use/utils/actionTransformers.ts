@@ -1,13 +1,9 @@
-import { BlockchainActionMetadata } from '../../interface/blockchainAction';
-import { HttpAction } from '../../interface/httpAction';
-import { TransferAction } from '../../interface/transferAction';
-import { isBlockchainActionMetadata } from '../../utils/createMetadata';
+import { BlockchainActionValidator } from '../../validators/blockchainActionValidator';
 import { isTransferAction, isHttpAction } from '../../validators/validator';
+import { Action } from '../../interface';
 
-type AnyAction = BlockchainActionMetadata | TransferAction | HttpAction;
-
-export function convertToTutorialFormat(action: AnyAction): string {
-    if (isBlockchainActionMetadata(action)) {
+export function convertToTutorialFormat(action: Action): string {
+    if (BlockchainActionValidator.isBlockchainActionMetadata(action)) {
         return `# Blockchain Action Tutorial
 To execute the "${action.label}" action:
 1. Connect to the ${action.chains.source} blockchain

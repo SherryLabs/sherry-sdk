@@ -1,7 +1,7 @@
 import { BlockchainActionMetadata, BlockchainAction } from './blockchainAction';
 import { TransferAction } from './transferAction';
 import { HttpAction } from './httpAction';
-import { ActionFlow } from './nestedAction';
+import { ActionFlow } from './flowAction';
 
 /**
  * Tipo unión para cualquier tipo de acción que puede ser incluida en la metadata

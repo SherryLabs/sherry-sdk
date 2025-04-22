@@ -1,19 +1,41 @@
 {
   "name": "@sherrylinks/sdk",
-  "version": "1.13.1-beta.1",
+  "version": "1.19.3-beta.1",
   "description": "SDK for Sherry Links",
   "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "browser": {
+    "crypto": false,
+    "node:crypto": false,
+    "@noble/hashes/cryptoNode": "@noble/hashes/cryptoBrowser"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": {
+        "browser": "./dist/sherry-sdk.browser.js",
+        "default": "./dist/index.esm.js"
+      },
+      "require": {
+        "browser": "./dist/sherry-sdk.browser.js",
+        "default": "./dist/index.js"
+      }
+    }
+  },
   "types": "dist/index.d.ts",
   "author": "Sherry Labs",
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "prepublishOnly": "npm run build",
+    "build:esm": "tsc --module ES2020 --outDir dist/esm && mv dist/esm/index.js dist/index.esm.js && rm -rf dist/esm",
+    "build:browser": "webpack --mode production",
+    "build:all": "npm run build && npm run build:esm && npm run build:browser",
+    "prepublishOnly": "npm run build:all",
     "test": "jest",
     "test:coverage": "jest --coverage",
     "lint": "oxlint",
     "prepare": "husky",
-    "publish": "npm run build && npm publish --access public",
+    "publish": "npm run build:all && npm publish --access public",
     "format": "prettier --write ."
   },
   "files": [
@@ -24,11 +46,18 @@
     "@babel/preset-env": "^7.26.0",
     "@babel/preset-typescript": "^7.26.0",
     "babel-jest": "^29.7.0",
+    "buffer": "^6.0.3",
+    "crypto-browserify": "^3.12.1",
     "husky": "^9.1.7",
     "jest": "^27.4.5",
     "node-fetch": "^2.6.9",
     "oxlint": "^0.14.0",
-    "prettier": "^3.5.3"
+    "prettier": "^3.5.3",
+    "stream-browserify": "^3.0.0",
+    "ts-loader": "^9.5.2",
+    "vm-browserify": "^1.1.2",
+    "webpack": "^5.99.5",
+    "webpack-cli": "^6.0.1"
   },
   "dependencies": {
     "@jest/globals": "^29.7.0",

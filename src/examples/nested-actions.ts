@@ -5,7 +5,7 @@ import {
     NestedHttpAction,
     CompletionAction,
     DecisionAction,
-} from '../interface/nestedAction';
+} from '../interface/actions/flowAction';
 import { Abi } from 'abitype';
 
 // =============== EXAMPLE 1: ONBOARDING FLOW ===============

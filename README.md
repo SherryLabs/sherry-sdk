@@ -4,6 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-4.9%2B-blue)](https://www.typescriptlang.org/)
 [![Tests](https://img.shields.io/badge/Tests-Jest-green)](https://jestjs.io/)
+[![GitHub Repo](https://img.shields.io/badge/GitHub-Repo-blue.svg)](https://github.com/SherryLabs/sherry-sdk)
 
 ## 🌟 Overview
 
@@ -331,43 +332,6 @@ Create interactive, multi-step experiences with conditional paths:
 
 ## 🔧 Advanced Usage
 
-### Flow Execution
-
-The SDK includes a `FlowExecutor` to run and manage nested action flows:
-
-```typescript
-import { FlowExecutor } from '@sherrylinks/sdk';
-
-// Create executor with the flow
-const executor = new FlowExecutor(myFlow);
-
-// Execute the current step
-const result = await executor.executeCurrentAction();
-
-// For decision steps, provide user choice
-const decisionResult = await executor.executeCurrentAction({
-  userChoice: selectedValue,
-});
-
-// Continue until completion
-while (!executor.isCompleted()) {
-  // Get current step
-  const currentStep = executor.getCurrentAction();
-
-  // Execute with appropriate data
-  const stepResult = await executor.executeCurrentAction(stepData);
-
-  // Check result and handle accordingly
-  if (stepResult.status === 'waiting') {
-    // Request user input
-    // ...
-  }
-}
-
-// Get execution history
-const history = executor.getHistory();
-```
-
 ### Template Helpers
 
 The SDK provides template helpers for common parameter types:
@@ -446,22 +410,20 @@ if (validationResult.isValid) {
 
 ### Core Functions
 
-- `createMetadata(metadata)`: Validates and processes metadata
-- `validateMetadata(input)`: Validates metadata and returns detailed results
-- `FlowValidator.validateFlow(flow)`: Validates a nested action flow
-- `FlowExecutor`: Class for executing and managing action flows
+- `createMetadata(metadata)`: Validates and processes metadata.
+- `validateMetadata(input)`: Validates metadata and returns detailed results.
 
 ### Type Guards
 
-- `isBlockchainActionMetadata(action)`: Type guard for blockchain actions
-- `isTransferAction(action)`: Type guard for transfer actions
-- `isHttpAction(action)`: Type guard for HTTP actions
-- `isActionFlow(obj)`: Type guard for nested action flows
+- `isBlockchainActionMetadata(action)`: Type guard for blockchain actions.
+- `isTransferAction(action)`: Type guard for transfer actions.
+- `isHttpAction(action)`: Type guard for HTTP actions.
+- `isActionFlow(obj)`: Type guard for nested action flows.
 
 ### Helper Functions
 
-- `createParameter(template, customizations)`: Helper for parameter creation
-- `PARAM_TEMPLATES`: Library of predefined parameter templates
+- `createParameter(template, customizations)`: Helper for parameter creation.
+- `PARAM_TEMPLATES`: Library of predefined parameter templates.
 
 ## 🧪 Development
 
@@ -478,8 +440,55 @@ yarn test --coverage
 # Build the package
 yarn build
 
-# Generate documentation
-yarn docs
+# Generate/serve documentation (run from docs/ directory)
+cd docs
+yarn start # For development server
+yarn build # To build static files
+```
+
+## Browser Usage
+
+When using Sherry SDK in browser environments, you'll need to configure your bundler (Webpack, Rollup, etc.) to handle Node.js built-ins:
+
+### Webpack
+
+```javascript
+// webpack.config.js
+module.exports = {
+  // ...your other config
+  resolve: {
+    fallback: {
+      crypto: require.resolve('crypto-browserify'),
+      stream: require.resolve('stream-browserify'),
+      buffer: require.resolve('buffer/'),
+    },
+  },
+  plugins: [
+    new webpack.ProvidePlugin({
+      Buffer: ['buffer', 'Buffer'],
+    }),
+  ],
+};
+```
+
+### Vite
+
+```javascript
+// vite.config.js
+import { defineConfig } from 'vite';
+import { nodePolyfills } from 'vite-plugin-node-polyfills';
+
+export default defineConfig({
+  plugins: [
+    nodePolyfills({
+      globals: {
+        Buffer: true,
+        process: true,
+      },
+      include: ['crypto', 'stream', 'buffer'],
+    }),
+  ],
+});
 ```
 
 ## 🤝 Contributing
@@ -500,4 +509,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 - [Project Website](https://sherry.social)
 - [Documentation](https://docs.sherry.social)
-- [GitHub Repository](https://github.com/sherrylinks/sdk)
+- [GitHub Repository](https://github.com/SherryLabs/sherry-sdk)

@@ -4,7 +4,7 @@ import {
     SelectParameter,
     RadioParameter,
     StandardParameter,
-} from '../interface/httpAction';
+} from '../interface/actions/httpAction';
 import { InvalidMetadataError } from '../errors/customErrors';
 
 export class HttpActionValidator {
@@ -224,8 +224,4 @@ export class HttpActionValidator {
 
         return true;
     }
-}
-
-export function isHttpAction(obj: any): obj is HttpAction {
-    return HttpActionValidator.isHttpAction(obj);
 }
