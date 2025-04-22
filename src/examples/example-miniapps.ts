@@ -1,5 +1,5 @@
 // example-miniapps.ts
-import { StandardParameter } from '../interface/blockchainAction';
+import { StandardParameter } from '../interface/actions/blockchainAction';
 import { PARAM_TEMPLATES, createParameter } from '../templates/templates';
 
 // ============== 1. TOKEN SWAP MINI-APP ==============
@@ -95,7 +95,6 @@ export const tokenSwapMiniApp = {
                 createParameter(PARAM_TEMPLATES.TOKEN_AMOUNT, {
                     name: 'amountIn',
                     label: 'Amount to Swap',
-                    placeholder: 'Enter amount',
                 }),
                 // Minimum Amount Out (with slippage)
                 createParameter(PARAM_TEMPLATES.TOKEN_AMOUNT, {
@@ -229,19 +228,16 @@ export const nftMarketplaceMiniApp = {
                 createParameter(PARAM_TEMPLATES.ADDRESS, {
                     name: 'nftAddress',
                     label: 'NFT Collection Address',
-                    placeholder: 'Enter NFT contract address',
                 }),
                 // Token ID
                 createParameter(PARAM_TEMPLATES.NFT_ID, {
                     name: 'tokenId',
                     label: 'NFT ID',
-                    placeholder: 'Enter NFT ID',
                 }),
                 // Price
                 createParameter(PARAM_TEMPLATES.TOKEN_AMOUNT, {
                     name: 'price',
                     label: 'Price in AVAX',
-                    placeholder: 'Enter price',
                 }),
                 // Expiration time
                 {
@@ -268,7 +264,6 @@ export const nftMarketplaceMiniApp = {
                 createParameter(PARAM_TEMPLATES.INTEGER, {
                     name: 'listingId',
                     label: 'Listing ID',
-                    placeholder: 'Enter listing ID',
                 }),
             ],
         },
@@ -287,7 +282,6 @@ export const nftMarketplaceMiniApp = {
                 createParameter(PARAM_TEMPLATES.INTEGER, {
                     name: 'listingId',
                     label: 'Listing ID',
-                    placeholder: 'Enter listing ID',
                 }),
             ],
         },
@@ -350,7 +344,6 @@ export const daoVotingMiniApp = {
                 createParameter(PARAM_TEMPLATES.TEXT, {
                     name: 'title',
                     label: 'Proposal Title',
-                    placeholder: 'Enter a concise title',
                     minLength: 10,
                     maxLength: 100,
                 }),
@@ -358,7 +351,6 @@ export const daoVotingMiniApp = {
                 createParameter(PARAM_TEMPLATES.TEXTAREA, {
                     name: 'description',
                     label: 'Proposal Description',
-                    placeholder: 'Describe your proposal in detail',
                     minLength: 50,
                     maxLength: 5000,
                 }),
@@ -396,7 +388,6 @@ export const daoVotingMiniApp = {
                 createParameter(PARAM_TEMPLATES.INTEGER, {
                     name: 'proposalId',
                     label: 'Proposal ID',
-                    placeholder: 'Enter proposal ID',
                 }),
                 // Support (yes/no)
                 createParameter(PARAM_TEMPLATES.BOOLEAN_RADIO, {
@@ -420,7 +411,6 @@ export const daoVotingMiniApp = {
                 createParameter(PARAM_TEMPLATES.INTEGER, {
                     name: 'proposalId',
                     label: 'Proposal ID',
-                    placeholder: 'Enter proposal ID',
                 }),
             ],
         },
@@ -481,7 +471,6 @@ export const fundraisingMiniApp = {
                 createParameter(PARAM_TEMPLATES.TEXT, {
                     name: 'title',
                     label: 'Campaign Title',
-                    placeholder: 'Enter a catchy title',
                     minLength: 5,
                     maxLength: 100,
                 }),
@@ -489,7 +478,6 @@ export const fundraisingMiniApp = {
                 createParameter(PARAM_TEMPLATES.TEXTAREA, {
                     name: 'description',
                     label: 'Campaign Description',
-                    placeholder: 'Describe your campaign goals',
                     minLength: 50,
                     maxLength: 2000,
                 }),
@@ -497,7 +485,6 @@ export const fundraisingMiniApp = {
                 createParameter(PARAM_TEMPLATES.TOKEN_AMOUNT, {
                     name: 'goal',
                     label: 'Funding Goal (AVAX)',
-                    placeholder: 'Enter funding goal',
                     min: 0.1,
                 }),
                 // Deadline
@@ -532,7 +519,6 @@ export const fundraisingMiniApp = {
                 createParameter(PARAM_TEMPLATES.INTEGER, {
                     name: 'campaignId',
                     label: 'Campaign ID',
-                    placeholder: 'Enter campaign ID',
                 }),
             ],
         },
@@ -551,7 +537,6 @@ export const fundraisingMiniApp = {
                 createParameter(PARAM_TEMPLATES.INTEGER, {
                     name: 'campaignId',
                     label: 'Campaign ID',
-                    placeholder: 'Enter campaign ID',
                 }),
             ],
         },
@@ -631,7 +616,6 @@ export const marketCreationMiniApp = {
                         name: {
                             type: 'text' as const,
                             label: 'Token Name',
-                            placeholder: 'Enter token name',
                             required: true,
                             minLength: 3,
                             maxLength: 50,
@@ -639,7 +623,6 @@ export const marketCreationMiniApp = {
                         symbol: {
                             type: 'text' as const,
                             label: 'Token Symbol',
-                            placeholder: 'Enter token symbol (3-5 characters)',
                             required: true,
                             minLength: 2,
                             maxLength: 5,
@@ -695,13 +678,11 @@ export const bridgeMiniApp = {
                 createParameter(PARAM_TEMPLATES.ADDRESS, {
                     name: 'token',
                     label: 'Token Address',
-                    placeholder: 'Enter token address',
                 }),
                 // Amount
                 createParameter(PARAM_TEMPLATES.TOKEN_AMOUNT, {
                     name: 'amount',
                     label: 'Amount to Bridge',
-                    placeholder: 'Enter amount',
                     min: 0.000001,
                 }),
                 // Recipient

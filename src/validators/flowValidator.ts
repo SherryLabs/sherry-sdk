@@ -7,7 +7,7 @@ import {
     DecisionAction,
     CompletionAction,
     NextActionDefinition,
-} from '../interface/nestedAction';
+} from '../interface/actions/flowAction';
 import { InvalidMetadataError } from '../errors/customErrors';
 import { HttpActionValidator } from './httpActionValidator';
 import { isAddress } from 'viem';
@@ -397,9 +397,4 @@ export class FlowValidator {
             obj.actions.length > 0
         );
     }
-}
-
-// Export the type guard separately for backward compatibility
-export function isActionFlow(obj: any): obj is ActionFlow {
-    return FlowValidator.isActionFlow(obj);
 }

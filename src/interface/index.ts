@@ -2,7 +2,7 @@
 export type * from './metadata';
 
 // Re-export all blockchain action types
-export type * from './blockchainAction';
+export type * from './actions/blockchainAction';
 export type {
     BlockchainActionMetadata,
     BlockchainAction,
@@ -13,7 +13,7 @@ export type {
     SelectOption,
     BaseParameter,
     BaseAction,
-} from './blockchainAction';
+} from './actions/blockchainAction';
 
 // Re-export chain related types
 export type * from './chains';
@@ -21,16 +21,21 @@ export type { Chain, ChainContext } from './chains';
 export { VALID_CHAINS } from './chains';
 
 // Re-export transfer action types
-export type * from './transferAction';
-export type { TransferAction, RecipientConfig, AmountConfig } from './transferAction';
+export type * from './actions/transferAction';
+export type { TransferAction, RecipientConfig, AmountConfig } from './actions/transferAction';
 
 // Re-export HTTP action types
-export type * from './httpAction';
-export type { HttpAction, HttpParameter, BaseInputType, AdvancedInputType } from './httpAction';
-export { INPUT_TYPES } from './httpAction';
+export type * from './actions/httpAction';
+export type {
+    HttpAction,
+    HttpParameter,
+    BaseInputType,
+    AdvancedInputType,
+} from './actions/httpAction';
+export { INPUT_TYPES } from './actions/httpAction';
 
 // Re-export nested action types
-export type * from './nestedAction';
+export type * from './actions/flowAction';
 export type {
     ActionFlow,
     NestedAction,
@@ -40,11 +45,11 @@ export type {
     NestedHttpAction,
     CompletionAction,
     DecisionAction,
-} from './nestedAction';
+} from './actions/flowAction';
 
 // Re-export action types
-export type * from './action';
-export type { Action, ValidatedAction } from './action';
+export type * from './actions/action';
+export type { Action, ValidatedAction } from './actions/action';
 
 /**
  * Re-export types from `abitype`

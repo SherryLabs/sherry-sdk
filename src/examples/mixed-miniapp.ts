@@ -1,7 +1,7 @@
 import { Metadata } from '../interface/metadata';
-import { TransferAction } from '../interface/transferAction';
-import { BlockchainActionMetadata } from '../interface/blockchainAction';
-import { HttpAction } from '../interface/httpAction';
+import { TransferAction } from '../interface/actions/transferAction';
+import { BlockchainActionMetadata } from '../interface/actions/blockchainAction';
+import { HttpAction } from '../interface/actions/httpAction';
 import { PARAM_TEMPLATES, createParameter } from '../templates/templates';
 
 // Simple ERC20 ABI (just the approve function)
@@ -54,7 +54,6 @@ export const mixedActionMiniApp: Metadata = {
                     label: 'Comments',
                     type: 'textarea',
                     required: false,
-                    placeholder: 'Tell us what you think',
                 },
             ],
         } as HttpAction,
@@ -97,7 +96,6 @@ export const mixedActionMiniApp: Metadata = {
                 createParameter(PARAM_TEMPLATES.TOKEN_AMOUNT, {
                     name: 'amount',
                     label: 'Amount to Approve',
-                    placeholder: 'Enter amount',
                     min: 1,
                 }),
             ],

@@ -24,8 +24,3 @@ export class ChainValidator {
         }
     }
 }
-
-// Export standalone function for backward compatibility
-export function validateChainContext(chains: ChainContext): void {
-    return ChainValidator.validateChainContext(chains);
-}

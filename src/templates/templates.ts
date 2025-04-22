@@ -4,7 +4,7 @@ import {
     RadioParameter,
     BlockchainParameter,
     SelectOption,
-} from '../interface/blockchainAction';
+} from '../interface/actions/blockchainAction';
 
 /**
  * Plantillas para parámetros comunes
@@ -15,7 +15,6 @@ export const PARAM_TEMPLATES = {
         type: 'address' as const,
         label: 'Wallet Address',
         required: true,
-        placeholder: '0x...',
         pattern: '^0x[a-fA-F0-9]{40}$',
         description: 'Enter a valid Ethereum address',
     } as StandardParameter,
@@ -26,7 +25,6 @@ export const PARAM_TEMPLATES = {
         label: 'Amount',
         required: true,
         min: 0.000001,
-        placeholder: '0.0',
         description: 'Enter the amount to transfer',
     } as StandardParameter,
 
@@ -35,7 +33,6 @@ export const PARAM_TEMPLATES = {
         type: 'email' as const,
         label: 'Email Address',
         required: true,
-        placeholder: 'user@example.com',
         pattern: '^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$',
         description: 'Enter your email address',
     } as StandardParameter,
@@ -55,7 +52,6 @@ export const PARAM_TEMPLATES = {
         required: true,
         minLength: 2,
         maxLength: 50,
-        placeholder: 'John Doe',
         description: 'Enter your full name',
     } as StandardParameter,
 
@@ -67,7 +63,6 @@ export const PARAM_TEMPLATES = {
         minLength: 3,
         maxLength: 20,
         pattern: '^[a-zA-Z0-9_]+$',
-        placeholder: 'username',
         description: 'Enter a username (letters, numbers, underscores only)',
     } as StandardParameter,
 
@@ -78,7 +73,6 @@ export const PARAM_TEMPLATES = {
         required: false,
         minLength: 5,
         maxLength: 500,
-        placeholder: 'Enter your message here...',
         description: 'Please enter your message',
     } as StandardParameter,
 
@@ -87,7 +81,6 @@ export const PARAM_TEMPLATES = {
         type: 'url' as const,
         label: 'Website',
         required: false,
-        placeholder: 'https://example.com',
         pattern: '^https?://.*',
         description: 'Enter a valid URL',
     } as StandardParameter,
@@ -194,7 +187,6 @@ export const PARAM_TEMPLATES = {
         label: 'Token ID',
         required: true,
         min: 1,
-        placeholder: '1',
         description: 'Enter the token ID',
     } as StandardParameter,
 

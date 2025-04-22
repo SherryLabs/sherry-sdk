@@ -4,7 +4,7 @@ import {
     SelectParameter,
     RadioParameter,
     BaseInputType,
-} from '../interface/blockchainAction';
+} from '../interface/actions/blockchainAction';
 
 /**
  * Utility class for parameter type checking and validation

@@ -1,6 +1,6 @@
-import { Abi, AbiStateMutability, AbiParameter } from './index';
-import { ContractFunctionName } from './index';
-import { ChainContext } from './chains';
+import { Abi, AbiStateMutability, AbiParameter } from '../index';
+import { ContractFunctionName } from '../index';
+import { ChainContext } from '../chains';
 import { AbiType } from 'abitype';
 
 // Input Types
@@ -15,6 +15,12 @@ export type UIInputType =
     | 'datetime' // Especialización de string para fecha
     | 'textarea'; // Especialización de string para texto largo
 
+/*
+    - bytes all types and string could be used as text
+    - address could be used as text
+    - boolean could be used as radio
+    - uint and int could be used as number
+    */
 export type SelectionInputType = 'select' | 'radio';
 
 // Option for selects and radios
@@ -29,7 +35,6 @@ export interface BaseParameter {
     name: string; // Nombre del parámetro, debe coincidir con el ABI
     label: string; // Etiqueta para mostrar en UI
     description?: string; // Descripción - Ayuda
-    placeholder?: string; // Placeholder para inputs
     required?: boolean; // Si es requerido
     fixed?: boolean; // Si el valor es fijo, no editable
     value?: any; // Valor por defecto, si no se envía, se renderizará un input vacío

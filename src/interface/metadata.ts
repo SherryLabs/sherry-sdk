@@ -1,4 +1,4 @@
-import { Action, ValidatedAction } from './action';
+import { Action, ValidatedAction } from './actions/action';
 
 export interface Metadata {
     url: string;
