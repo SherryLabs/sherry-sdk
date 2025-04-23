@@ -9,34 +9,39 @@ type FeatureItem = {
     description: ReactNode;
 };
 
+// Updated FeatureList for Sherry SDK
 const FeatureList: FeatureItem[] = [
     {
-        title: 'Easy to Use',
+        title: 'Embed Web3 Actions Anywhere',
+        // TODO: Replace with a relevant SVG (e.g., social media icon, link icon)
         Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
         description: (
             <>
-                Docusaurus was designed from the ground up to be easily installed and used to get
-                your website up and running quickly.
+                Create interactive Web3 mini-apps (like swaps, votes, mints) that can be embedded
+                directly into social media posts or any web context.
             </>
         ),
     },
     {
-        title: 'Focus on What Matters',
+        title: 'Multi-Chain & Multi-Action',
+        // TODO: Replace with a relevant SVG (e.g., chain links, puzzle pieces)
         Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
         description: (
             <>
-                Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go ahead and
-                move your docs into the <code>docs</code> directory.
+                Support for multiple blockchains (Avalanche, Celo, Ethereum, etc.) and diverse
+                action types including contract calls, transfers, API requests, and multi-step
+                flows.
             </>
         ),
     },
     {
-        title: 'Powered by React',
+        title: 'Developer Focused',
+        // TODO: Replace with a relevant SVG (e.g., code icon, gears icon)
         Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
         description: (
             <>
-                Extend or customize your website layout by reusing React. Docusaurus can be extended
-                while reusing the same header and footer.
+                Built with TypeScript for type safety, includes robust validation, and offers clear
+                parameter configuration for a smooth development experience.
             </>
         ),
     },

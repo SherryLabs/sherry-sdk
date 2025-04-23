@@ -70,19 +70,19 @@ const config: Config = {
         navbar: {
             title: 'Sherry',
             logo: {
-                alt: 'My Site Logo',
-                src: 'img/logo.svg',
+                alt: 'Sherry Logo',
+                src: 'img/sherry-logo.png',
             },
             items: [
                 {
                     type: 'docSidebar',
                     sidebarId: 'tutorialSidebar',
                     position: 'left',
-                    label: 'Tutorial',
+                    label: 'Documentation',
                 },
                 { to: '/blog', label: 'Blog', position: 'left' },
                 {
-                    href: 'https://github.com/facebook/docusaurus',
+                    href: 'https://github.com/SherryLabs',
                     label: 'GitHub',
                     position: 'right',
                 },
@@ -104,16 +104,12 @@ const config: Config = {
                     title: 'Community',
                     items: [
                         {
-                            label: 'Stack Overflow',
-                            href: 'https://stackoverflow.com/questions/tagged/docusaurus',
-                        },
-                        {
                             label: 'Discord',
                             href: 'https://discordapp.com/invite/docusaurus',
                         },
                         {
                             label: 'X',
-                            href: 'https://x.com/docusaurus',
+                            href: 'https://x.com/sherryprotocol',
                         },
                     ],
                 },
@@ -122,11 +118,11 @@ const config: Config = {
                     items: [
                         {
                             label: 'Blog',
-                            to: '/blog',
+                            href: 'https://sherry.social/blog',
                         },
                         {
                             label: 'GitHub',
-                            href: 'https://github.com/facebook/docusaurus',
+                            href: 'https://github.com/SherryLabs',
                         },
                     ],
                 },

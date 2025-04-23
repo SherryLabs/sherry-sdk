@@ -36,7 +36,9 @@
     "lint": "oxlint",
     "prepare": "husky",
     "publish": "npm run build:all && npm publish --access public",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "docs:start": "cd docs && yarn start",
+    "docs:build": "cd docs && yarn build"
   },
   "files": [
     "dist"
