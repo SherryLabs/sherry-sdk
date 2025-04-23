@@ -1,46 +1,44 @@
 ---
+# filepath: /Users/gilbertsahumada/projects/sherry-sdk/docs/docs/sdk/intro.md
 sidebar_position: 1
 ---
 
 # Sherry SDK Introduction
 
-Welcome to the Sherry SDK documentation! This Software Development Kit (SDK) provides all the tools you need to build powerful decentralized social applications.
+Welcome to the Sherry SDK documentation. This SDK allows you to build interactive Web3 mini-apps that can be embedded directly into social media posts, transforming static content into dynamic experiences.
 
-## What is Sherry SDK?
+## What Can You Build?
 
-Sherry SDK is a comprehensive toolkit designed to simplify blockchain integration for social applications. It provides a set of APIs, utilities, and validators to interact with blockchain networks, manage transactions, and handle blockchain actions.
+With the Sherry SDK, you can create "actions" that users can execute from a post:
 
-## Key Features
+-   **Interact with Smart Contracts:** Call functions, approve tokens, vote in DAOs, mint NFTs.
+-   **Transfer Assets:** Send native tokens or ERC20s to specific or user-selected addresses.
+-   **Make HTTP Requests:** Send form data to external APIs.
+-   **Create Complex Flows:** Guide users through multi-step processes with conditional logic.
 
-- **Blockchain Integration** - Easily connect your app to multiple blockchain networks
-- **Transaction Management** - Handle transactions with built-in validation and error handling
-- **Action Validators** - Ensure blockchain actions are properly formatted and valid
-- **Cross-Chain Support** - Build apps that work across multiple blockchain ecosystems
-- **Type Safety** - Built with TypeScript for robust type checking
+## Key Concepts
 
-## Getting Started
+-   **Metadata:** The main object defining your mini-app (URL, icon, title, description) and the actions it contains.
+-   **Actions:** The interactive units users can execute. There are several types:
+    -   `BlockchainAction`: For interacting with contracts.
+    -   `TransferAction`: For sending tokens.
+    -   `HttpAction`: For API calls.
+    -   `ActionFlow`: For multi-step flows.
+-   **Parameters:** Define the inputs a user must provide for an action (addresses, amounts, text, selections, etc.).
+-   **Validation:** The SDK validates your `Metadata` to ensure it's correctly formed before use.
 
-Install the SDK in your project:
+## Installation
 
 ```bash
-npm install @sherrylabs/sherry-sdk
-# or
-yarn add @sherrylabs/sherry-sdk
+# Using npm
+npm install @sherrylinks/sdk
+
+# Using yarn
+yarn add @sherrylinks/sdk
 ```
 
-Basic usage:
+## Next Steps
 
-```typescript
-import { SherryClient } from '@sherrylabs/sherry-sdk';
-
-// Initialize the SDK
-const client = new SherryClient({
-  chainId: 43114, // Avalanche C-Chain
-  apiKey: 'YOUR_API_KEY',
-});
-
-// Use the SDK functionality
-const balance = await client.getBalance('0x1234...');
-```
-
-Continue reading the documentation to learn how to use all the features of the Sherry SDK!
+-   Learn how to [Create Your First Mini-App](./creating-miniapps.md).
+-   Explore the different [Action Types](./action-types/blockchain-actions.md).
+-   Dive deeper into [Parameter Configuration](./parameters.md).

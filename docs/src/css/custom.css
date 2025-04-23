@@ -6,25 +6,117 @@
 
 /* You can override the default Infima variables here. */
 :root {
-  --ifm-color-primary: #2e8555;
-  --ifm-color-primary-dark: #29784c;
-  --ifm-color-primary-darker: #277148;
-  --ifm-color-primary-darkest: #205d3b;
-  --ifm-color-primary-light: #33925d;
-  --ifm-color-primary-lighter: #359962;
-  --ifm-color-primary-lightest: #3cad6e;
+  /* Using Sherry color palette for Light Theme */
+  --ifm-color-primary: #5443B7; /* sherry-600 */
+  --ifm-color-primary-dark: #41348E; /* sherry-700 */
+  --ifm-color-primary-darker: #271F56; /* sherry-800 */
+  --ifm-color-primary-darkest: #161231; /* sherry-900 */
+  --ifm-color-primary-light: #7162C6; /* sherry-500 */
+  --ifm-color-primary-lighter: #8C80D1; /* sherry-400 */
+  --ifm-color-primary-lightest: #ABA2DD; /* sherry-300 */
+
+  /* Keep existing non-color variables or adjust as needed */
   --ifm-code-font-size: 95%;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1); /* Adjust if needed for contrast */
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme='dark'] {
-  --ifm-color-primary: #25c2a0;
-  --ifm-color-primary-dark: #21af90;
-  --ifm-color-primary-darker: #1fa588;
-  --ifm-color-primary-darkest: #1a8870;
-  --ifm-color-primary-light: #29d5b0;
-  --ifm-color-primary-lighter: #32d8b4;
-  --ifm-color-primary-lightest: #4fddbf;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+  /* Using Sherry color palette for Dark Theme */
+  --ifm-color-primary: #8C80D1; /* sherry-400 */
+  --ifm-color-primary-dark: #7162C6; /* sherry-500 */
+  --ifm-color-primary-darker: #5443B7; /* sherry-600 */
+  --ifm-color-primary-darkest: #41348E; /* sherry-700 */
+  --ifm-color-primary-light: #ABA2DD; /* sherry-300 */
+  --ifm-color-primary-lighter: #C6C0E8; /* sherry-200 */
+  --ifm-color-primary-lightest: #E4E1F4; /* sherry-100 */
+
+  /* Keep existing non-color variables or adjust as needed */
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3); /* Adjust if needed for contrast */
+}
+
+/* --- Add Sidebar Icons --- */
+
+/* General style for all sidebar links */
+.menu__link::before {
+  content: ''; /* Default no icon */
+  display: inline-block;
+  width: 1.2em; /* Adjust width as needed */
+  height: 1em;
+  margin-right: 0.3em; /* Space between icon and text */
+  background-repeat: no-repeat;
+  background-size: contain; /* Or adjust as needed */
+  vertical-align: middle; /* Align icon with text */
+  /* Consider filter for dark mode if using SVGs */
+}
+
+/* Specific Icons based on href or structure */
+/* Adjust href values based on your actual sidebar structure and slugs */
+
+/* --- Top Level Items & Categories --- */
+
+/* 1. Main Introduction */
+.menu__link[href='/docs/intro']::before {
+  content: '🏠'; /* Home/Intro icon */
+}
+
+/* 2. Getting Started Category */
+/* Target the category label via its first child link */
+.menu__list-item:has(> a.menu__link[href='/docs/sdk/creating-miniapps']) > .menu__list-item-collapsible > .menu__link::before {
+  content: '🚀'; /* Rocket icon */
+}
+/* Icon for the item itself */
+.menu__link[href='/docs/sdk/creating-miniapps']::before {
+  content: '📝'; /* Document/Create icon */
+}
+
+
+/* 3. Building Blocks Category */
+/* Target the category link directly as it has a slug */
+.menu__link[href='/docs/sdk/building-blocks']::before {
+  content: '🧱'; /* Bricks icon */
+}
+/* Sub-Category: Action Types */
+.menu__link[href='/docs/sdk/action-types']::before {
+ content: '⚡'; /* Bolt icon */
+}
+/* Items within Action Types */
+.menu__link[href='/docs/sdk/action-types/blockchain-actions']::before {
+  content: '🔗'; /* Link icon */
+}
+.menu__link[href='/docs/sdk/action-types/transfer-actions']::before {
+  content: '💸'; /* Money icon */
+}
+.menu__link[href='/docs/sdk/action-types/http-actions']::before {
+  content: '🌐'; /* Globe icon */
+}
+.menu__link[href='/docs/sdk/action-types/nested-action-flows']::before {
+  content: '🌊'; /* Flow/Wave icon */
+}
+/* Item: Parameters (within Building Blocks) */
+.menu__link[href='/docs/sdk/parameters']::before {
+  content: '🔧'; /* Wrench icon */
+}
+
+
+/* 4. Advanced & Reference Category */
+/* Target the category label via its first child link */
+.menu__list-item:has(> a.menu__link[href='/docs/sdk/chains']) > .menu__list-item-collapsible > .menu__link::before {
+ content: '📚'; /* Books icon */
+}
+/* Items within Advanced & Reference */
+.menu__link[href='/docs/sdk/chains']::before {
+  content: '⛓️'; /* Chain icon */
+}
+.menu__link[href='/docs/sdk/validation']::before {
+  content: '✅'; /* Checkmark icon */
+}
+.menu__link[href='/docs/sdk/examples']::before {
+  content: '💡'; /* Lightbulb icon */
+}
+
+
+/* Optional: Adjust spacing for nested items */
+.menu__list .menu__list .menu__link::before {
+  margin-left: 0.5em; /* Indent nested icons slightly */
 }
