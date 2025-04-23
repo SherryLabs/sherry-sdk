@@ -7,13 +7,13 @@
 /* You can override the default Infima variables here. */
 :root {
   /* Using Sherry color palette for Light Theme */
-  --ifm-color-primary: #5443B7; /* sherry-600 */
-  --ifm-color-primary-dark: #41348E; /* sherry-700 */
-  --ifm-color-primary-darker: #271F56; /* sherry-800 */
+  --ifm-color-primary: #5443b7; /* sherry-600 */
+  --ifm-color-primary-dark: #41348e; /* sherry-700 */
+  --ifm-color-primary-darker: #271f56; /* sherry-800 */
   --ifm-color-primary-darkest: #161231; /* sherry-900 */
-  --ifm-color-primary-light: #7162C6; /* sherry-500 */
-  --ifm-color-primary-lighter: #8C80D1; /* sherry-400 */
-  --ifm-color-primary-lightest: #ABA2DD; /* sherry-300 */
+  --ifm-color-primary-light: #7162c6; /* sherry-500 */
+  --ifm-color-primary-lighter: #8c80d1; /* sherry-400 */
+  --ifm-color-primary-lightest: #aba2dd; /* sherry-300 */
 
   /* Keep existing non-color variables or adjust as needed */
   --ifm-code-font-size: 95%;
@@ -23,13 +23,13 @@
 /* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme='dark'] {
   /* Using Sherry color palette for Dark Theme */
-  --ifm-color-primary: #8C80D1; /* sherry-400 */
-  --ifm-color-primary-dark: #7162C6; /* sherry-500 */
-  --ifm-color-primary-darker: #5443B7; /* sherry-600 */
-  --ifm-color-primary-darkest: #41348E; /* sherry-700 */
-  --ifm-color-primary-light: #ABA2DD; /* sherry-300 */
-  --ifm-color-primary-lighter: #C6C0E8; /* sherry-200 */
-  --ifm-color-primary-lightest: #E4E1F4; /* sherry-100 */
+  --ifm-color-primary: #8c80d1; /* sherry-400 */
+  --ifm-color-primary-dark: #7162c6; /* sherry-500 */
+  --ifm-color-primary-darker: #5443b7; /* sherry-600 */
+  --ifm-color-primary-darkest: #41348e; /* sherry-700 */
+  --ifm-color-primary-light: #aba2dd; /* sherry-300 */
+  --ifm-color-primary-lighter: #c6c0e8; /* sherry-200 */
+  --ifm-color-primary-lightest: #e4e1f4; /* sherry-100 */
 
   /* Keep existing non-color variables or adjust as needed */
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3); /* Adjust if needed for contrast */
@@ -62,14 +62,15 @@
 
 /* 2. Getting Started Category */
 /* Target the category label via its first child link */
-.menu__list-item:has(> a.menu__link[href='/docs/sdk/creating-miniapps']) > .menu__list-item-collapsible > .menu__link::before {
+.menu__list-item:has(> a.menu__link[href='/docs/sdk/creating-miniapps'])
+  > .menu__list-item-collapsible
+  > .menu__link::before {
   content: '🚀'; /* Rocket icon */
 }
 /* Icon for the item itself */
 .menu__link[href='/docs/sdk/creating-miniapps']::before {
   content: '📝'; /* Document/Create icon */
 }
-
 
 /* 3. Building Blocks Category */
 /* Target the category link directly as it has a slug */
@@ -78,7 +79,7 @@
 }
 /* Sub-Category: Action Types */
 .menu__link[href='/docs/sdk/action-types']::before {
- content: '⚡'; /* Bolt icon */
+  content: '⚡'; /* Bolt icon */
 }
 /* Items within Action Types */
 .menu__link[href='/docs/sdk/action-types/blockchain-actions']::before {
@@ -98,11 +99,12 @@
   content: '🔧'; /* Wrench icon */
 }
 
-
 /* 4. Advanced & Reference Category */
 /* Target the category label via its first child link */
-.menu__list-item:has(> a.menu__link[href='/docs/sdk/chains']) > .menu__list-item-collapsible > .menu__link::before {
- content: '📚'; /* Books icon */
+.menu__list-item:has(> a.menu__link[href='/docs/sdk/chains'])
+  > .menu__list-item-collapsible
+  > .menu__link::before {
+  content: '📚'; /* Books icon */
 }
 /* Items within Advanced & Reference */
 .menu__link[href='/docs/sdk/chains']::before {
@@ -114,7 +116,6 @@
 .menu__link[href='/docs/sdk/examples']::before {
   content: '💡'; /* Lightbulb icon */
 }
-
 
 /* Optional: Adjust spacing for nested items */
 .menu__list .menu__list .menu__link::before {

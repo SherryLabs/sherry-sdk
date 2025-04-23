@@ -118,7 +118,7 @@ const config: Config = {
                     items: [
                         {
                             label: 'Blog',
-                            href: 'https://sherry.social/blog'
+                            href: 'https://sherry.social/blog',
                         },
                         {
                             label: 'GitHub',

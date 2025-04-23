@@ -12,34 +12,34 @@ The Sherry SDK is designed to be multi-chain. The `chains` property in `Blockcha
 ```typescript
 // src/interface/chains.ts
 export interface ChainContext {
-    source: Chain;          // Chain where the transaction/action originates
-    destination?: Chain;    // Destination chain (only for cross-chain actions)
+  source: Chain; // Chain where the transaction/action originates
+  destination?: Chain; // Destination chain (only for cross-chain actions)
 }
 
 export type Chain = (typeof VALID_CHAINS)[number];
 
 export const VALID_CHAINS = [
-    'fuji',         // Avalanche Fuji Testnet
-    'avalanche',    // Avalanche C-Chain Mainnet
-    'alfajores',    // Celo Alfajores Testnet
-    'celo',         // Celo Mainnet
-    'monad-testnet' // Monad Testnet
-    // 'ethereum' - Could be added if supported
+  'fuji', // Avalanche Fuji Testnet
+  'avalanche', // Avalanche C-Chain Mainnet
+  'alfajores', // Celo Alfajores Testnet
+  'celo', // Celo Mainnet
+  'monad-testnet', // Monad Testnet
+  // 'ethereum' - Could be added if supported
 ] as const;
 ```
 
--   `source`: The blockchain where the transaction will be sent or where the primary contract/asset resides. **Always required.**
--   `destination` (Optional): If the action involves interaction between two chains (e.g., a bridge), this property indicates the target chain. If the action occurs entirely on a single chain, `destination` is omitted.
+- `source`: The blockchain where the transaction will be sent or where the primary contract/asset resides. **Always required.**
+- `destination` (Optional): If the action involves interaction between two chains (e.g., a bridge), this property indicates the target chain. If the action occurs entirely on a single chain, `destination` is omitted.
 
 ## Supported Chains
 
 The chains currently defined in `VALID_CHAINS` are officially supported by the SDK for validation and potentially for execution (depending on the environment).
 
--   `fuji`
--   `avalanche`
--   `alfajores`
--   `celo`
--   `monad-testnet`
+- `fuji`
+- `avalanche`
+- `alfajores`
+- `celo`
+- `monad-testnet`
 
 ## Examples
 
@@ -56,7 +56,7 @@ const simpleTransfer: TransferAction = {
   // ...
   chains: { source: 'fuji' }, // Transfer within Fuji
   // ...
-}
+};
 ```
 
 ### Cross-Chain Action (Bridge from Avalanche to Celo)
@@ -70,16 +70,16 @@ const bridgeAction: BlockchainActionMetadata = {
   // Transaction originates on Avalanche, logical destination is Celo
   chains: { source: 'avalanche', destination: 'celo' },
   params: [
-      // ... params like token, amount, recipient on Celo, destinationChainId (Celo's ID) ...
+    // ... params like token, amount, recipient on Celo, destinationChainId (Celo's ID) ...
   ],
 };
 
 const crossChainTransfer: TransferAction = {
-    label: 'Send from Celo to Fuji',
-    // Transfer starts on Celo and goes to Fuji
-    chains: { source: 'celo', destination: 'fuji' },
-    // ... to, amount, etc.
-}
+  label: 'Send from Celo to Fuji',
+  // Transfer starts on Celo and goes to Fuji
+  chains: { source: 'celo', destination: 'fuji' },
+  // ... to, amount, etc.
+};
 ```
 
 **Note:** Actual support for executing cross-chain actions depends on the implementation of the underlying contract (`BlockchainAction`) or the service handling the `TransferAction`. The SDK provides the structure to define these interactions.

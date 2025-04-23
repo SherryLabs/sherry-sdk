@@ -12,19 +12,19 @@ The heart of a Sherry mini-app is the `Metadata` object. This object defines how
 ```typescript
 // src/interface/metadata.ts
 export interface Metadata {
-    url: string;        // Unique identifying URL for your mini-app
-    icon: string;       // URL of the icon to display
-    title: string;      // Main title of the mini-app
-    description: string; // Short description
-    actions: Action[];  // Array of actions the mini-app can perform
+  url: string; // Unique identifying URL for your mini-app
+  icon: string; // URL of the icon to display
+  title: string; // Main title of the mini-app
+  description: string; // Short description
+  actions: Action[]; // Array of actions the mini-app can perform
 }
 ```
 
--   `url`: Must be a unique URL that identifies your application. Using a URL under your control is recommended.
--   `icon`: A URL to an image (preferably PNG or SVG) representing your mini-app.
--   `title`: A concise and descriptive title.
--   `description`: A brief explanation of what the mini-app does.
--   `actions`: An array containing one or more action definitions. These can be `BlockchainActionMetadata`, `TransferAction`, `HttpAction`, or `ActionFlow`.
+- `url`: Must be a unique URL that identifies your application. Using a URL under your control is recommended.
+- `icon`: A URL to an image (preferably PNG or SVG) representing your mini-app.
+- `title`: A concise and descriptive title.
+- `description`: A brief explanation of what the mini-app does.
+- `actions`: An array containing one or more action definitions. These can be `BlockchainActionMetadata`, `TransferAction`, `HttpAction`, or `ActionFlow`.
 
 ## Basic Example
 

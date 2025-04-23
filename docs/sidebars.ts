@@ -32,21 +32,23 @@ const sidebars: SidebarsConfig = {
         {
             type: 'category',
             label: 'Building Blocks',
-            link: { // Link to the Action Types overview page
+            link: {
+                // Link to the Action Types overview page
                 type: 'generated-index',
                 title: 'Action Types & Parameters',
                 description: 'Learn about the core components for building mini-apps.',
-                slug: '/sdk/building-blocks' // Define a URL slug for this overview
+                slug: '/sdk/building-blocks', // Define a URL slug for this overview
             },
             items: [
                 {
                     type: 'category',
                     label: 'Action Types',
-                    link: { // Link to the Action Types sub-overview
+                    link: {
+                        // Link to the Action Types sub-overview
                         type: 'generated-index',
                         title: 'SDK Action Types',
                         description: 'Explore the different actions you can define.',
-                        slug: '/sdk/action-types'
+                        slug: '/sdk/action-types',
                     },
                     items: [
                         'sdk/action-types/blockchain-actions',

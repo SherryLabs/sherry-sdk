@@ -12,59 +12,59 @@ sidebar_position: 2
 ```typescript
 // src/interface/actions/transferAction.ts
 export interface TransferAction {
-    label: string;          // Label for UI
-    description?: string;   // Optional description/help text
-    chains: ChainContext;   // Chains involved
+  label: string; // Label for UI
+  description?: string; // Optional description/help text
+  chains: ChainContext; // Chains involved
 
-    // Simple Configuration (fixed values)
-    to?: `0x${string}`;     // Fixed destination address
-    amount?: number;        // Fixed amount (in native unit, e.g., ETH, AVAX)
+  // Simple Configuration (fixed values)
+  to?: `0x${string}`; // Fixed destination address
+  amount?: number; // Fixed amount (in native unit, e.g., ETH, AVAX)
 
-    // Advanced Configuration (allows user input/choice)
-    recipient?: RecipientConfig; // Configuration for user to choose recipient
-    amountConfig?: AmountConfig; // Configuration for user to choose amount
+  // Advanced Configuration (allows user input/choice)
+  recipient?: RecipientConfig; // Configuration for user to choose recipient
+  amountConfig?: AmountConfig; // Configuration for user to choose amount
 }
 
 export interface RecipientConfig {
-    defaultValue?: `0x${string}`;
-    inputType?: 'select' | 'radio';
-    options?: SelectOption[];
-    label?: string;
-    description?: string;
-    required?: boolean;
+  defaultValue?: `0x${string}`;
+  inputType?: 'select' | 'radio';
+  options?: SelectOption[];
+  label?: string;
+  description?: string;
+  required?: boolean;
 }
 
 export interface AmountConfig {
-    defaultValue?: number;
-    inputType?: 'select' | 'radio';
-    options?: SelectOption[];
-    label?: string;
-    description?: string;
-    required?: boolean;
+  defaultValue?: number;
+  inputType?: 'select' | 'radio';
+  options?: SelectOption[];
+  label?: string;
+  description?: string;
+  required?: boolean;
 }
 
 export interface SelectOption {
-    label: string;
-    value: string | number | boolean; // `value` will be the address (string) for recipient, or amount (number) for amount
-    description?: string;
+  label: string;
+  value: string | number | boolean; // `value` will be the address (string) for recipient, or amount (number) for amount
+  description?: string;
 }
 ```
 
--   `label`: Text the user sees to initiate the action.
--   `description`: Additional help text.
--   `chains`: Defines the source chain (`source`) and optionally the destination (`destination`) if cross-chain. See [Chains](./../chains.md).
--   `to` (Simple): Fixed destination address. If provided, `recipient` is ignored.
--   `amount` (Simple): Fixed amount to send. If provided, `amountConfig` is ignored.
--   `recipient` (Advanced): Allows configuring how the user selects or inputs the destination address.
-    -   If neither `recipient` nor `to` is provided, the user is assumed to input the address in a standard text field.
-    -   `inputType`: `'select'` or `'radio'` to present predefined options.
-    -   `options`: Array of `SelectOption` where `value` is the address (`0x...`).
-    -   `defaultValue`, `label`, `description`, `required`: Standard input properties.
--   `amountConfig` (Advanced): Allows configuring how the user selects or inputs the amount.
-    -   If neither `amountConfig` nor `amount` is provided, the user is assumed to input the amount in a standard number field.
-    -   `inputType`: `'select'` or `'radio'` to present predefined options.
-    -   `options`: Array of `SelectOption` where `value` is the amount (number).
-    -   `defaultValue`, `label`, `description`, `required`: Standard input properties.
+- `label`: Text the user sees to initiate the action.
+- `description`: Additional help text.
+- `chains`: Defines the source chain (`source`) and optionally the destination (`destination`) if cross-chain. See [Chains](./../chains.md).
+- `to` (Simple): Fixed destination address. If provided, `recipient` is ignored.
+- `amount` (Simple): Fixed amount to send. If provided, `amountConfig` is ignored.
+- `recipient` (Advanced): Allows configuring how the user selects or inputs the destination address.
+  - If neither `recipient` nor `to` is provided, the user is assumed to input the address in a standard text field.
+  - `inputType`: `'select'` or `'radio'` to present predefined options.
+  - `options`: Array of `SelectOption` where `value` is the address (`0x...`).
+  - `defaultValue`, `label`, `description`, `required`: Standard input properties.
+- `amountConfig` (Advanced): Allows configuring how the user selects or inputs the amount.
+  - If neither `amountConfig` nor `amount` is provided, the user is assumed to input the amount in a standard number field.
+  - `inputType`: `'select'` or `'radio'` to present predefined options.
+  - `options`: Array of `SelectOption` where `value` is the amount (number).
+  - `defaultValue`, `label`, `description`, `required`: Standard input properties.
 
 ## Examples
 
@@ -110,9 +110,9 @@ const charityDonation: TransferAction = {
   },
   // amountConfig is not defined, user will input the amount
   amountConfig: {
-      defaultValue: 0.1, // We can set a default value
-      label: "Amount (CELO)"
-  }
+    defaultValue: 0.1, // We can set a default value
+    label: 'Amount (CELO)',
+  },
 };
 ```
 
@@ -145,10 +145,10 @@ const tipCreator: TransferAction = {
 import { TransferAction } from '@sherrylinks/sdk';
 
 const bridgeTransfer: TransferAction = {
-    label: 'Bridge to Celo',
-    description: 'Send tokens from Avalanche to Celo.',
-    chains: { source: 'avalanche', destination: 'celo' },
-    // 'to', 'amount', 'recipient', and 'amountConfig' are not specified.
-    // The UI will prompt the user for the destination address and amount.
+  label: 'Bridge to Celo',
+  description: 'Send tokens from Avalanche to Celo.',
+  chains: { source: 'avalanche', destination: 'celo' },
+  // 'to', 'amount', 'recipient', and 'amountConfig' are not specified.
+  // The UI will prompt the user for the destination address and amount.
 };
 ```

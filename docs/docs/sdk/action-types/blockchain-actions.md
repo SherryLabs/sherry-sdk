@@ -12,29 +12,29 @@ sidebar_position: 1
 ```typescript
 // src/interface/actions/blockchainAction.ts
 export interface BlockchainActionMetadata extends BaseAction {
-    address: `0x${string}`; // Contract address
-    abi: Abi;               // Contract ABI (array of objects)
-    functionName: string;   // Name of the function to call
-    amount?: number;        // Amount to send if the function is 'payable' (in native unit, e.g., ETH, AVAX)
-    params?: BlockchainParameter[]; // Function parameters (optional)
-    // chains: ChainContext; // Inherited from BaseAction
+  address: `0x${string}`; // Contract address
+  abi: Abi; // Contract ABI (array of objects)
+  functionName: string; // Name of the function to call
+  amount?: number; // Amount to send if the function is 'payable' (in native unit, e.g., ETH, AVAX)
+  params?: BlockchainParameter[]; // Function parameters (optional)
+  // chains: ChainContext; // Inherited from BaseAction
 }
 
 export interface BaseAction {
-    label: string;          // Label for UI
-    description: string;    // Description/help text
-    chains: ChainContext;   // Chains involved
+  label: string; // Label for UI
+  description: string; // Description/help text
+  chains: ChainContext; // Chains involved
 }
 ```
 
--   `label`: Text the user sees to initiate the action.
--   `description`: Additional help text.
--   `address`: The address of the smart contract to interact with.
--   `abi`: The Application Binary Interface (ABI) of the contract. You only need to include the definition of the function you are calling and any others necessary for validation or processing. Using `as const` provides better type safety.
--   `functionName`: The exact name of the contract function you want to execute.
--   `amount` (Optional): If the function is `payable`, specify the amount of the `source` chain's native currency (e.g., AVAX, CELO) to send with the transaction. The SDK will convert it to the smallest unit (wei).
--   `params` (Optional): An array of `BlockchainParameter` objects defining the inputs required by the contract function. They must be **in the same order** as they appear in the ABI. See [Parameters](./../parameters.md) for more details.
--   `chains`: Defines the source chain (`source`) where the transaction will be executed. See [Chains](./../chains.md).
+- `label`: Text the user sees to initiate the action.
+- `description`: Additional help text.
+- `address`: The address of the smart contract to interact with.
+- `abi`: The Application Binary Interface (ABI) of the contract. You only need to include the definition of the function you are calling and any others necessary for validation or processing. Using `as const` provides better type safety.
+- `functionName`: The exact name of the contract function you want to execute.
+- `amount` (Optional): If the function is `payable`, specify the amount of the `source` chain's native currency (e.g., AVAX, CELO) to send with the transaction. The SDK will convert it to the smallest unit (wei).
+- `params` (Optional): An array of `BlockchainParameter` objects defining the inputs required by the contract function. They must be **in the same order** as they appear in the ABI. See [Parameters](./../parameters.md) for more details.
+- `chains`: Defines the source chain (`source`) where the transaction will be executed. See [Chains](./../chains.md).
 
 ## Example: Approving an ERC20 Token
 
@@ -42,16 +42,16 @@ export interface BaseAction {
 import { BlockchainActionMetadata, PARAM_TEMPLATES, createParameter } from '@sherrylinks/sdk';
 
 const erc20Abi = [
-    {
-        name: 'approve',
-        type: 'function',
-        stateMutability: 'nonpayable',
-        inputs: [
-            { name: 'spender', type: 'address' },
-            { name: 'amount', type: 'uint256' },
-        ],
-        outputs: [{ name: '', type: 'bool' }],
-    },
+  {
+    name: 'approve',
+    type: 'function',
+    stateMutability: 'nonpayable',
+    inputs: [
+      { name: 'spender', type: 'address' },
+      { name: 'amount', type: 'uint256' },
+    ],
+    outputs: [{ name: '', type: 'bool' }],
+  },
 ] as const;
 
 const approveAction: BlockchainActionMetadata = {
@@ -83,12 +83,13 @@ const approveAction: BlockchainActionMetadata = {
 ```
 
 In this example:
+
 1.  We define the `approve` action from the ERC20 standard in the `abi`.
 2.  We specify the USDC token `address`, the `abi`, and the `functionName`.
 3.  We indicate it will run on `avalanche`.
 4.  We define the `params` in order:
-    *   `spender`: Uses the `ADDRESS` template and fixes the value to the swap contract's address.
-    *   `amount`: Uses the `TOKEN_AMOUNT` template, allowing the user to input the amount.
+    - `spender`: Uses the `ADDRESS` template and fixes the value to the swap contract's address.
+    - `amount`: Uses the `TOKEN_AMOUNT` template, allowing the user to input the amount.
 
 ## Example: Payable Function (Donate to Campaign)
 
@@ -96,31 +97,31 @@ In this example:
 import { BlockchainActionMetadata, PARAM_TEMPLATES, createParameter } from '@sherrylinks/sdk';
 
 const fundraisingAbi = [
-    // ... other functions ...
-    {
-        name: 'donate',
-        type: 'function',
-        stateMutability: 'payable', // Important!
-        inputs: [{ name: 'campaignId', type: 'uint256' }],
-        outputs: [],
-    },
+  // ... other functions ...
+  {
+    name: 'donate',
+    type: 'function',
+    stateMutability: 'payable', // Important!
+    inputs: [{ name: 'campaignId', type: 'uint256' }],
+    outputs: [],
+  },
 ] as const;
 
 const donateAction: BlockchainActionMetadata = {
-    label: 'Donate to Campaign',
-    description: 'Support a campaign with AVAX.',
-    address: '0xFundraisingContract...',
-    abi: fundraisingAbi,
-    functionName: 'donate',
-    chains: { source: 'fuji' },
-    amount: 0.1, // Send 0.1 AVAX with the transaction
-    params: [
-        createParameter(PARAM_TEMPLATES.INTEGER, {
-            name: 'campaignId',
-            label: 'Campaign ID',
-            // User will input the ID
-        }),
-    ],
+  label: 'Donate to Campaign',
+  description: 'Support a campaign with AVAX.',
+  address: '0xFundraisingContract...',
+  abi: fundraisingAbi,
+  functionName: 'donate',
+  chains: { source: 'fuji' },
+  amount: 0.1, // Send 0.1 AVAX with the transaction
+  params: [
+    createParameter(PARAM_TEMPLATES.INTEGER, {
+      name: 'campaignId',
+      label: 'Campaign ID',
+      // User will input the ID
+    }),
+  ],
 };
 ```
 

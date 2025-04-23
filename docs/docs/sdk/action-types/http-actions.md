@@ -12,9 +12,9 @@ sidebar_position: 3
 ```typescript
 // src/interface/actions/httpAction.ts
 export interface HttpAction {
-    label: string;          // Label for UI
-    endpoint: string;       // URL of the API endpoint to call
-    params: HttpParameter[]; // Parameters/fields of the form
+  label: string; // Label for UI
+  endpoint: string; // URL of the API endpoint to call
+  params: HttpParameter[]; // Parameters/fields of the form
 }
 
 // HttpParameter is a union of StandardParameter, SelectParameter, RadioParameter
@@ -24,39 +24,39 @@ export interface HttpAction {
 export type HttpParameter = StandardParameter | SelectParameter | RadioParameter;
 
 export interface BaseParameter {
-    name: string;       // Field name (will be the key in the submitted data)
-    label: string;      // Label for UI
-    required: boolean;
-    description?: string;
-    defaultValue?: any;
+  name: string; // Field name (will be the key in the submitted data)
+  label: string; // Label for UI
+  required: boolean;
+  description?: string;
+  defaultValue?: any;
 }
 
 export interface StandardParameter extends BaseParameter {
-    type: BaseInputType; // 'text', 'number', 'boolean', 'email', 'url', 'datetime', 'textarea'
-    // ... other props like minLength, pattern, min, max ...
+  type: BaseInputType; // 'text', 'number', 'boolean', 'email', 'url', 'datetime', 'textarea'
+  // ... other props like minLength, pattern, min, max ...
 }
 
 export interface SelectParameter extends BaseParameter {
-    type: 'select';
-    options: SelectOption[];
+  type: 'select';
+  options: SelectOption[];
 }
 
 export interface RadioParameter extends BaseParameter {
-    type: 'radio';
-    options: SelectOption[];
+  type: 'radio';
+  options: SelectOption[];
 }
 
 export interface SelectOption {
-    label: string;
-    value: string | number | boolean;
+  label: string;
+  value: string | number | boolean;
 }
 ```
 
--   `label`: Text the user sees to initiate the action (e.g., "Submit Feedback").
--   `endpoint`: The full URL to which the form data will be sent. The SDK will make a POST request with the data in JSON format by default.
--   `params`: An array of `HttpParameter` objects defining the form fields the user will fill out.
-    -   Each parameter defines a field with `name` (key in the sent JSON), `label` (for the UI), `type` (input type), `required`, etc.
-    -   The parameter types (`StandardParameter`, `SelectParameter`, `RadioParameter`) and their properties are very similar to those for `BlockchainAction`. See [Parameters](./../parameters.md) for more details on configuration.
+- `label`: Text the user sees to initiate the action (e.g., "Submit Feedback").
+- `endpoint`: The full URL to which the form data will be sent. The SDK will make a POST request with the data in JSON format by default.
+- `params`: An array of `HttpParameter` objects defining the form fields the user will fill out.
+  - Each parameter defines a field with `name` (key in the sent JSON), `label` (for the UI), `type` (input type), `required`, etc.
+  - The parameter types (`StandardParameter`, `SelectParameter`, `RadioParameter`) and their properties are very similar to those for `BlockchainAction`. See [Parameters](./../parameters.md) for more details on configuration.
 
 ## Example: Feedback Form
 
@@ -95,12 +95,12 @@ const feedbackAction: HttpAction = {
       maxLength: 500,
     },
     {
-        name: 'subscribe',
-        label: 'Subscribe to newsletter',
-        type: 'boolean', // Checkbox
-        required: false,
-        defaultValue: false,
-    }
+      name: 'subscribe',
+      label: 'Subscribe to newsletter',
+      type: 'boolean', // Checkbox
+      required: false,
+      defaultValue: false,
+    },
   ],
 };
 ```
