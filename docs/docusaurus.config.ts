@@ -5,12 +5,12 @@ import type * as Preset from '@docusaurus/preset-classic';
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-    title: 'Sherry Social Docs',
-    tagline: 'start to develop your own social dapp',
+    title: 'Sherry Protocol Docs',
+    tagline: 'start to develop your actions',
     favicon: 'img/favicon.ico',
 
     // Set the production url of your site here
-    url: 'https://your-docusaurus-site.example.com',
+    url: 'https://sherry.social',
     // Set the /<baseUrl>/ pathname under which your site is served
     // For GitHub pages deployment, it is often '/<projectName>/'
     baseUrl: '/sherry-sdk/', // Changed baseUrl for GitHub Pages
