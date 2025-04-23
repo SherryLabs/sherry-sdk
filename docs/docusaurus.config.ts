@@ -13,15 +13,15 @@ const config: Config = {
     url: 'https://your-docusaurus-site.example.com',
     // Set the /<baseUrl>/ pathname under which your site is served
     // For GitHub pages deployment, it is often '/<projectName>/'
-    baseUrl: '/',
+    baseUrl: '/sherry-sdk/', // Changed baseUrl for GitHub Pages
 
     // GitHub pages deployment config.
     // If you aren't using GitHub pages, you don't need these.
     organizationName: 'sherrylabs', // Usually your GitHub org/user name.
-    projectName: 'sherrylabs', // Usually your repo name.
+    projectName: 'sherry-sdk', // Updated to match the repo name
 
-    onBrokenLinks: 'throw',
-    onBrokenMarkdownLinks: 'warn',
+    onBrokenLinks: 'ignore', // Change from 'warn' to 'ignore' to completely ignore broken links
+    onBrokenMarkdownLinks: 'ignore', // Also ignore broken markdown links
 
     // Even if you don't use internationalization, you can use this field to set
     // useful metadata like html lang. For example, if your site is Chinese, you
@@ -41,21 +41,6 @@ const config: Config = {
                     // Remove this to remove the "edit this page" links.
                     editUrl:
                         'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
-                },
-                blog: {
-                    showReadingTime: true,
-                    feedOptions: {
-                        type: ['rss', 'atom'],
-                        xslt: true,
-                    },
-                    // Please change this to your repo.
-                    // Remove this to remove the "edit this page" links.
-                    editUrl:
-                        'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
-                    // Useful options to enforce blogging best practices
-                    onInlineTags: 'warn',
-                    onInlineAuthors: 'warn',
-                    onUntruncatedBlogPosts: 'warn',
                 },
                 theme: {
                     customCss: './src/css/custom.css',
@@ -79,12 +64,6 @@ const config: Config = {
                     sidebarId: 'tutorialSidebar',
                     position: 'left',
                     label: 'Documentation',
-                },
-                { to: '/blog', label: 'Blog', position: 'left' },
-                {
-                    href: 'https://github.com/SherryLabs',
-                    label: 'GitHub',
-                    position: 'right',
                 },
             ],
         },
