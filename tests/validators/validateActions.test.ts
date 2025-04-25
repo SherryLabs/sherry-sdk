@@ -7,6 +7,7 @@ import { Metadata } from '../../src/interface';
 describe('Action Validators', () => {
     it('should correctly identify blockchain actions', () => {
         const blockchainAction = {
+            type: 'blockchain',
             label: 'Approve Token',
             title: 'Approve Token for Swap',
             description: 'Approve tokens to be used by the swap router',

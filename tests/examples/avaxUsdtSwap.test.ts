@@ -1,6 +1,6 @@
 import { describe, expect, it } from '@jest/globals';
 import { Metadata } from '../../src/interface/metadata';
-import { BlockchainAction } from '../../src/interface/blockchainAction';
+import { BlockchainAction } from '../../src/interface/actions/blockchainAction';
 import { createMetadata } from '../../src/utils/createMetadata';
 import { validateMetadata } from '../../src/validators/validateMetadata';
 
@@ -72,8 +72,8 @@ describe('AVAX to USDT Swap Action', () => {
             actions: [
                 // Swap Action
                 {
+                    type: 'blockchain',
                     label: 'Swap 1 AVAX for USDT',
-                    description: 'Swap exact AVAX for USDT tokens with slippage protection',
                     address: '0x18556DA13313f3532c54711497A8FedAC273220E', // Trader Joe V2.2 Router
                     abi: routerAbi,
                     functionName: 'swapExactNATIVEForTokens',

@@ -1,7 +1,7 @@
 import { Abi, AbiStateMutability, AbiParameter } from '../index';
 import { ContractFunctionName } from '../index';
-import { ChainContext } from '../chains';
 import { AbiType } from 'abitype';
+import { BaseAction } from './action';
 
 // Input Types
 export type BaseInputType = AbiType | UIInputType | SelectionInputType;
@@ -66,15 +66,8 @@ export interface RadioParameter extends BaseParameter {
 // Tipo unión para todos los parámetros
 export type BlockchainParameter = StandardParameter | SelectParameter | RadioParameter;
 
-// Base Action Interface
-export interface BaseAction {
-    label: string; // Etiqueta para mostrar en UI
-    description: string; // Descripción - Ayuda
-    chains: ChainContext; // [sourceChain, destinationChain | null]
-}
-
 export interface BlockchainActionMetadata extends BaseAction {
-    label: string; // Etiqueta para mostrar en UI
+    type: 'blockchain';
     address: `0x${string}`; // Dirección del contrato
     abi: Abi; // ABI del contrato
     functionName: ContractFunctionName; // Nombre de la función

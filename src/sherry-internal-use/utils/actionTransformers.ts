@@ -21,7 +21,7 @@ To execute the "${action.label}" transfer:
         return `# API Request Tutorial
 To execute the "${action.label}" API call:
 1. Send a request to ${action.endpoint}
-2. Include the following parameters: ${action.params.map(p => p.name).join(', ')}`;
+2. Include the following parameters: ${action.params?.map(p => p.name).join(', ')}`;
     }
 
     return 'Unknown action type';

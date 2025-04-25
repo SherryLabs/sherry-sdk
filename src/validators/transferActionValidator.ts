@@ -33,10 +33,6 @@ export class TransferActionValidator {
         if (!action.label || typeof action.label !== 'string') {
             throw new InvalidMetadataError('Transfer action must have a valid label');
         }
-
-        if (action.description !== undefined && typeof action.description !== 'string') {
-            throw new InvalidMetadataError('If provided, description must be a string');
-        }
     }
 
     /**

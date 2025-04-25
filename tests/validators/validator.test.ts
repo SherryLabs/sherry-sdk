@@ -17,6 +17,7 @@ describe('Validator utils', () => {
             description: 'This is a test',
             actions: [
                 {
+                    type: 'blockchain',
                     label: 'Test Action',
                     address: '0x1234567890123456789012345678901234567890',
                     abi: [],
@@ -89,6 +90,7 @@ describe('Validator utils', () => {
                 description: 'This is a test',
                 actions: [
                     {
+                        type: 'blockchain',
                         label: 'Test Action',
                         address: '0x1234567890123456789012345678901234567890',
                         abi: [

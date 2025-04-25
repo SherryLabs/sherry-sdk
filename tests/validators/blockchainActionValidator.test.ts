@@ -81,8 +81,8 @@ function createValidBaseAction(
     abi: Abi = simpleAbi,
 ): BlockchainActionMetadata {
     return {
+        type: 'blockchain',
         label: 'Test Action',
-        description: 'Test Description',
         address: '0x1234567890123456789012345678901234567890',
         abi: abi,
         functionName: functionName,
@@ -429,8 +429,8 @@ describe('BlockchainActionValidator', () => {
 
         it('validates ERC20 approve action with fixed parameters (string amount)', () => {
             const approveAction: BlockchainActionMetadata = {
+                type: 'blockchain',
                 label: 'Aprobar USDC',
-                description: 'Autoriza al router a usar tus USDC',
                 address: USDC_ADDRESS,
                 abi: erc20Abi,
                 functionName: 'approve',
@@ -465,8 +465,8 @@ describe('BlockchainActionValidator', () => {
 
         it('validates swapExactIn with native token input (AVAX)', () => {
             const swapAction: BlockchainActionMetadata = {
+                type: 'blockchain',
                 label: 'Swap AVAX por USDC',
-                description: 'Intercambia AVAX nativo por USDC',
                 address: ROUTER_ADDRESS,
                 abi: routerAbi,
                 functionName: 'swapExactIn',

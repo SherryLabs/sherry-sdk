@@ -1,4 +1,5 @@
 import { ChainContext } from '../chains';
+import { BaseAction } from './action';
 
 // Option for selects and radios
 export interface SelectOption {
@@ -27,12 +28,10 @@ export interface AmountConfig {
     required?: boolean; // If selection is required
 }
 
-export interface TransferAction {
-    label: string;
-    description?: string;
-    chains: ChainContext;
-
+export interface TransferAction extends BaseAction {
+    type: 'transfer'; // Type of action
     // Simple configuration
+    token?: `0x${string}`; // Token address (ERC20, ERC721, etc.)
     to?: `0x${string}`; // Direct recipient address (takes precedence)
     amount?: number; // Direct amount (takes precedence)
 

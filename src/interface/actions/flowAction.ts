@@ -3,6 +3,8 @@
 import { BlockchainActionMetadata } from './blockchainAction';
 import { TransferAction } from './transferAction';
 import { HttpAction } from './httpAction';
+import { DynamicAction } from './dynamicAction';
+import { BaseAction } from './action';
 
 /**
  * Condición para evaluación de caminos en flujos de acciones.
@@ -32,13 +34,19 @@ export interface NestedActionBase {
     nextActions?: NextActionDefinition[]; // Posibles acciones siguientes
 }
 
-/**
+/**~
  * Blockchain Action con capacidad de anidación
  */
 export interface NestedBlockchainAction
-    extends Omit<BlockchainActionMetadata, 'label' | 'description'>,
+    extends Omit<BlockchainActionMetadata, 'label' | 'description' | 'type'>,
         NestedActionBase {
     type: 'blockchain';
+}
+
+export interface NestedDynamicAction
+    extends Omit<DynamicAction, 'label' | 'description' | 'type'>,
+        NestedActionBase {
+    type: 'dynamic';
 }
 
 /**
@@ -87,16 +95,17 @@ export type NestedAction =
     | NestedTransferAction
     | NestedHttpAction
     | CompletionAction
-    | DecisionAction;
+    | DecisionAction
+    | NestedDynamicAction;
 
 /**
  * Interfaz para un flujo completo de acciones anidadas.
  * Implementa un grafo dirigido de acciones que pueden ejecutarse secuencialmente
  * con bifurcaciones condicionales.
  */
-export interface ActionFlow {
+export interface ActionFlow extends Omit<BaseAction, 'chains'> {
     type: 'flow'; // Tipo para identificarlo como un flujo
-    label: string; // Etiqueta para mostrar (compatible con otras acciones)
+    //label: string; // Etiqueta para mostrar (compatible con otras acciones)
     initialActionId: string; // ID de la acción inicial
     actions: NestedAction[]; // Todas las acciones del flujo
 }
