@@ -73,10 +73,7 @@ describe('Mixed Action Mini-App', () => {
 
         // Transfer action validation - check if it maintains core properties
         expect(isTransferAction(transferAction)).toBe(true);
-        expect(transferAction).toHaveProperty(
-            'to',
-            '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045',
-        );
+        expect(transferAction).toHaveProperty('to', '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045');
         expect(transferAction).toHaveProperty('chains');
         expect(transferAction.chains).toHaveProperty('source', 'avalanche');
 
@@ -103,6 +100,5 @@ describe('Mixed Action Mini-App', () => {
             expect(Array.isArray(blockchainAction.abiParams)).toBe(true);
             expect(blockchainAction.abiParams.length).toBe(2);
         }
-
     });
 });
