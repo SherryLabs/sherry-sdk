@@ -1,42 +1,49 @@
 ---
 sidebar_position: 1
+title: Introduction
 ---
 
-# Introducción al Sherry SDK
+# Sherry SDK Introduction
 
 [![npm version](https://img.shields.io/npm/v/@sherrylinks/sdk.svg)](https://www.npmjs.com/package/@sherrylinks/sdk)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-4.9%2B-blue)](https://www.typescriptlang.org/)
 [![Tests](https://img.shields.io/badge/Tests-Jest-green)](https://jestjs.io/)
+[![GitHub Repo](https://img.shields.io/badge/GitHub-Repo-blue.svg)](https://github.com/SherryLabs/sherry-sdk)
 
-## 🌟 ¿Qué es Sherry SDK?
+## 🌟 Overview
 
-Sherry SDK es un poderoso conjunto de herramientas para crear mini-aplicaciones Web3 interactivas que pueden incrustarse dentro de publicaciones en redes sociales. El SDK permite a los desarrolladores crear experiencias blockchain ricas y componibles sin requerir que los usuarios abandonen su feed de redes sociales.
+Sherry SDK is a powerful toolkit for building interactive Web3 **mini-apps** that can be embedded directly within social media posts. The SDK enables developers to create rich, composable blockchain experiences without requiring users to leave their social media feed.
 
-Con Sherry, puedes transformar cualquier publicación en una dApp interactiva que permite a los usuarios intercambiar tokens, votar en propuestas, acuñar NFTs, firmar transacciones y mucho más, todo con validación integrada y una experiencia unificada en diferentes cadenas de bloques.
+With Sherry, you can transform any post into an interactive dApp that allows users to swap tokens, vote on proposals, mint NFTs, sign transactions, transfer assets, interact with APIs, and much more—all with built-in validation and a unified experience across multiple blockchains.
 
-## ✨ Características principales
+## ✨ Key Features
 
-- 🔗 **Soporte multi-cadena**: Construye una vez, despliega en Ethereum, Avalanche, Celo, Monad y más
-- 🧩 **Múltiples tipos de acciones**:
-  - **Acciones blockchain**: Llama a funciones de contratos inteligentes con configuración rica de parámetros
-  - **Acciones de transferencia**: Habilita transferencias de tokens con interfaces de usuario personalizables
-  - **Acciones HTTP**: Realiza llamadas a API y envíos de formularios
-  - **Flujos de acciones anidadas**: Crea procesos interactivos de múltiples pasos con rutas condicionales
-- 📋 **Validación integrada**: Asegura que tus mini-aplicaciones sean válidas y estén bien formadas antes del despliegue
-- ⚡ **Seguridad de tipos**: Soporte completo de TypeScript con definiciones de tipos completas
-- 🔄 **Interacciones entre cadenas**: Habilita transacciones a través de múltiples blockchains
-- 📊 **Plantillas de metadatos**: Plantillas listas para usar para casos de uso comunes de Web3
+- 🔗 **Multi-chain Support**: Build once, deploy across Ethereum, Avalanche, Celo, Monad, and more.
+- 🧩 **Multiple Action Types**:
+  - **Blockchain Actions**: Call smart contract functions with rich parameter configuration.
+  - **Transfer Actions**: Enable native token or ERC20 transfers with customizable UIs.
+  - **HTTP Actions**: Make API calls and form submissions.
+  - **Action Flows**: Create interactive multi-step processes with conditional paths using `decision` and `completion` steps.
+- 📋 **Built-in Validation**: Ensures your mini-app metadata is valid and well-formed before use via `createMetadata` or `validateMetadata`.
+- ⚡ **Type Safety**: Full TypeScript support with comprehensive type definitions.
+- 🔄 **Cross-chain Interactions**: Enable transactions across multiple blockchains.
+- 📊 **Metadata Templates**: Ready-to-use templates for common Web3 use cases.
 
-## 🚀 ¿Para quién es este SDK?
+## 🚀 Getting Started
 
-Este SDK está dirigido a desarrolladores que:
+- Start with creating your first Mini-App
+- Learn about configuring parameters for user inputs
 
-- Desean integrar funcionalidades blockchain en plataformas sociales
-- Buscan crear experiencias Web3 interactivas sin que los usuarios abandonen su contexto actual
-- Necesitan construir flujos de trabajo multi-paso con lógica condicional
-- Quieren aprovechar una herramienta con validación integrada y tipado fuerte
+## 🚀 Who is this SDK for?
 
-## 📚 Siguiente paso
+This SDK is aimed at developers who:
 
-Continúa con la sección de [Instalación](./guia-empezar/instalacion.md) para comenzar a utilizar Sherry SDK en tu proyecto.
+- Want to integrate blockchain functionalities into social platforms or web contexts.
+- Seek to create interactive Web3 experiences without users leaving their current environment.
+- Need to build multi-step workflows with conditional logic.
+- Value a tool with integrated validation and strong typing.
+
+## 📚 Next Steps
+
+Explore the SDK documentation to get started with your Web3 mini-apps!

@@ -11,6 +11,7 @@ export const simpleDonationMiniApp: Metadata = {
     actions: [
         // Simple direct transfer with fixed values
         {
+            type: 'transfer',
             label: 'Donate 0.1 AVAX',
             description: 'Support our project with a small donation',
             to: '0x8901B77211629fB220B5aBA0f25EF9E3c46B93d2', // Project wallet
@@ -21,6 +22,7 @@ export const simpleDonationMiniApp: Metadata = {
         // Another donation option with different amount
         {
             label: 'Donate 0.5 AVAX',
+            type: 'transfer',
             description: 'Support our project with a larger donation',
             to: '0x8901B77211629fB220B5aBA0f25EF9E3c46B93d2', // Project wallet
             amount: 0.5, // Fixed amount
@@ -40,6 +42,7 @@ export const charityDonationMiniApp: Metadata = {
         // Transfer with recipient selection
         {
             label: 'Donate to Charity',
+            type: 'transfer',
             description: 'Choose a charity and donation amount',
             chains: { source: 'celo' },
             recipient: {
@@ -82,6 +85,7 @@ export const tippingMiniApp: Metadata = {
         // Transfer with amount selection
         {
             label: 'Tip Creator',
+            type: 'transfer',
             description: 'Send a tip to the content creator',
             chains: { source: 'avalanche' },
             to: '0x9012345678901234567890123456789012345678', // Creator's wallet
@@ -110,6 +114,7 @@ export const crossChainTransferMiniApp: Metadata = {
     actions: [
         // Cross-chain transfer
         {
+            type: 'transfer',
             label: 'Bridge to Celo',
             description: 'Send tokens from Avalanche to Celo',
             chains: { source: 'avalanche', destination: 'celo' },
@@ -118,6 +123,7 @@ export const crossChainTransferMiniApp: Metadata = {
 
         // Another cross-chain direction
         {
+            type: 'transfer',
             label: 'Bridge to Avalanche',
             description: 'Send tokens from Celo to Avalanche',
             chains: { source: 'celo', destination: 'avalanche' },
@@ -136,6 +142,7 @@ export const paymentSplittingMiniApp: Metadata = {
     actions: [
         // First split recipient
         {
+            type: 'transfer',
             label: 'Pay Team Member 1',
             description: 'Send payment to first team member (20%)',
             chains: { source: 'monad-testnet' },
@@ -154,6 +161,7 @@ export const paymentSplittingMiniApp: Metadata = {
 
         // Second split recipient
         {
+            type: 'transfer',
             label: 'Pay Team Member 2',
             description: 'Send payment to second team member (35%)',
             chains: { source: 'monad-testnet' },
@@ -172,6 +180,7 @@ export const paymentSplittingMiniApp: Metadata = {
 
         // Third split recipient
         {
+            type: 'transfer',
             label: 'Pay Team Member 3',
             description: 'Send payment to third team member (45%)',
             chains: { source: 'monad-testnet' },

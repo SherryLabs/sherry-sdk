@@ -1,6 +1,6 @@
 import { describe, expect, it } from '@jest/globals';
 import { Metadata } from '../src/interface/metadata';
-import { BlockchainAction } from '../src/interface/blockchainAction';
+import { BlockchainAction } from '../src/interface/actions/blockchainAction';
 import { createMetadata } from '../src/utils/createMetadata';
 import { validateMetadata } from '../src/validators/validateMetadata';
 
@@ -14,6 +14,7 @@ describe('ETH Denver Raffle Metadata', () => {
                 'Found me at ETHDenver? Enter your wallet address to verify your POAP and join the $500 USDC raffle! Five winners will be selected',
             actions: [
                 {
+                    type: 'blockchain',
                     label: 'Join the Raffle',
                     address: '0xB7cfa4c519a8508900c02d21b6C8B5310f63D53b',
                     abi: [

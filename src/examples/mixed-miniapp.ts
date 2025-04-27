@@ -27,6 +27,7 @@ export const mixedActionMiniApp: Metadata = {
     actions: [
         // HTTP Action - Submit feedback form
         {
+            type: 'http',
             label: 'Submit Feedback',
             endpoint: 'https://api.example.com/feedback',
             params: [
@@ -61,7 +62,7 @@ export const mixedActionMiniApp: Metadata = {
         // Transfer Action - Tip developer
         {
             label: 'Tip Developer',
-            description: 'Support the developer with a small donation',
+            type: 'transfer',
             chains: { source: 'avalanche' },
             to: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045', // Vitalik's address as example
             amountConfig: {
@@ -79,6 +80,7 @@ export const mixedActionMiniApp: Metadata = {
         // Blockchain Action - Token Approval
         {
             label: 'Approve Token',
+            type: 'blockchain',
             description: 'Approve app to use your tokens',
             address: '0x5ee75a1B1648C023e885E58bD3735Ae273f2cc52' as `0x${string}`,
             abi: erc20Abi,

@@ -12,7 +12,6 @@ export type {
     RadioParameter,
     SelectOption,
     BaseParameter,
-    BaseAction,
 } from './actions/blockchainAction';
 
 // Re-export chain related types

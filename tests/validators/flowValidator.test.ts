@@ -6,7 +6,7 @@ import {
     NestedHttpAction,
     DecisionAction,
     CompletionAction,
-} from '../../src/interface/nestedAction';
+} from '../../src/interface/actions/flowAction';
 import { InvalidMetadataError } from '../../src/errors/customErrors';
 import { nestedActionExamples } from '../../src/examples/nested-actions';
 

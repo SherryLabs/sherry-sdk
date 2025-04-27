@@ -1,10 +1,10 @@
 import { describe, expect, it } from '@jest/globals';
 import { mixedActionMiniApp } from '../../src/examples/mixed-miniapp';
-import { createMetadata } from '../../src/validators/validator';
+import { MetadataValidator } from '../../src/validators/metadataValidator';
 import { BlockchainActionValidator } from '../../src/validators/blockchainActionValidator';
-import { isTransferAction, isHttpAction } from '../../src/validators/validator';
-import { HttpAction } from '../../src/interface/httpAction';
-import { TransferAction } from '../../src/interface/transferAction';
+import { HttpActionValidator, TransferActionValidator } from '../../src';
+import { HttpAction } from '../../src/interface/actions/httpAction';
+import { TransferAction } from '../../src/interface/actions/transferAction';
 import { BlockchainAction, ValidatedMetadata } from '../../src/interface';
 
 describe('Mixed Action Mini-App', () => {
@@ -56,56 +56,49 @@ describe('Mixed Action Mini-App', () => {
     it('should have correctly configured action parameters after processing', () => {
         // First process the metadata to get validated actions
         let validatedApp = {} as ValidatedMetadata;
-        try {
-            //validatedApp = createMetadata(mixedActionMiniApp);
 
-            const [httpAction, transferAction, blockchainAction] = validatedApp.actions as [
-                HttpAction,
-                TransferAction,
-                BlockchainAction,
-            ];
+        validatedApp = MetadataValidator.createMetadata(mixedActionMiniApp);
 
-            // HTTP action validation - check if it maintains core properties
-            expect(isHttpAction(httpAction)).toBe(true);
-            expect(httpAction).toHaveProperty('endpoint', 'https://api.example.com/feedback');
-            expect(httpAction).toHaveProperty('params');
-            expect(httpAction.params).toBe(3);
+        const [httpAction, transferAction, blockchainAction] = validatedApp.actions as [
+            HttpAction,
+            TransferAction,
+            BlockchainAction,
+        ];
 
-            // Transfer action validation - check if it maintains core properties
-            expect(isTransferAction(transferAction)).toBe(true);
-            expect(transferAction).toHaveProperty(
-                'to',
-                '0xD8dA6BF26964aF9D7eEd9e03E53415D37aA96045',
-            );
-            expect(transferAction).toHaveProperty('chains');
-            expect(transferAction.chains).toHaveProperty('source', 'avalanche');
+        // HTTP action validation - check if it maintains core properties
+        expect(HttpActionValidator.isHttpAction(httpAction)).toBe(true);
+        expect(httpAction).toHaveProperty('endpoint', 'https://api.example.com/feedback');
+        expect(httpAction).toHaveProperty('params');
+        expect(httpAction.params).toHaveLength(3);
 
-            // Verify amountConfig if it exists (optional check to avoid undefined property access)
-            if (transferAction.amountConfig) {
-                expect(transferAction.amountConfig).toHaveProperty('options');
-                expect(Array.isArray(transferAction.amountConfig.options)).toBe(true);
-            }
+        // Transfer action validation - check if it maintains core properties
+        expect(TransferActionValidator.isTransferAction(transferAction)).toBe(true);
+        expect(transferAction).toHaveProperty('to', '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045');
+        expect(transferAction).toHaveProperty('chains');
+        expect(transferAction.chains).toHaveProperty('source', 'avalanche');
 
-            // Blockchain action validation - check if it has been properly processed
-            expect(BlockchainActionValidator.isBlockchainAction(blockchainAction)).toBe(true);
-            expect(blockchainAction).toHaveProperty(
-                'address',
-                '0x5ee75a1B1648C023e885E58bD3735Ae273f2cc52',
-            );
-            expect(blockchainAction).toHaveProperty('functionName', 'approve');
+        // Verify amountConfig if it exists (optional check to avoid undefined property access)
+        if (transferAction.amountConfig) {
+            expect(transferAction.amountConfig).toHaveProperty('options');
+            expect(Array.isArray(transferAction.amountConfig.options)).toBe(true);
+        }
 
-            // Check properties added during processing
-            expect(blockchainAction).toHaveProperty('blockchainActionType');
-            expect(blockchainAction).toHaveProperty('abiParams');
+        // Blockchain action validation - check if it has been properly processed
+        expect(BlockchainActionValidator.isBlockchainAction(blockchainAction)).toBe(true);
+        expect(blockchainAction).toHaveProperty(
+            'address',
+            '0x5ee75a1B1648C023e885E58bD3735Ae273f2cc52',
+        );
+        expect(blockchainAction).toHaveProperty('functionName', 'approve');
 
-            // Check if abiParams array exists and has the right structure
-            if (blockchainAction.abiParams) {
-                expect(Array.isArray(blockchainAction.abiParams)).toBe(true);
-                expect(blockchainAction.abiParams.length).toBe(2);
-            }
-        } catch (e) {
-            console.log('*** Error in processing mini-app: ***');
-            //console.log('Error : ', e);
+        // Check properties added during processing
+        expect(blockchainAction).toHaveProperty('blockchainActionType');
+        expect(blockchainAction).toHaveProperty('abiParams');
+
+        // Check if abiParams array exists and has the right structure
+        if (blockchainAction.abiParams) {
+            expect(Array.isArray(blockchainAction.abiParams)).toBe(true);
+            expect(blockchainAction.abiParams.length).toBe(2);
         }
     });
 });

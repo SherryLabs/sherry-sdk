@@ -1,6 +1,6 @@
 import { createMetadata } from '../../src/utils/createMetadata';
 import { Metadata } from '../../src/interface';
-import { BlockchainActionMetadata } from '../../src/interface/blockchainAction';
+import { BlockchainActionMetadata } from '../../src/interface/actions/blockchainAction';
 import { SherryValidationError } from '../../src/errors/customErrors';
 import { Abi } from 'abitype';
 import { describe, test, expect } from '@jest/globals';
@@ -40,8 +40,8 @@ describe('createMetadata', () => {
 
     // Valid blockchain action
     const validBlockchainAction: BlockchainActionMetadata = {
+        type: 'blockchain',
         label: 'Transfer Tokens',
-        description: 'Transfer tokens to another address',
         address: '0x1234567890123456789012345678901234567890',
         abi: sampleAbi,
         functionName: 'transfer',
@@ -69,8 +69,8 @@ describe('createMetadata', () => {
 
     // Second valid blockchain action (using deposit - payable function)
     const validPayableAction: BlockchainActionMetadata = {
+        type: 'blockchain',
         label: 'Deposit Funds',
-        description: 'Deposit ETH to the contract',
         address: '0x1234567890123456789012345678901234567890',
         abi: sampleAbi,
         functionName: 'deposit',

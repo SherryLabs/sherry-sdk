@@ -81,8 +81,8 @@ function createValidBaseAction(
     abi: Abi = simpleAbi,
 ): BlockchainActionMetadata {
     return {
+        type: 'blockchain',
         label: 'Test Action',
-        description: 'Test Description',
         address: '0x1234567890123456789012345678901234567890',
         abi: abi,
         functionName: functionName,
@@ -346,12 +346,14 @@ describe('BlockchainActionValidator', () => {
                 ],
             } as BlockchainActionMetadata;
 
+            const abiParams = BlockchainActionValidator.getAbiParameters(invalidAction);
+
             expect(() => BlockchainActionValidator.validateBlockchainAction(invalidAction)).toThrow(
                 ActionValidationError,
             );
             // Expect the count mismatch error from validateBlockchainParameters
             expect(() => BlockchainActionValidator.validateBlockchainAction(invalidAction)).toThrow(
-                /Parameter count mismatch.*expects 4, received 1/,
+                `Function ${invalidAction.functionName} expects ${abiParams.length} parameters, but received ${invalidAction.params?.length}`,
             );
         });
 
@@ -369,11 +371,13 @@ describe('BlockchainActionValidator', () => {
                 ],
             } as BlockchainActionMetadata;
 
+            const abiParams = BlockchainActionValidator.getAbiParameters(invalidAction);
+
             expect(() => BlockchainActionValidator.validateBlockchainAction(invalidAction)).toThrow(
                 ActionValidationError,
             );
             expect(() => BlockchainActionValidator.validateBlockchainAction(invalidAction)).toThrow(
-                /Parameter count mismatch.*expects 0, received 1/,
+                `Function ${invalidAction.functionName} expects ${abiParams.length} parameters, but received ${invalidAction.params?.length}`,
             );
         });
 
@@ -397,9 +401,35 @@ describe('BlockchainActionValidator', () => {
         });
 
         it('throws error for amount with non-payable function', () => {
-            const invalidAction = {
+            const invalidAction: BlockchainActionMetadata = {
                 ...createValidBaseAction(), // testFunction is non-payable
                 amount: 0.1,
+                params: [
+                    {
+                        name: 'param1',
+                        label: 'P1',
+                        type: 'string',
+                        required: true,
+                    },
+                    {
+                        name: 'param2',
+                        label: 'P2',
+                        type: 'uint256',
+                        required: true,
+                    },
+                    {
+                        name: 'param3',
+                        label: 'P3',
+                        type: 'bool',
+                        required: true,
+                    },
+                    {
+                        name: 'param4',
+                        label: 'P4',
+                        type: 'address',
+                        required: true,
+                    },
+                ],
             };
 
             expect(() => BlockchainActionValidator.validateBlockchainAction(invalidAction)).toThrow(
@@ -429,8 +459,8 @@ describe('BlockchainActionValidator', () => {
 
         it('validates ERC20 approve action with fixed parameters (string amount)', () => {
             const approveAction: BlockchainActionMetadata = {
+                type: 'blockchain',
                 label: 'Aprobar USDC',
-                description: 'Autoriza al router a usar tus USDC',
                 address: USDC_ADDRESS,
                 abi: erc20Abi,
                 functionName: 'approve',
@@ -465,8 +495,8 @@ describe('BlockchainActionValidator', () => {
 
         it('validates swapExactIn with native token input (AVAX)', () => {
             const swapAction: BlockchainActionMetadata = {
+                type: 'blockchain',
                 label: 'Swap AVAX por USDC',
-                description: 'Intercambia AVAX nativo por USDC',
                 address: ROUTER_ADDRESS,
                 abi: routerAbi,
                 functionName: 'swapExactIn',

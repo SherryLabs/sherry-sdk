@@ -1,12 +1,12 @@
 import { describe, expect, it } from '@jest/globals';
 import { TransferActionValidator } from '../../src/validators/transferActionValidator';
-import { TransferAction } from '../../src/interface/transferAction';
+import { TransferAction } from '../../src/interface/actions/transferAction';
 import { InvalidMetadataError } from '../../src/errors/customErrors';
 
 describe('TransferActionValidator', () => {
     const validTransferAction: TransferAction = {
+        type: 'transfer',
         label: 'Transfer AVAX',
-        description: 'Send AVAX to a recipient',
         chains: { source: 'avalanche' },
         to: '0x1234567890123456789012345678901234567890',
         amount: 0.1,
@@ -46,6 +46,7 @@ describe('TransferActionValidator', () => {
 
         it('validates transfer action with recipient config', () => {
             const actionWithRecipientConfig: TransferAction = {
+                type: 'transfer',
                 label: 'Transfer Tokens',
                 chains: { source: 'avalanche' },
                 recipient: {
@@ -65,6 +66,7 @@ describe('TransferActionValidator', () => {
 
         it('validates transfer action with amount config', () => {
             const actionWithAmountConfig: TransferAction = {
+                type: 'transfer',
                 label: 'Transfer Tokens',
                 chains: { source: 'avalanche' },
                 to: '0x1234567890123456789012345678901234567890',
