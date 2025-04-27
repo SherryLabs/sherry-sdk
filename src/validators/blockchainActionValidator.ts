@@ -44,56 +44,70 @@ export class BlockchainActionValidator {
      * Validates a blockchain action and returns it if valid
      */
     static validateBlockchainAction(action: BlockchainActionMetadata): BlockchainAction {
-        // Validate basic metadata structure and ABI/function existence first
-        this.validateBlockchainActionMetadataStructure(action);
+        try {
+            // Validate basic metadata structure and ABI/function existence first
+            BlockchainActionValidator.validateBlockchainActionMetadataStructure(action);
 
-        // Get the ABI parameters for the specified function
-        const abiParams = this.getAbiParameters(action);
+            // Get the ABI parameters for the specified function
+            const abiParams = BlockchainActionValidator.getAbiParameters(action);
 
-        // Validate the user-provided parameters against the ABI parameters
-        // This now includes the type compatibility logic
-        if (action.params) {
-            this.validateBlockchainParameters(action.params, abiParams, action.functionName);
-        } else if (abiParams.length > 0) {
-            // Handle case where ABI expects parameters but none are provided
-            // Depending on strictness, could warn or throw error
-            console.warn(
-                `Function ${action.functionName} expects ${abiParams.length} parameters, but none were provided in metadata.`,
-            );
-            // Potentially throw: throw new ActionValidationError(...)
+            // Get the blockchain action type (mutability)
+            const blockchainActionType = BlockchainActionValidator.getBlockchainActionType(action);
+
+            // Validate 'amount' property based on mutability - MOVER ESTA VERIFICACIÓN ANTES DE LA VALIDACIÓN DE PARÁMETROS
+            const hasAmountParameterInAbi = abiParams.some(param => param.name === 'amount');
+            if (
+                blockchainActionType !== 'payable' &&
+                action.amount !== undefined &&
+                !hasAmountParameterInAbi // Allow top-level amount if there's an ABI param named 'amount'
+            ) {
+                throw new ActionValidationError(
+                    'The action function is not payable according to the ABI, but an "amount" was provided at the top level.',
+                );
+            }
+
+            // Validate the user-provided parameters against the ABI parameters
+            if (action.params) {
+                if (action.params.length !== abiParams.length) {
+                    throw new ActionValidationError(
+                        `Function ${action.functionName} expects ${abiParams.length} parameters, but received ${action.params.length}.`,
+                    );
+                }
+                BlockchainActionValidator.validateBlockchainParameters(
+                    action.params,
+                    abiParams,
+                    action.functionName,
+                );
+            }
+
+            // Validate payable function without amount (moved from above)
+            if (
+                blockchainActionType === 'payable' &&
+                action.amount === undefined &&
+                !hasAmountParameterInAbi
+            ) {
+                throw new ActionValidationError(
+                    `Payable function ${action.functionName} called without a top-level 'amount' and no 'amount' parameter.`,
+                );
+            }
+
+            // Return the processed action with additional info
+            return {
+                ...action,
+                abiParams: [...abiParams], // Create a mutable copy of the readonly array
+                blockchainActionType,
+            };
+        } catch (error) {
+            if (error instanceof ActionValidationError) {
+                // If the error is already an ActionValidationError, rethrow it
+                throw error;
+            } else {
+                const errorMessage = error instanceof Error ? error.message : String(error);
+                throw new ActionValidationError(
+                    `Error validating blockchain action: ${errorMessage}`,
+                );
+            }
         }
-
-        // Get the blockchain action type (mutability)
-        const blockchainActionType = this.getBlockchainActionType(action);
-
-        // Validate 'amount' property based on mutability
-        const hasAmountParameterInAbi = abiParams.some(param => param.name === 'amount');
-        if (
-            blockchainActionType !== 'payable' &&
-            action.amount !== undefined &&
-            !hasAmountParameterInAbi // Allow top-level amount if there's an ABI param named 'amount'
-        ) {
-            throw new ActionValidationError(
-                'The action function is not payable according to the ABI, but an "amount" was provided at the top level.',
-            );
-        }
-        if (
-            blockchainActionType === 'payable' &&
-            action.amount === undefined &&
-            !hasAmountParameterInAbi
-        ) {
-            // Warn or potentially error if payable but no amount provided (and no 'amount' param)
-            console.warn(
-                `Payable function ${action.functionName} called without a top-level 'amount' and no 'amount' parameter.`,
-            );
-        }
-
-        // Return the processed action with additional info
-        return {
-            ...action,
-            abiParams: [...abiParams], // Create a mutable copy of the readonly array
-            blockchainActionType,
-        };
     }
 
     /**
@@ -416,15 +430,16 @@ export class BlockchainActionValidator {
         const labels = param.options.map(o => o.label);
         if (new Set(labels).size !== labels.length) {
             // This might be acceptable in some cases, but often indicates an error
-            console.warn(`Parameter "${param.name}" has options with duplicate labels.`);
-            // Optionally throw: throw new ActionValidationError(...)
+            throw new ActionValidationError(
+                `Parameter "${param.name}" has options with duplicate values.`,
+            );
         }
 
         // Specific validation for radio (usually needs >= 2 options)
         if (param.type === 'radio' && param.options.length < 2) {
-            // Warn or throw depending on requirements
-            console.warn(`Radio parameter "${param.name}" has fewer than 2 options.`);
-            // Optionally throw: throw new ActionValidationError(...)
+            throw new ActionValidationError(
+                `Radio parameter "${param.name}" must have at least 2 options, found ${param.options.length}.`,
+            );
         }
     }
 

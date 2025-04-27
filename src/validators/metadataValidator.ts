@@ -9,6 +9,8 @@ import { ActionFlow } from '../interface/actions/flowAction';
 import { BlockchainActionMetadata } from '../interface/actions/blockchainAction';
 import { TransferAction } from '../interface/actions/transferAction';
 import { HttpAction } from '../interface/actions/httpAction';
+import { DynamicActionValidator } from './dynamicActionValidator';
+import { DynamicAction } from '../interface/actions/dynamicAction';
 
 // Define the structure for our validator mapping
 interface ActionValidatorConfig {
@@ -39,6 +41,12 @@ const actionValidators: ActionValidatorConfig[] = [
     {
         guard: HttpActionValidator.isHttpAction,
         validate: HttpActionValidator.validateHttpAction as (action: HttpAction) => ValidatedAction,
+    },
+    {
+        guard: DynamicActionValidator.isDynamicAction,
+        validate: DynamicActionValidator.validateDynamicAction as (
+            action: DynamicAction,
+        ) => ValidatedAction,
     },
     // --- Add new action types here ---
     // { guard: NewActionValidator.isNewAction, validate: NewActionValidator.validateNewAction },
@@ -98,21 +106,16 @@ export class MetadataValidator {
             // Validate basic metadata
             this.validateBasicMetadata(metadata);
 
-            // Process each action with the appropriate validator
-            const processedActions = metadata.actions.map(action => {
-                if (FlowValidator.isActionFlow(action)) {
-                    return FlowValidator.validateFlow(action);
-                } else if (BlockchainActionValidator.isBlockchainActionMetadata(action)) {
-                    return BlockchainActionValidator.validateBlockchainAction(action);
-                } else if (TransferActionValidator.isTransferAction(action)) {
-                    return TransferActionValidator.validateTransferAction(action);
-                } else if (HttpActionValidator.isHttpAction(action)) {
-                    return HttpActionValidator.validateHttpAction(action);
+            const processedActions = metadata.actions.map((action): ValidatedAction => {
+                const validatorConfig = actionValidators.find(v => v.guard(action));
+                if (validatorConfig) {
+                    return validatorConfig.validate(action);
                 } else {
-                    throw new SherryValidationError('Invalid Action: Unknown action type');
+                    throw new SherryValidationError(
+                        `Invalid Action: Unknown action type for action with label "${action.label ?? 'N/A'}"`,
+                    );
                 }
             });
-
             // Return the processed metadata
             return {
                 url: metadata.url,

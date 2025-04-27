@@ -29,6 +29,7 @@ async function main() {
         description: 'description',
         actions: [
             {
+                type: 'blockchain',
                 label: 'Test Action 2',
                 address: '0x1234567890abcdef1234567890abcdef12345678',
                 abi: exampleAbi,
@@ -36,6 +37,7 @@ async function main() {
                 chains: { source: 'fuji' },
             },
             {
+                type: 'blockchain',
                 label: 'Test Action 2',
                 address: '0x1234567890abcdef1234567890abcdef12345678',
                 abi: exampleAbi,

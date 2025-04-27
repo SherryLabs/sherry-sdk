@@ -12,16 +12,16 @@ export class TransferActionValidator {
      */
     static validateTransferAction(action: TransferAction): TransferAction {
         // Validate basic fields
-        this.validateBasicFields(action);
+        TransferActionValidator.validateBasicFields(action);
 
         // Validate chains
-        this.validateChains(action.chains);
+        TransferActionValidator.validateChains(action.chains);
 
         // Validate recipient
-        this.validateRecipient(action);
+        TransferActionValidator.validateRecipient(action);
 
         // Validate amount
-        this.validateAmount(action);
+        TransferActionValidator.validateAmount(action);
 
         return action;
     }

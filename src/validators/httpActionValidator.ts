@@ -9,9 +9,9 @@ import { InvalidMetadataError } from '../errors/customErrors';
 
 export class HttpActionValidator {
     static validateHttpAction(action: HttpAction): HttpAction {
-        this.validateEndpoint(action.endpoint);
+        HttpActionValidator.validateEndpoint(action.endpoint);
 
-        const validatedParams = this.validateParameters(action.params);
+        const validatedParams = HttpActionValidator.validateParameters(action.params);
 
         return {
             ...action,
@@ -44,9 +44,9 @@ export class HttpActionValidator {
             // Validate by parameter type
             switch (param.type) {
                 case 'select':
-                    return this.validateSelectParameter(param as SelectParameter);
+                    return HttpActionValidator.validateSelectParameter(param as SelectParameter);
                 case 'radio':
-                    return this.validateRadioParameter(param as RadioParameter);
+                    return HttpActionValidator.validateRadioParameter(param as RadioParameter);
                 case 'text':
                 case 'email':
                 case 'number':
@@ -54,7 +54,9 @@ export class HttpActionValidator {
                 case 'url':
                 case 'datetime':
                 case 'textarea':
-                    return this.validateStandardParameter(param as StandardParameter);
+                    return HttpActionValidator.validateStandardParameter(
+                        param as StandardParameter,
+                    );
                 default:
                     throw new InvalidMetadataError(
                         `Invalid parameter type: ${(param as any).type}`,
@@ -118,21 +120,21 @@ export class HttpActionValidator {
         if (param.defaultValue !== undefined) {
             switch (param.type) {
                 case 'email':
-                    if (!this.isValidEmail(param.defaultValue)) {
+                    if (!HttpActionValidator.isValidEmail(param.defaultValue)) {
                         throw new InvalidMetadataError(
                             `Invalid email format for default value in parameter ${param.name}`,
                         );
                     }
                     break;
                 case 'url':
-                    if (!this.isValidUrl(param.defaultValue)) {
+                    if (!HttpActionValidator.isValidUrl(param.defaultValue)) {
                         throw new InvalidMetadataError(
                             `Invalid URL format for default value in parameter ${param.name}`,
                         );
                     }
                     break;
                 case 'datetime':
-                    if (!this.isValidDateTime(param.defaultValue)) {
+                    if (!HttpActionValidator.isValidDateTime(param.defaultValue)) {
                         throw new InvalidMetadataError(
                             `Invalid datetime format for default value in parameter ${param.name}`,
                         );

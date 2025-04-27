@@ -346,12 +346,14 @@ describe('BlockchainActionValidator', () => {
                 ],
             } as BlockchainActionMetadata;
 
+            const abiParams = BlockchainActionValidator.getAbiParameters(invalidAction);
+
             expect(() => BlockchainActionValidator.validateBlockchainAction(invalidAction)).toThrow(
                 ActionValidationError,
             );
             // Expect the count mismatch error from validateBlockchainParameters
             expect(() => BlockchainActionValidator.validateBlockchainAction(invalidAction)).toThrow(
-                /Parameter count mismatch.*expects 4, received 1/,
+                `Function ${invalidAction.functionName} expects ${abiParams.length} parameters, but received ${invalidAction.params?.length}`,
             );
         });
 
@@ -369,11 +371,13 @@ describe('BlockchainActionValidator', () => {
                 ],
             } as BlockchainActionMetadata;
 
+            const abiParams = BlockchainActionValidator.getAbiParameters(invalidAction);
+
             expect(() => BlockchainActionValidator.validateBlockchainAction(invalidAction)).toThrow(
                 ActionValidationError,
             );
             expect(() => BlockchainActionValidator.validateBlockchainAction(invalidAction)).toThrow(
-                /Parameter count mismatch.*expects 0, received 1/,
+                `Function ${invalidAction.functionName} expects ${abiParams.length} parameters, but received ${invalidAction.params?.length}`,
             );
         });
 
@@ -397,9 +401,35 @@ describe('BlockchainActionValidator', () => {
         });
 
         it('throws error for amount with non-payable function', () => {
-            const invalidAction = {
+            const invalidAction: BlockchainActionMetadata = {
                 ...createValidBaseAction(), // testFunction is non-payable
                 amount: 0.1,
+                params: [
+                    {
+                        name: 'param1',
+                        label: 'P1',
+                        type: 'string',
+                        required: true,
+                    },
+                    {
+                        name: 'param2',
+                        label: 'P2',
+                        type: 'uint256',
+                        required: true,
+                    },
+                    {
+                        name: 'param3',
+                        label: 'P3',
+                        type: 'bool',
+                        required: true,
+                    },
+                    {
+                        name: 'param4',
+                        label: 'P4',
+                        type: 'address',
+                        required: true,
+                    },
+                ],
             };
 
             expect(() => BlockchainActionValidator.validateBlockchainAction(invalidAction)).toThrow(

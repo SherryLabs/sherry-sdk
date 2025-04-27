@@ -1,8 +1,8 @@
 import { describe, expect, it } from '@jest/globals';
 import { mixedActionMiniApp } from '../../src/examples/mixed-miniapp';
-import { createMetadata } from '../../src/validators/validator';
+import { MetadataValidator } from '../../src/validators/metadataValidator';
 import { BlockchainActionValidator } from '../../src/validators/blockchainActionValidator';
-import { isTransferAction, isHttpAction } from '../../src/validators/validator';
+import { HttpActionValidator, TransferActionValidator } from '../../src';
 import { HttpAction } from '../../src/interface/actions/httpAction';
 import { TransferAction } from '../../src/interface/actions/transferAction';
 import { BlockchainAction, ValidatedMetadata } from '../../src/interface';
@@ -57,7 +57,7 @@ describe('Mixed Action Mini-App', () => {
         // First process the metadata to get validated actions
         let validatedApp = {} as ValidatedMetadata;
 
-        validatedApp = createMetadata(mixedActionMiniApp);
+        validatedApp = MetadataValidator.createMetadata(mixedActionMiniApp);
 
         const [httpAction, transferAction, blockchainAction] = validatedApp.actions as [
             HttpAction,
@@ -66,13 +66,13 @@ describe('Mixed Action Mini-App', () => {
         ];
 
         // HTTP action validation - check if it maintains core properties
-        expect(isHttpAction(httpAction)).toBe(true);
+        expect(HttpActionValidator.isHttpAction(httpAction)).toBe(true);
         expect(httpAction).toHaveProperty('endpoint', 'https://api.example.com/feedback');
         expect(httpAction).toHaveProperty('params');
         expect(httpAction.params).toHaveLength(3);
 
         // Transfer action validation - check if it maintains core properties
-        expect(isTransferAction(transferAction)).toBe(true);
+        expect(TransferActionValidator.isTransferAction(transferAction)).toBe(true);
         expect(transferAction).toHaveProperty('to', '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045');
         expect(transferAction).toHaveProperty('chains');
         expect(transferAction.chains).toHaveProperty('source', 'avalanche');
