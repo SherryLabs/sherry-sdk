@@ -10,5 +10,5 @@ export interface ExecutionResponse {
         }[];
         contractAddress?: string;
         functionName?: string;
-    },
+    };
 }

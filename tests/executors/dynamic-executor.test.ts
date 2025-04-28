@@ -1,7 +1,7 @@
-import { describe, expect, it, jest, beforeEach } from '@jest/globals'
-import { DynamicAction } from '../../src/interface/actions/dynamicAction'
-import { ExecutionResponse } from '../../src/interface/response/executionResponse'
-import { DynamicActionExecutor } from '../../src/executors/dynamicExecutor'
+import { describe, expect, it, jest, beforeEach } from '@jest/globals';
+import { DynamicAction } from '../../src/interface/actions/dynamicAction';
+import { ExecutionResponse } from '../../src/interface/response/executionResponse';
+import { DynamicActionExecutor } from '../../src/executors/dynamicExecutor';
 
 type MockFetch = jest.Mock<typeof fetch>;
 
@@ -21,10 +21,10 @@ describe('DynamicActionExecutor', () => {
     };
 
     // Sample expected response from the endpoint
-    const mockResolvedTxResponse: ExecutionResponse = { 
+    const mockResolvedTxResponse: ExecutionResponse = {
         serializedTransaction: '0x1234567890abcdef',
         chainId: 'fuji',
-        meta: { 
+        meta: {
             title: 'Confirm dynamic Item Purchase',
             description: 'Purchase item 123 for user 0xUser...',
             details: [
@@ -33,8 +33,8 @@ describe('DynamicActionExecutor', () => {
             ],
             contractAddress: '0xContractAddress',
             functionName: 'purchaseItem',
-        }
-    }
+        },
+    };
 
     beforeEach(() => {
         executor = new DynamicActionExecutor();
@@ -42,7 +42,7 @@ describe('DynamicActionExecutor', () => {
     });
 
     it('should call the endpoint with POST and correct parameters', async () => {
-        (global.fetch as MockFetch).mockResolvedValueOnce({ 
+        (global.fetch as MockFetch).mockResolvedValueOnce({
             ok: true,
             json: async () => mockResolvedTxResponse,
             status: 200,
@@ -51,17 +51,16 @@ describe('DynamicActionExecutor', () => {
 
         await executor.resolve(sampleDynamicAction);
         expect(fetch).toHaveBeenCalledTimes(1);
-        expect(fetch). toHaveBeenCalledWith(sampleDynamicAction.endpoint,
+        expect(fetch).toHaveBeenCalledWith(
+            sampleDynamicAction.endpoint,
             expect.objectContaining({
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Accept': 'application/json'
+                    Accept: 'application/json',
                 },
-                body: JSON.stringify(sampleDynamicAction.params)
-            })
-        )
-     });
-
-
- })
+                body: JSON.stringify(sampleDynamicAction.params),
+            }),
+        );
+    });
+});
