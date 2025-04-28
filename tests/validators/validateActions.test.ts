@@ -1,12 +1,15 @@
 import { describe, expect, it } from '@jest/globals';
 import { BlockchainActionValidator } from '../../src/validators/blockchainActionValidator';
-import { isTransferAction, isHttpAction, createMetadata } from '../../src/validators/validator';
+import { createMetadata } from '../../src/validators/metadataValidator';
+import { TransferActionValidator } from '../../src';
+import { HttpActionValidator } from '../../src';
 import { BlockchainActionMetadata } from '../../src/interface/actions/blockchainAction';
 import { Metadata } from '../../src/interface';
 
 describe('Action Validators', () => {
     it('should correctly identify blockchain actions', () => {
         const blockchainAction = {
+            type: 'blockchain',
             label: 'Approve Token',
             title: 'Approve Token for Swap',
             description: 'Approve tokens to be used by the swap router',
@@ -62,8 +65,8 @@ describe('Action Validators', () => {
         expect(BlockchainActionValidator.isBlockchainAction(validated.actions[0])).toBe(true);
 
         // These should be false - it's NOT a transfer or HTTP action
-        expect(isTransferAction(blockchainAction)).toBe(false);
-        expect(isHttpAction(blockchainAction)).toBe(false);
+        expect(TransferActionValidator.isTransferAction(blockchainAction)).toBe(false);
+        expect(HttpActionValidator.isHttpAction(blockchainAction)).toBe(false);
     });
 
     it('should correctly identify transfer actions', () => {
@@ -76,10 +79,10 @@ describe('Action Validators', () => {
         };
 
         // This should be true - it's a transfer action
-        expect(isTransferAction(transferAction)).toBe(true);
+        expect(TransferActionValidator.isTransferAction(transferAction)).toBe(true);
 
         // These should be false - it's NOT a blockchain or HTTP action
         expect(BlockchainActionValidator.isBlockchainAction(transferAction)).toBe(false);
-        expect(isHttpAction(transferAction)).toBe(false);
+        expect(HttpActionValidator.isHttpAction(transferAction)).toBe(false);
     });
 });

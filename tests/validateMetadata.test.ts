@@ -11,6 +11,7 @@ describe('validateMetadata', () => {
             description: 'This is a test metadata',
             actions: [
                 {
+                    type: 'blockchain',
                     label: 'Test Action',
                     address: '0xB7cfa4c519a8508900c02d21b6C8B5310f63D53b',
                     abi: [

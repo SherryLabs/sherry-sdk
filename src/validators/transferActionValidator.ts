@@ -12,16 +12,16 @@ export class TransferActionValidator {
      */
     static validateTransferAction(action: TransferAction): TransferAction {
         // Validate basic fields
-        this.validateBasicFields(action);
+        TransferActionValidator.validateBasicFields(action);
 
         // Validate chains
-        this.validateChains(action.chains);
+        TransferActionValidator.validateChains(action.chains);
 
         // Validate recipient
-        this.validateRecipient(action);
+        TransferActionValidator.validateRecipient(action);
 
         // Validate amount
-        this.validateAmount(action);
+        TransferActionValidator.validateAmount(action);
 
         return action;
     }
@@ -32,10 +32,6 @@ export class TransferActionValidator {
     private static validateBasicFields(action: TransferAction): void {
         if (!action.label || typeof action.label !== 'string') {
             throw new InvalidMetadataError('Transfer action must have a valid label');
-        }
-
-        if (action.description !== undefined && typeof action.description !== 'string') {
-            throw new InvalidMetadataError('If provided, description must be a string');
         }
     }
 

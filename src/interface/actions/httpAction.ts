@@ -44,9 +44,13 @@ export interface RadioParameter extends BaseParameter {
 export type HttpParameter = StandardParameter | SelectParameter | RadioParameter;
 
 export interface HttpAction {
+    type: 'http';
     label: string;
     endpoint: string;
-    params: HttpParameter[];
+    method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
+    headers?: Record<string, string>;
+    body?: Record<string, any>;
+    params?: HttpParameter[];
 }
 
 export const INPUT_TYPES = {

@@ -11,6 +11,7 @@ import {
 import { InvalidMetadataError } from '../errors/customErrors';
 import { HttpActionValidator } from './httpActionValidator';
 import { isAddress } from 'viem';
+import { HttpAction } from '../interface';
 
 /**
  * Class for validating nested action flows.
@@ -187,7 +188,8 @@ export class FlowValidator {
     ): NestedHttpAction {
         try {
             // Use the existing HTTP validator
-            const httpAction = {
+            const httpAction: HttpAction = {
+                type: 'http',
                 label: action.label,
                 endpoint: action.endpoint,
                 params: action.params || [],
