@@ -29,7 +29,7 @@ export const mixedActionMiniApp: Metadata = {
         {
             type: 'http',
             label: 'Submit Feedback',
-            endpoint: 'https://api.example.com/feedback',
+            path: 'https://api.example.com/feedback',
             params: [
                 {
                     name: 'email',

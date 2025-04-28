@@ -9,7 +9,7 @@ import { InvalidMetadataError } from '../errors/customErrors';
 
 export class HttpActionValidator {
     static validateHttpAction(action: HttpAction): HttpAction {
-        HttpActionValidator.validateEndpoint(action.endpoint);
+        HttpActionValidator.validatepath(action.path);
 
         const validatedParams = HttpActionValidator.validateParameters(action.params);
 
@@ -19,11 +19,11 @@ export class HttpActionValidator {
         };
     }
 
-    private static validateEndpoint(endpoint: string): void {
+    private static validatepath(path: string): void {
         try {
-            new URL(endpoint);
+            new URL(path);
         } catch {
-            throw new InvalidMetadataError('Invalid endpoint URL');
+            throw new InvalidMetadataError('Invalid path URL');
         }
     }
 
@@ -197,7 +197,7 @@ export class HttpActionValidator {
 
         // Then validate HTTP action required properties
         const hasRequiredProps =
-            typeof action.label === 'string' && typeof action.endpoint === 'string';
+            typeof action.label === 'string' && typeof action.path === 'string';
 
         if (!hasRequiredProps) return false;
 

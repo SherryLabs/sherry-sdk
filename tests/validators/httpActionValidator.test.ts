@@ -7,7 +7,7 @@ describe('HttpActionValidator', () => {
     const validHttpAction: HttpAction = {
         type: 'http',
         label: 'Subscribe to Newsletter',
-        endpoint: 'https://api.example.com/subscribe',
+        path: 'https://api.example.com/subscribe',
         params: [
             {
                 name: 'email',
@@ -31,10 +31,10 @@ describe('HttpActionValidator', () => {
         expect(validatedAction.params!.length).toBe(2);
     });
 
-    it('should fail with invalid endpoint', () => {
+    it('should fail with invalid path', () => {
         const invalidAction: HttpAction = {
             ...validHttpAction,
-            endpoint: 'not-a-valid-url',
+            path: 'not-a-valid-url',
         };
 
         expect(() => {
@@ -46,7 +46,7 @@ describe('HttpActionValidator', () => {
         const actionWithSelect: HttpAction = {
             type: 'http',
             label: 'Choose Plan',
-            endpoint: 'https://api.example.com/subscribe',
+            path: 'https://api.example.com/subscribe',
             params: [
                 {
                     name: 'plan',
@@ -71,7 +71,7 @@ describe('HttpActionValidator', () => {
         const invalidSelect: HttpAction = {
             type: 'http',
             label: 'Choose Plan',
-            endpoint: 'https://api.example.com/subscribe',
+            path: 'https://api.example.com/subscribe',
             params: [
                 {
                     name: 'plan',
@@ -92,7 +92,7 @@ describe('HttpActionValidator', () => {
         const formAction: HttpAction = {
             type: 'http',
             label: 'Contact Form',
-            endpoint: 'https://api.example.com/contact',
+            path: 'https://api.example.com/contact',
             params: [
                 {
                     name: 'name',
@@ -123,7 +123,7 @@ describe('HttpActionValidator', () => {
         const actionWithRadio: HttpAction = {
             type: 'http',
             label: 'Choose Payment',
-            endpoint: 'https://api.example.com/payment',
+            path: 'https://api.example.com/payment',
             params: [
                 {
                     name: 'paymentType',

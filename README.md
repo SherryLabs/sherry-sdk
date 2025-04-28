@@ -83,7 +83,7 @@ const swapFlow: ActionFlow = {
       id: 'select-tokens',
       type: 'http',
       label: 'Select Tokens',
-      endpoint: 'https://api.example.com/quote',
+      path: 'https://api.example.com/quote',
       params: [
         // Token selection parameters...
       ],
@@ -240,7 +240,7 @@ Make API calls and form submissions:
 ```typescript
 {
   label: 'Submit Feedback',
-  endpoint: 'https://api.example.com/feedback',
+  path: 'https://api.example.com/feedback',
   params: [
     {
       name: 'email',

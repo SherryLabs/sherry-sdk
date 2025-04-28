@@ -408,7 +408,7 @@ export class FlowExecutor {
         }
 
         // En una implementación real, aquí realizarías la petición HTTP con los datos del formulario
-        console.log(`[HTTP] Calling ${action.endpoint} with data:`, actionData);
+        console.log(`[HTTP] Calling ${action.path} with data:`, actionData);
 
         // Simulación de petición HTTP
         await new Promise(resolve => setTimeout(resolve, 800));
