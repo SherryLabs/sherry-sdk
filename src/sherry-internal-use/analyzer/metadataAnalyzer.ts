@@ -8,6 +8,8 @@ export function analyzeMetadata(metadata: Metadata): Record<string, any> {
     const blockchainActions = actions.filter(BlockchainActionValidator.isBlockchainActionMetadata);
     const transferActions = actions.filter(TransferActionValidator.isTransferAction);
     const httpActions = actions.filter(HttpActionValidator.isHttpAction);
+    const flowActions = actions.filter(action => action.type === 'flow');
+    const dynamicActions = actions.filter(action => action.type === 'dynamic');
 
     return {
         totalActions: actions.length,
@@ -15,6 +17,8 @@ export function analyzeMetadata(metadata: Metadata): Record<string, any> {
             blockchain: blockchainActions.length,
             transfer: transferActions.length,
             http: httpActions.length,
+            flow: flowActions.length,
+            dynamic: dynamicActions.length,
         },
         chainDistribution: getChainDistribution([...blockchainActions, ...transferActions]),
         complexityScore: calculateComplexityScore(metadata),
