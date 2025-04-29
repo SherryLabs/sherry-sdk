@@ -52,6 +52,11 @@ export type * from './actions/transferAction';
  * Note: Also re-exports types like `SelectOption`, `BaseParameter` etc. which is fine.
  */
 export type * from './actions/httpAction';
+
+export type * from './actions/flowAction';
+
+export type * from './response/executionResponse'
+
 /**
  * Re-exports the constant object defining standard input types for HTTP actions.
  */
