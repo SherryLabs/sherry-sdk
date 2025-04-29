@@ -1,5 +1,4 @@
 import { createMetadata, Metadata } from '../../src';
-import { ActionValidationError } from '../../src';
 
 describe('Dynamic Action Validation', () => {
     it('should fail when dynamic action has a relative path without baseUrl', () => {
