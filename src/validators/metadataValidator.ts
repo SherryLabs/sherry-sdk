@@ -100,6 +100,22 @@ export class MetadataValidator {
             }
         }
 
+        metadata.actions.forEach((action, index) => {
+            if (!action.type) {
+                throw new SherryValidationError(
+                    `Action at index ${index} is missing required 'type' property`,
+                );
+            }
+
+            // Verificar que sea uno de los tipos permitidos
+            const validTypes = ['blockchain', 'transfer', 'http', 'dynamic', 'flow'];
+            if (!validTypes.includes(action.type)) {
+                throw new SherryValidationError(
+                    `Action at index ${index} has invalid type: '${action.type}'. Must be one of: ${validTypes.join(', ')}`,
+                );
+            }
+        });
+
         return true;
     }
 
