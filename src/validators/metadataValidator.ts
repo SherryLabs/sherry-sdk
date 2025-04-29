@@ -1,10 +1,10 @@
 import { Metadata, ValidatedMetadata } from '../interface/metadata';
-import { SherryValidationError } from '../errors/customErrors';
-import { ValidatedAction } from '../interface/actions/action';
+import { SherryValidationError, DynamicActionValidationError } from '../errors/customErrors';
+import { Action, ValidatedAction } from '../interface/actions/action';
 import { FlowValidator } from './flowValidator';
 import { BlockchainActionValidator } from './blockchainActionValidator';
-import { TransferActionValidator } from '../validators/transferActionValidator';
-import { HttpActionValidator } from '../validators/httpActionValidator';
+import { TransferActionValidator } from './transferActionValidator';
+import { HttpActionValidator } from './httpActionValidator';
 import { ActionFlow } from '../interface/actions/flowAction';
 import { BlockchainActionMetadata } from '../interface/actions/blockchainAction';
 import { TransferAction } from '../interface/actions/transferAction';
@@ -17,7 +17,7 @@ interface ActionValidatorConfig {
     // The type guard function
     guard: (action: any) => boolean;
     // The validation function, accepting the specific action type it handles
-    validate: (action: any) => ValidatedAction; // Use 'any' or refine with generics/overloads if possible
+    validate: (action: any) => ValidatedAction;
 }
 
 type DynamicActionValidateFn = (action: DynamicAction, baseUrl?: string) => ValidatedAction;
@@ -120,59 +120,9 @@ export class MetadataValidator {
     }
 
     /**
-     * Creates and validates a complete Metadata object
-     * This function centralizes the validation and creation of metadata
-     *
-     * @param metadata The unprocessed metadata
-     * @returns The processed and validated metadata
-     * @throws SherryValidationError if there is any validation error
+     * Validates the relationship between baseUrl and dynamic actions
+     * Ensures that dynamic actions with relative paths have a baseUrl available
      */
-    static createMetadata(metadata: Metadata): ValidatedMetadata {
-        try {
-            // Validate basic metadata
-            this.validateBasicMetadata(metadata);
-
-            const processedActions = metadata.actions.map((action): ValidatedAction => {
-                const validatorConfig = actionValidators.find(v => v.guard(action));
-
-                if (validatorConfig) {
-                    // Check if it's the dynamic action validator and pass baseUrl
-                    if (validatorConfig.guard === DynamicActionValidator.isDynamicAction) {
-                        return (validatorConfig.validate as DynamicActionValidateFn)(
-                            action as DynamicAction,
-                            metadata.baseUrl,
-                        );
-                    } else {
-                        // For other validators, call normally
-                        return (validatorConfig.validate as (action: any) => ValidatedAction)(
-                            action,
-                        );
-                    }
-                } else {
-                    throw new SherryValidationError(
-                        `Invalid Action: Unknown action type for action with label "${action.label ?? 'N/A'}"`,
-                    );
-                }
-            });
-            // Return the processed metadata
-            return {
-                url: metadata.url,
-                icon: metadata.icon,
-                title: metadata.title,
-                description: metadata.description,
-                actions: processedActions as ValidatedAction[],
-            };
-        } catch (error) {
-            if (error instanceof SherryValidationError) {
-                throw error;
-            } else if (error instanceof Error) {
-                throw new SherryValidationError(`Error processing metadata: ${error.message}`);
-            } else {
-                throw new SherryValidationError(`Unknown error processing metadata`);
-            }
-        }
-    }
-
     static validateBaseUrlAndDynamicActions(metadata: Metadata): void {
         // Si la metadata tiene baseUrl, comprueba que sea válida
         if (metadata.baseUrl) {
@@ -192,12 +142,83 @@ export class MetadataValidator {
             // Para cada DynamicAction, verifica que tenga acceso a una URL completa
             dynamicActions.forEach(action => {
                 // Si el path es relativo pero no hay baseUrl, es un error
-                if (!action.path.startsWith('http') && !metadata.baseUrl) {
-                    throw new SherryValidationError(
-                        `DynamicAction '${action.label}' has a relative path '${action.path}' but no baseUrl is provided in metadata`,
+                if (action.path && action.path.startsWith('/') && !metadata.baseUrl) {
+                    throw new DynamicActionValidationError(
+                        `Dynamic action '${action.label}' has a relative path '${action.path}' but no baseUrl is provided in metadata`,
                     );
                 }
             });
+        }
+    }
+
+    /**
+     * Creates and validates a complete Metadata object
+     * This function centralizes the validation and creation of metadata
+     *
+     * @param metadata The unprocessed metadata
+     * @returns The processed and validated metadata
+     * @throws SherryValidationError if there is any validation error
+     */
+    static createMetadata(metadata: Metadata): ValidatedMetadata {
+        try {
+            // 1. Validate basic metadata structure
+            this.validateBasicMetadata(metadata);
+            
+            // 2. Validate baseUrl and dynamic actions relationship
+            // This ensures dynamic actions with relative paths have a baseUrl
+            this.validateBaseUrlAndDynamicActions(metadata);
+
+            // 3. Process each action with its appropriate validator
+            const processedActions = metadata.actions.map((action): ValidatedAction => {
+                const validatorConfig = actionValidators.find(v => v.guard(action));
+
+                if (validatorConfig) {
+                    // Check if it's the dynamic action validator and pass baseUrl
+                    if (validatorConfig.guard === DynamicActionValidator.isDynamicAction) {
+                        try {
+                            return (validatorConfig.validate as DynamicActionValidateFn)(
+                                action as DynamicAction,
+                                metadata.baseUrl,
+                            );
+                        } catch (error) {
+                            if (error instanceof Error) {
+                                throw new DynamicActionValidationError(
+                                    `Dynamic action '${action.label}' validation failed: ${error.message}`
+                                );
+                            }
+                            throw error;
+                        }
+                    } else {
+                        // For other validators, call normally
+                        return (validatorConfig.validate as (action: Action) => ValidatedAction)(
+                            action,
+                        );
+                    }
+                } else {
+                    throw new SherryValidationError(
+                        `Invalid Action: Unknown action type for action with label "${action.label ?? 'N/A'}"`,
+                    );
+                }
+            });
+            
+            // 4. Return the processed metadata with validated actions
+            return {
+                url: metadata.url,
+                icon: metadata.icon,
+                title: metadata.title,
+                description: metadata.description,
+                baseUrl: metadata.baseUrl, // Make sure to include baseUrl in the validated metadata
+                actions: processedActions as ValidatedAction[],
+            };
+        } catch (error) {
+            // Re-throw specific error types
+            if (error instanceof SherryValidationError || error instanceof DynamicActionValidationError) {
+                throw error;
+            } else if (error instanceof Error) {
+                throw new SherryValidationError(`Error processing metadata: ${error.message}`);
+            } else {
+                throw new SherryValidationError(`Unknown error processing metadata`);
+            }
         }
     }
 }

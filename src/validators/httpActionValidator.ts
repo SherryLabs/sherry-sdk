@@ -18,7 +18,7 @@ export class HttpActionValidator {
         try {
             new URL(path);
         } catch {
-            throw new InvalidMetadataError('Invalid path URL');
+            throw new InvalidMetadataError('[HttpAction-validatepath]Invalid path URL');
         }
     }
 
@@ -158,6 +158,9 @@ export class HttpActionValidator {
     }
 
     static isHttpAction(action: any): action is HttpAction {
+        if(action.type !== 'http') { 
+            return false;
+        }
         // First we check if the object exists and is actually an object
         if (!action || typeof action !== 'object') {
             return false;
