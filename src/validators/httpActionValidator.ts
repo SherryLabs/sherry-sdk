@@ -158,7 +158,7 @@ export class HttpActionValidator {
     }
 
     static isHttpAction(action: any): action is HttpAction {
-        if(action.type !== 'http') { 
+        if (action.type !== 'http') {
             return false;
         }
         // First we check if the object exists and is actually an object

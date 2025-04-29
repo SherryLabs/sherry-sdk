@@ -163,7 +163,7 @@ export class MetadataValidator {
         try {
             // 1. Validate basic metadata structure
             this.validateBasicMetadata(metadata);
-            
+
             // 2. Validate baseUrl and dynamic actions relationship
             // This ensures dynamic actions with relative paths have a baseUrl
             this.validateBaseUrlAndDynamicActions(metadata);
@@ -183,7 +183,7 @@ export class MetadataValidator {
                         } catch (error) {
                             if (error instanceof Error) {
                                 throw new DynamicActionValidationError(
-                                    `Dynamic action '${action.label}' validation failed: ${error.message}`
+                                    `Dynamic action '${action.label}' validation failed: ${error.message}`,
                                 );
                             }
                             throw error;
@@ -200,7 +200,7 @@ export class MetadataValidator {
                     );
                 }
             });
-            
+
             // 4. Return the processed metadata with validated actions
             return {
                 url: metadata.url,
@@ -212,7 +212,10 @@ export class MetadataValidator {
             };
         } catch (error) {
             // Re-throw specific error types
-            if (error instanceof SherryValidationError || error instanceof DynamicActionValidationError) {
+            if (
+                error instanceof SherryValidationError ||
+                error instanceof DynamicActionValidationError
+            ) {
                 throw error;
             } else if (error instanceof Error) {
                 throw new SherryValidationError(`Error processing metadata: ${error.message}`);
