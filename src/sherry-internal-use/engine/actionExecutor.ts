@@ -37,6 +37,6 @@ async function executeTransferAction(action: TransferAction): Promise<any> {
 }
 
 async function executeHttpAction(action: HttpAction): Promise<any> {
-    console.log(`Executing HTTP request to: ${action.endpoint}`);
+    console.log(`Executing HTTP request to: ${action.path}`);
     // Implement HTTP request logic
 }

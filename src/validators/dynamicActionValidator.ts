@@ -1,26 +1,42 @@
+// src/validators/dynamicActionValidator.ts
 import { DynamicAction } from '../interface/actions/dynamicAction';
 import { ActionValidationError } from '../errors/customErrors';
+import { ParameterValidator } from './parameterValidator';
 
 /**
  * Validator class for Dynamic Actions
  */
 export class DynamicActionValidator {
     /**
-     * Validates a dynamic action and returns it if valid
+     * Validates a dynamic action, considering an optional baseUrl from metadata.
+     * @param action The dynamic action to validate.
+     * @param baseUrl Optional base URL from the parent Metadata object.
+     * @returns The validated dynamic action.
+     * @throws {ActionValidationError} If validation fails.
      */
-    static validateDynamicAction(action: DynamicAction): DynamicAction {
+    static validateDynamicAction(action: DynamicAction, baseUrl?: string): DynamicAction {
         // Validate basic fields
         this.validateBasicFields(action);
 
-        // Validate resolution URL
-        //this.validateResolveUrl(action.resolveUrl);
+        // Validate path
+        this.validatePath(action.path);
 
-        // Validate resolution parameters if present
-        /*
-        if (action.resolveParams) {
-            this.validateResolveParams(action.resolveParams);
+        // Validate the action has access to a baseUrl (either from metadata or complete path)
+        if (!baseUrl && !action.path.startsWith('http')) {
+            throw new ActionValidationError(
+                `Dynamic action '${action.label}' has a relative path '${action.path}' but no baseUrl is provided in metadata`,
+            );
         }
-        */
+
+        // Validate parameters if present
+        if (action.params && action.params.length > 0) {
+            this.validateParameters(action.params);
+        }
+
+        // Validate chains
+        if (!action.chains || !action.chains.source) {
+            throw new ActionValidationError('Dynamic action must specify a source chain');
+        }
 
         return action;
     }
@@ -37,48 +53,83 @@ export class DynamicActionValidator {
             throw new ActionValidationError('Action type must be "dynamic"');
         }
 
-        if (!action.description || typeof action.description !== 'string') {
-            throw new ActionValidationError('Dynamic action must have a valid description');
+        if (action.description && typeof action.description !== 'string') {
+            throw new ActionValidationError('Description must be a string if provided');
         }
     }
 
     /**
-     * Validates the resolve URL
+     * Validates the path, checking for required baseUrl with relative paths.
+     * @param path The path string from the action.
+     * @param baseUrl Optional base URL from metadata.
      */
-    private static validateResolveUrl(resolveUrl: string): void {
-        if (!resolveUrl || typeof resolveUrl !== 'string') {
-            throw new ActionValidationError('Dynamic action must have a valid resolveUrl');
+    private static validatePath(path: string, baseUrl?: string): void {
+        if (!path || typeof path !== 'string') {
+            throw new ActionValidationError('Dynamic action must have a valid path');
         }
 
-        try {
-            new URL(resolveUrl);
-        } catch {
-            throw new ActionValidationError(`Invalid resolve URL: ${resolveUrl}`);
+        if (path.startsWith('http')) {
+            // If it's a full URL, validate its format
+            try {
+                new URL(path);
+            } catch (error) {
+                throw new ActionValidationError(`Invalid path URL: ${path}`);
+            }
+        } else if (path.startsWith('/')) {
+            // If it's a relative path, baseUrl MUST be present and valid
+            if (!baseUrl) {
+                throw new ActionValidationError(
+                    `Dynamic action has a relative path '${path}' but no baseUrl is provided in metadata.`,
+                );
+            }
+            // Optional: Validate the combined URL
+            try {
+                new URL(path, baseUrl); // Check if combining works
+            } catch (error) {
+                throw new ActionValidationError(
+                    `Invalid combination of baseUrl ('${baseUrl}') and relative path ('${path}')`,
+                );
+            }
+        } else {
+            // Path is not a full URL and not a valid relative path
+            throw new ActionValidationError(
+                `Invalid path format: '${path}'. Must be a full URL or start with '/'.`,
+            );
         }
     }
 
     /**
-     * Validates the resolve parameters
+     * Validates the parameters
      */
-    private static validateResolveParams(params: Record<string, any>): void {
-        if (typeof params !== 'object' || params === null) {
-            throw new ActionValidationError('resolveParams must be an object');
+    private static validateParameters(params: any[]): void {
+        if (!Array.isArray(params)) {
+            throw new ActionValidationError('Parameters must be an array');
         }
+
+        // Use the existing parameter validator to validate each parameter
+        params.forEach(param => {
+            try {
+                ParameterValidator.validateParameter(param);
+            } catch (error) {
+                const message = error instanceof Error ? error.message : String(error);
+                throw new ActionValidationError(`Invalid parameter: ${message}`);
+            }
+        });
     }
 
     /**
      * Checks if an object is a valid DynamicAction
      */
     static isDynamicAction(obj: any): obj is DynamicAction {
-        // Check basic required properties
-        const hasBaseProperties =
+        return (
             obj &&
             typeof obj === 'object' &&
-            typeof obj.label === 'string' &&
-            typeof obj.type === 'string' &&
             obj.type === 'dynamic' &&
-            typeof obj.resolveUrl === 'string';
-
-        return hasBaseProperties;
+            typeof obj.label === 'string' &&
+            typeof obj.path === 'string' &&
+            obj.chains &&
+            typeof obj.chains === 'object' &&
+            typeof obj.chains.source === 'string'
+        );
     }
 }

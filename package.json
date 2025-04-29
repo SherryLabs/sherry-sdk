@@ -1,35 +1,33 @@
 {
   "name": "@sherrylinks/sdk",
-  "version": "1.19.3-beta.1",
+  "version": "2.20.6-beta.1",
   "description": "SDK for Sherry Links",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
   "browser": {
-    "crypto": false,
-    "node:crypto": false,
-    "@noble/hashes/cryptoNode": "@noble/hashes/cryptoBrowser"
+    "@noble/hashes/cryptoNode": "@noble/hashes/cryptoBrowser",
+    "./dist/index.js": "./dist/index.esm.js"
   },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": {
-        "browser": "./dist/sherry-sdk.browser.js",
-        "default": "./dist/index.esm.js"
-      },
-      "require": {
-        "browser": "./dist/sherry-sdk.browser.js",
-        "default": "./dist/index.js"
-      }
+      "import": "./dist/index.esm.js",
+      "require": "./dist/index.js"
     }
   },
-  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
   "author": "Sherry Labs",
   "license": "MIT",
   "scripts": {
-    "build": "tsc",
-    "build:esm": "tsc --module ES2020 --outDir dist/esm && mv dist/esm/index.js dist/index.esm.js && rm -rf dist/esm",
-    "build:browser": "webpack --mode production",
-    "build:all": "npm run build && npm run build:esm && npm run build:browser",
+    "build": "tsc --project tsconfig.json",
+    "build:esm": "webpack --config webpack.config.js",
+    "build:browser": "webpack --config webpack.config.js",
+    "build:all": "rm -rf dist && npm run build && npm run build:esm && npm run build:browser",
     "prepublishOnly": "npm run build:all",
     "test": "jest",
     "test:coverage": "jest --coverage",
@@ -40,9 +38,6 @@
     "docs:start": "cd docs && yarn start",
     "docs:build": "cd docs && yarn build"
   },
-  "files": [
-    "dist"
-  ],
   "devDependencies": {
     "@babel/core": "^7.26.0",
     "@babel/preset-env": "^7.26.0",
@@ -55,12 +50,14 @@
     "jest": "^27.4.5",
     "node-fetch": "^2.6.9",
     "oxlint": "^0.14.0",
+    "path-browserify": "^1.0.1",
     "prettier": "^3.5.3",
+    "process": "^0.11.10",
     "stream-browserify": "^3.0.0",
     "ts-jest": "^29.3.2",
     "ts-loader": "^9.5.2",
     "vm-browserify": "^1.1.2",
-    "webpack": "^5.99.5",
+    "webpack": "^5.99.7",
     "webpack-cli": "^6.0.1"
   },
   "dependencies": {
