@@ -1,5 +1,5 @@
 import { DynamicAction } from '../interface/actions/dynamicAction';
-import { ActionValidationError, DynamicActionValidationError } from '../errors/customErrors';
+import { DynamicActionValidationError } from '../errors/customErrors';
 import { ParameterValidator } from './parameterValidator';
 
 /**
