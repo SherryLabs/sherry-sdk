@@ -108,3 +108,15 @@ export class ActionValidationError extends Error {
         this.name = 'ActionValidationError';
     }
 }
+
+export class DynamicActionValidationError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'DynamicActionValidationError';
+
+        // Mantener la pila de llamadas en errores personalizados
+        if (Error.captureStackTrace) {
+            Error.captureStackTrace(this, DynamicActionValidationError);
+        }
+    }
+}
