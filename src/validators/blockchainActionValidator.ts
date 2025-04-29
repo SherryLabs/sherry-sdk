@@ -4,23 +4,16 @@ import {
     BlockchainActionMetadata,
     BlockchainAction,
     BlockchainParameter,
+} from '../interface/actions/blockchainAction';
+import { BaseInputType, UIInputType, SelectionInputType } from '../interface/inputs';
+import { ChainContext } from '../interface/chains';
+import { SherryValidationError, ActionValidationError } from '../errors/customErrors';
+import {
     StandardParameter,
     SelectParameter,
     RadioParameter,
-    BaseInputType,
-    UIInputType,
-    SelectionInputType, // Make sure this is imported if defined elsewhere
-} from '../interface/actions/blockchainAction';
-import { ChainContext } from '../interface/chains';
-import { SherryValidationError, ActionValidationError } from '../errors/customErrors';
-// Assuming ParameterValidator is no longer needed here if validation is consolidated
-// import { ParameterValidator } from './parameterValidator';
-import {
-    isStandardParameter,
-    isSelectParameter,
-    isRadioParameter,
-    getInputTypeFromAbiType,
-} from './paramTypeUtils';
+    SelectOption,
+} from '../interface/inputs';
 
 /**
  * Validator class for Blockchain Actions
@@ -54,25 +47,29 @@ export class BlockchainActionValidator {
             // Get the blockchain action type (mutability)
             const blockchainActionType = BlockchainActionValidator.getBlockchainActionType(action);
 
-            // Validate 'amount' property based on mutability - MOVER ESTA VERIFICACIÓN ANTES DE LA VALIDACIÓN DE PARÁMETROS
+            // Validate 'amount' property based on mutability - Check before parameter validation
             const hasAmountParameterInAbi = abiParams.some(param => param.name === 'amount');
             if (
                 blockchainActionType !== 'payable' &&
                 action.amount !== undefined &&
-                !hasAmountParameterInAbi // Allow top-level amount if there's an ABI param named 'amount'
+                !hasAmountParameterInAbi // Allow top-level amount only if there's an ABI param named 'amount'
             ) {
                 throw new ActionValidationError(
                     'The action function is not payable according to the ABI, but an "amount" was provided at the top level.',
                 );
             }
 
+            console.log('ABI Parameters:', abiParams);
+            console.log('Action Parameters:', action.params);
             // Validate the user-provided parameters against the ABI parameters
             if (action.params) {
                 if (action.params.length !== abiParams.length) {
+                    // If ABI expects params but none are provided
                     throw new ActionValidationError(
                         `Function ${action.functionName} expects ${abiParams.length} parameters, but received ${action.params.length}.`,
                     );
                 }
+                // Parameter count check moved inside validateBlockchainParameters
                 BlockchainActionValidator.validateBlockchainParameters(
                     action.params,
                     abiParams,
@@ -80,7 +77,7 @@ export class BlockchainActionValidator {
                 );
             }
 
-            // Validate payable function without amount (moved from above)
+            // Validate payable function without amount (if no 'amount' param in ABI)
             if (
                 blockchainActionType === 'payable' &&
                 action.amount === undefined &&
@@ -98,13 +95,14 @@ export class BlockchainActionValidator {
                 blockchainActionType,
             };
         } catch (error) {
-            if (error instanceof ActionValidationError) {
-                // If the error is already an ActionValidationError, rethrow it
+            if (error instanceof ActionValidationError || error instanceof SherryValidationError) {
+                // If the error is already a known validation error, rethrow it
                 throw error;
             } else {
+                // Wrap unexpected errors
                 const errorMessage = error instanceof Error ? error.message : String(error);
                 throw new ActionValidationError(
-                    `Error validating blockchain action: ${errorMessage}`,
+                    `Unexpected error validating blockchain action: ${errorMessage}`,
                 );
             }
         }
@@ -178,164 +176,136 @@ export class BlockchainActionValidator {
 
     /**
      * Validates user-provided parameters against the ABI parameters, including type compatibility.
+     * Completely refactored with a cleaner approach based on explicit parameter type.
      */
     static validateBlockchainParameters(
         params: BlockchainParameter[],
         abiParams: readonly AbiParameter[],
-        functionName: string, // Pass functionName for better error messages
+        functionName: string,
     ): void {
         if (!Array.isArray(params)) {
             throw new ActionValidationError(
                 `Parameters for function ${functionName} must be an array.`,
             );
         }
-
-        // Check for parameter count mismatch
         if (params.length !== abiParams.length) {
             throw new ActionValidationError(
-                `Parameter count mismatch for function ${functionName}. ABI expects ${abiParams.length}, received ${params.length}.`,
+                `Function ${functionName} expects ${abiParams.length} parameters, but received ${params.length}.`,
             );
         }
 
         for (let i = 0; i < abiParams.length; i++) {
             const abiParam = abiParams[i];
             const userParam = params[i];
+            const abiType = abiParam.type as AbiType; // Cast for convenience
 
-            // 1. Validate basic structure and name matching
-            if (!userParam || typeof userParam !== 'object') {
-                throw new ActionValidationError(
-                    `Invalid parameter definition at index ${i} for function ${functionName}.`,
-                );
-            }
-            if (typeof userParam.name !== 'string' || !userParam.name) {
-                throw new ActionValidationError(
-                    `Parameter at index ${i} for function ${functionName} must have a valid name.`,
-                );
-            }
+            // --- 1. Basic Structural Validation For All Parameter Types ---
+            this.validateBasicParameterStructure(userParam, i, functionName);
+
             if (userParam.name !== abiParam.name) {
                 throw new ActionValidationError(
                     `Parameter name mismatch at index ${i} for function ${functionName}. Expected '${abiParam.name}', received '${userParam.name}'. Parameters must be in the same order as the ABI.`,
                 );
             }
-            if (typeof userParam.label !== 'string' || !userParam.label) {
-                throw new ActionValidationError(
-                    `Parameter "${userParam.name}" must have a valid label.`,
-                );
-            }
 
-            // 2. Determine types and validate compatibility
-            const abiType = abiParam.type;
-            // If user doesn't specify type, infer from ABI for validation, but prefer user's type if provided
-            const userSpecifiedType = userParam.type;
-            const effectiveUserType = userSpecifiedType || getInputTypeFromAbiType(abiType); // Use helper for default
+            // Validate common optional properties (description, required, fixed) that apply to all parameter types
+            this.validateCommonOptionalProperties(userParam);
 
-            // --- Type Compatibility Logic ---
-            if (this.isAbiType(effectiveUserType)) {
-                // Case 1: User type is an ABI type (e.g., 'address', 'uint256')
-                if (effectiveUserType !== abiType) {
-                    throw new ActionValidationError(
-                        `Type mismatch for parameter '${userParam.name}'. ABI expects '${abiType}', but received direct type '${effectiveUserType}'.`,
+            // Option for debugging - uncomment if needed
+            /*
+            console.log(`Parameter ${userParam.name} validation:`, {
+                name: userParam.name,
+                type: userParam.type || 'undefined',
+                value: userParam.value,
+                fixed: userParam.fixed,
+                abiType
+            });
+            */
+
+            // --- 2. Determine Parameter Type Explicitly ---
+            try {
+                // First, determine the type of parameter we're dealing with
+                const paramType = userParam.type;
+
+                // --- 3. Handle Fixed Value Validation (common to all parameter types) ---
+                // This must be done before type-specific validation since 'fixed' is in BaseParameter
+                if (userParam.fixed === true) {
+                    // CORREGIDO
+                    if (userParam.value === undefined) {
+                        throw new ActionValidationError(
+                            `Parameter "${userParam.name}" is marked as 'fixed: true' but is missing a 'value'.`,
+                        );
+                    }
+
+                    // Validate the fixed value's compatibility
+                    if (!this.isValueCompatible(userParam.value, abiType)) {
+                        throw new ActionValidationError(
+                            `Fixed 'value' for parameter '${userParam.name}' is not compatible with ABI type '${abiType}'. ` +
+                                `Value: ${JSON.stringify(userParam.value)} (type: ${typeof userParam.value})`,
+                        );
+                    }
+                }
+
+                // --- 4. Type-Specific Validation ---
+                // Now branch based on the parameter type for type-specific validation
+                if (paramType === 'select' || paramType === 'radio') {
+                    // SELECT or RADIO parameter validation
+                    this.validateSelectionParameter(
+                        userParam as SelectParameter | RadioParameter,
+                        abiType,
+                    );
+                } else {
+                    // STANDARD parameter validation (includes all standard types like text, number, etc)
+                    // We also determine the effective type to use for validation if none was specified
+                    const effectiveType = paramType || this.getInputTypeFromAbiType(abiType);
+                    this.validateStandardParameter(
+                        userParam as StandardParameter,
+                        abiType,
+                        effectiveType,
                     );
                 }
-                // Validate fixed value if present
-                if (userParam.fixed && userParam.value !== undefined) {
-                    if (!this.isValueCompatible(userParam.value, abiType as AbiType)) {
-                        throw new ActionValidationError(
-                            `Fixed value for parameter '${userParam.name}' is not compatible with ABI type '${abiType}'.`,
-                        );
-                    }
-                }
-            } else if (this.isUIType(effectiveUserType)) {
-                // Case 2: User type is a UI type (e.g., 'text', 'number')
-                // Cast abiType to AbiType to satisfy the function signature
-                if (!this.isUITypeCompatible(effectiveUserType, abiType as AbiType)) {
+            } catch (error) {
+                if (error instanceof ActionValidationError) {
+                    throw error; // Re-throw validation errors as is
+                } else {
+                    // Wrap unexpected errors with more context
                     throw new ActionValidationError(
-                        `UI type '${effectiveUserType}' for parameter '${userParam.name}' is not compatible with ABI type '${abiType}'.`,
+                        `Error validating parameter '${userParam.name}': ${
+                            error instanceof Error ? error.message : String(error)
+                        }`,
                     );
                 }
-                // Validate fixed value if present
-                if (userParam.fixed && userParam.value !== undefined) {
-                    if (!this.isValueCompatible(userParam.value, abiType as AbiType)) {
-                        throw new ActionValidationError(
-                            `Fixed value for parameter '${userParam.name}' is not compatible with ABI type '${abiType}'.`,
-                        );
-                    }
-                }
-            } else if (effectiveUserType === 'select' || effectiveUserType === 'radio') {
-                // Case 3: User type is selection ('select' or 'radio')
-                const selectParam = userParam as SelectParameter | RadioParameter;
-                if (
-                    !selectParam.options ||
-                    !Array.isArray(selectParam.options) ||
-                    selectParam.options.length === 0
-                ) {
-                    throw new ActionValidationError(
-                        `Parameter '${userParam.name}' of type '${effectiveUserType}' must have a non-empty 'options' array.`,
-                    );
-                }
-
-                // Validate structure and values of each option against the ABI type
-                for (const option of selectParam.options) {
-                    if (typeof option.label !== 'string' || !option.label) {
-                        throw new ActionValidationError(
-                            `Parameter '${userParam.name}' has an option with an invalid label.`,
-                        );
-                    }
-                    if (option.value === undefined) {
-                        // Allow null/false/0 as values
-                        throw new ActionValidationError(
-                            `Parameter '${userParam.name}' has an option (label: "${option.label}") without a value.`,
-                        );
-                    }
-                    // *** The crucial check: validate option value against ABI type ***
-                    if (!this.isValueCompatible(option.value, abiType as AbiType)) {
-                        throw new ActionValidationError(
-                            `Invalid option value '${option.value}' (label: "${option.label}") for parameter '${userParam.name}'. Expected value compatible with ABI type '${abiType}'.`,
-                        );
-                    }
-                }
-
-                // Validate default value if present
-                if (userParam.value !== undefined) {
-                    if (!this.isValueCompatible(userParam.value, abiType as AbiType)) {
-                        throw new ActionValidationError(
-                            `Default value for parameter '${userParam.name}' is not compatible with ABI type '${abiType}'.`,
-                        );
-                    }
-                    // Ensure default value is one of the options
-                    if (!selectParam.options.some(opt => opt.value === userParam.value)) {
-                        throw new ActionValidationError(
-                            `Default value for parameter '${userParam.name}' is not present in the available options.`,
-                        );
-                    }
-                }
-
-                // Additional structural validation for select/radio (e.g., no duplicate values/labels)
-                this.validateSelectionOptions(selectParam);
-            } else {
-                // Should not happen if type inference and checks are correct, but handle defensively
-                throw new ActionValidationError(
-                    `Unknown or unsupported parameter type '${effectiveUserType}' specified for parameter '${userParam.name}'.`,
-                );
-            }
-
-            // 3. Validate common parameter properties (required, description, etc.)
-            // These are less critical for type matching but good for completeness
-            this.validateCommonParameterProperties(userParam);
-
-            // 4. Validate type-specific standard parameter properties (minLength, pattern, etc.)
-            // Only apply if it's effectively a standard parameter (ABI or UI type, not select/radio)
-            if (this.isAbiType(effectiveUserType) || this.isUIType(effectiveUserType)) {
-                // We might need to cast userParam safely here if needed
-                this.validateStandardParameterProperties(userParam as StandardParameter);
             }
         }
     }
 
     /**
-     * Validates common properties present in all parameter types.
+     * Validates the basic structure that all parameter types must have.
      */
-    private static validateCommonParameterProperties(param: BlockchainParameter): void {
+    private static validateBasicParameterStructure(
+        param: any,
+        index: number,
+        functionName: string,
+    ): void {
+        if (!param || typeof param !== 'object') {
+            throw new ActionValidationError(
+                `Invalid parameter definition at index ${index} for function ${functionName}.`,
+            );
+        }
+        if (typeof param.name !== 'string' || !param.name) {
+            throw new ActionValidationError(
+                `Parameter at index ${index} for function ${functionName} must have a valid name.`,
+            );
+        }
+        if (typeof param.label !== 'string' || !param.label) {
+            throw new ActionValidationError(`Parameter "${param.name}" must have a valid label.`);
+        }
+    }
+
+    /**
+     * Validates common optional properties present in BaseParameter.
+     */
+    private static validateCommonOptionalProperties(param: BlockchainParameter): void {
         if (param.required !== undefined && typeof param.required !== 'boolean') {
             throw new ActionValidationError(
                 `Parameter "${param.name}" has an invalid 'required' value (must be boolean).`,
@@ -351,17 +321,114 @@ export class BlockchainActionValidator {
                 `Parameter "${param.name}" has an invalid 'fixed' value (must be boolean).`,
             );
         }
-        if (param.fixed && param.value === undefined) {
+    }
+
+    /**
+     * Validates a standard parameter (text, number, etc.)
+     */
+    private static validateStandardParameter(
+        param: StandardParameter,
+        abiType: AbiType,
+        effectiveType: string,
+    ): void {
+        // Validate type compatibility
+        if (this.isAbiType(effectiveType) && effectiveType !== abiType) {
             throw new ActionValidationError(
-                `Parameter "${param.name}" is marked as 'fixed' but has no 'value'.`,
+                `Type mismatch for parameter '${param.name}'. ABI expects '${abiType}', but received direct type '${effectiveType}'.`,
             );
         }
-        // Note: Validation of param.value against ABI type happens elsewhere
+        if (this.isUIType(effectiveType) && !this.isUITypeCompatible(effectiveType, abiType)) {
+            throw new ActionValidationError(
+                `UI type '${effectiveType}' for parameter '${param.name}' is not compatible with ABI type '${abiType}'.`,
+            );
+        }
+
+        // Validate default value if present and not fixed (fixed values were validated earlier)
+        if (param.value !== undefined && param.fixed !== true) {
+            if (!this.isValueCompatible(param.value, abiType)) {
+                throw new ActionValidationError(
+                    `Default 'value' for parameter '${param.name}' is not compatible with ABI type '${abiType}'. ` +
+                        `Value: ${JSON.stringify(param.value)}`,
+                );
+            }
+        }
+
+        // Validate standard specific properties
+        this.validateStandardParameterProperties(param);
+    }
+
+    /**
+     * Validates a selection parameter (select, radio)
+     */
+    /**
+     * Validates a selection parameter (select, radio)
+     */
+    private static validateSelectionParameter(
+        param: SelectParameter | RadioParameter,
+        abiType: AbiType,
+    ): void {
+        // Validate options array
+        if (!param.options || !Array.isArray(param.options) || param.options.length === 0) {
+            throw new ActionValidationError(
+                `Parameter '${param.name}' of type '${param.type}' must have a non-empty 'options' array.`,
+            );
+        }
+
+        // Validate each option
+        for (const option of param.options) {
+            if (typeof option.label !== 'string' || !option.label) {
+                throw new ActionValidationError(
+                    `Parameter '${param.name}' has an option with an invalid label.`,
+                );
+            }
+            if (option.value === undefined) {
+                throw new ActionValidationError(
+                    `Parameter '${param.name}' has an option (label: "${option.label}") without a value.`,
+                );
+            }
+            if (!this.isValueCompatible(option.value, abiType)) {
+                throw new ActionValidationError(
+                    `Invalid option value '${typeof option.value === 'object' ? JSON.stringify(option.value) : option.value}' ` +
+                        `(label: "${option.label}") for parameter '${param.name}'. ` +
+                        `Expected value compatible with ABI type '${abiType}'.`,
+                );
+            }
+        }
+
+        // Validate default value (non-fixed) if present
+        // Fixed values were already validated in the common section
+        if (param.value !== undefined && param.fixed !== true) {
+            // Ensure the value is valid for the ABI type
+            if (!this.isValueCompatible(param.value, abiType)) {
+                throw new ActionValidationError(
+                    `Default 'value' for parameter '${param.name}' is not compatible with ABI type '${abiType}'. ` +
+                        `Value: ${JSON.stringify(param.value)}`,
+                );
+            }
+
+            // Ensure value exists in options
+            const valueExists = param.options.some(opt => {
+                // Use deep comparison for objects
+                if (typeof param.value === 'object' && param.value !== null) {
+                    return JSON.stringify(opt.value) === JSON.stringify(param.value);
+                }
+                return opt.value === param.value;
+            });
+
+            if (!valueExists) {
+                throw new ActionValidationError(
+                    `Default 'value' for parameter '${param.name}' does not match any option. ` +
+                        `Value: ${JSON.stringify(param.value)}`,
+                );
+            }
+        }
+
+        // Validate selection structure (duplicates, etc.)
+        this.validateSelectionOptions(param);
     }
 
     /**
      * Validates properties specific to StandardParameter (minLength, pattern, etc.).
-     * Assumes the parameter type itself is compatible.
      */
     private static validateStandardParameterProperties(param: StandardParameter): void {
         if (
@@ -418,36 +485,55 @@ export class BlockchainActionValidator {
 
     /**
      * Validates structural properties of Select/Radio options (duplicates).
-     * Assumes individual option values have already been validated for type compatibility.
      */
     private static validateSelectionOptions(param: SelectParameter | RadioParameter): void {
-        const values = param.options.map(o => o.value);
-        if (new Set(values).size !== values.length) {
-            throw new ActionValidationError(
-                `Parameter "${param.name}" has options with duplicate values.`,
-            );
+        // Check for duplicate values
+        const uniqueValues = new Set();
+        for (const option of param.options) {
+            const valueStr =
+                typeof option.value === 'object' && option.value !== null
+                    ? JSON.stringify(option.value)
+                    : String(option.value);
+
+            if (uniqueValues.has(valueStr)) {
+                throw new ActionValidationError(
+                    `Parameter "${param.name}" has options with duplicate values.`,
+                );
+            }
+            uniqueValues.add(valueStr);
         }
+
+        // Check for duplicate labels
         const labels = param.options.map(o => o.label);
         if (new Set(labels).size !== labels.length) {
-            // This might be acceptable in some cases, but often indicates an error
             throw new ActionValidationError(
-                `Parameter "${param.name}" has options with duplicate values.`,
+                `Parameter "${param.name}" has options with duplicate labels.`,
             );
         }
 
-        // Specific validation for radio (usually needs >= 2 options)
+        // Radio type specific validation
         if (param.type === 'radio' && param.options.length < 2) {
             throw new ActionValidationError(
-                `Radio parameter "${param.name}" must have at least 2 options, found ${param.options.length}.`,
+                `Radio parameter "${param.name}" must have at least 2 options.`,
             );
         }
     }
 
-    // --- Helper Functions for Type Checking and Compatibility ---
+    /**
+     * Maps ABI types to appropriate input types.
+     */
+    private static getInputTypeFromAbiType(abiType: AbiType): string {
+        if (abiType === 'address') return 'address';
+        if (abiType === 'bool') return 'bool';
+        if (abiType === 'string') return 'text';
+        if (abiType.startsWith('uint') || abiType.startsWith('int')) return 'number';
+        if (abiType.startsWith('bytes')) return 'text'; // bytes as hex strings
+        if (abiType.endsWith('[]')) return 'text'; // arrays as JSON strings
+        return 'text'; // Default fallback to 'text'
+    }
 
     /**
      * Checks if a type string represents a known ABI type.
-     * Includes basic types, fixed-size types, and array notation.
      */
     private static isAbiType(type: string): type is AbiType {
         if (!type) return false;
@@ -463,7 +549,7 @@ export class BlockchainActionValidator {
         if (basicAbiTypes.has(type)) return true;
         // Numeric types (uint/int)
         if (
-            /^(u?int)(8|16|24|32|40|48|56|64|72|80|88|96|104|112|120|128|136|144|152|160|168|176|184|192|200|208|216|224|232|240|248|256)$/.test(
+            /^(u?int)(8|16|24|32|40|48|56|64|72|80|88|96|104|112|120|128|136|144|152|160|168|176|184|192|200|208|216|224|232|240|248|256)?$/.test(
                 type,
             )
         )
@@ -499,14 +585,6 @@ export class BlockchainActionValidator {
     }
 
     /**
-     * Checks if a type string represents a known Selection input type.
-     */
-    private static isSelectionType(type: string): type is SelectionInputType {
-        const knownSelectionTypes: Set<string> = new Set(['select', 'radio']);
-        return knownSelectionTypes.has(type);
-    }
-
-    /**
      * Checks if a UI input type is a reasonable representation for a given ABI type.
      */
     private static isUITypeCompatible(uiType: UIInputType, abiType: AbiType): boolean {
@@ -530,101 +608,78 @@ export class BlockchainActionValidator {
 
     /**
      * Validates if a given JavaScript value is compatible with the expected ABI type.
-     * This is crucial for validating default values, fixed values, and option values.
      */
     private static isValueCompatible(value: any, abiType: AbiType): boolean {
-        if (value === null || value === undefined) {
-            // Generally, null/undefined aren't valid values for contract calls unless maybe for optional params,
-            // but the 'required' flag handles whether a value *must* be provided.
-            // This function checks if an *existing* value is valid.
-            // Let's consider null/undefined invalid for now for simplicity.
-            return false;
-        }
+        try {
+            if (value === null || value === undefined) {
+                return false; // Generally invalid for contract calls
+            }
 
-        const typeOfValue = typeof value;
+            const typeOfValue = typeof value;
 
-        if (abiType === 'address') {
-            // Allow 'sender' as a special keyword, otherwise must be valid address string
-            return (
-                typeOfValue === 'string' && (value.toLowerCase() === 'sender' || isAddress(value))
-            );
-        }
-        if (abiType === 'bool') {
-            return typeOfValue === 'boolean';
-        }
-        if (abiType === 'string') {
-            return typeOfValue === 'string';
-        }
-        if (abiType.startsWith('uint') || abiType.startsWith('int')) {
-            // Allow numbers, BigInts, or strings representing valid integers
-            if (typeOfValue === 'number') {
-                // Ensure it's an integer and within safe integer range if not using BigInt
-                return Number.isInteger(value);
+            if (abiType === 'address') {
+                return (
+                    typeOfValue === 'string' &&
+                    (value.toLowerCase() === 'sender' || isAddress(value))
+                );
             }
-            if (typeOfValue === 'bigint') {
-                return true; // BigInt is suitable for large integers
+            if (abiType === 'bool') {
+                return typeOfValue === 'boolean';
             }
-            if (typeOfValue === 'string') {
-                // Regex for integer strings (positive or negative)
-                const isValidIntegerString = /^-?\d+$/.test(value);
-                if (!isValidIntegerString) return false;
-                // Optional: Check if string representation fits within target type (e.g., uint8 max 255)
-                // This requires parsing and comparing, potentially with BigInt for large types.
-                // Example (simplified, needs BigInt for full correctness):
-                // if (abiType.startsWith('uint')) {
-                //     const num = BigInt(value);
-                //     if (num < 0) return false;
-                //     // Add checks based on size (uint8, uint16, etc.)
-                // } else { // int
-                //     // Add checks based on size (int8, int16, etc.)
-                // }
-                return true; // Basic check: is it an integer string?
+            if (abiType === 'string') {
+                return typeOfValue === 'string';
             }
-            return false;
-        }
-        if (abiType.startsWith('bytes')) {
-            // Expect a hex string (0x...)
-            if (
-                typeOfValue !== 'string' ||
-                !value.startsWith('0x') ||
-                !/^(0x)?[0-9a-fA-F]*$/.test(value)
-            ) {
+            if (abiType.startsWith('uint') || abiType.startsWith('int')) {
+                if (typeOfValue === 'number') {
+                    return Number.isInteger(value);
+                }
+                if (typeOfValue === 'bigint') {
+                    return true;
+                }
+                if (typeOfValue === 'string') {
+                    const isValidIntegerString = /^-?\d+$/.test(value);
+                    return isValidIntegerString;
+                }
                 return false;
             }
-            // For fixed-size bytes (bytes1..32), check length
-            if (abiType !== 'bytes') {
-                // It's bytesN
-                try {
-                    const size = parseInt(abiType.replace('bytes', ''));
-                    // Each byte is 2 hex chars, plus '0x' prefix
-                    if (value.length !== 2 + size * 2) {
+            if (abiType.startsWith('bytes')) {
+                if (typeOfValue !== 'string') return false;
+
+                if (!value.startsWith('0x') || !/^(0x)?[0-9a-fA-F]*$/.test(value)) {
+                    return false;
+                }
+
+                // Fixed-size bytesN
+                if (abiType !== 'bytes') {
+                    try {
+                        const size = parseInt(abiType.replace('bytes', ''));
+                        // Each byte is 2 hex characters + '0x' prefix
+                        return value.length === 2 + size * 2;
+                    } catch (e) {
                         return false;
                     }
-                } catch (e) {
-                    return false;
-                } // Invalid bytesN format
+                }
+
+                // Dynamic bytes
+                return (value.length - 2) % 2 === 0; // Ensure even number of hex digits
             }
-            // Check if hex string has an even number of characters after 0x
-            return (value.length - 2) % 2 === 0;
-        }
-        if (abiType.endsWith('[]')) {
-            // Array validation
-            if (!Array.isArray(value)) return false;
-            const baseType = abiType.slice(0, -2) as AbiType; // Get base type
-            // Recursively validate each item in the array
-            return value.every(item => this.isValueCompatible(item, baseType));
-        }
-        if (abiType === 'tuple') {
-            // Basic check: is it an object? Deeper validation would require component types.
-            return typeOfValue === 'object' && !Array.isArray(value);
-        }
+            if (abiType.endsWith('[]')) {
+                if (!Array.isArray(value)) return false;
+                const baseType = abiType.slice(0, -2) as AbiType;
+                return value.every(item => this.isValueCompatible(item, baseType));
+            }
+            if (abiType === 'tuple') {
+                // Basic check, deeper validation would need component types from ABI
+                return typeOfValue === 'object' && !Array.isArray(value);
+            }
 
-        // Fallback for unhandled ABI types
-        console.warn(`Compatibility check not fully implemented for ABI type: ${abiType}`);
-        return true; // Be permissive for unknown types until implemented
+            console.warn(`Compatibility check not fully implemented for ABI type: ${abiType}`);
+            return true; // Permissive for unknown types
+        } catch (error) {
+            console.error(`Error validating value compatibility: ${error}`);
+            return false; // Fail safely
+        }
     }
-
-    // --- Existing Helper Functions ---
 
     /**
      * Gets a function from the ABI by its name
@@ -680,7 +735,6 @@ export class BlockchainActionValidator {
             typeof obj.functionName === 'string' &&
             obj.chains &&
             typeof obj.chains.source === 'string'
-            // Note: Doesn't check ABI validity or function existence here
         );
     }
 
@@ -695,12 +749,4 @@ export class BlockchainActionValidator {
             Array.isArray((obj as any).abiParams) // Added by validation
         );
     }
-
-    // --- Deprecated/Removed Methods ---
-    // Removed validateStandardParameter, validateSelectParameter, validateRadioParameter
-    // as their logic is now integrated into validateBlockchainParameters
-    // Removed validateParameterValue as its logic is now in isValueCompatible
-    // Removed getValidInputTypes, isStandardParameter, isSelectParameter, isRadioParameter
-    // as type checking is done differently now.
-    // Removed processParams as parameter processing/validation is now part of validateBlockchainParameters
 }

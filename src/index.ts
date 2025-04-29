@@ -22,6 +22,8 @@ export { HttpActionValidator } from './validators/httpActionValidator';
 
 export { FlowValidator } from './validators/flowValidator';
 
+export { DynamicActionValidator } from './validators/dynamicActionValidator';
+
 // Export flow executors and utilities
 export { FlowExecutor } from './executors/flowExecutor';
 

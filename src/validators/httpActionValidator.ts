@@ -1,11 +1,6 @@
-import {
-    HttpAction,
-    HttpParameter,
-    SelectParameter,
-    RadioParameter,
-    StandardParameter,
-} from '../interface/actions/httpAction';
+import { HttpAction, HttpParameter } from '../interface/actions/httpAction';
 import { InvalidMetadataError } from '../errors/customErrors';
+import { SelectParameter, RadioParameter, StandardParameter } from '../interface/inputs';
 
 export class HttpActionValidator {
     static validateHttpAction(action: HttpAction): HttpAction {
@@ -23,7 +18,7 @@ export class HttpActionValidator {
         try {
             new URL(path);
         } catch {
-            throw new InvalidMetadataError('Invalid path URL');
+            throw new InvalidMetadataError('[HttpAction-validatepath]Invalid path URL');
         }
     }
 
@@ -80,13 +75,6 @@ export class HttpActionValidator {
             }
         });
 
-        // Validate default value if present
-        if (param.defaultValue !== undefined) {
-            if (!param.options.some(opt => opt.value === param.defaultValue)) {
-                throw new InvalidMetadataError(`Invalid default value for parameter ${param.name}`);
-            }
-        }
-
         return param;
     }
 
@@ -105,36 +93,29 @@ export class HttpActionValidator {
             }
         });
 
-        // Validate default value if present
-        if (param.defaultValue !== undefined) {
-            if (!param.options.some(opt => opt.value === param.defaultValue)) {
-                throw new InvalidMetadataError(`Invalid default value for parameter ${param.name}`);
-            }
-        }
-
         return param;
     }
 
     private static validateStandardParameter(param: StandardParameter): StandardParameter {
         // Validate default value type if present
-        if (param.defaultValue !== undefined) {
+        if (param.value !== undefined) {
             switch (param.type) {
                 case 'email':
-                    if (!HttpActionValidator.isValidEmail(param.defaultValue)) {
+                    if (!HttpActionValidator.isValidEmail(param.value)) {
                         throw new InvalidMetadataError(
                             `Invalid email format for default value in parameter ${param.name}`,
                         );
                     }
                     break;
                 case 'url':
-                    if (!HttpActionValidator.isValidUrl(param.defaultValue)) {
+                    if (!HttpActionValidator.isValidUrl(param.value)) {
                         throw new InvalidMetadataError(
                             `Invalid URL format for default value in parameter ${param.name}`,
                         );
                     }
                     break;
                 case 'datetime':
-                    if (!HttpActionValidator.isValidDateTime(param.defaultValue)) {
+                    if (!HttpActionValidator.isValidDateTime(param.value)) {
                         throw new InvalidMetadataError(
                             `Invalid datetime format for default value in parameter ${param.name}`,
                         );
@@ -177,6 +158,9 @@ export class HttpActionValidator {
     }
 
     static isHttpAction(action: any): action is HttpAction {
+        if (action.type !== 'http') {
+            return false;
+        }
         // First we check if the object exists and is actually an object
         if (!action || typeof action !== 'object') {
             return false;

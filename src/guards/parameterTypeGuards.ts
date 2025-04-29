@@ -1,10 +1,5 @@
-import {
-    HttpParameter,
-    StandardParameter,
-    SelectParameter,
-    RadioParameter,
-    INPUT_TYPES,
-} from '../interface/actions/httpAction';
+import { HttpParameter, INPUT_TYPES } from '../interface/actions/httpAction';
+import { SelectParameter, RadioParameter, StandardParameter } from '../interface/inputs';
 
 export function isSelectParameter(param: HttpParameter): param is SelectParameter {
     return param.type === INPUT_TYPES.SELECT;

@@ -1,10 +1,7 @@
 import { describe, expect, it } from '@jest/globals'; // Import jest for mocking console
 import { BlockchainActionValidator } from '../../src/validators/blockchainActionValidator';
-import {
-    BlockchainActionMetadata,
-    SelectParameter,
-    RadioParameter,
-} from '../../src/interface/actions/blockchainAction';
+import { BlockchainActionMetadata } from '../../src/interface/actions/blockchainAction';
+import { SelectParameter, RadioParameter } from '../../src/interface/inputs';
 import { ActionValidationError } from '../../src/errors/customErrors';
 import { Abi, AbiParameter, AbiFunction } from 'abitype';
 
