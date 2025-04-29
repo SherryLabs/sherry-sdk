@@ -13,7 +13,7 @@ sidebar_position: 3
 // src/interface/actions/httpAction.ts
 export interface HttpAction {
   label: string; // Label for UI
-  endpoint: string; // URL of the API endpoint to call
+  path: string; // URL of the API path to call
   params: HttpParameter[]; // Parameters/fields of the form
 }
 
@@ -53,7 +53,7 @@ export interface SelectOption {
 ```
 
 - `label`: Text the user sees to initiate the action (e.g., "Submit Feedback").
-- `endpoint`: The full URL to which the form data will be sent. The SDK will make a POST request with the data in JSON format by default.
+- `path`: The full URL to which the form data will be sent. The SDK will make a POST request with the data in JSON format by default.
 - `params`: An array of `HttpParameter` objects defining the form fields the user will fill out.
   - Each parameter defines a field with `name` (key in the sent JSON), `label` (for the UI), `type` (input type), `required`, etc.
   - The parameter types (`StandardParameter`, `SelectParameter`, `RadioParameter`) and their properties are very similar to those for `BlockchainAction`. See [Parameters](./../parameters.md) for more details on configuration.
@@ -65,7 +65,7 @@ import { HttpAction, HttpParameter } from '@sherrylinks/sdk';
 
 const feedbackAction: HttpAction = {
   label: 'Submit Feedback',
-  endpoint: 'https://api.myfeedback.example/submit',
+  path: 'https://api.myfeedback.example/submit',
   params: [
     {
       name: 'email',

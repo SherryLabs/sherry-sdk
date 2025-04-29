@@ -91,7 +91,7 @@ Validation covers many aspects, including:
 - **`Metadata` Structure:** Presence and correct type of `url`, `icon`, `title`, `description`, `actions`.
 - **Actions:**
   - Valid action type (`blockchain`, `transfer`, `http`, `flow`).
-  - Required properties for each action type (`address`, `abi`, `functionName` for blockchain; `endpoint` for http; `initialActionId` for flow, etc.).
+  - Required properties for each action type (`address`, `abi`, `functionName` for blockchain; `path` for http; `initialActionId` for flow, etc.).
   - Validity of `chains`.
 - **`BlockchainAction`:**
   - `address` is a valid address.
@@ -104,7 +104,7 @@ Validation covers many aspects, including:
   - `amount` (if present) is a positive number.
   - Valid configuration of `recipient` and `amountConfig` (if used).
 - **`HttpAction`:**
-  - `endpoint` is a valid URL.
+  - `path` is a valid URL.
   - `params` have valid `name`, `label`, `type`.
   - `options` present and non-empty for `select` and `radio`.
 - **`ActionFlow`:**

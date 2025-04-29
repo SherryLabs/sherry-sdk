@@ -40,7 +40,7 @@ describe('Mixed Action Mini-App', () => {
 
         // First action should remain HttpAction
         expect(isHttpAction(validatedApp.actions[0])).toBe(true);
-        expect(validatedApp.actions[0]).toHaveProperty('endpoint');
+        expect(validatedApp.actions[0]).toHaveProperty('path');
 
         // Second action should remain TransferAction
         expect(isTransferAction(validatedApp.actions[1])).toBe(true);
@@ -67,7 +67,7 @@ describe('Mixed Action Mini-App', () => {
 
         // HTTP action validation - check if it maintains core properties
         expect(HttpActionValidator.isHttpAction(httpAction)).toBe(true);
-        expect(httpAction).toHaveProperty('endpoint', 'https://api.example.com/feedback');
+        expect(httpAction).toHaveProperty('path', 'https://api.example.com/feedback');
         expect(httpAction).toHaveProperty('params');
         expect(httpAction.params).toHaveLength(3);
 

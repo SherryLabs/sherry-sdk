@@ -46,7 +46,7 @@ export type HttpParameter = StandardParameter | SelectParameter | RadioParameter
 export interface HttpAction {
     type: 'http';
     label: string;
-    endpoint: string;
+    path: string;
     method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
     headers?: Record<string, string>;
     body?: Record<string, any>;

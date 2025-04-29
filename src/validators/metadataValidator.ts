@@ -20,6 +20,8 @@ interface ActionValidatorConfig {
     validate: (action: any) => ValidatedAction; // Use 'any' or refine with generics/overloads if possible
 }
 
+type DynamicActionValidateFn = (action: DynamicAction, baseUrl?: string) => ValidatedAction;
+
 // Create the lookup table (array) of validators
 const actionValidators: ActionValidatorConfig[] = [
     {
@@ -90,6 +92,30 @@ export class MetadataValidator {
             );
         }
 
+        if (metadata.baseUrl) {
+            try {
+                new URL(metadata.baseUrl);
+            } catch (error) {
+                throw new SherryValidationError(`Invalid baseUrl format: ${metadata.baseUrl}`);
+            }
+        }
+
+        metadata.actions.forEach((action, index) => {
+            if (!action.type) {
+                throw new SherryValidationError(
+                    `Action at index ${index} is missing required 'type' property`,
+                );
+            }
+
+            // Verificar que sea uno de los tipos permitidos
+            const validTypes = ['blockchain', 'transfer', 'http', 'dynamic', 'flow'];
+            if (!validTypes.includes(action.type)) {
+                throw new SherryValidationError(
+                    `Action at index ${index} has invalid type: '${action.type}'. Must be one of: ${validTypes.join(', ')}`,
+                );
+            }
+        });
+
         return true;
     }
 
@@ -108,8 +134,20 @@ export class MetadataValidator {
 
             const processedActions = metadata.actions.map((action): ValidatedAction => {
                 const validatorConfig = actionValidators.find(v => v.guard(action));
+
                 if (validatorConfig) {
-                    return validatorConfig.validate(action);
+                    // Check if it's the dynamic action validator and pass baseUrl
+                    if (validatorConfig.guard === DynamicActionValidator.isDynamicAction) {
+                        return (validatorConfig.validate as DynamicActionValidateFn)(
+                            action as DynamicAction,
+                            metadata.baseUrl,
+                        );
+                    } else {
+                        // For other validators, call normally
+                        return (validatorConfig.validate as (action: any) => ValidatedAction)(
+                            action,
+                        );
+                    }
                 } else {
                     throw new SherryValidationError(
                         `Invalid Action: Unknown action type for action with label "${action.label ?? 'N/A'}"`,
@@ -132,6 +170,34 @@ export class MetadataValidator {
             } else {
                 throw new SherryValidationError(`Unknown error processing metadata`);
             }
+        }
+    }
+
+    static validateBaseUrlAndDynamicActions(metadata: Metadata): void {
+        // Si la metadata tiene baseUrl, comprueba que sea válida
+        if (metadata.baseUrl) {
+            try {
+                new URL(metadata.baseUrl);
+            } catch (error) {
+                throw new SherryValidationError(`Invalid baseUrl: ${metadata.baseUrl}`);
+            }
+        }
+
+        // Comprueba si hay DynamicActions que requieran una baseUrl
+        const dynamicActions = metadata.actions.filter(
+            action => action.type === 'dynamic',
+        ) as DynamicAction[];
+
+        if (dynamicActions.length > 0) {
+            // Para cada DynamicAction, verifica que tenga acceso a una URL completa
+            dynamicActions.forEach(action => {
+                // Si el path es relativo pero no hay baseUrl, es un error
+                if (!action.path.startsWith('http') && !metadata.baseUrl) {
+                    throw new SherryValidationError(
+                        `DynamicAction '${action.label}' has a relative path '${action.path}' but no baseUrl is provided in metadata`,
+                    );
+                }
+            });
         }
     }
 }

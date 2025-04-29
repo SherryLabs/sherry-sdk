@@ -6,6 +6,6 @@ export interface DynamicAction {
     label: string;
     description?: string;
     chains: ChainContext;
-    endpoint: string;
+    path: string;
     params?: BlockchainParameter[];
 }

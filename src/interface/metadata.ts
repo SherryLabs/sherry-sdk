@@ -5,6 +5,7 @@ export interface Metadata {
     icon: string;
     title: string;
     description: string;
+    baseUrl?: string;
     /**
      * The actions that can be performed by the mini app.
      * This is an array of different types of actions, which can include:

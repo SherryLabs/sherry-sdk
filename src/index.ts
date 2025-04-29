@@ -36,3 +36,5 @@ export {
     onboardingFlowApp as exampleOnboardingFlow,
     defiSwapFlowApp as exampleDefiSwapFlow,
 } from './examples/nested-actions';
+
+export { DynamicActionExecutor } from './executors/dynamicExecutor';
