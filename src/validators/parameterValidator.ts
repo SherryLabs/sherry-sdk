@@ -1,10 +1,6 @@
-import {
-    BlockchainParameter,
-    StandardParameter,
-    SelectParameter,
-    RadioParameter,
-} from '../interface/actions/blockchainAction';
+import { BlockchainParameter } from '../interface/actions/blockchainAction';
 import { SherryValidationError } from '../errors/customErrors';
+import { StandardParameter, SelectParameter, RadioParameter } from '../interface/inputs';
 import { isAddress } from 'viem';
 import { isStandardParameter, isSelectParameter, isRadioParameter } from './paramTypeUtils';
 

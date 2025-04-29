@@ -1,7 +1,8 @@
 import { DynamicAction } from '../interface/actions/dynamicAction';
-import { ValidatedAction } from '../interface';
+import { BlockchainParameter, ValidatedAction } from '../interface';
 import { ActionValidationError } from '../utils';
 import { ExecutionResponse } from '../interface/response/executionResponse';
+import { StandardParameter } from '../interface/inputs';
 
 export class DynamicActionExecutor {
     private baseUrl?: string;
@@ -31,10 +32,6 @@ export class DynamicActionExecutor {
 
             let fullUrl = this.getFullUrl(action);
             fullUrl = this.appendQueryParams(action, inputs, context, fullUrl);
-
-            console.log(
-                `[DynamicActionExecutor] Executing Action '${action.label}' with URL: ${fullUrl}`,
-            );
 
             const response = await fetch(fullUrl, {
                 method: 'POST',
@@ -68,10 +65,6 @@ export class DynamicActionExecutor {
                 );
             }
         } catch (error) {
-            console.error(
-                `[DynamicActionExecutor] Error executing action '${action.label}':`,
-                error,
-            );
             const message = error instanceof Error ? error.message : 'Unknown error';
             throw new ActionValidationError(`Error executing action '${action.label}': ${message}`);
         }
@@ -98,7 +91,7 @@ export class DynamicActionExecutor {
         const urlObj = new URL(url);
 
         if (action.params) {
-            action.params.forEach(param => {
+            action.params.forEach((param: StandardParameter) => {
                 if (param.fixed || param.value !== undefined) {
                     urlObj.searchParams.append(param.name, String(param.value));
                 } else if (inputs[param.name] !== undefined) {

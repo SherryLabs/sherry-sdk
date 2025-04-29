@@ -1,5 +1,5 @@
 import { ChainContext } from '../chains';
-import { BlockchainParameter } from './blockchainAction';
+import { StandardParameter } from '../inputs';
 
 export interface DynamicAction {
     type: 'dynamic';
@@ -7,5 +7,5 @@ export interface DynamicAction {
     description?: string;
     chains: ChainContext;
     path: string;
-    params?: BlockchainParameter[];
+    params?: StandardParameter[];
 }

@@ -1,5 +1,5 @@
 // example-miniapps.ts
-import { StandardParameter } from '../interface/actions/blockchainAction';
+import { StandardParameter } from '../interface/inputs';
 import { PARAM_TEMPLATES, createParameter } from '../templates/templates';
 
 // ============== 1. TOKEN SWAP MINI-APP ==============

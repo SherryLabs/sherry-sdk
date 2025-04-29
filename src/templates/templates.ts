@@ -1,10 +1,10 @@
+import { BlockchainParameter } from '../interface/actions/blockchainAction';
 import {
     StandardParameter,
     SelectParameter,
     RadioParameter,
-    BlockchainParameter,
     SelectOption,
-} from '../interface/actions/blockchainAction';
+} from '../interface/inputs';
 
 /**
  * Plantillas para parámetros comunes

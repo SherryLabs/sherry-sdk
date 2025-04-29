@@ -1,72 +1,105 @@
-// Re-export all types from metadata
+// ========================================================================
+// Metadata Exports
+// ========================================================================
+/**
+ * Re-exports all types related to the core Metadata structure.
+ */
 export type * from './metadata';
 
-// Re-export all blockchain action types
-export type * from './actions/blockchainAction';
-export type {
-    BlockchainActionMetadata,
-    BlockchainAction,
-    BlockchainParameter,
-    StandardParameter,
-    SelectParameter,
-    RadioParameter,
-    SelectOption,
-    BaseParameter,
-} from './actions/blockchainAction';
-
-// Re-export chain related types
+// ========================================================================
+// Chain Exports
+// ========================================================================
+/**
+ * Re-exports types related to blockchain identification and context.
+ */
 export type * from './chains';
-export type { Chain, ChainContext } from './chains';
+/**
+ * Re-exports the constant array of supported chain identifiers.
+ */
 export { VALID_CHAINS } from './chains';
 
-// Re-export transfer action types
-export type * from './actions/transferAction';
-export type { TransferAction, RecipientConfig, AmountConfig } from './actions/transferAction';
+// ========================================================================
+// Action Exports
+// ========================================================================
 
-// Re-export HTTP action types
+// --- General Action Types ---
+/**
+ * Re-exports general action types (`Action`, `ValidatedAction`) and the `BaseAction` interface.
+ */
+export type * from './actions/action';
+
+// --- Blockchain Action Types ---
+/**
+ * Re-exports all types related to Blockchain Actions, including metadata,
+ * validated action, parameters (`BlockchainParameter`, `StandardParameter`,
+ * `SelectParameter`, `RadioParameter`), options (`SelectOption`), and base types.
+ */
+export type * from './actions/blockchainAction';
+
+// --- Transfer Action Types ---
+/**
+ * Re-exports all types related to Transfer Actions, including the main action type
+ * and configuration interfaces (`RecipientConfig`, `AmountConfig`).
+ * Note: Also re-exports `SelectOption` which is fine.
+ */
+export type * from './actions/transferAction';
+
+// --- HTTP Action Types ---
+/**
+ * Re-exports all types related to HTTP Actions, including the main action type,
+ * parameters (`HttpParameter`, `StandardParameter`, `SelectParameter`, `RadioParameter`),
+ * options (`SelectOption`), and base types.
+ * Note: Also re-exports types like `SelectOption`, `BaseParameter` etc. which is fine.
+ */
 export type * from './actions/httpAction';
-export type {
-    HttpAction,
-    HttpParameter,
-    BaseInputType,
-    AdvancedInputType,
-} from './actions/httpAction';
+/**
+ * Re-exports the constant object defining standard input types for HTTP actions.
+ */
 export { INPUT_TYPES } from './actions/httpAction';
 
-// Re-export nested action types
+// --- Flow Action Types ---
+/**
+ * Re-exports all types related to Flow Actions (ActionFlow), including various
+ * nested action types (`NestedAction`, `NestedBlockchainAction`, `NestedTransferAction`,
+ * `NestedHttpAction`, `CompletionAction`, `DecisionAction`, `NestedDynamicAction`)
+ * and the base interface for nested actions (`NestedActionBase`).
+ */
 export type * from './actions/flowAction';
-export type {
-    ActionFlow,
-    NestedAction,
-    NestedActionBase,
-    NestedBlockchainAction,
-    NestedTransferAction,
-    NestedHttpAction,
-    CompletionAction,
-    DecisionAction,
-} from './actions/flowAction';
 
-// Re-export action types
-export type * from './actions/action';
-export type { Action, ValidatedAction } from './actions/action';
+// --- Dynamic Action Types ---
+/**
+ * Re-exports all types related to Dynamic Actions.
+ */
+export type * from './actions/dynamicAction';
+
+// ========================================================================
+// Response Exports
+// ========================================================================
+/**
+ * Re-exports types related to the response format expected after action execution,
+ * particularly for dynamic actions.
+ */
+export type * from './response/executionResponse';
+
+// ========================================================================
+// Third-Party Library Re-exports
+// ========================================================================
 
 /**
- * Re-export types from `abitype`
- *
+ * Re-exports selected types from `abitype` for ABI handling.
+ * These types are fundamental for defining contract interactions.
  * @see {@link https://abitype.dev/}
  */
 export type { Abi, AbiParameter, AbiStateMutability, AbiFunction } from 'abitype';
 
 /**
- * Re-export types from `viem`
- *
+ * Re-exports selected types from `viem` for contract interaction specifics.
  * @see {@link https://viem.sh/}
  */
 export type { ContractFunctionName } from 'viem';
 
 /**
- * Re-export functions from `viem`
- *
+ * Re-exports selected utility functions from `viem`.
  * @see {@link https://viem.sh/}
  */
 export { isAddress } from 'viem';

@@ -1,45 +1,6 @@
-export type BaseInputType =
-    | 'text'
-    | 'number'
-    | 'boolean'
-    | 'email'
-    | 'url'
-    | 'datetime'
-    | 'textarea';
+import { StandardParameter, SelectParameter, RadioParameter } from '../inputs';
 
 export type AdvancedInputType = 'select' | 'radio';
-
-export interface SelectOption {
-    label: string;
-    value: string | number | boolean;
-}
-
-export interface BaseParameter {
-    name: string;
-    label: string;
-    required: boolean;
-    description?: string;
-    defaultValue?: any;
-}
-
-export interface StandardParameter extends BaseParameter {
-    type: BaseInputType;
-    minLength?: number;
-    maxLength?: number;
-    pattern?: string; // Para validaciones con regex
-    min?: number; // Para inputs numéricos y datetime
-    max?: number; // Para inputs numéricos y datetime
-}
-
-export interface SelectParameter extends BaseParameter {
-    type: 'select';
-    options: SelectOption[];
-}
-
-export interface RadioParameter extends BaseParameter {
-    type: 'radio';
-    options: SelectOption[];
-}
 
 export type HttpParameter = StandardParameter | SelectParameter | RadioParameter;
 
