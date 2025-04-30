@@ -242,10 +242,10 @@ describe('DynamicActionExecutor', () => {
     // Note: isValidExecutionResponse checks 'chain', but ExecutionResponse uses 'chainId'.
     // This test checks the current behavior (failing if 'chain' is missing).
     it.skip('should throw ActionValidationError if response is missing "chainId" (based on current isValidExecutionResponse)', async () => {
-        const missingChainId = { 
-            serializedTransaction: '0x123', 
+        const missingChainId = {
+            serializedTransaction: '0x123',
             meta: { title: 'Test' },
-            rawTransaction: { to: '0x123' }
+            rawTransaction: { to: '0x123' },
         }; // Missing chainId
         mockFetchSuccess(missingChainId);
 

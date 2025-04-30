@@ -134,19 +134,20 @@ export class DynamicActionExecutor {
         // Verificar si podemos adaptar los datos
         if (data.transaction || data.tx || data.serializedTransaction) {
             // Extraer la transacción serializada
-            const txData = data.transaction || data.transactionHash || data.tx || data.serializedTransaction;
+            const txData =
+                data.transaction || data.transactionHash || data.tx || data.serializedTransaction;
             // Ensure it's a hex string
             const serializedTx = txData.startsWith('0x') ? txData : `0x${txData}`;
-            
+
             // Extraer el ID de cadena
             const chainId = data.chain || data.chainId || data.network || data.blockchain;
-            
+
             // Crear la respuesta adaptada con todos los campos requeridos
             const response: ExecutionResponse = {
                 // Campos básicos obligatorios
                 serializedTransaction: serializedTx,
                 chainId: chainId,
-                
+
                 // Meta obligatorio (con valores predeterminados si no existen)
                 meta: {
                     title: data.title || data.meta?.title || `Transaction on ${chainId}`,
@@ -159,7 +160,7 @@ export class DynamicActionExecutor {
                     data: data.data || data.rawTransaction?.data || data.calldata || '0x',
                 },
             };
-            
+
             // Campos opcionales
             if (data.decoded || data.functionName || (data.params && Array.isArray(data.params))) {
                 response.decoded = {
@@ -167,10 +168,10 @@ export class DynamicActionExecutor {
                     params: data.params || data.decoded?.params || [],
                 };
             }
-            
+
             return response;
         }
-    
+
         return null;
     }
 }
