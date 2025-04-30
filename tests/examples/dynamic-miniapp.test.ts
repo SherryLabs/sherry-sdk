@@ -1,4 +1,4 @@
-import { createMetadata, Metadata } from '../../src';
+import { createMetadata, DynamicAction, Metadata } from '../../src';
 
 describe('Dynamic Action Validation', () => {
     it('should fail when dynamic action has a relative path without baseUrl', () => {
@@ -17,7 +17,23 @@ describe('Dynamic Action Validation', () => {
                     chains: {
                         source: 'fuji',
                     },
-                },
+                    params: [
+                        {
+                            type: 'string',
+                            name: 'param1',
+                            label: 'Test Parameter 1',
+                            description: 'Test parameter 1',
+                            required: true,
+                        },
+                        {
+                            type: 'number',
+                            name: 'param2',
+                            label: 'Test Parameter 2',
+                            description: 'Test parameter 2',
+                            required: false,
+                        },
+                    ],
+                } as DynamicAction,
             ],
         };
 

@@ -41,32 +41,47 @@ describe('DynamicActionExecutor', () => {
         params: [{ name: 'recipient', type: 'address', label: 'Recipient' }],
     };
 
-    // Sample expected response from the path
+    // Sample expected response from the path - UPDATED for new interface
     const mockSuccessResponse: ExecutionResponse = {
         serializedTransaction: '0x1234567890abcdef',
         chainId: 'fuji',
         meta: {
             title: 'Confirm dynamic Item Purchase',
-            description: 'Purchase item 123 for user 0xUser...',
-            /*
-            details: [
-                { label: 'Item ID', value: '123' },
-                { label: 'User Address', value: '0xUser...' },
-            ],
-            contractAddress: '0xContractAddress',
+        },
+        rawTransaction: {
+            to: '0xContractAddress',
+            value: '0x0',
+            data: '0xabcdef123456',
+        },
+        decoded: {
             functionName: 'purchaseItem',
-            */
+            params: [
+                { name: 'itemId', value: '123' },
+                { name: 'userId', value: '0xUser...' },
+            ],
         },
     };
 
+    // UPDATED: Now includes properties needed for the new interface
     const mockAdaptableResponse = {
         tx: '0x1234567890abcdef',
         network: 'fuji',
+        to: '0xRecipientAddress',
+        title: 'Dynamic Transaction',
     };
 
+    // UPDATED: Now matches the new ExecutionResponse interface
     const expectedAdaptedResponse: ExecutionResponse = {
         serializedTransaction: '0x1234567890abcdef',
         chainId: 'fuji',
+        meta: {
+            title: 'Dynamic Transaction',
+        },
+        rawTransaction: {
+            to: '0xRecipientAddress',
+            value: '0x0',
+            data: '0x',
+        },
     };
 
     beforeEach(() => {
@@ -193,16 +208,6 @@ describe('DynamicActionExecutor', () => {
         //      .rejects.toThrow(/Database connection failed/);
     });
 
-    // Test the CURRENT behavior for HTTP errors (if (response.ok) check) - This test *should* fail if the bug is fixed
-    /*
-    it('[BUG] should NOT throw ActionValidationError on HTTP error due to incorrect ok check', async () => {
-        mockFetchHttpError(500, 'Internal Server Error'); // ok: false
-        // Because of the bug, it tries to parse JSON of the error response
-        await expect(executor.execute(sampleActionFullUrl, sampleInputs, sampleContext))
-             .rejects.toThrow(/Invalid response format/); // Or JSON parse error
-    });
-    */
-
     it.skip('should throw ActionValidationError if response is not valid JSON', async () => {
         (global.fetch as MockFetch).mockResolvedValueOnce({
             ok: true,
@@ -236,9 +241,13 @@ describe('DynamicActionExecutor', () => {
 
     // Note: isValidExecutionResponse checks 'chain', but ExecutionResponse uses 'chainId'.
     // This test checks the current behavior (failing if 'chain' is missing).
-    it.skip('should throw ActionValidationError if response is missing "chain" (based on current isValidExecutionResponse)', async () => {
-        const missingChain = { serializedTransaction: '0x123', chainId: '137' }; // Has chainId but not chain
-        mockFetchSuccess(missingChain);
+    it.skip('should throw ActionValidationError if response is missing "chainId" (based on current isValidExecutionResponse)', async () => {
+        const missingChainId = { 
+            serializedTransaction: '0x123', 
+            meta: { title: 'Test' },
+            rawTransaction: { to: '0x123' }
+        }; // Missing chainId
+        mockFetchSuccess(missingChainId);
 
         await expect(
             executor.execute(sampleActionFullUrl, sampleInputs, sampleContext),

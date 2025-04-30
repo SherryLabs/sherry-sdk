@@ -59,8 +59,6 @@ export class BlockchainActionValidator {
                 );
             }
 
-            console.log('ABI Parameters:', abiParams);
-            console.log('Action Parameters:', action.params);
             // Validate the user-provided parameters against the ABI parameters
             if (action.params) {
                 if (action.params.length !== abiParams.length) {

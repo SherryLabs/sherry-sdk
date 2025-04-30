@@ -131,21 +131,46 @@ export class DynamicActionExecutor {
     }
 
     private adaptToExecutionResponse(data: any): ExecutionResponse | null {
+        // Verificar si podemos adaptar los datos
         if (data.transaction || data.tx || data.serializedTransaction) {
-            const txData =
-                data.transaction || data.transactionHash || data.tx || data.serializedTransaction;
+            // Extraer la transacción serializada
+            const txData = data.transaction || data.transactionHash || data.tx || data.serializedTransaction;
             // Ensure it's a hex string
             const serializedTx = txData.startsWith('0x') ? txData : `0x${txData}`;
+            
+            // Extraer el ID de cadena
             const chainId = data.chain || data.chainId || data.network || data.blockchain;
-
-            return {
+            
+            // Crear la respuesta adaptada con todos los campos requeridos
+            const response: ExecutionResponse = {
+                // Campos básicos obligatorios
                 serializedTransaction: serializedTx,
                 chainId: chainId,
-                status: 'success',
-                error: null,
-            } as ExecutionResponse;
+                
+                // Meta obligatorio (con valores predeterminados si no existen)
+                meta: {
+                    title: data.title || data.meta?.title || `Transaction on ${chainId}`,
+                },
+                abi: data.abi || data.abi || [], // ABI opcional
+                // rawTransaction obligatorio (con al menos 'to')
+                rawTransaction: {
+                    to: data.to || data.rawTransaction?.to || data.receiver || '0x',
+                    value: data.value || data.rawTransaction?.value || data.amount || '0x0',
+                    data: data.data || data.rawTransaction?.data || data.calldata || '0x',
+                },
+            };
+            
+            // Campos opcionales
+            if (data.decoded || data.functionName || (data.params && Array.isArray(data.params))) {
+                response.decoded = {
+                    functionName: data.functionName || data.decoded?.functionName || 'unknown',
+                    params: data.params || data.decoded?.params || [],
+                };
+            }
+            
+            return response;
         }
-
+    
         return null;
     }
 }
