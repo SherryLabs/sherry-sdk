@@ -1,3 +1,5 @@
+import { DynamicAction } from '../interface';
+import { SelectParameter, SelectOption } from '../interface/inputs';
 import { Metadata } from '../interface/metadata';
 
 const routerAbi = [
@@ -70,6 +72,59 @@ const avaxToUsdtSwapApp: Metadata = {
             chains: {
                 source: 'fuji',
             },
-        },
+        } as DynamicAction,
+        {
+            label: 'Dynamic SWAP',
+            type: 'dynamic',
+            description: 'Dynamic Swap',
+            path: '/swapExactTokensForTokens',
+            chains: {
+                source: 'fuji',
+            },
+            params: [
+                {
+                    name: 'amountOutMin',
+                    label: 'Minimum Amount Out',
+                    description: 'Minimum amount of tokens to receive from the swap',
+                    required: true,
+                    type: 'select',
+                    value: {
+                        options: [
+                            {
+                                label: '0.1',
+                                value: '0.1',
+                            },
+                            {
+                                label: '0.2',
+                                value: '0.2',
+                            },
+                            {
+                                label: '0.3',
+                                value: '0.3',
+                            },
+                        ] ,
+                    } ,
+                },
+                {
+                    name: 'to',
+                    label: 'Recipient Address',
+                    description: 'Address to receive the swapped tokens',
+                    required: true,
+                    type: 'select',
+                    value: {
+                        options: [
+                            {
+                                label: '0x1234567890abcdef1234567890abcdef12345678',
+                                value: '0x1234567890abcdef1234567890abcdef12345678',
+                            },
+                            {
+                                label: '0xabcdefabcdefabcdefabcdefabcdefabcdefabcd',
+                                value: '0xabcdefabcdefabcdefabcdefabcdefabcdefabcd',
+                            },
+                        ] ,
+                    } ,
+                },
+            ],
+        } as DynamicAction,
     ],
 };

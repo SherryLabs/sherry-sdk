@@ -1,4 +1,5 @@
 // example-miniapps.ts
+import { AmountConfig, Metadata, RecipientConfig, TransferAction } from '../interface';
 import { StandardParameter } from '../interface/inputs';
 import { PARAM_TEMPLATES, createParameter } from '../templates/templates';
 
@@ -658,7 +659,7 @@ const bridgeAbi = [
 ] as const;
 
 // Cross-Chain Bridge Mini-App
-export const bridgeMiniApp = {
+export const bridgeMiniApp: Metadata = {
     url: 'https://bridge.sherry.social',
     icon: 'https://example.com/bridge-icon.png',
     title: 'Cross-Chain Bridge',
@@ -667,8 +668,7 @@ export const bridgeMiniApp = {
         // Action: Bridge Tokens
         {
             label: 'Bridge Tokens',
-            title: 'Bridge Your Assets',
-            description: 'Transfer tokens across different blockchains',
+            type: 'blockchain',
             address: '0xBridgeAddress' as `0x${string}`,
             abi: bridgeAbi,
             functionName: 'bridgeTokens',
@@ -708,7 +708,7 @@ export const bridgeMiniApp = {
 // ============== 7. SIMPLE TRANSFER MINI-APP ==============
 // Adding a simple transfer app as example for transfer actions
 
-export const simpleTransferMiniApp = {
+export const simpleTransferMiniApp: Metadata = {
     url: 'https://transfer.sherry.social',
     icon: 'https://example.com/transfer-icon.png',
     title: 'Simple Transfer',
@@ -716,19 +716,19 @@ export const simpleTransferMiniApp = {
     actions: [
         // Action: Simple Transfer
         {
+            type: 'transfer',
             label: 'Transfer AVAX',
-            description: 'Send AVAX to another address',
             chains: { source: 'fuji' },
             to: '0x1234567890123456789012345678901234567890',
             amount: 0.1,
         },
         // Action: Transfer with recipient selection
         {
+            type: 'transfer',
             label: 'Send to Recipient',
-            description: 'Choose a recipient from the list',
             chains: { source: 'avalanche' },
             recipient: {
-                inputType: 'select',
+                type: 'select',
                 label: 'Select Recipient',
                 required: true,
                 options: [
@@ -748,9 +748,9 @@ export const simpleTransferMiniApp = {
                         description: 'Designer',
                     },
                 ],
-            },
+            } as RecipientConfig,
             amountConfig: {
-                inputType: 'radio',
+                type: 'radio',
                 label: 'Amount',
                 required: true,
                 options: [
@@ -758,7 +758,7 @@ export const simpleTransferMiniApp = {
                     { label: 'Medium', value: 0.05, description: '0.05 AVAX' },
                     { label: 'Large', value: 0.1, description: '0.1 AVAX' },
                 ],
-            },
+            } as AmountConfig,
         },
     ],
 };

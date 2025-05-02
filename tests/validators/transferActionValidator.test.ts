@@ -50,7 +50,7 @@ describe('TransferActionValidator', () => {
                 label: 'Transfer Tokens',
                 chains: { source: 'avalanche' },
                 recipient: {
-                    inputType: 'select',
+                    type: 'select',
                     options: [
                         { label: 'Option 1', value: '0x1234567890123456789012345678901234567890' },
                         { label: 'Option 2', value: '0x2345678901234567890123456789012345678901' },
@@ -71,7 +71,7 @@ describe('TransferActionValidator', () => {
                 chains: { source: 'avalanche' },
                 to: '0x1234567890123456789012345678901234567890',
                 amountConfig: {
-                    inputType: 'select',
+                    type: 'select',
                     options: [
                         { label: 'Small', value: 0.1, description: '0.1 AVAX' },
                         { label: 'Medium', value: 0.5, description: '0.5 AVAX' },

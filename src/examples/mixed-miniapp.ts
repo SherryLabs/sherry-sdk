@@ -66,7 +66,7 @@ export const mixedActionMiniApp: Metadata = {
             chains: { source: 'avalanche' },
             to: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045', // Vitalik's address as example
             amountConfig: {
-                inputType: 'radio',
+                type: 'radio',
                 label: 'Tip Amount',
                 required: true,
                 options: [
