@@ -86,7 +86,7 @@ export type * from './actions/dynamicAction';
  */
 export type * from './response/executionResponse';
 
-export * from './inputs'
+export * from './inputs';
 
 // ========================================================================
 // Third-Party Library Re-exports

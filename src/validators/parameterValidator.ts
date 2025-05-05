@@ -1,13 +1,13 @@
 import { SherryValidationError } from '../errors/customErrors';
-import { 
-    StandardParameter, 
-    SelectParameter, 
-    RadioParameter, 
+import {
+    StandardParameter,
+    SelectParameter,
+    RadioParameter,
     TextBasedParameter,
     NumberBasedParameter,
     AddressParameter,
     BooleanParameter,
-    BaseParameter
+    BaseParameter,
 } from '../interface/inputs';
 import { isAddress } from 'viem';
 
@@ -21,13 +21,17 @@ export function isRadioParameter(param: BaseParameter): param is RadioParameter 
 }
 
 export function isTextBasedParameter(param: BaseParameter): param is TextBasedParameter {
-    return ['text', 'email', 'url', 'textarea', 'string', 'bytes'].includes(param.type as string) 
-        || /^bytes\d+$/.test(param.type as string);
+    return (
+        ['text', 'email', 'url', 'textarea', 'string', 'bytes'].includes(param.type as string) ||
+        /^bytes\d+$/.test(param.type as string)
+    );
 }
 
 export function isNumberBasedParameter(param: BaseParameter): param is NumberBasedParameter {
-    return ['number', 'datetime'].includes(param.type as string) 
-        || /^(u?int)\d*$/.test(param.type as string);
+    return (
+        ['number', 'datetime'].includes(param.type as string) ||
+        /^(u?int)\d*$/.test(param.type as string)
+    );
 }
 
 export function isAddressParameter(param: BaseParameter): param is AddressParameter {
@@ -59,7 +63,9 @@ export class ParameterValidator {
 
         // Verify type
         if (!param.type) {
-            throw new SherryValidationError(`Parameter '${param.name}' missing required 'type' field`);
+            throw new SherryValidationError(
+                `Parameter '${param.name}' missing required 'type' field`,
+            );
         }
     }
 
@@ -91,9 +97,10 @@ export class ParameterValidator {
             }
 
             // For objects, stringify them for comparison
-            const valueKey = typeof opt.value === 'object' && opt.value !== null
-                ? JSON.stringify(opt.value)
-                : String(opt.value);
+            const valueKey =
+                typeof opt.value === 'object' && opt.value !== null
+                    ? JSON.stringify(opt.value)
+                    : String(opt.value);
 
             if (values.has(valueKey)) {
                 throw new SherryValidationError(
@@ -138,7 +145,11 @@ export class ParameterValidator {
         }
 
         // Type-specific validations
-        if (param.type === 'email' && param.value !== undefined && typeof param.value === 'string') {
+        if (
+            param.type === 'email' &&
+            param.value !== undefined &&
+            typeof param.value === 'string'
+        ) {
             const emailRegex = /^[\w\-.]+@([\w-]+\.)+[\w-]{2,4}$/;
             if (!emailRegex.test(param.value)) {
                 throw new SherryValidationError(

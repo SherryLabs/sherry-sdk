@@ -6,11 +6,11 @@ import {
     createRadioParam,
     createParameter,
 } from '../../src/templates/templates';
-import { 
+import {
     TextBasedParameter,
     AddressParameter,
     SelectParameter,
-    RadioParameter
+    RadioParameter,
 } from '../../src/interface/inputs';
 
 describe('Template parameters', () => {
@@ -49,7 +49,7 @@ describe('Template parameters', () => {
 
 describe('Template helper functions', () => {
     // Resto de tests con los tipos correctos
-    
+
     it('creates parameters with customizations', () => {
         const customized = createParameter(PARAM_TEMPLATES.TEXT, {
             name: 'customText',

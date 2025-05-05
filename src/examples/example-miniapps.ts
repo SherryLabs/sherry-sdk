@@ -1,14 +1,19 @@
 // example-miniapps.ts
 import { AmountConfig, Metadata, RecipientConfig, TransferAction } from '../interface';
-import { 
-    TextBasedParameter, 
-    NumberBasedParameter, 
+import {
+    TextBasedParameter,
+    NumberBasedParameter,
     AddressParameter,
     BooleanParameter,
     SelectParameter,
-    RadioParameter
+    RadioParameter,
 } from '../interface/inputs';
-import { PARAM_TEMPLATES, createParameter, createSelectParam, createRadioParam } from '../templates/templates';
+import {
+    PARAM_TEMPLATES,
+    createParameter,
+    createSelectParam,
+    createRadioParam,
+} from '../templates/templates';
 
 // ============== 1. TOKEN SWAP MINI-APP ==============
 
@@ -110,7 +115,7 @@ export const tokenSwapMiniApp = {
                     min: 0.000001,
                     description: 'Amount of tokens to swap',
                 } as NumberBasedParameter,
-                
+
                 // Minimum Amount Out (with slippage)
                 {
                     name: 'amountOutMin',
@@ -120,34 +125,34 @@ export const tokenSwapMiniApp = {
                     value: '0', // Will be calculated frontend based on amountIn
                     description: 'Minimum amount to receive after slippage',
                 } as NumberBasedParameter,
-                
+
                 // Token Path - Ahora usando SelectParameter para el path
                 createSelectParam(
                     'path',
                     'Token Path',
                     [
-                        { 
-                            label: 'AVAX -> USDC', 
+                        {
+                            label: 'AVAX -> USDC',
                             value: ['0xTokenAAddress', '0xTokenBAddress'],
-                            description: 'Swap AVAX for USDC' 
+                            description: 'Swap AVAX for USDC',
                         },
-                        { 
-                            label: 'AVAX -> USDT', 
+                        {
+                            label: 'AVAX -> USDT',
                             value: ['0xTokenAAddress', '0xTokenCAddress'],
-                            description: 'Swap AVAX for USDT'
+                            description: 'Swap AVAX for USDT',
                         },
                     ],
                     true,
-                    'Select the token swap path'
+                    'Select the token swap path',
                 ),
-                
+
                 // Recipient
                 createParameter(PARAM_TEMPLATES.ADDRESS, {
                     name: 'to',
                     label: 'Recipient',
                     value: 'sender', // Special value meaning current user
                 }),
-                
+
                 // Deadline
                 {
                     name: 'deadline',
@@ -181,34 +186,34 @@ export const tokenSwapMiniApp = {
                     value: '0', // Will be calculated frontend based on amount
                     description: 'Minimum tokens to receive after slippage',
                 } as NumberBasedParameter,
-                
+
                 // Token Path
                 createSelectParam(
                     'path',
                     'Token Path',
                     [
-                        { 
-                            label: 'AVAX -> USDC', 
+                        {
+                            label: 'AVAX -> USDC',
                             value: ['0xWAVAXAddress', '0xTokenBAddress'],
-                            description: 'Swap AVAX for USDC' 
+                            description: 'Swap AVAX for USDC',
                         },
-                        { 
-                            label: 'AVAX -> USDT', 
+                        {
+                            label: 'AVAX -> USDT',
                             value: ['0xWAVAXAddress', '0xTokenCAddress'],
-                            description: 'Swap AVAX for USDT'
+                            description: 'Swap AVAX for USDT',
                         },
                     ],
                     true,
-                    'Select the token swap path'
+                    'Select the token swap path',
                 ),
-                
+
                 // Recipient
                 createParameter(PARAM_TEMPLATES.ADDRESS, {
                     name: 'to',
                     label: 'Recipient',
                     value: 'sender', // Special value meaning current user
                 }),
-                
+
                 // Deadline
                 {
                     name: 'deadline',
@@ -278,7 +283,7 @@ export const nftMarketplaceMiniApp = {
                     name: 'nftAddress',
                     label: 'NFT Collection Address',
                 }),
-                
+
                 // Token ID
                 {
                     name: 'tokenId',
@@ -288,7 +293,7 @@ export const nftMarketplaceMiniApp = {
                     description: 'ID of the NFT you want to sell',
                     min: 1,
                 } as NumberBasedParameter,
-                
+
                 // Price
                 {
                     name: 'price',
@@ -298,7 +303,7 @@ export const nftMarketplaceMiniApp = {
                     min: 0.01,
                     description: 'Listing price in AVAX',
                 } as NumberBasedParameter,
-                
+
                 // Expiration time
                 {
                     name: 'expiresAt',
@@ -417,7 +422,7 @@ export const daoVotingMiniApp = {
                     maxLength: 100,
                     description: 'A concise title for your proposal',
                 } as TextBasedParameter,
-                
+
                 // Description - Usando textarea en lugar de text
                 {
                     name: 'description',
@@ -428,7 +433,7 @@ export const daoVotingMiniApp = {
                     maxLength: 5000,
                     description: 'Detailed explanation of your proposal',
                 } as TextBasedParameter,
-                
+
                 // Actions (encoded)
                 {
                     name: 'actions',
@@ -439,7 +444,7 @@ export const daoVotingMiniApp = {
                     fixed: true, // User cannot change this
                     description: 'Technical: encoded on-chain actions',
                 } as TextBasedParameter,
-                
+
                 // Expiration time
                 {
                     name: 'expiresAt',
@@ -470,7 +475,7 @@ export const daoVotingMiniApp = {
                     required: true,
                     description: 'ID of the proposal you want to vote on',
                 } as NumberBasedParameter,
-                
+
                 // Support (yes/no)
                 {
                     name: 'support',
@@ -565,7 +570,7 @@ export const fundraisingMiniApp = {
                     maxLength: 100,
                     description: 'A title for your fundraising campaign',
                 } as TextBasedParameter,
-                
+
                 // Description - Usando textarea
                 {
                     name: 'description',
@@ -576,7 +581,7 @@ export const fundraisingMiniApp = {
                     maxLength: 2000,
                     description: 'Describe the purpose of your campaign',
                 } as TextBasedParameter,
-                
+
                 // Goal amount
                 {
                     name: 'goal',
@@ -586,7 +591,7 @@ export const fundraisingMiniApp = {
                     min: 0.1,
                     description: 'Target amount to raise in AVAX',
                 } as NumberBasedParameter,
-                
+
                 // Deadline
                 {
                     name: 'deadline',
@@ -596,7 +601,7 @@ export const fundraisingMiniApp = {
                     min: Math.floor(Date.now() / 1000) + 86400, // At least 1 day from now
                     description: 'When your fundraising campaign will end',
                 } as NumberBasedParameter,
-                
+
                 // Beneficiary
                 createParameter(PARAM_TEMPLATES.ADDRESS, {
                     name: 'beneficiary',
@@ -690,26 +695,26 @@ export const bridgeMiniApp: Metadata = {
                     'token',
                     'Select Token',
                     [
-                        { 
-                            label: 'USDC', 
+                        {
+                            label: 'USDC',
                             value: '0xA7D7079b0FEaD91F3e65f86E8915Cb59c1a4C664',
-                            description: 'USD Coin' 
+                            description: 'USD Coin',
                         },
-                        { 
-                            label: 'USDT', 
+                        {
+                            label: 'USDT',
                             value: '0xc7198437980c041c805A1EDcbA50c1Ce5db95118',
-                            description: 'Tether USD'
+                            description: 'Tether USD',
                         },
-                        { 
-                            label: 'DAI', 
+                        {
+                            label: 'DAI',
                             value: '0xd586E7F844cEa2F87f50152665BCbc2C279D8d70',
-                            description: 'Dai Stablecoin'
+                            description: 'Dai Stablecoin',
                         },
                     ],
                     true,
-                    'Select the token you want to bridge'
+                    'Select the token you want to bridge',
                 ),
-                
+
                 // Amount
                 {
                     name: 'amount',
@@ -719,14 +724,14 @@ export const bridgeMiniApp: Metadata = {
                     min: 0.000001,
                     description: 'Amount of tokens to send to the destination chain',
                 } as NumberBasedParameter,
-                
+
                 // Recipient
                 createParameter(PARAM_TEMPLATES.ADDRESS, {
                     name: 'recipient',
                     label: 'Destination Address',
                     value: 'sender', // Default to current user
                 }),
-                
+
                 // Destination Chain ID
                 {
                     name: 'destinationChainId',
@@ -827,7 +832,7 @@ export const parameterTypesDemoMiniApp: Metadata = {
                     maxLength: 50,
                     description: 'Standard text input with length limits',
                 } as TextBasedParameter,
-                
+
                 // Email parameter
                 {
                     name: 'emailInput',
@@ -837,7 +842,7 @@ export const parameterTypesDemoMiniApp: Metadata = {
                     pattern: '^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$',
                     description: 'Email input with validation',
                 } as TextBasedParameter,
-                
+
                 // URL parameter
                 {
                     name: 'urlInput',
@@ -846,7 +851,7 @@ export const parameterTypesDemoMiniApp: Metadata = {
                     required: false,
                     description: 'URL input with built-in validation',
                 } as TextBasedParameter,
-                
+
                 // Textarea parameter
                 {
                     name: 'textareaInput',
@@ -857,7 +862,7 @@ export const parameterTypesDemoMiniApp: Metadata = {
                     maxLength: 1000,
                     description: 'Multi-line text input for longer content',
                 } as TextBasedParameter,
-                
+
                 // Bytes parameter
                 {
                     name: 'bytesInput',
@@ -887,7 +892,7 @@ export const parameterTypesDemoMiniApp: Metadata = {
                     max: 100,
                     description: 'Standard number input with range',
                 } as NumberBasedParameter,
-                
+
                 // Integer parameter (uint256)
                 {
                     name: 'integerInput',
@@ -897,7 +902,7 @@ export const parameterTypesDemoMiniApp: Metadata = {
                     min: 1,
                     description: 'Integer input for blockchain values',
                 } as NumberBasedParameter,
-                
+
                 // Datetime parameter
                 {
                     name: 'datetimeInput',
@@ -927,9 +932,9 @@ export const parameterTypesDemoMiniApp: Metadata = {
                         { label: 'Option 3', value: '3', description: 'Third option' },
                     ],
                     true,
-                    'Standard dropdown selection'
+                    'Standard dropdown selection',
                 ),
-                
+
                 // Radio parameter
                 createRadioParam(
                     'radioInput',
@@ -940,9 +945,9 @@ export const parameterTypesDemoMiniApp: Metadata = {
                         { label: 'Blue', value: 'blue', description: 'Blue color' },
                     ],
                     true,
-                    'Radio button selection'
+                    'Radio button selection',
                 ),
-                
+
                 // Boolean parameter
                 {
                     name: 'booleanInput',
@@ -951,14 +956,14 @@ export const parameterTypesDemoMiniApp: Metadata = {
                     required: true,
                     description: 'ON/OFF toggle switch',
                 } as BooleanParameter,
-                
+
                 // Yes/No radio
                 createParameter(PARAM_TEMPLATES.YES_NO, {
                     name: 'yesNoInput',
                     label: 'Confirm Choice',
                     description: 'Yes/No selection using radio buttons',
                 }),
-                
+
                 // Address parameter
                 createParameter(PARAM_TEMPLATES.ADDRESS, {
                     name: 'addressInput',

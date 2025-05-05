@@ -124,7 +124,7 @@ export class HttpActionValidator {
                 // ... otros casos para los demás tipos
             }
         }
-    
+
         // Verificar si el parámetro tiene la propiedad 'pattern' antes de usarla
         if ('pattern' in param && param.pattern) {
             try {
@@ -133,7 +133,7 @@ export class HttpActionValidator {
                 throw new InvalidMetadataError(`Invalid regex pattern for parameter ${param.name}`);
             }
         }
-    
+
         return param;
     }
 

@@ -1,4 +1,3 @@
-
 import {
     TextBasedParameter,
     NumberBasedParameter,
@@ -7,10 +6,10 @@ import {
     SelectParameter,
     RadioParameter,
     SelectOption,
-    StandardParameter
+    StandardParameter,
 } from '../interface/inputs';
 
-type AnyParameter = 
+type AnyParameter =
     | TextBasedParameter
     | NumberBasedParameter
     | AddressParameter
@@ -75,7 +74,7 @@ export const PARAM_TEMPLATES = {
         maxLength: 50,
         description: 'Enter your full name',
     } as TextBasedParameter,
-    
+
     // Selección de token
     TOKEN_SELECT: {
         type: 'select' as const,
@@ -87,7 +86,7 @@ export const PARAM_TEMPLATES = {
         ],
         description: 'Select the token you want to use',
     } as SelectParameter,
-    
+
     // Selección Sí/No
     YES_NO: {
         type: 'radio' as const,
@@ -99,7 +98,7 @@ export const PARAM_TEMPLATES = {
         ],
         description: 'Please confirm your choice',
     } as RadioParameter,
-    
+
     // Booleano
     BOOLEAN: {
         type: 'bool' as const,
@@ -206,4 +205,3 @@ export const CHAIN_OPTIONS: SelectOption[] = [
     { label: 'Alfajores', value: 'alfajores', description: 'Celo Alfajores Testnet' },
     { label: 'Monad Testnet', value: 'monad-testnet', description: 'Monad Testnet' },
 ];
-

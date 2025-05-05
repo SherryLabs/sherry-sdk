@@ -39,7 +39,7 @@ export const mixedActionMiniApp: Metadata = {
                     type: 'email',
                     required: true,
                 } as TextBasedParameter,
-                
+
                 // Corrección: especificar el tipo correcto para select
                 {
                     name: 'rating',
@@ -54,7 +54,7 @@ export const mixedActionMiniApp: Metadata = {
                         { label: '⭐⭐⭐⭐⭐', value: 5 },
                     ],
                 } as SelectParameter,
-                
+
                 // Corrección: especificar el tipo correcto para textarea
                 {
                     name: 'comment',
@@ -100,7 +100,7 @@ export const mixedActionMiniApp: Metadata = {
                     value: '0x1234567890123456789012345678901234567890',
                     fixed: true,
                 }),
-                
+
                 // Corrección: usar AMOUNT en lugar de TOKEN_SELECT para cantidad
                 createParameter(PARAM_TEMPLATES.AMOUNT, {
                     name: 'amount',

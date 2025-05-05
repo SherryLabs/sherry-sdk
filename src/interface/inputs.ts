@@ -61,7 +61,7 @@ export type StandardParameter =
     | TextBasedParameter
     | NumberBasedParameter
     | AddressParameter
-    | BooleanParameter
+    | BooleanParameter;
 
 export type SelectionInputType = 'select' | 'radio';
 
@@ -72,7 +72,7 @@ export type UIInputType =
     | 'url' // Especialización de string para url
     | 'datetime' // Especialización de string para fecha
     | 'textarea' // Especialización de string para texto largo
-    | 'boolean'
+    | 'boolean';
 
 export type BaseInputType = AbiType | UIInputType | SelectionInputType;
 

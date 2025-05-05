@@ -2,7 +2,6 @@ import { ChainContext } from '../chains';
 import { BaseAction } from './action';
 import { SelectOption } from '../inputs';
 
-
 // Configuration for the "to" field
 export interface RecipientConfig {
     defaultValue?: `0x${string}`; // Default address if any
