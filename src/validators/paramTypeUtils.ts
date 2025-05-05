@@ -1,11 +1,10 @@
 import { AbiType } from 'abitype';
-import { StandardParameter, SelectParameter, RadioParameter } from '../interface/inputs';
-import { BlockchainParameter } from '../interface/actions/blockchainAction';
+import { StandardParameter, SelectParameter, RadioParameter, Parameter } from '../interface/inputs';
 
 /**
  * Determines if a parameter is a StandardParameter based on its structure and type.
  */
-export function isStandardParameter(param: BlockchainParameter): param is StandardParameter {
+export function isStandardParameter(param: Parameter): param is StandardParameter {
     if (!param || typeof param !== 'object') return false;
 
     // Un parámetro es estándar si:
@@ -24,7 +23,7 @@ export function isStandardParameter(param: BlockchainParameter): param is Standa
 /**
  * Determines if a parameter is a SelectParameter based on its structure and type.
  */
-export function isSelectParameter(param: BlockchainParameter): param is SelectParameter {
+export function isSelectParameter(param: Parameter): param is SelectParameter {
     if (!param || typeof param !== 'object') return false;
 
     return (
@@ -41,7 +40,7 @@ export function isSelectParameter(param: BlockchainParameter): param is SelectPa
 /**
  * Determines if a parameter is a RadioParameter based on its structure and type.
  */
-export function isRadioParameter(param: BlockchainParameter): param is RadioParameter {
+export function isRadioParameter(param: Parameter): param is RadioParameter {
     if (!param || typeof param !== 'object') return false;
 
     return (

@@ -27,7 +27,7 @@ export interface TransferAction {
 
 export interface RecipientConfig {
   defaultValue?: `0x${string}`;
-  inputType?: 'select' | 'radio';
+  type?: 'select' | 'radio';
   options?: SelectOption[];
   label?: string;
   description?: string;
@@ -36,7 +36,7 @@ export interface RecipientConfig {
 
 export interface AmountConfig {
   defaultValue?: number;
-  inputType?: 'select' | 'radio';
+  type?: 'select' | 'radio';
   options?: SelectOption[];
   label?: string;
   description?: string;
@@ -57,12 +57,12 @@ export interface SelectOption {
 - `amount` (Simple): Fixed amount to send. If provided, `amountConfig` is ignored.
 - `recipient` (Advanced): Allows configuring how the user selects or inputs the destination address.
   - If neither `recipient` nor `to` is provided, the user is assumed to input the address in a standard text field.
-  - `inputType`: `'select'` or `'radio'` to present predefined options.
+  - `type`: `'select'` or `'radio'` to present predefined options.
   - `options`: Array of `SelectOption` where `value` is the address (`0x...`).
   - `defaultValue`, `label`, `description`, `required`: Standard input properties.
 - `amountConfig` (Advanced): Allows configuring how the user selects or inputs the amount.
   - If neither `amountConfig` nor `amount` is provided, the user is assumed to input the amount in a standard number field.
-  - `inputType`: `'select'` or `'radio'` to present predefined options.
+  - `type`: `'select'` or `'radio'` to present predefined options.
   - `options`: Array of `SelectOption` where `value` is the amount (number).
   - `defaultValue`, `label`, `description`, `required`: Standard input properties.
 
@@ -92,7 +92,7 @@ const charityDonation: TransferAction = {
   description: 'Choose a charity and the donation amount.',
   chains: { source: 'celo' },
   recipient: {
-    inputType: 'select',
+    type: 'select',
     label: 'Select Charity',
     required: true,
     options: [
@@ -127,7 +127,7 @@ const tipCreator: TransferAction = {
   chains: { source: 'avalanche' },
   to: '0xCreatorWalletAddress...', // Fixed recipient
   amountConfig: {
-    inputType: 'radio',
+    type: 'radio',
     label: 'Tip Amount',
     required: true,
     options: [

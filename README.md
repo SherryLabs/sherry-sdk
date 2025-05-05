@@ -209,7 +209,7 @@ Send native tokens or assets:
 
   // Or let the user choose
   recipient: {
-    inputType: 'select',
+    type: 'select',
     label: 'Select Charity',
     options: [
       { label: 'Education Fund', value: '0xAddress1' },
@@ -222,7 +222,7 @@ Send native tokens or assets:
 
   // Or let the user choose
   amountConfig: {
-    inputType: 'radio',
+    type: 'radio',
     label: 'Donation Amount',
     options: [
       { label: 'Small', value: 0.01 },
