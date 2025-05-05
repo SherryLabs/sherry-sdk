@@ -122,19 +122,18 @@ export class HttpActionValidator {
                     }
                     break;
                 // ... otros casos para los demás tipos
-                // TODO: Agregar los demás tipos
             }
         }
-
-        // Validate pattern if present
-        if (param.pattern) {
+    
+        // Verificar si el parámetro tiene la propiedad 'pattern' antes de usarla
+        if ('pattern' in param && param.pattern) {
             try {
                 new RegExp(param.pattern);
             } catch {
                 throw new InvalidMetadataError(`Invalid regex pattern for parameter ${param.name}`);
             }
         }
-
+    
         return param;
     }
 

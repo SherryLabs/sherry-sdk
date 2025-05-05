@@ -1,18 +1,18 @@
 import { Abi, AbiFunction, AbiParameter, AbiStateMutability, AbiType } from 'abitype';
 import { ContractFunctionName, isAddress } from 'viem';
-import {
-    BlockchainActionMetadata,
-    BlockchainAction,
-    BlockchainParameter,
-} from '../interface/actions/blockchainAction';
-import { BaseInputType, UIInputType, SelectionInputType } from '../interface/inputs';
+import { BlockchainActionMetadata, BlockchainAction } from '../interface/actions/blockchainAction';
 import { ChainContext } from '../interface/chains';
 import { SherryValidationError, ActionValidationError } from '../errors/customErrors';
+import { isTextBasedParameter, isNumberBasedParameter, isAddressParameter } from '../validators/parameterValidator';
 import {
     StandardParameter,
     SelectParameter,
     RadioParameter,
     SelectOption,
+    BaseInputType,
+    UIInputType,
+    SelectionInputType,
+    Parameter,
 } from '../interface/inputs';
 
 /**
@@ -177,7 +177,7 @@ export class BlockchainActionValidator {
      * Completely refactored with a cleaner approach based on explicit parameter type.
      */
     static validateBlockchainParameters(
-        params: BlockchainParameter[],
+        params: Parameter[],
         abiParams: readonly AbiParameter[],
         functionName: string,
     ): void {
@@ -303,7 +303,7 @@ export class BlockchainActionValidator {
     /**
      * Validates common optional properties present in BaseParameter.
      */
-    private static validateCommonOptionalProperties(param: BlockchainParameter): void {
+    private static validateCommonOptionalProperties(param: Parameter): void {
         if (param.required !== undefined && typeof param.required !== 'boolean') {
             throw new ActionValidationError(
                 `Parameter "${param.name}" has an invalid 'required' value (must be boolean).`,
@@ -405,7 +405,7 @@ export class BlockchainActionValidator {
             }
 
             // Ensure value exists in options
-            const valueExists = param.options.some(opt => {
+            const valueExists = param.options.some((opt: any) => {
                 // Use deep comparison for objects
                 if (typeof param.value === 'object' && param.value !== null) {
                     return JSON.stringify(opt.value) === JSON.stringify(param.value);
@@ -428,7 +428,12 @@ export class BlockchainActionValidator {
     /**
      * Validates properties specific to StandardParameter (minLength, pattern, etc.).
      */
-    private static validateStandardParameterProperties(param: StandardParameter): void {
+/**
+ * Validates properties specific to StandardParameter (minLength, pattern, etc.).
+ */
+private static validateStandardParameterProperties(param: StandardParameter): void {
+    // Validar propiedades de text-based parameters (text, email, url, textarea, string, bytes)
+    if (isTextBasedParameter(param)) {
         if (
             param.minLength !== undefined &&
             (typeof param.minLength !== 'number' || param.minLength < 0)
@@ -452,6 +457,10 @@ export class BlockchainActionValidator {
         ) {
             throw new ActionValidationError(`Parameter "${param.name}" has minLength > maxLength.`);
         }
+    }
+
+    // Validar propiedades de number-based parameters (number, datetime, int types)
+    if (isNumberBasedParameter(param)) {
         if (param.min !== undefined && typeof param.min !== 'number') {
             throw new ActionValidationError(
                 `Parameter "${param.name}" has an invalid 'min' value.`,
@@ -465,21 +474,28 @@ export class BlockchainActionValidator {
         if (param.min !== undefined && param.max !== undefined && param.min > param.max) {
             throw new ActionValidationError(`Parameter "${param.name}" has min > max.`);
         }
-        if (param.pattern !== undefined) {
-            if (typeof param.pattern !== 'string') {
-                throw new ActionValidationError(
-                    `Parameter "${param.name}" has an invalid 'pattern' (must be string).`,
-                );
-            }
-            try {
-                new RegExp(param.pattern);
-            } catch (e) {
-                throw new ActionValidationError(
-                    `Parameter "${param.name}" has an invalid regex pattern: ${e instanceof Error ? e.message : e}`,
-                );
-            }
+    }
+
+    // Validar pattern - puede existir en varios tipos
+    // TextBasedParameter, NumberBasedParameter, AddressParameter
+    if (
+        (isTextBasedParameter(param) || isNumberBasedParameter(param) || isAddressParameter(param)) &&
+        param.pattern !== undefined
+    ) {
+        if (typeof param.pattern !== 'string') {
+            throw new ActionValidationError(
+                `Parameter "${param.name}" has an invalid 'pattern' (must be string).`,
+            );
+        }
+        try {
+            new RegExp(param.pattern);
+        } catch (e) {
+            throw new ActionValidationError(
+                `Parameter "${param.name}" has an invalid regex pattern: ${e instanceof Error ? e.message : e}`,
+            );
         }
     }
+}
 
     /**
      * Validates structural properties of Select/Radio options (duplicates).
@@ -502,7 +518,7 @@ export class BlockchainActionValidator {
         }
 
         // Check for duplicate labels
-        const labels = param.options.map(o => o.label);
+        const labels = param.options.map((o: any) => o.label);
         if (new Set(labels).size !== labels.length) {
             throw new ActionValidationError(
                 `Parameter "${param.name}" has options with duplicate labels.`,

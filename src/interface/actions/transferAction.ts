@@ -2,14 +2,6 @@ import { ChainContext } from '../chains';
 import { BaseAction } from './action';
 import { SelectOption } from '../inputs';
 
-// Option for selects and radios
-/*
-export interface SelectOption {
-    label: string;
-    value: string | number | boolean;
-    description?: string;
-}
-    */
 
 // Configuration for the "to" field
 export interface RecipientConfig {

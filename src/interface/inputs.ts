@@ -7,22 +7,44 @@ export interface SelectOption {
     description?: string;
 }
 
-export interface StandardParameter extends BaseParameter {
-    type: BaseInputType;
-    minLength?: number;
-    maxLength?: number;
-    pattern?: string; // Para validaciones con regex
-    min?: number; // Para inputs numéricos y datetime
-    max?: number; // Para inputs numéricos y datetime
-}
-
 export interface BaseParameter {
+    type: string;
     name: string;
     label: string;
     required?: boolean;
     description?: string;
     fixed?: boolean; // Si el valor es fijo, no editable
     value?: any; // Valor por defecto, si no se envía, se renderizará un input vacío
+}
+
+export interface TextBasedParameter extends BaseParameter {
+    type:
+        | 'text'
+        | 'email'
+        | 'url'
+        | 'textarea'
+        | 'string'
+        | 'bytes'
+        | Extract<AbiType, 'string' | 'bytes' | `bytes${number}`>;
+    minLength?: number;
+    maxLength?: number;
+    pattern?: string; // Para validaciones con regex
+}
+
+export interface NumberBasedParameter extends BaseParameter {
+    type: 'number' | 'datetime' | Extract<AbiType, `uint${string}` | `int${string}`>;
+    min?: number; // Para inputs numéricos y datetime
+    max?: number; // Para inputs numéricos y datetime
+    pattern?: string; // Para validaciones con regex
+}
+
+export interface AddressParameter extends BaseParameter {
+    type: 'address' | Extract<AbiType, 'address'>;
+    pattern?: string; // Para validaciones con regex
+}
+
+export interface BooleanParameter extends BaseParameter {
+    type: 'boolean' | Extract<AbiType, 'bool'>;
 }
 
 export interface SelectParameter extends BaseParameter {
@@ -35,17 +57,14 @@ export interface RadioParameter extends BaseParameter {
     options: SelectOption[];
 }
 
-export type BaseInputType = AbiType | UIInputType | SelectionInputType;
+export type StandardParameter =
+    | TextBasedParameter
+    | NumberBasedParameter
+    | AddressParameter
+    | BooleanParameter
 
-/*
-    - bytes all types and string could be used as text
-    - address could be used as text
-    - boolean could be used as radio
-    - uint and int could be used as number
-    */
 export type SelectionInputType = 'select' | 'radio';
 
-// UI-specific input types (no tienen equivalente directo en Solidity)
 export type UIInputType =
     | 'text' // Especialización de string con validación
     | 'number' // Especialización de number, uint o int funcionan para number tambien
@@ -53,4 +72,8 @@ export type UIInputType =
     | 'url' // Especialización de string para url
     | 'datetime' // Especialización de string para fecha
     | 'textarea' // Especialización de string para texto largo
-    | 'boolean';
+    | 'boolean'
+
+export type BaseInputType = AbiType | UIInputType | SelectionInputType;
+
+export type Parameter = StandardParameter | SelectParameter | RadioParameter;

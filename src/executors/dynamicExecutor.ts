@@ -1,8 +1,8 @@
 import { DynamicAction } from '../interface/actions/dynamicAction';
-import { BlockchainParameter, ValidatedAction } from '../interface';
+import { ValidatedAction } from '../interface';
 import { ActionValidationError } from '../utils';
 import { ExecutionResponse } from '../interface/response/executionResponse';
-import { StandardParameter } from '../interface/inputs';
+import { StandardParameter, Parameter } from '../interface/inputs';
 
 export class DynamicActionExecutor {
     private baseUrl?: string;
@@ -91,7 +91,7 @@ export class DynamicActionExecutor {
         const urlObj = new URL(url);
 
         if (action.params) {
-            action.params.forEach((param: StandardParameter) => {
+            action.params.forEach((param: Parameter) => {
                 if (param.fixed || param.value !== undefined) {
                     urlObj.searchParams.append(param.name, String(param.value));
                 } else if (inputs[param.name] !== undefined) {

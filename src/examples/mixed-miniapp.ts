@@ -3,6 +3,7 @@ import { TransferAction } from '../interface/actions/transferAction';
 import { BlockchainActionMetadata } from '../interface/actions/blockchainAction';
 import { HttpAction } from '../interface/actions/httpAction';
 import { PARAM_TEMPLATES, createParameter } from '../templates/templates';
+import { NumberBasedParameter, TextBasedParameter, SelectParameter } from '../interface/inputs';
 
 // Simple ERC20 ABI (just the approve function)
 const erc20Abi = [
@@ -31,12 +32,15 @@ export const mixedActionMiniApp: Metadata = {
             label: 'Submit Feedback',
             path: 'https://api.example.com/feedback',
             params: [
+                // Corrección: especificar el tipo correcto para email
                 {
                     name: 'email',
                     label: 'Email Address',
                     type: 'email',
                     required: true,
-                },
+                } as TextBasedParameter,
+                
+                // Corrección: especificar el tipo correcto para select
                 {
                     name: 'rating',
                     label: 'Rating',
@@ -49,13 +53,15 @@ export const mixedActionMiniApp: Metadata = {
                         { label: '⭐⭐⭐⭐', value: 4 },
                         { label: '⭐⭐⭐⭐⭐', value: 5 },
                     ],
-                },
+                } as SelectParameter,
+                
+                // Corrección: especificar el tipo correcto para textarea
                 {
                     name: 'comment',
                     label: 'Comments',
                     type: 'textarea',
                     required: false,
-                },
+                } as TextBasedParameter,
             ],
         } as HttpAction,
 
@@ -94,11 +100,13 @@ export const mixedActionMiniApp: Metadata = {
                     value: '0x1234567890123456789012345678901234567890',
                     fixed: true,
                 }),
-                // Amount to approve
-                createParameter(PARAM_TEMPLATES.TOKEN_AMOUNT, {
+                
+                // Corrección: usar AMOUNT en lugar de TOKEN_SELECT para cantidad
+                createParameter(PARAM_TEMPLATES.AMOUNT, {
                     name: 'amount',
                     label: 'Amount to Approve',
-                    min: 1,
+                    // Valor máximo para aprobación completa (2^256-1)
+                    value: '115792089237316195423570985008687907853269984665640564039457584007913129639935',
                 }),
             ],
         } as BlockchainActionMetadata,

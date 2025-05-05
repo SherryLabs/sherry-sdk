@@ -1,7 +1,14 @@
 // example-miniapps.ts
 import { AmountConfig, Metadata, RecipientConfig, TransferAction } from '../interface';
-import { StandardParameter } from '../interface/inputs';
-import { PARAM_TEMPLATES, createParameter } from '../templates/templates';
+import { 
+    TextBasedParameter, 
+    NumberBasedParameter, 
+    AddressParameter,
+    BooleanParameter,
+    SelectParameter,
+    RadioParameter
+} from '../interface/inputs';
+import { PARAM_TEMPLATES, createParameter, createSelectParam, createRadioParam } from '../templates/templates';
 
 // ============== 1. TOKEN SWAP MINI-APP ==============
 
@@ -69,16 +76,18 @@ export const tokenSwapMiniApp = {
                 createParameter(PARAM_TEMPLATES.ADDRESS, {
                     name: 'spender',
                     label: 'Router Address',
-                    value: '0x5ee75a1B1648C023e885E58bD3735Ae273f2cc52', // 0xUniswapRouterAddress - Pre-filled with router address
+                    value: '0x5ee75a1B1648C023e885E58bD3735Ae273f2cc52', // Router address
                     fixed: true, // User cannot change this
                 }),
                 // Amount to approve
-                createParameter(PARAM_TEMPLATES.TOKEN_AMOUNT, {
+                {
                     name: 'amount',
                     label: 'Amount to Approve',
+                    type: 'uint256',
                     value: '115792089237316195423570985008687907853269984665640564039457584007913129639935', // uint256 max
                     fixed: true, // User cannot change this
-                }),
+                    description: 'Maximum approval amount',
+                } as NumberBasedParameter,
             ],
         },
 
@@ -93,40 +102,62 @@ export const tokenSwapMiniApp = {
             chains: { source: 'avalanche' },
             params: [
                 // Amount In
-                createParameter(PARAM_TEMPLATES.TOKEN_AMOUNT, {
+                {
                     name: 'amountIn',
                     label: 'Amount to Swap',
-                }),
+                    type: 'uint256',
+                    required: true,
+                    min: 0.000001,
+                    description: 'Amount of tokens to swap',
+                } as NumberBasedParameter,
+                
                 // Minimum Amount Out (with slippage)
-                createParameter(PARAM_TEMPLATES.TOKEN_AMOUNT, {
+                {
                     name: 'amountOutMin',
                     label: 'Minimum Received (0.5% slippage)',
-                    value: '0', // Will be calculated frontend based on amountIn
-                }),
-                // Token Path
-                {
-                    name: 'path',
-                    type: 'address' as const,
-                    label: 'Token Path',
+                    type: 'uint256',
                     required: true,
-                    value: ['0xTokenAAddress', '0xTokenBAddress'], // Pre-filled path
-                    fixed: true, // User cannot change this
-                } as StandardParameter,
+                    value: '0', // Will be calculated frontend based on amountIn
+                    description: 'Minimum amount to receive after slippage',
+                } as NumberBasedParameter,
+                
+                // Token Path - Ahora usando SelectParameter para el path
+                createSelectParam(
+                    'path',
+                    'Token Path',
+                    [
+                        { 
+                            label: 'AVAX -> USDC', 
+                            value: ['0xTokenAAddress', '0xTokenBAddress'],
+                            description: 'Swap AVAX for USDC' 
+                        },
+                        { 
+                            label: 'AVAX -> USDT', 
+                            value: ['0xTokenAAddress', '0xTokenCAddress'],
+                            description: 'Swap AVAX for USDT'
+                        },
+                    ],
+                    true,
+                    'Select the token swap path'
+                ),
+                
                 // Recipient
                 createParameter(PARAM_TEMPLATES.ADDRESS, {
                     name: 'to',
                     label: 'Recipient',
                     value: 'sender', // Special value meaning current user
                 }),
+                
                 // Deadline
                 {
                     name: 'deadline',
-                    type: 'number' as const,
                     label: 'Expires After',
+                    type: 'uint256',
                     required: true,
                     value: Math.floor(Date.now() / 1000) + 1200, // 20 minutes from now
                     fixed: true, // User cannot change this
-                } as StandardParameter,
+                    description: 'Transaction will revert after this time',
+                } as NumberBasedParameter,
             ],
         },
 
@@ -142,35 +173,52 @@ export const tokenSwapMiniApp = {
             amount: 0.1, // Send 0.1 AVAX with transaction
             params: [
                 // Minimum Amount Out (with slippage)
-                createParameter(PARAM_TEMPLATES.TOKEN_AMOUNT, {
+                {
                     name: 'amountOutMin',
                     label: 'Minimum Received (0.5% slippage)',
-                    value: '0', // Will be calculated frontend based on amount
-                }),
-                // Token Path
-                {
-                    name: 'path',
-                    type: 'address' as const,
-                    label: 'Token Path',
+                    type: 'uint256',
                     required: true,
-                    value: ['0xWAVAXAddress', '0xTokenBAddress'], // Pre-filled path
-                    fixed: true, // User cannot change this
-                } as StandardParameter,
+                    value: '0', // Will be calculated frontend based on amount
+                    description: 'Minimum tokens to receive after slippage',
+                } as NumberBasedParameter,
+                
+                // Token Path
+                createSelectParam(
+                    'path',
+                    'Token Path',
+                    [
+                        { 
+                            label: 'AVAX -> USDC', 
+                            value: ['0xWAVAXAddress', '0xTokenBAddress'],
+                            description: 'Swap AVAX for USDC' 
+                        },
+                        { 
+                            label: 'AVAX -> USDT', 
+                            value: ['0xWAVAXAddress', '0xTokenCAddress'],
+                            description: 'Swap AVAX for USDT'
+                        },
+                    ],
+                    true,
+                    'Select the token swap path'
+                ),
+                
                 // Recipient
                 createParameter(PARAM_TEMPLATES.ADDRESS, {
                     name: 'to',
                     label: 'Recipient',
                     value: 'sender', // Special value meaning current user
                 }),
+                
                 // Deadline
                 {
                     name: 'deadline',
-                    type: 'number' as const,
                     label: 'Expires After',
+                    type: 'uint256',
                     required: true,
                     value: Math.floor(Date.now() / 1000) + 1200, // 20 minutes from now
                     fixed: true, // User cannot change this
-                } as StandardParameter,
+                    description: 'Transaction will revert after this time',
+                } as NumberBasedParameter,
             ],
         },
     ],
@@ -230,24 +278,36 @@ export const nftMarketplaceMiniApp = {
                     name: 'nftAddress',
                     label: 'NFT Collection Address',
                 }),
+                
                 // Token ID
-                createParameter(PARAM_TEMPLATES.NFT_ID, {
+                {
                     name: 'tokenId',
                     label: 'NFT ID',
-                }),
+                    type: 'uint256',
+                    required: true,
+                    description: 'ID of the NFT you want to sell',
+                    min: 1,
+                } as NumberBasedParameter,
+                
                 // Price
-                createParameter(PARAM_TEMPLATES.TOKEN_AMOUNT, {
+                {
                     name: 'price',
                     label: 'Price in AVAX',
-                }),
+                    type: 'uint256',
+                    required: true,
+                    min: 0.01,
+                    description: 'Listing price in AVAX',
+                } as NumberBasedParameter,
+                
                 // Expiration time
                 {
                     name: 'expiresAt',
-                    type: 'datetime' as const,
                     label: 'Expires After',
+                    type: 'datetime',
                     required: true,
                     value: Math.floor(Date.now() / 1000) + 604800, // 1 week from now
-                } as StandardParameter,
+                    description: 'When the listing will expire',
+                } as NumberBasedParameter,
             ],
         },
 
@@ -262,10 +322,13 @@ export const nftMarketplaceMiniApp = {
             chains: { source: 'fuji' },
             params: [
                 // Listing ID
-                createParameter(PARAM_TEMPLATES.INTEGER, {
+                {
                     name: 'listingId',
                     label: 'Listing ID',
-                }),
+                    type: 'uint256',
+                    required: true,
+                    description: 'ID of the listing you want to purchase',
+                } as NumberBasedParameter,
             ],
         },
 
@@ -280,10 +343,13 @@ export const nftMarketplaceMiniApp = {
             chains: { source: 'fuji' },
             params: [
                 // Listing ID
-                createParameter(PARAM_TEMPLATES.INTEGER, {
+                {
                     name: 'listingId',
                     label: 'Listing ID',
-                }),
+                    type: 'uint256',
+                    required: true,
+                    description: 'ID of the listing you want to cancel',
+                } as NumberBasedParameter,
             ],
         },
     ],
@@ -342,36 +408,47 @@ export const daoVotingMiniApp = {
             chains: { source: 'celo' },
             params: [
                 // Title
-                createParameter(PARAM_TEMPLATES.TEXT, {
+                {
                     name: 'title',
                     label: 'Proposal Title',
+                    type: 'string',
+                    required: true,
                     minLength: 10,
                     maxLength: 100,
-                }),
-                // Description
-                createParameter(PARAM_TEMPLATES.TEXTAREA, {
+                    description: 'A concise title for your proposal',
+                } as TextBasedParameter,
+                
+                // Description - Usando textarea en lugar de text
+                {
                     name: 'description',
                     label: 'Proposal Description',
+                    type: 'textarea',
+                    required: true,
                     minLength: 50,
                     maxLength: 5000,
-                }),
+                    description: 'Detailed explanation of your proposal',
+                } as TextBasedParameter,
+                
                 // Actions (encoded)
                 {
                     name: 'actions',
-                    type: 'text' as const,
                     label: 'Encoded Actions',
+                    type: 'bytes',
                     required: true,
                     value: '0x', // Empty bytes for simple proposals
                     fixed: true, // User cannot change this
-                } as StandardParameter,
+                    description: 'Technical: encoded on-chain actions',
+                } as TextBasedParameter,
+                
                 // Expiration time
                 {
                     name: 'expiresAt',
-                    type: 'datetime' as const,
                     label: 'Voting Period Ends',
+                    type: 'datetime',
                     required: true,
                     value: Math.floor(Date.now() / 1000) + 604800, // 1 week from now
-                } as StandardParameter,
+                    description: 'When voting on this proposal will end',
+                } as NumberBasedParameter,
             ],
         },
 
@@ -386,15 +463,22 @@ export const daoVotingMiniApp = {
             chains: { source: 'celo' },
             params: [
                 // Proposal ID
-                createParameter(PARAM_TEMPLATES.INTEGER, {
+                {
                     name: 'proposalId',
                     label: 'Proposal ID',
-                }),
+                    type: 'uint256',
+                    required: true,
+                    description: 'ID of the proposal you want to vote on',
+                } as NumberBasedParameter,
+                
                 // Support (yes/no)
-                createParameter(PARAM_TEMPLATES.BOOLEAN_RADIO, {
+                {
                     name: 'support',
                     label: 'Your Vote',
-                }),
+                    type: 'boolean',
+                    required: true,
+                    description: 'Select whether you support this proposal',
+                } as BooleanParameter,
             ],
         },
 
@@ -409,10 +493,13 @@ export const daoVotingMiniApp = {
             chains: { source: 'celo' },
             params: [
                 // Proposal ID
-                createParameter(PARAM_TEMPLATES.INTEGER, {
+                {
                     name: 'proposalId',
                     label: 'Proposal ID',
-                }),
+                    type: 'uint256',
+                    required: true,
+                    description: 'ID of the approved proposal to execute',
+                } as NumberBasedParameter,
             ],
         },
     ],
@@ -469,33 +556,47 @@ export const fundraisingMiniApp = {
             chains: { source: 'fuji' },
             params: [
                 // Title
-                createParameter(PARAM_TEMPLATES.TEXT, {
+                {
                     name: 'title',
                     label: 'Campaign Title',
+                    type: 'string',
+                    required: true,
                     minLength: 5,
                     maxLength: 100,
-                }),
-                // Description
-                createParameter(PARAM_TEMPLATES.TEXTAREA, {
+                    description: 'A title for your fundraising campaign',
+                } as TextBasedParameter,
+                
+                // Description - Usando textarea
+                {
                     name: 'description',
                     label: 'Campaign Description',
+                    type: 'textarea',
+                    required: true,
                     minLength: 50,
                     maxLength: 2000,
-                }),
+                    description: 'Describe the purpose of your campaign',
+                } as TextBasedParameter,
+                
                 // Goal amount
-                createParameter(PARAM_TEMPLATES.TOKEN_AMOUNT, {
+                {
                     name: 'goal',
                     label: 'Funding Goal (AVAX)',
+                    type: 'uint256',
+                    required: true,
                     min: 0.1,
-                }),
+                    description: 'Target amount to raise in AVAX',
+                } as NumberBasedParameter,
+                
                 // Deadline
                 {
                     name: 'deadline',
-                    type: 'datetime' as const,
                     label: 'Campaign Deadline',
+                    type: 'datetime',
                     required: true,
                     min: Math.floor(Date.now() / 1000) + 86400, // At least 1 day from now
-                } as StandardParameter,
+                    description: 'When your fundraising campaign will end',
+                } as NumberBasedParameter,
+                
                 // Beneficiary
                 createParameter(PARAM_TEMPLATES.ADDRESS, {
                     name: 'beneficiary',
@@ -517,10 +618,13 @@ export const fundraisingMiniApp = {
             amount: 0.1, // Default donation of 0.1 AVAX
             params: [
                 // Campaign ID
-                createParameter(PARAM_TEMPLATES.INTEGER, {
+                {
                     name: 'campaignId',
                     label: 'Campaign ID',
-                }),
+                    type: 'uint256',
+                    required: true,
+                    description: 'ID of the campaign you want to support',
+                } as NumberBasedParameter,
             ],
         },
 
@@ -535,112 +639,19 @@ export const fundraisingMiniApp = {
             chains: { source: 'fuji' },
             params: [
                 // Campaign ID
-                createParameter(PARAM_TEMPLATES.INTEGER, {
+                {
                     name: 'campaignId',
                     label: 'Campaign ID',
-                }),
-            ],
-        },
-    ],
-};
-
-// ============== 5. MARKET CREATION MINI-APP (COMPLEX EXAMPLE) ==============
-
-// Market Factory ABI (simplified for example)
-const marketFactoryAbi = [
-    {
-        name: 'createMarketAndToken',
-        type: 'function',
-        stateMutability: 'nonpayable',
-        inputs: [
-            {
-                name: 'marketCreation',
-                type: 'tuple',
-                components: [
-                    { name: 'tokenType', type: 'uint96' },
-                    { name: 'name', type: 'string' },
-                    { name: 'symbol', type: 'string' },
-                    { name: 'quoteToken', type: 'address' },
-                    { name: 'totalSupply', type: 'uint256' },
-                    { name: 'creatorShare', type: 'uint16' },
-                    { name: 'stakingShare', type: 'uint16' },
-                    { name: 'bidPrices', type: 'uint256[]' },
-                    { name: 'askPrices', type: 'uint256[]' },
-                    { name: 'args', type: 'bytes' },
-                ],
-            },
-        ],
-        outputs: [
-            { name: 'token', type: 'address' },
-            { name: 'market', type: 'address' },
-        ],
-    },
-] as const;
-
-// Market Creation Mini-App
-export const marketCreationMiniApp = {
-    url: 'https://markets.sherry.social',
-    icon: 'https://example.com/market-icon.png',
-    title: 'Create Token Market',
-    description: 'Launch your own token with a liquidity market',
-    actions: [
-        // Action: Create Market
-        {
-            label: 'Create Market',
-            title: 'Create Token Market',
-            description: 'Launch a new token with a built-in market',
-            address: '0xMarketFactoryAddress' as `0x${string}`,
-            abi: marketFactoryAbi,
-            functionName: 'createMarketAndToken',
-            chains: { source: 'fuji' },
-            params: [
-                // Market Creation Parameters (complex struct)
-                {
-                    name: 'marketCreation',
-                    type: 'number' as const, // This is just a placeholder - struct handling is special
-                    label: 'Market Parameters',
+                    type: 'uint256',
                     required: true,
-                    value: {
-                        tokenType: 1,
-                        name: '', // User will fill this
-                        symbol: '', // User will fill this
-                        quoteToken: '0xWrappedNativeAddress',
-                        totalSupply: '1000000000000000000000000', // 1 million tokens with 18 decimals
-                        creatorShare: 4000, // 40%
-                        stakingShare: 4000, // 40%
-                        bidPrices: [0, '100000000000000'],
-                        askPrices: [0, '99000000000000'],
-                        args: '0x5ee75a1B1648C023e885E58bD3735Ae273f2cc52', // encoded 18 decimals
-                    },
-                    // We'll define sub-parameters for the struct fields that need user input
-                    fields: {
-                        name: {
-                            type: 'text' as const,
-                            label: 'Token Name',
-                            required: true,
-                            minLength: 3,
-                            maxLength: 50,
-                        },
-                        symbol: {
-                            type: 'text' as const,
-                            label: 'Token Symbol',
-                            required: true,
-                            minLength: 2,
-                            maxLength: 5,
-                            pattern: '^[A-Z0-9]+$',
-                        },
-                        // Other fields use default values and are hidden from the user
-                    },
-                } as StandardParameter & {
-                    fields: Record<string, any>;
-                    value: Record<string, any>;
-                },
+                    description: 'ID of the campaign to claim funds from',
+                } as NumberBasedParameter,
             ],
         },
     ],
 };
 
-// ============== 6. CROSS-CHAIN BRIDGE MINI-APP ==============
+// ============== 5. CROSS-CHAIN BRIDGE MINI-APP ==============
 
 // Bridge ABI (simplified)
 const bridgeAbi = [
@@ -674,38 +685,64 @@ export const bridgeMiniApp: Metadata = {
             functionName: 'bridgeTokens',
             chains: { source: 'avalanche', destination: 'celo' },
             params: [
-                // Token address
-                createParameter(PARAM_TEMPLATES.ADDRESS, {
-                    name: 'token',
-                    label: 'Token Address',
-                }),
+                // Token address - Ahora usando select para tokens predefinidos
+                createSelectParam(
+                    'token',
+                    'Select Token',
+                    [
+                        { 
+                            label: 'USDC', 
+                            value: '0xA7D7079b0FEaD91F3e65f86E8915Cb59c1a4C664',
+                            description: 'USD Coin' 
+                        },
+                        { 
+                            label: 'USDT', 
+                            value: '0xc7198437980c041c805A1EDcbA50c1Ce5db95118',
+                            description: 'Tether USD'
+                        },
+                        { 
+                            label: 'DAI', 
+                            value: '0xd586E7F844cEa2F87f50152665BCbc2C279D8d70',
+                            description: 'Dai Stablecoin'
+                        },
+                    ],
+                    true,
+                    'Select the token you want to bridge'
+                ),
+                
                 // Amount
-                createParameter(PARAM_TEMPLATES.TOKEN_AMOUNT, {
+                {
                     name: 'amount',
                     label: 'Amount to Bridge',
+                    type: 'uint256',
+                    required: true,
                     min: 0.000001,
-                }),
+                    description: 'Amount of tokens to send to the destination chain',
+                } as NumberBasedParameter,
+                
                 // Recipient
                 createParameter(PARAM_TEMPLATES.ADDRESS, {
                     name: 'recipient',
                     label: 'Destination Address',
                     value: 'sender', // Default to current user
                 }),
+                
                 // Destination Chain ID
                 {
                     name: 'destinationChainId',
-                    type: 'number' as const,
                     label: 'Destination Chain',
+                    type: 'uint256',
                     required: true,
                     value: 42220, // Celo chain ID
                     fixed: true, // User cannot change this
-                } as StandardParameter,
+                    description: 'Chain ID of the destination blockchain',
+                } as NumberBasedParameter,
             ],
         },
     ],
 };
 
-// ============== 7. SIMPLE TRANSFER MINI-APP ==============
+// ============== 6. SIMPLE TRANSFER MINI-APP ==============
 // Adding a simple transfer app as example for transfer actions
 
 export const simpleTransferMiniApp: Metadata = {
@@ -763,13 +800,183 @@ export const simpleTransferMiniApp: Metadata = {
     ],
 };
 
+// ============== 7. ALL PARAMETER TYPES DEMO ==============
+// Adding a demo app to showcase all parameter types
+
+export const parameterTypesDemoMiniApp: Metadata = {
+    url: 'https://demo.sherry.social',
+    icon: 'https://example.com/demo-icon.png',
+    title: 'Parameter Types Demo',
+    description: 'Showcase all parameter types in the SDK',
+    actions: [
+        {
+            label: 'Text Parameters',
+            type: 'blockchain',
+            address: '0xDemoAddress' as `0x${string}`,
+            abi: [],
+            functionName: 'textDemo',
+            chains: { source: 'fuji' },
+            params: [
+                // Text parameter
+                {
+                    name: 'textInput',
+                    label: 'Text Input',
+                    type: 'text',
+                    required: true,
+                    minLength: 3,
+                    maxLength: 50,
+                    description: 'Standard text input with length limits',
+                } as TextBasedParameter,
+                
+                // Email parameter
+                {
+                    name: 'emailInput',
+                    label: 'Email Address',
+                    type: 'email',
+                    required: true,
+                    pattern: '^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$',
+                    description: 'Email input with validation',
+                } as TextBasedParameter,
+                
+                // URL parameter
+                {
+                    name: 'urlInput',
+                    label: 'Website URL',
+                    type: 'url',
+                    required: false,
+                    description: 'URL input with built-in validation',
+                } as TextBasedParameter,
+                
+                // Textarea parameter
+                {
+                    name: 'textareaInput',
+                    label: 'Long Text',
+                    type: 'textarea',
+                    required: false,
+                    minLength: 10,
+                    maxLength: 1000,
+                    description: 'Multi-line text input for longer content',
+                } as TextBasedParameter,
+                
+                // Bytes parameter
+                {
+                    name: 'bytesInput',
+                    label: 'Hex Data',
+                    type: 'bytes',
+                    required: false,
+                    pattern: '^0x[a-fA-F0-9]*$',
+                    description: 'Hexadecimal data input',
+                } as TextBasedParameter,
+            ],
+        },
+        {
+            label: 'Number Parameters',
+            type: 'blockchain',
+            address: '0xDemoAddress' as `0x${string}`,
+            abi: [],
+            functionName: 'numberDemo',
+            chains: { source: 'fuji' },
+            params: [
+                // Number parameter
+                {
+                    name: 'numberInput',
+                    label: 'Number',
+                    type: 'number',
+                    required: true,
+                    min: 0,
+                    max: 100,
+                    description: 'Standard number input with range',
+                } as NumberBasedParameter,
+                
+                // Integer parameter (uint256)
+                {
+                    name: 'integerInput',
+                    label: 'Integer (uint256)',
+                    type: 'uint256',
+                    required: true,
+                    min: 1,
+                    description: 'Integer input for blockchain values',
+                } as NumberBasedParameter,
+                
+                // Datetime parameter
+                {
+                    name: 'datetimeInput',
+                    label: 'Date and Time',
+                    type: 'datetime',
+                    required: true,
+                    min: Math.floor(Date.now() / 1000),
+                    description: 'Date/time input as unix timestamp',
+                } as NumberBasedParameter,
+            ],
+        },
+        {
+            label: 'Selection Parameters',
+            type: 'blockchain',
+            address: '0xDemoAddress' as `0x${string}`,
+            abi: [],
+            functionName: 'selectionDemo',
+            chains: { source: 'fuji' },
+            params: [
+                // Select parameter
+                createSelectParam(
+                    'selectInput',
+                    'Dropdown Select',
+                    [
+                        { label: 'Option 1', value: '1', description: 'First option' },
+                        { label: 'Option 2', value: '2', description: 'Second option' },
+                        { label: 'Option 3', value: '3', description: 'Third option' },
+                    ],
+                    true,
+                    'Standard dropdown selection'
+                ),
+                
+                // Radio parameter
+                createRadioParam(
+                    'radioInput',
+                    'Radio Selection',
+                    [
+                        { label: 'Red', value: 'red', description: 'Red color' },
+                        { label: 'Green', value: 'green', description: 'Green color' },
+                        { label: 'Blue', value: 'blue', description: 'Blue color' },
+                    ],
+                    true,
+                    'Radio button selection'
+                ),
+                
+                // Boolean parameter
+                {
+                    name: 'booleanInput',
+                    label: 'Boolean Switch',
+                    type: 'boolean',
+                    required: true,
+                    description: 'ON/OFF toggle switch',
+                } as BooleanParameter,
+                
+                // Yes/No radio
+                createParameter(PARAM_TEMPLATES.YES_NO, {
+                    name: 'yesNoInput',
+                    label: 'Confirm Choice',
+                    description: 'Yes/No selection using radio buttons',
+                }),
+                
+                // Address parameter
+                createParameter(PARAM_TEMPLATES.ADDRESS, {
+                    name: 'addressInput',
+                    label: 'Ethereum Address',
+                    description: 'Ethereum wallet address input with validation',
+                }),
+            ],
+        },
+    ],
+};
+
 // Export all mini-apps
 export const miniApps = {
     tokenSwap: tokenSwapMiniApp,
     nftMarketplace: nftMarketplaceMiniApp,
     daoVoting: daoVotingMiniApp,
     fundraising: fundraisingMiniApp,
-    marketCreation: marketCreationMiniApp,
     bridge: bridgeMiniApp,
     simpleTransfer: simpleTransferMiniApp,
+    parameterTypesDemo: parameterTypesDemoMiniApp, // Nuevo mini-app de demo
 };
