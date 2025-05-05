@@ -30,9 +30,7 @@ export class DynamicActionExecutor {
             }
 
             // Construir la URL
-            let fullUrl = action.path.startsWith('http') 
-                ? action.path 
-                : this.getFullUrl(action);
+            let fullUrl = action.path.startsWith('http') ? action.path : this.getFullUrl(action);
             fullUrl = this.appendQueryParams(action, inputs, context, fullUrl);
 
             // Ejecutar la petición
@@ -49,7 +47,9 @@ export class DynamicActionExecutor {
             // Manejar errores HTTP
             if (!response.ok) {
                 const errorText = await response.text();
-                throw new Error(`HTTP Error! Status: ${response.status} ${response.statusText}. Details: ${errorText}`);
+                throw new Error(
+                    `HTTP Error! Status: ${response.status} ${response.statusText}. Details: ${errorText}`,
+                );
             }
 
             // Parsear la respuesta JSON
@@ -57,20 +57,24 @@ export class DynamicActionExecutor {
             try {
                 responseData = await response.json();
             } catch (error) {
-                throw new Error(`Invalid JSON response: ${error instanceof Error ? error.message : String(error)}`);
+                throw new Error(
+                    `Invalid JSON response: ${error instanceof Error ? error.message : String(error)}`,
+                );
             }
 
             // Validar y adaptar la respuesta
             if (this.isValidExecutionResponse(responseData)) {
                 return responseData as ExecutionResponse;
-            } 
-            
+            }
+
             const adaptedResponse = this.adaptToExecutionResponse(responseData);
             if (adaptedResponse) {
                 return adaptedResponse;
             }
 
-            throw new Error(`Invalid response format from endpoint for action '${action.label}'. Expected ExecutionResponse format.`);
+            throw new Error(
+                `Invalid response format from endpoint for action '${action.label}'. Expected ExecutionResponse format.`,
+            );
         } catch (error) {
             // Convertir cualquier error en ActionValidationError
             const message = error instanceof Error ? error.message : 'Unknown error';
@@ -134,13 +138,19 @@ export class DynamicActionExecutor {
 
         // Identificar la transacción serializada
         let serializedTx: string | undefined;
-        if (typeof data.serializedTransaction === 'string' && data.serializedTransaction.startsWith('0x')) {
+        if (
+            typeof data.serializedTransaction === 'string' &&
+            data.serializedTransaction.startsWith('0x')
+        ) {
             serializedTx = data.serializedTransaction;
         } else if (typeof data.tx === 'string' && data.tx.startsWith('0x')) {
             serializedTx = data.tx;
         } else if (typeof data.transaction === 'string' && data.transaction.startsWith('0x')) {
             serializedTx = data.transaction;
-        } else if (typeof data.transactionHash === 'string' && data.transactionHash.startsWith('0x')) {
+        } else if (
+            typeof data.transactionHash === 'string' &&
+            data.transactionHash.startsWith('0x')
+        ) {
             serializedTx = data.transactionHash;
         }
 
@@ -180,14 +190,15 @@ export class DynamicActionExecutor {
         // Añadir params si hay datos disponibles
         if (data.functionName || data.params || (data.decoded && data.decoded.functionName)) {
             response.params = {
-                functionName: typeof data.functionName === 'string' 
-                              ? data.functionName 
-                              : (data.decoded && typeof data.decoded.functionName === 'string'
-                                ? data.decoded.functionName 
-                                : 'unknown'),
-                args: {}
+                functionName:
+                    typeof data.functionName === 'string'
+                        ? data.functionName
+                        : data.decoded && typeof data.decoded.functionName === 'string'
+                          ? data.decoded.functionName
+                          : 'unknown',
+                args: {},
             };
-            
+
             // Extraer args
             if (typeof data.params === 'object' && !Array.isArray(data.params)) {
                 response.params.args = data.params;
@@ -196,7 +207,12 @@ export class DynamicActionExecutor {
                 const decodedParams = data.decoded.params;
                 if (Array.isArray(decodedParams)) {
                     decodedParams.forEach(param => {
-                        if (param && typeof param === 'object' && 'name' in param && 'value' in param) {
+                        if (
+                            param &&
+                            typeof param === 'object' &&
+                            'name' in param &&
+                            'value' in param
+                        ) {
                             response.params!.args[param.name] = param.value;
                         }
                     });
