@@ -2,6 +2,7 @@
 const config = {
     preset: 'ts-jest',
     testEnvironment: 'node',
+    setupFiles: ['./jest.setup.js'],
     //setupFiles: ['<rootDir>/test/setup.js'],
 };
 
