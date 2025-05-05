@@ -46,7 +46,7 @@ export const charityDonationMiniApp: Metadata = {
             description: 'Choose a charity and donation amount',
             chains: { source: 'celo' },
             recipient: {
-                inputType: 'select',
+                type: 'select',
                 label: 'Select Charity',
                 required: true,
                 options: [
@@ -90,7 +90,7 @@ export const tippingMiniApp: Metadata = {
             chains: { source: 'avalanche' },
             to: '0x9012345678901234567890123456789012345678', // Creator's wallet
             amountConfig: {
-                inputType: 'radio',
+                type: 'radio',
                 label: 'Tip Amount',
                 required: true,
                 options: [
@@ -148,7 +148,7 @@ export const paymentSplittingMiniApp: Metadata = {
             chains: { source: 'monad-testnet' },
             to: '0x5678901234567890123456789012345678901234',
             amountConfig: {
-                inputType: 'select',
+                type: 'select',
                 label: 'Project Budget',
                 required: true,
                 options: [
@@ -167,7 +167,7 @@ export const paymentSplittingMiniApp: Metadata = {
             chains: { source: 'monad-testnet' },
             to: '0x6789012345678901234567890123456789012345',
             amountConfig: {
-                inputType: 'select',
+                type: 'select',
                 label: 'Project Budget',
                 required: true,
                 options: [
@@ -186,7 +186,7 @@ export const paymentSplittingMiniApp: Metadata = {
             chains: { source: 'monad-testnet' },
             to: '0x7890123456789012345678901234567890123456',
             amountConfig: {
-                inputType: 'select',
+                type: 'select',
                 label: 'Project Budget',
                 required: true,
                 options: [

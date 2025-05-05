@@ -83,14 +83,14 @@ export class TransferActionValidator {
                 throw new InvalidMetadataError('Recipient configuration must be an object');
             }
 
-            if (!['select', 'input'].includes(action.recipient.inputType || '')) {
+            if (!['select', 'input'].includes(action.recipient.type || '')) {
                 throw new InvalidMetadataError(
-                    `Invalid recipient input type: ${action.recipient.inputType}`,
+                    `Invalid recipient input type: ${action.recipient.type}`,
                 );
             }
 
             if (
-                action.recipient.inputType === 'select' &&
+                action.recipient.type === 'select' &&
                 (!Array.isArray(action.recipient.options) || action.recipient.options.length === 0)
             ) {
                 throw new InvalidMetadataError(
@@ -123,16 +123,16 @@ export class TransferActionValidator {
             }
 
             if (
-                action.amountConfig.inputType &&
-                !['select', 'radio', 'input'].includes(action.amountConfig.inputType)
+                action.amountConfig.type &&
+                !['select', 'radio', 'input'].includes(action.amountConfig.type)
             ) {
                 throw new InvalidMetadataError(
-                    `Invalid amount input type: ${action.amountConfig.inputType}`,
+                    `Invalid amount input type: ${action.amountConfig.type}`,
                 );
             }
 
             if (
-                ['select', 'radio'].includes(action.amountConfig.inputType || '') &&
+                ['select', 'radio'].includes(action.amountConfig.type || '') &&
                 (!Array.isArray(action.amountConfig.options) ||
                     action.amountConfig.options.length === 0)
             ) {

@@ -1,14 +1,13 @@
 export interface ExecutionResponse {
-    serializedTransaction: string;
+    // Elementos esenciales
+    serializedTransaction: string; // Usando wagmi serialize
     chainId: string;
-    meta?: {
-        title?: string;
-        description?: string;
-        details?: {
-            label: string;
-            value: string;
-        }[];
-        contractAddress?: string;
-        functionName?: string;
+
+    // Para verificación (opcionales)
+    abi?: any[]; // Permite verificación completa
+    params?: {
+        // Parámetros decodificados para mejor UX
+        functionName: string;
+        args: Record<string, any>;
     };
 }

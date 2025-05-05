@@ -1,8 +1,7 @@
 import { DynamicAction } from '../interface/actions/dynamicAction';
-import { BlockchainParameter, ValidatedAction } from '../interface';
-import { ActionValidationError } from '../utils';
+import { ActionValidationError } from '../errors/customErrors';
 import { ExecutionResponse } from '../interface/response/executionResponse';
-import { StandardParameter } from '../interface/inputs';
+import { Parameter } from '../interface/inputs';
 
 export class DynamicActionExecutor {
     private baseUrl?: string;
@@ -17,22 +16,24 @@ export class DynamicActionExecutor {
         context: Record<string, any>,
     ): Promise<ExecutionResponse> {
         try {
+            // Validaciones iniciales
             if (action.type !== 'dynamic') {
                 throw new ActionValidationError('Action type must be "dynamic"');
             }
             if (!action.path || typeof action.path !== 'string') {
                 throw new ActionValidationError('Dynamic action must have a valid path');
             }
-
             if (!this.baseUrl && !action.path.startsWith('http')) {
                 throw new ActionValidationError(
                     `Dynamic action '${action.label}' has a relative path '${action.path}' but no baseUrl is provided in metadata`,
                 );
             }
 
-            let fullUrl = this.getFullUrl(action);
+            // Construir la URL
+            let fullUrl = action.path.startsWith('http') ? action.path : this.getFullUrl(action);
             fullUrl = this.appendQueryParams(action, inputs, context, fullUrl);
 
+            // Ejecutar la petición
             const response = await fetch(fullUrl, {
                 method: 'POST',
                 headers: {
@@ -43,6 +44,7 @@ export class DynamicActionExecutor {
                 },
             });
 
+            // Manejar errores HTTP
             if (!response.ok) {
                 const errorText = await response.text();
                 throw new Error(
@@ -50,21 +52,31 @@ export class DynamicActionExecutor {
                 );
             }
 
-            const responseData = await response.json();
-
-            if (this.isValidExecutionResponse(responseData)) {
-                return responseData as ExecutionResponse;
-            } else {
-                const adaptedResponse = this.adaptToExecutionResponse(responseData);
-                if (adaptedResponse) {
-                    return adaptedResponse;
-                }
-
-                throw new ActionValidationError(
-                    `Invalid response format from endpoint for action '${action.label}'. Expected ExecutionResponse format.`,
+            // Parsear la respuesta JSON
+            let responseData;
+            try {
+                responseData = await response.json();
+            } catch (error) {
+                throw new Error(
+                    `Invalid JSON response: ${error instanceof Error ? error.message : String(error)}`,
                 );
             }
+
+            // Validar y adaptar la respuesta
+            if (this.isValidExecutionResponse(responseData)) {
+                return responseData as ExecutionResponse;
+            }
+
+            const adaptedResponse = this.adaptToExecutionResponse(responseData);
+            if (adaptedResponse) {
+                return adaptedResponse;
+            }
+
+            throw new Error(
+                `Invalid response format from endpoint for action '${action.label}'. Expected ExecutionResponse format.`,
+            );
         } catch (error) {
+            // Convertir cualquier error en ActionValidationError
             const message = error instanceof Error ? error.message : 'Unknown error';
             throw new ActionValidationError(`Error executing action '${action.label}': ${message}`);
         }
@@ -74,10 +86,8 @@ export class DynamicActionExecutor {
         if (!this.baseUrl) {
             throw new ActionValidationError('Base URL is not provided');
         }
-
         const baseWithSlash = this.baseUrl.endsWith('/') ? this.baseUrl : `${this.baseUrl}/`;
         const pathWithoutSlash = action.path.startsWith('/') ? action.path.slice(1) : action.path;
-
         return `${baseWithSlash}${pathWithoutSlash}`;
     }
 
@@ -87,11 +97,9 @@ export class DynamicActionExecutor {
         context: Record<string, any>,
         url: string,
     ): string {
-        //const queryParams = new URLSearchParams();
         const urlObj = new URL(url);
-
         if (action.params) {
-            action.params.forEach((param: StandardParameter) => {
+            action.params.forEach((param: Parameter) => {
                 if (param.fixed || param.value !== undefined) {
                     urlObj.searchParams.append(param.name, String(param.value));
                 } else if (inputs[param.name] !== undefined) {
@@ -99,25 +107,16 @@ export class DynamicActionExecutor {
                 }
             });
         }
-
         if (context.userAddress) {
             urlObj.searchParams.append('userAddress', context.userAddress);
         }
-
         if (action.chains) {
             urlObj.searchParams.append('chain', action.chains.source);
-
             if (action.chains.destination) {
                 urlObj.searchParams.append('destinationChain', action.chains.destination);
             }
         }
-
-        const queryString = urlObj.searchParams.toString();
-        if (queryString) {
-            return `${url}${url.includes('?') ? '&' : '?'}${queryString}`;
-        }
-
-        return url;
+        return urlObj.toString();
     }
 
     private isValidExecutionResponse(data: any): boolean {
@@ -126,26 +125,101 @@ export class DynamicActionExecutor {
             typeof data === 'object' &&
             typeof data.serializedTransaction === 'string' &&
             data.serializedTransaction.startsWith('0x') &&
-            typeof data.chain === 'string'
+            typeof data.chainId === 'string' &&
+            data.chainId.length > 0
         );
     }
 
     private adaptToExecutionResponse(data: any): ExecutionResponse | null {
-        if (data.transaction || data.tx || data.serializedTransaction) {
-            const txData =
-                data.transaction || data.transactionHash || data.tx || data.serializedTransaction;
-            // Ensure it's a hex string
-            const serializedTx = txData.startsWith('0x') ? txData : `0x${txData}`;
-            const chainId = data.chain || data.chainId || data.network || data.blockchain;
-
-            return {
-                serializedTransaction: serializedTx,
-                chainId: chainId,
-                status: 'success',
-                error: null,
-            } as ExecutionResponse;
+        // Si no hay datos, no podemos adaptar
+        if (!data || typeof data !== 'object') {
+            return null;
         }
 
-        return null;
+        // Identificar la transacción serializada
+        let serializedTx: string | undefined;
+        if (
+            typeof data.serializedTransaction === 'string' &&
+            data.serializedTransaction.startsWith('0x')
+        ) {
+            serializedTx = data.serializedTransaction;
+        } else if (typeof data.tx === 'string' && data.tx.startsWith('0x')) {
+            serializedTx = data.tx;
+        } else if (typeof data.transaction === 'string' && data.transaction.startsWith('0x')) {
+            serializedTx = data.transaction;
+        } else if (
+            typeof data.transactionHash === 'string' &&
+            data.transactionHash.startsWith('0x')
+        ) {
+            serializedTx = data.transactionHash;
+        }
+
+        // Si no hay transacción válida, no podemos adaptar
+        if (!serializedTx) {
+            return null;
+        }
+
+        // Identificar el chainId
+        let chainId: string | undefined;
+        if (typeof data.chainId === 'string' && data.chainId) {
+            chainId = data.chainId;
+        } else if (typeof data.chain === 'string' && data.chain) {
+            chainId = data.chain;
+        } else if (typeof data.network === 'string' && data.network) {
+            chainId = data.network;
+        } else if (typeof data.blockchain === 'string' && data.blockchain) {
+            chainId = data.blockchain;
+        }
+
+        // Si no hay chainId válido, no podemos adaptar
+        if (!chainId) {
+            return null;
+        }
+
+        // Construir respuesta básica
+        const response: ExecutionResponse = {
+            serializedTransaction: serializedTx,
+            chainId: chainId,
+        };
+
+        // Añadir ABI si está disponible
+        if (Array.isArray(data.abi)) {
+            response.abi = data.abi;
+        }
+
+        // Añadir params si hay datos disponibles
+        if (data.functionName || data.params || (data.decoded && data.decoded.functionName)) {
+            response.params = {
+                functionName:
+                    typeof data.functionName === 'string'
+                        ? data.functionName
+                        : data.decoded && typeof data.decoded.functionName === 'string'
+                          ? data.decoded.functionName
+                          : 'unknown',
+                args: {},
+            };
+
+            // Extraer args
+            if (typeof data.params === 'object' && !Array.isArray(data.params)) {
+                response.params.args = data.params;
+            } else if (data.decoded && data.decoded.params) {
+                // Intentar extraer desde decoded.params
+                const decodedParams = data.decoded.params;
+                if (Array.isArray(decodedParams)) {
+                    decodedParams.forEach(param => {
+                        if (
+                            param &&
+                            typeof param === 'object' &&
+                            'name' in param &&
+                            'value' in param
+                        ) {
+                            response.params!.args[param.name] = param.value;
+                        }
+                    });
+                }
+            }
+        }
+
+        return response;
     }
 }
