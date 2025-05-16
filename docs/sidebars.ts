@@ -17,18 +17,60 @@ const sidebars: SidebarsConfig = {
         'intro', // Assuming 'intro.md' is now your main SDK introduction
 
         // 2. First Main Section: Getting Started / Core Concepts
+        //{
+          // type: 'category',
+           // label: 'Quickstart',
+           // collapsed: false,
+            // Optional: Add a link to a specific doc if needed, otherwise it's just a category
+            // link: { type: 'doc', id: 'sdk/getting-started-overview' },
+           // items: [
+               // 'quickstart/quickstart',
+                
+                 // Docs about the key concepts of the SDK
+                // Add other getting started guides here if you have them
+           // ],
+       // },
+    // 3. Second Main Section: Key Concepts
         {
             type: 'category',
             label: 'Getting Started',
+            collapsed: false,
             // Optional: Add a link to a specific doc if needed, otherwise it's just a category
             // link: { type: 'doc', id: 'sdk/getting-started-overview' },
             items: [
-                'sdk/creating-miniapps', // How to create Metadata/Mini-apps
+                'keyconcepts/keyconcepts',
+                'keyconcepts/creatingminiapp',
+                'keyconcepts/actions',
+                'keyconcepts/metadata',
+                'keyconcepts/stepbystep',
+                'keyconcepts/examples',
+                'keyconcepts/nextsteps',
+                
+              
+                 // How to create Metadata/Mini-apps
+                 // Docs about the key concepts of the SDK
                 // Add other getting started guides here if you have them
             ],
         },
 
-        // 3. Second Main Section: Building Blocks / Action Types
+        {
+            type: 'category',
+            label: 'Chain Logic & Examples',
+            collapsed: false,
+            // Optional: Add a link to a specific doc if needed, otherwise it's just a category
+            // link: { type: 'doc', id: 'sdk/getting-started-overview' },
+            items: [
+                'chainlogic/chains',
+                'chainlogic/crosschain',
+                'chainlogic/supported',
+                
+                 // How to create Metadata/Mini-apps
+                 // Docs about the key concepts of the SDK
+                // Add other getting started guides here if you have them
+            ],
+        },
+
+
         {
             type: 'category',
             label: 'Building Blocks',
