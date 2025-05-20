@@ -1,43 +1,47 @@
-# Examples 
+# Examples
 
 Explore these ready-to-use examples (available in src/examples/):
 
 ## 🔹 Single Action Mini-Apps
 
 ```typescript
-tokenSwapMiniApp
+tokenSwapMiniApp;
 
-nftMarketplaceMiniApp
+nftMarketplaceMiniApp;
 
-daoVotingMiniApp
+daoVotingMiniApp;
 
-fundraisingMiniApp
+fundraisingMiniApp;
 
-marketCreationMiniApp
+marketCreationMiniApp;
 
-bridgeMiniApp
+bridgeMiniApp;
 
-simpleTransferMiniApp
+simpleTransferMiniApp;
 ```
 
 ## 🔸 Transfer Mini-Apps
 
 ```typescript
-simpleDonationMiniApp
+simpleDonationMiniApp;
 
-charityDonationMiniApp
+charityDonationMiniApp;
 
-tippingMiniApp
+tippingMiniApp;
 
-crossChainTransferMiniApp
+crossChainTransferMiniApp;
 
-paymentSplittingMiniApp
+paymentSplittingMiniApp;
 ```
+
 ## 🔄 Mixed Action Mini-App
+
 ```typescript
 mixedActionMiniApp: Combines HTTP, transfer, and contract calls.
 ```
+
 ## 🪜 Nested Action Flows
+
 ```typescript
 onboardingFlowApp
 
@@ -47,5 +51,3 @@ governanceFlowApp
 
 You can also review how Metadata is tested under tests/examples/.
 ```
-
-

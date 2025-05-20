@@ -22,6 +22,7 @@ if (!result.isValid) {
 ```
 
 ## 🔍 What Gets Validated?
+
 ```typescript
 Metadata structure
 
