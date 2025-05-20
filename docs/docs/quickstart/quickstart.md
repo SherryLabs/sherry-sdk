@@ -1,9 +1,9 @@
 # Quick Start
-## First Steps! 🚀 
+
+## First Steps! 🚀
 
 This section will help you get up and running with the Sherry SDK in minutes.  
 You’ll learn how to install the SDK, create your first mini-app, and validate your setup to start building interactive Web3 experiences inside social media posts.
-
 
 ## Basic Mini-App
 
@@ -81,6 +81,7 @@ const validatedMetadata = createMetadata(metadata);
 
 
 ```
+
 ## Completion states
 
 ```typescript
@@ -109,19 +110,16 @@ const validatedMetadata = createMetadata(metadata);
 
 ],
  };
-``` 
-## Add to Metadata 
+```
+
+## Add to Metadata
 
 ```typescript
- const flowMetadata: Metadata = {
- url: 'https://swap.example',
- icon: 'https://example.com/swap-icon.png',
- title: 'Advanced Token Swap',
- description: 'Swap tokens with our guided flow',
- actions: [swapFlow],
- };
- ```
-
-
-
-
+const flowMetadata: Metadata = {
+  url: 'https://swap.example',
+  icon: 'https://example.com/swap-icon.png',
+  title: 'Advanced Token Swap',
+  description: 'Swap tokens with our guided flow',
+  actions: [swapFlow],
+};
+```
