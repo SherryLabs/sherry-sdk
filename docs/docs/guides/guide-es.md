@@ -58,101 +58,100 @@ mkdir -p app/api/example
 Crea el archivo `app/api/example/route.ts` con el siguiente contenido:
 
 ```typescript
-import { NextRequest, NextResponse } from "next/server";
-import { avalancheFuji } from "viem/chains";
-import { createMetadata, Metadata, ValidatedMetadata } from "@sherrylinks/sdk";
+import { NextRequest, NextResponse } from 'next/server';
+import { avalancheFuji } from 'viem/chains';
+import { createMetadata, Metadata, ValidatedMetadata } from '@sherrylinks/sdk';
 
 export async function GET(_req: NextRequest, _res: NextResponse) {
-    // Dirección del contrato - debe coincidir con la dirección en el endpoint POST
-    const CONTRACT_ADDRESS = "0xYourContractAddressHere";
+  // Dirección del contrato - debe coincidir con la dirección en el endpoint POST
+  const CONTRACT_ADDRESS = '0xYourContractAddressHere';
 
-    try {
-        // Creamos el objeto de metadatos paso a paso
-        const metadata: Metadata = {
-            // ----- Propiedades generales de la mini-app -----
-            
-            // URL completa a la que se debe acceder para obtener los metadatos
-            url: `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"}/api/dynamic-action`,
-            
-            // URL del ícono que se mostrará para la mini-app
-            icon: "https://avatars.githubusercontent.com/u/117962315",
-            
-            // Título de la mini-app que aparecerá en la interfaz
-            title: "Mensaje con Timestamp",
-            
-            // URL base para las llamadas a la API
-            baseUrl: process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000",
-            
-            // Descripción detallada de lo que hace la mini-app
-            description: "Almacena un mensaje con un timestamp optimizado calculado por nuestro algoritmo",
-            
-            // ----- Definición de las acciones disponibles -----
-            actions: [
-                {
-                    // Tipo de acción: 'dynamic' indica que se ejecutará con una llamada a un endpoint
-                    type: "dynamic",
-                    
-                    // Texto que se mostrará en el botón de acción
-                    label: "Almacenar Mensaje",
-                    
-                    // Descripción detallada de lo que hace esta acción específica
-                    description: "Almacena tu mensaje con un timestamp personalizado calculado para un almacenamiento óptimo",
-                    
-                    // Cadenas blockchain compatibles
-                    chains: { 
-                        source: "fuji" // Cadena de origen (Avalanche Fuji)
-                    },
-                    
-                    // Ruta del endpoint POST que procesará esta acción
-                    path: `/api/example`,
-                    
-                    // ----- Parámetros que necesita la acción -----
-                    // Cada parámetro sin valor predefinido generará un campo de entrada en la UI
-                    params: [
-                        {
-                            // Nombre del parámetro (se usará como nombre de queryParam en la petición POST)
-                            name: "message",
-                            
-                            // Etiqueta que verá el usuario junto al campo de entrada
-                            label: "Tu Mensaje",
-                            
-                            // Tipo de dato del campo (text, number, select, etc.)
-                            type: "text",
-                            
-                            // Si es obligatorio completar este campo
-                            required: true,
-                            
-                            // Descripción o instrucciones para el usuario
-                            description: "Ingresa el mensaje que deseas almacenar en la blockchain",
-                            
-                            // NOTA: Si quisiéramos un valor predefinido, podríamos usar:
-                            // value: "Valor predeterminado",
-                            // Cuando se incluye 'value', no se renderiza un input para este parámetro
-                        },
-                        // Podríamos añadir más parámetros según sea necesario
-                    ],
-                    
-                    // Podrían definirse más acciones según sea necesario
-                },
-            ],
-        };
+  try {
+    // Creamos el objeto de metadatos paso a paso
+    const metadata: Metadata = {
+      // ----- Propiedades generales de la mini-app -----
 
-        // Validamos los metadatos utilizando la función del SDK
-        const validated: ValidatedMetadata = createMetadata(metadata);
+      // URL completa a la que se debe acceder para obtener los metadatos
+      url: `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/api/dynamic-action`,
 
-        // Retornamos los metadatos validados con cabeceras CORS
-        return NextResponse.json(validated, {
-            headers: {
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+      // URL del ícono que se mostrará para la mini-app
+      icon: 'https://avatars.githubusercontent.com/u/117962315',
+
+      // Título de la mini-app que aparecerá en la interfaz
+      title: 'Mensaje con Timestamp',
+
+      // URL base para las llamadas a la API
+      baseUrl: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000',
+
+      // Descripción detallada de lo que hace la mini-app
+      description:
+        'Almacena un mensaje con un timestamp optimizado calculado por nuestro algoritmo',
+
+      // ----- Definición de las acciones disponibles -----
+      actions: [
+        {
+          // Tipo de acción: 'dynamic' indica que se ejecutará con una llamada a un endpoint
+          type: 'dynamic',
+
+          // Texto que se mostrará en el botón de acción
+          label: 'Almacenar Mensaje',
+
+          // Descripción detallada de lo que hace esta acción específica
+          description:
+            'Almacena tu mensaje con un timestamp personalizado calculado para un almacenamiento óptimo',
+
+          // Cadenas blockchain compatibles
+          chains: {
+            source: 'fuji', // Cadena de origen (Avalanche Fuji)
+          },
+
+          // Ruta del endpoint POST que procesará esta acción
+          path: `/api/example`,
+
+          // ----- Parámetros que necesita la acción -----
+          // Cada parámetro sin valor predefinido generará un campo de entrada en la UI
+          params: [
+            {
+              // Nombre del parámetro (se usará como nombre de queryParam en la petición POST)
+              name: 'message',
+
+              // Etiqueta que verá el usuario junto al campo de entrada
+              label: 'Tu Mensaje',
+
+              // Tipo de dato del campo (text, number, select, etc.)
+              type: 'text',
+
+              // Si es obligatorio completar este campo
+              required: true,
+
+              // Descripción o instrucciones para el usuario
+              description: 'Ingresa el mensaje que deseas almacenar en la blockchain',
+
+              // NOTA: Si quisiéramos un valor predefinido, podríamos usar:
+              // value: "Valor predeterminado",
+              // Cuando se incluye 'value', no se renderiza un input para este parámetro
             },
-        });
-    } catch (error) {
-        return NextResponse.json(
-            { error: "Error al crear metadatos" },
-            { status: 500 }
-        );
-    }
+            // Podríamos añadir más parámetros según sea necesario
+          ],
+
+          // Podrían definirse más acciones según sea necesario
+        },
+      ],
+    };
+
+    // Validamos los metadatos utilizando la función del SDK
+    const validated: ValidatedMetadata = createMetadata(metadata);
+
+    // Retornamos los metadatos validados con cabeceras CORS
+    return NextResponse.json(validated, {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+      },
+    });
+  } catch (error) {
+    return NextResponse.json({ error: 'Error al crear metadatos' }, { status: 500 });
+  }
 }
 ```
 
@@ -163,6 +162,7 @@ export async function GET(_req: NextRequest, _res: NextResponse) {
 Los metadatos son la base de la mini-app y se construyen de manera jerárquica:
 
 1. **Propiedades generales de la mini-app**:
+
    - `url`: URL completa del endpoint de la mini-app.
    - `icon`: URL del ícono que se mostrará.
    - `title`: Nombre de la mini-app.
@@ -170,6 +170,7 @@ Los metadatos son la base de la mini-app y se construyen de manera jerárquica:
    - `description`: Descripción general de la mini-app.
 
 2. **Acciones disponibles** (array `actions`):
+
    - `type`: Tipo de acción (generalmente `"dynamic"` para mini-apps).
    - `label`: Texto del botón que ejecutará la acción.
    - `description`: Descripción detallada de la acción.
@@ -203,77 +204,73 @@ El endpoint POST se encarga de ejecutar la acción dinámica, recibiendo los par
 
 ```typescript
 import { serialize } from 'wagmi';
-import { ExecutionResponse } from "@sherrylinks/sdk";
+import { ExecutionResponse } from '@sherrylinks/sdk';
 
 export async function POST(req: NextRequest, res: NextResponse) {
-    try {
-        // Obtenemos los parámetros de la URL
-        // Los nombres de los queryParams coinciden con los nombres definidos en 'name' en la configuración de metadatos
-        const { searchParams } = new URL(req.url);
-        const message = searchParams.get("message");
-        
-        // Validamos que el parámetro 'message' exista (marcado como required en los metadatos)
-        if (!message) {
-            return NextResponse.json(
-                { error: "El parámetro 'message' es requerido" },
-                {
-                    status: 400,
-                    headers: {
-                        "Access-Control-Allow-Origin": "*",
-                        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-                        "Access-Control-Allow-Headers": "Content-Type, Authorization",
-                    },
-                }
-            );
-        }
-        
-        // ---- Procesamiento de los datos recibidos ----
-        // Aquí puedes realizar cualquier lógica necesaria con los parámetros recibidos
-        // Por ejemplo, podrías:
-        // - Añadir un timestamp al mensaje
-        // - Validar datos adicionales
-        // - Interactuar con otros servicios
-        
-        // ---- Creación de la transacción ----
-        // En un caso real, aquí crearías la transacción para interactuar con tu contrato
-        const tx = {
-            to: '0x5ee75a1B1648C023e885E58bD3735Ae273f2cc52', // Dirección del contrato
-            value: BigInt(1000000), // Valor a enviar (en wei)
-            chainId: avalancheFuji.id, // ID de la cadena (Avalanche Fuji)
-            // También podrías incluir:
-            // - data: para llamadas a funciones de contratos
-            // - maxFeePerGas, maxPriorityFeePerGas: para configurar fees
-            // - nonce: para control de transacciones
-        }
+  try {
+    // Obtenemos los parámetros de la URL
+    // Los nombres de los queryParams coinciden con los nombres definidos en 'name' en la configuración de metadatos
+    const { searchParams } = new URL(req.url);
+    const message = searchParams.get('message');
 
-        // ---- Serialización de la transacción ----
-        // Convierte la transacción a un formato que puede ser firmado y enviado a la blockchain
-        const serialized = serialize(tx);
-
-        // ---- Creación de la respuesta ----
-        // Formato específico que espera el SDK de Sherry
-        const resp: ExecutionResponse = {
-            serializedTransaction: serialized, // Transacción serializada lista para ser firmada
-            chainId: avalancheFuji.name, // Nombre de la cadena (importante: debe coincidir con la especificada en los metadatos)
-        }
-
-        // Retornamos la respuesta
-        return NextResponse.json(resp, {
-            status: 200,
-            headers: {
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-                "Access-Control-Allow-Headers": "Content-Type, Authorization",
-            },
-        });
-
-    } catch (error) {
-        console.error("Error en la solicitud POST:", error);
-        return NextResponse.json(
-            { error: "Error interno del servidor" },
-            { status: 500 }
-        );
+    // Validamos que el parámetro 'message' exista (marcado como required en los metadatos)
+    if (!message) {
+      return NextResponse.json(
+        { error: "El parámetro 'message' es requerido" },
+        {
+          status: 400,
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+          },
+        },
+      );
     }
+
+    // ---- Procesamiento de los datos recibidos ----
+    // Aquí puedes realizar cualquier lógica necesaria con los parámetros recibidos
+    // Por ejemplo, podrías:
+    // - Añadir un timestamp al mensaje
+    // - Validar datos adicionales
+    // - Interactuar con otros servicios
+
+    // ---- Creación de la transacción ----
+    // En un caso real, aquí crearías la transacción para interactuar con tu contrato
+    const tx = {
+      to: '0x5ee75a1B1648C023e885E58bD3735Ae273f2cc52', // Dirección del contrato
+      value: BigInt(1000000), // Valor a enviar (en wei)
+      chainId: avalancheFuji.id, // ID de la cadena (Avalanche Fuji)
+      // También podrías incluir:
+      // - data: para llamadas a funciones de contratos
+      // - maxFeePerGas, maxPriorityFeePerGas: para configurar fees
+      // - nonce: para control de transacciones
+    };
+
+    // ---- Serialización de la transacción ----
+    // Convierte la transacción a un formato que puede ser firmado y enviado a la blockchain
+    const serialized = serialize(tx);
+
+    // ---- Creación de la respuesta ----
+    // Formato específico que espera el SDK de Sherry
+    const resp: ExecutionResponse = {
+      serializedTransaction: serialized, // Transacción serializada lista para ser firmada
+      chainId: avalancheFuji.name, // Nombre de la cadena (importante: debe coincidir con la especificada en los metadatos)
+    };
+
+    // Retornamos la respuesta
+    return NextResponse.json(resp, {
+      status: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+      },
+    });
+  } catch (error) {
+    console.error('Error en la solicitud POST:', error);
+    return NextResponse.json({ error: 'Error interno del servidor' }, { status: 500 });
+  }
 }
 ```
 
@@ -282,19 +279,23 @@ export async function POST(req: NextRequest, res: NextResponse) {
 #### Flujo de Procesamiento
 
 1. **Recepción de Parámetros**:
+
    - Los parámetros se reciben como query params en la URL.
    - Los nombres de los parámetros coinciden exactamente con los nombres definidos en la propiedad `name` de cada parámetro en los metadatos.
    - Ejemplo: Si definiste un parámetro con `name: "message"`, se accede con `searchParams.get("message")`.
 
 2. **Validación de Parámetros**:
+
    - Se verifica que los parámetros marcados como `required: true` en los metadatos estén presentes.
    - Si falta algún parámetro requerido, se devuelve un error 400 (Bad Request).
 
 3. **Procesamiento de Datos**:
+
    - Aquí puedes implementar cualquier lógica de negocio necesaria.
    - Ejemplos: añadir timestamps, validaciones adicionales, interacciones con APIs externas.
 
 4. **Creación de la Transacción**:
+
    - Se construye el objeto de transacción con los parámetros necesarios para interactuar con la blockchain.
    - Componentes principales:
      - `to`: Dirección del contrato inteligente.
@@ -303,6 +304,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
      - `data` (opcional): Datos codificados para llamadas a funciones de contratos.
 
 5. **Serialización**:
+
    - La transacción se serializa usando la función `serialize` de `wagmi`.
    - Esto convierte la transacción a un formato que puede ser firmado por una wallet.
 
@@ -325,14 +327,15 @@ Para permitir solicitudes desde diferentes orígenes, necesitamos manejar correc
 
 ```typescript
 export async function OPTIONS(request: NextRequest) {
-    return new NextResponse(null, {
-        status: 204, // Sin contenido
-        headers: {
-            "Access-Control-Allow-Origin": "*", 
-            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-            "Access-Control-Allow-Headers": "Content-Type, Authorization, X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Date, X-Api-Version", 
-        },
-    });
+  return new NextResponse(null, {
+    status: 204, // Sin contenido
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+      'Access-Control-Allow-Headers':
+        'Content-Type, Authorization, X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Date, X-Api-Version',
+    },
+  });
 }
 ```
 
@@ -411,14 +414,14 @@ Alternativamente, puedes desplegar en servicios como Vercel, Netlify o cualquier
 
 El SDK de Sherry admite varios tipos de parámetros que puedes utilizar en tus mini-apps:
 
-| Tipo | Descripción | Ejemplo de Uso |
-|------|-------------|----------------|
-| `text` | Campo de texto simple | Mensajes, nombres, identificadores |
-| `number` | Valores numéricos | Cantidades, IDs numéricos |
-| `select` | Lista desplegable de opciones | Seleccionar una opción de una lista predefinida |
-| `boolean` | Valor verdadero/falso | Opciones de activación/desactivación |
-| `date` | Selector de fecha | Fechas de vencimiento, programación |
-| `file` | Carga de archivos | Subir imágenes, documentos |
+| Tipo      | Descripción                   | Ejemplo de Uso                                  |
+| --------- | ----------------------------- | ----------------------------------------------- |
+| `text`    | Campo de texto simple         | Mensajes, nombres, identificadores              |
+| `number`  | Valores numéricos             | Cantidades, IDs numéricos                       |
+| `select`  | Lista desplegable de opciones | Seleccionar una opción de una lista predefinida |
+| `boolean` | Valor verdadero/falso         | Opciones de activación/desactivación            |
+| `date`    | Selector de fecha             | Fechas de vencimiento, programación             |
+| `file`    | Carga de archivos             | Subir imágenes, documentos                      |
 
 Para utilizar el tipo `select`, necesitas definir las opciones disponibles:
 

@@ -117,11 +117,8 @@ const sidebars: SidebarsConfig = {
         {
             type: 'category',
             label: 'Guides',
-            items: [
-                'guides/guide-en',
-                'guides/guide-es',
-            ]
-        }
+            items: ['guides/guide-en', 'guides/guide-es'],
+        },
     ],
 };
 
