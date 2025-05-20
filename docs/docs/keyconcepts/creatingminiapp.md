@@ -1,9 +1,8 @@
-# Creating Your First Mini App 
+# Creating Your First Mini App
 
 Define a Metadata object with all required fields:
 
 ```typescript
-
 const simpleTransferApp: Metadata = {
   url: 'https://transfer.myapp.example/simple-avax',
   icon: 'https://myapp.example/icons/avax-transfer.png',
@@ -19,5 +18,4 @@ const simpleTransferApp: Metadata = {
     } as TransferAction,
   ],
 };
-
 ```

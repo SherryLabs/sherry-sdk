@@ -2,9 +2,7 @@
 
 When using a Sherry Link to perform transfers from one chain to another, you are leveraging the power of cross-chain operations enabled by the Wormhole protocol. This advanced integration allows seamless communication and asset transfers between blockchains, breaking the barriers of isolated networks and enabling a unified decentralized experience.
 
-
 # Introduction
-
 
 When using a Sherry Link to perform transfers from one chain to another, you are leveraging the power of cross-chain operations enabled by the Wormhole protocol. This advanced integration allows seamless communication and asset transfers between blockchains, breaking the barriers of isolated networks and enabling a unified decentralized experience.
 
@@ -12,18 +10,13 @@ Cross-chain operations involve multiple components working together: from relayi
 
 In this section, we will delve into the core concepts behind cross-chain operations, explain how costs are calculated, and guide you through configuring and executing transfers effectively. Whether you are sending assets, invoking smart contract functions, or combining both, understanding these foundations will empower you to optimize your cross-chain workflows.
 
-
 ## How it works
 
-
 When sending cross-chain messages, it is important to consider certain aspects: the cost associated with the message, which includes executing a transaction on the destination blockchain, and any potential gas surplus that may occur.
-
 
 Gas Cost: Cross-chain transfers require additional gas to facilitate the communication between chains. When specifying Celo (or any supported chain
 ) as the chains, the transaction includes a gas cost which is more than standard transfers due to the complexity of cross-chain operations.
 Excess Gas Refund: Any excess gas, after the transaction is completed, is refunded to the sender on the Avalanche chain, ensuring you only pay for what is necessary.
-
-
 
 ## Cross-Chain Message Costs
 
@@ -51,9 +44,9 @@ function quoteCrossChainCost(
 }
 ```
 
-+ _targetChain: The chain ID of the destination chain in Wormhole format (e.g., 14 for Celo).
-+ _receiverValue: The amount in wei to be transferred to the recipient in the destination chain. This amount will be the amount the user will receive. If no native tokens are transferred, 0 will be set.
-+ _gasLimit: An estimated gas limit for the transaction on the target chain.
+- \_targetChain: The chain ID of the destination chain in Wormhole format (e.g., 14 for Celo).
+- \_receiverValue: The amount in wei to be transferred to the recipient in the destination chain. This amount will be the amount the user will receive. If no native tokens are transferred, 0 will be set.
+- \_gasLimit: An estimated gas limit for the transaction on the target chain.
 
 :::For a TransferAction corresponding to a transfer of native tokens from a blockchain to a source blockchain we send a gas_limit of **100_000**.
 For Blockchain Actions, depending on the state of the network we send a maximum of **800_000**.
@@ -63,10 +56,10 @@ This function interacts with the Wormhole Relayer to quote the cost of the cross
 
 ## How to define cross-chain Sherry Link
 
-The way to define a sherry link is very simple and is done through the metadata. In the chains property you must assign a different chain for source and destination, taking into account that this chain <u>*must be supported* </u>
-  by Sherry.
+The way to define a sherry link is very simple and is done through the metadata. In the chains property you must assign a different chain for source and destination, taking into account that this chain <u>_must be supported_ </u>
+by Sherry.
 
-A Sherry Link allows seamless operations across blockchains, simplifying both smart contract interactions and cryptocurrency transfers. Two main types of actions are supported: BlockchainAction and TransferAction. 
+A Sherry Link allows seamless operations across blockchains, simplifying both smart contract interactions and cryptocurrency transfers. Two main types of actions are supported: BlockchainAction and TransferAction.
 
 ## BlockchainAction
 
@@ -74,23 +67,23 @@ This type of action allows interaction with a smart contract on the target block
 
 ```typescript
 const actionMetadata: BlockchainActionMetadata = {
-  label: "Cross-Chain Action",
-  address: "0x1234567890abcdef1234567890abcdef12345678",
+  label: 'Cross-Chain Action',
+  address: '0x1234567890abcdef1234567890abcdef12345678',
   abi: exampleAbi,
-  functionName: "mint",
-  chains: { source: "avalanche", destination : "celo" },
-  amount: 0.01 // Optional: amount of native cryptocurrency to send
+  functionName: 'mint',
+  chains: { source: 'avalanche', destination: 'celo' },
+  amount: 0.01, // Optional: amount of native cryptocurrency to send
 };
 ```
 
 ::: As you can see, celo has been defined as destination, this will be interpreted as cross-chain by Sherry (from Avalanche to Celo). :::
 
-+ label: Text displayed on the Sherry Link button.
-+ address: The smart contract’s address on the target blockchain.
-+ abi: The ABI of the contract required to interact with its functions.
-+ functionName: The function in the contract to be executed (e.g., mint).
-+ chains: The blockchains where the action will take place (e.g., avalanche - celo).
-+ amount: (Optional) Amount of native cryptocurrency to send to the function. If specified, the function must be payable.
+- label: Text displayed on the Sherry Link button.
+- address: The smart contract’s address on the target blockchain.
+- abi: The ABI of the contract required to interact with its functions.
+- functionName: The function in the contract to be executed (e.g., mint).
+- chains: The blockchains where the action will take place (e.g., avalanche - celo).
+- amount: (Optional) Amount of native cryptocurrency to send to the function. If specified, the function must be payable.
 
 Additionally, the ABI is validated to check if the mint function requires parameters. If so, the corresponding input fields are dynamically generated for the user.
 
@@ -101,14 +94,14 @@ This type of action is designed for transferring native cryptocurrency between a
 ```typescript
 const actions: TransferAction[] = [
   {
-    label: "0.01 CELO",
-    to: "0x5b1869D9A4C187F2EAa108f3062412ecf0526b24",
+    label: '0.01 CELO',
+    to: '0x5b1869D9A4C187F2EAa108f3062412ecf0526b24',
     amount: 0.01,
-    chains: { source: "avalanche", destination : "celo" },
+    chains: { source: 'avalanche', destination: 'celo' },
   },
   {
-    label: "Manual Transfer",
-    chains: { source: "avalanche", destination : "celo" },
+    label: 'Manual Transfer',
+    chains: { source: 'avalanche', destination: 'celo' },
   },
 ];
 ```
@@ -131,7 +124,7 @@ function sendMessage(
     uint256 _receiverValue
 ) external payable {
     require(_gasLimit <= GAS_LIMIT, "Gas limit exceeds the maximum limit");
-    
+
     bytes memory encodedData = encodeMessage(
         _contractToBeCalled,
         _encodedFunctionCall
@@ -155,15 +148,15 @@ function sendMessage(
     );
 }
 ```
+
 ## Parameters Explanation
 
-
-+ _targetChain: The chain to which the message will be sent.
-+ _receiverAddress: The address of the smart contract that will handle the message on the target blockchain (SL1MessageReceiver).
-+ _contractToBeCalled: The address of the contract function to be executed.
-+ _encodedFunctionCall: The encoded data containing the function call and its parameters.
-+ _gasLimit: The maximum gas limit for the transaction on the target chain.
-+ _receiverValue: The amount of native cryptocurrency to be sent along with the message.
+- \_targetChain: The chain to which the message will be sent.
+- \_receiverAddress: The address of the smart contract that will handle the message on the target blockchain (SL1MessageReceiver).
+- \_contractToBeCalled: The address of the contract function to be executed.
+- \_encodedFunctionCall: The encoded data containing the function call and its parameters.
+- \_gasLimit: The maximum gas limit for the transaction on the target chain.
+- \_receiverValue: The amount of native cryptocurrency to be sent along with the message.
 
 Upon invocation, the function first encodes the contract address and the function call using encodeMessage. This encoding is crucial, as it transforms the data into a format that can be interpreted by the receiving contract.
 
@@ -212,39 +205,14 @@ function receiveWormholeMessages(
     }
 }
 ```
+
 ## Key Operations
 
-+ The function checks if it was called by the Wormhole Relayer, ensuring only authorized entities can execute it.
-+ It decodes the incoming payload to retrieve the original function call parameters.
-+ The contract then uses call to execute the specified function on the target contract, transferring any native cryptocurrency value that was included in the message.
+- The function checks if it was called by the Wormhole Relayer, ensuring only authorized entities can execute it.
+- It decodes the incoming payload to retrieve the original function call parameters.
+- The contract then uses call to execute the specified function on the target contract, transferring any native cryptocurrency value that was included in the message.
 
 ## Important Considerations
 
-+ The msg.sender during cross-chain operations will always refer to the Sherry Receiver contract on the target blockchain. This is critical for ensuring that permissions and function calls are handled correctly.
-+ Any functions utilizing msg.sender will operate under the assumption that it refers to the Sherry Receiver, thus impacting access controls and function logic.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+- The msg.sender during cross-chain operations will always refer to the Sherry Receiver contract on the target blockchain. This is critical for ensuring that permissions and function calls are handled correctly.
+- Any functions utilizing msg.sender will operate under the assumption that it refers to the Sherry Receiver, thus impacting access controls and function logic.
