@@ -114,6 +114,14 @@ const sidebars: SidebarsConfig = {
             ],
         },
         // Removed the placeholder Tutorial sections
+        {
+            type: 'category',
+            label: 'Guides',
+            items: [
+                'guides/guide-en',
+                'guides/guide-es',
+            ]
+        }
     ],
 };
 
