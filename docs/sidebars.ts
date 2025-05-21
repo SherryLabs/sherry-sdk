@@ -42,7 +42,6 @@ const sidebars: SidebarsConfig = {
                 'keyconcepts/creatingminiapp',
                 'keyconcepts/actions',
                 'keyconcepts/metadata',
-                'keyconcepts/stepbystep',
                 'keyconcepts/examples',
                 'keyconcepts/nextsteps',
 
