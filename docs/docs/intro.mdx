@@ -1,7 +1,3 @@
----
-title: Introduction
----
-
 # Sherry SDK Introduction
 
 [![npm version](https://img.shields.io/npm/v/@sherrylinks/sdk.svg)](https://www.npmjs.com/package/@sherrylinks/sdk)
@@ -15,7 +11,7 @@ title: Introduction
 import Admonition from '@theme/Admonition';
 
 <Admonition type="caution" title="Disclaimer">
-  Our **SDK** and documentation are still under development; we’re working hard to ensure everything
+  Our **SDK** and documentation are still under development; we're working hard to ensure everything
   is as polished as possible. Any feedback is very helpful — you can contact us on
   [**Discord**](https://discord.gg/69brTf6J)
 </Admonition>
@@ -30,23 +26,37 @@ With Sherry, you can transform any post into an interactive dApp that allows use
 
 ## ✨ Key Features
 
-- 🔗 **Multi-chain Support**: Build once, deploy across Ethereum, Avalanche, Celo, Monad, and more.
+- 🔗 **Multi-chain Support**: Build once, deploy across Avalanche, Celo, Ethereum, and more.
 - 🧩 **Multiple Action Types**:
-  - **Transfer Actions**: Enable native token or ERC20 transfers with customizable UIs.
+  - **Transfer Actions**: Enable native token transfers with customizable UIs.
   - **Blockchain Actions**: Call smart contract functions with rich parameter configuration.
-  - **Dynamic Actions** : ESCRIBIR AQUI
+  - **Dynamic Actions**: Create flexible mini-apps that compute actions server-side.
+  - **HTTP Actions**: Integrate with external APIs and services.
   - **Action Flows**: Create interactive multi-step processes with conditional paths using `decision` and `completion` steps.
 - 📋 **Built-in Validation**: Ensures your mini-app metadata is valid and well-formed before use via `createMetadata` or `validateMetadata`.
 - ⚡ **Type Safety**: Full TypeScript support with comprehensive type definitions.
-- 🔄 **Cross-chain Interactions**: Enable transactions across multiple blockchains.
+- 🔄 **Cross-chain Interactions**: Enable transactions across multiple blockchains via Wormhole integration.
 - 📊 **Metadata Templates**: Ready-to-use templates for common Web3 use cases.
 
 ---
 
 ## 🚀 Getting Started
 
-- Start with creating your first Mini-App
-- Learn about configuring parameters for user inputs
+Ready to build your first mini-app? Here are the main paths:
+
+### Quick Start Options
+
+1. **[Create Your First Mini-App](./keyconcepts/creatingminiapp.mdx)** - Start with the basics
+2. **[View Examples](./keyconcepts/examples.md)** - See working examples
+3. **[Follow the Complete Guide](./guides/guide-en.md)** - Step-by-step tutorial
+
+### Core Concepts
+
+- **[Understanding Actions](./keyconcepts/actions.md)** - Learn about different action types
+- **[Metadata Structure](./keyconcepts/metadata.md)** - Understand the mini-app definition format
+- **[Chain Support](./chainlogic/chains.md)** - Multi-chain and cross-chain capabilities
+
+---
 
 ## 👀 Who is this SDK for?
 
@@ -57,6 +67,147 @@ This SDK is aimed at developers who:
 - Need to build multi-step workflows with conditional logic.
 - Value a tool with integrated validation and strong typing.
 
-## 📚 Next Steps
+---
+
+## 📚 What's Next?
+
+Choose your learning path:
+
+import { useColorMode } from '@docusaurus/theme-common';
+
+export const QuickLinks = () => {
+  const { colorMode } = useColorMode();
+  
+  const links = [
+    {
+      title: "🏗️ Build Your First Mini-App",
+      href: "./keyconcepts/creatingminiapp",
+      description: "Learn the basics with a simple example",
+      time: "5 min"
+    },
+    {
+      title: "🎯 Explore Action Types", 
+      href: "./sdk/action-types/blockchain-actions",
+      description: "Understand different ways to interact with blockchain",
+      time: "10 min"
+    },
+    {
+      title: "📖 Complete Guide",
+      href: "./guides/guide-en",
+      description: "Step-by-step tutorial with Next.js",
+      time: "30 min"
+    },
+    {
+      title: "💡 View Examples",
+      href: "./keyconcepts/examples",
+      description: "Ready-to-use examples for common use cases",
+      time: "2 min"
+    }
+  ];
+
+return (
+
+<div
+  style={{
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+    gap: '1.5rem',
+    margin: '2rem 0',
+  }}
+>
+  {links.map((link, idx) => (
+    <a
+      key={idx}
+      href={link.href}
+      style={{
+        display: 'block',
+        padding: '1.5rem',
+        border: colorMode === 'dark' ? '1px solid #444' : '1px solid #e0e0e0',
+        borderRadius: '8px',
+        textDecoration: 'none',
+        color: 'inherit',
+        backgroundColor: colorMode === 'dark' ? '#2d2d30' : '#f9f9f9',
+        transition: 'all 0.2s ease',
+        ':hover': {
+          transform: 'translateY(-2px)',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+        },
+      }}
+      onMouseEnter={e => {
+        e.target.style.transform = 'translateY(-2px)';
+        e.target.style.boxShadow =
+          colorMode === 'dark' ? '0 4px 12px rgba(255,255,255,0.1)' : '0 4px 12px rgba(0,0,0,0.1)';
+      }}
+      onMouseLeave={e => {
+        e.target.style.transform = 'none';
+        e.target.style.boxShadow = 'none';
+      }}
+    >
+      <div style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>
+        {link.title}
+      </div>
+      <div
+        style={{
+          fontSize: '0.9rem',
+          color: colorMode === 'dark' ? '#b3b3b3' : '#666',
+          marginBottom: '0.5rem',
+        }}
+      >
+        {link.description}
+      </div>
+      <div
+        style={{
+          fontSize: '0.8rem',
+          color: 'var(--ifm-color-primary)',
+          fontWeight: '500',
+        }}
+      >
+        {link.time}
+      </div>
+    </a>
+  ))}
+</div>
+); };
+
+<QuickLinks />
+
+---
+
+## 🔧 Installation
+
+```bash
+# Using npm
+npm install @sherrylinks/sdk
+
+# Using yarn
+yarn add @sherrylinks/sdk
+```
+
+## 📝 Quick Example
+
+```typescript
+import { createMetadata, Metadata } from '@sherrylinks/sdk';
+
+const metadata: Metadata = {
+  url: 'https://myapp.example',
+  icon: 'https://example.com/icon.png',
+  title: 'Token Transfer',
+  description: 'Send tokens easily',
+  actions: [
+    {
+      type: 'transfer',
+      label: 'Send 0.1 AVAX',
+      to: '0x1234567890123456789012345678901234567890',
+      amount: 0.1,
+      chains: { source: 'avalanche' },
+    },
+  ],
+};
+
+// Validate and use
+const validated = createMetadata(metadata);
+```
+
+---
 
 Explore the SDK documentation to get started with your Web3 mini-apps!

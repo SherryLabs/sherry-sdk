@@ -145,7 +145,7 @@ export const paymentSplittingMiniApp: Metadata = {
             type: 'transfer',
             label: 'Pay Team Member 1',
             description: 'Send payment to first team member (20%)',
-            chains: { source: 'monad-testnet' },
+            chains: { source: 'alfajores' },
             to: '0x5678901234567890123456789012345678901234',
             amountConfig: {
                 type: 'select',
@@ -164,7 +164,7 @@ export const paymentSplittingMiniApp: Metadata = {
             type: 'transfer',
             label: 'Pay Team Member 2',
             description: 'Send payment to second team member (35%)',
-            chains: { source: 'monad-testnet' },
+            chains: { source: 'alfajores' },
             to: '0x6789012345678901234567890123456789012345',
             amountConfig: {
                 type: 'select',
@@ -183,7 +183,7 @@ export const paymentSplittingMiniApp: Metadata = {
             type: 'transfer',
             label: 'Pay Team Member 3',
             description: 'Send payment to third team member (45%)',
-            chains: { source: 'monad-testnet' },
+            chains: { source: 'alfajores' },
             to: '0x7890123456789012345678901234567890123456',
             amountConfig: {
                 type: 'select',
