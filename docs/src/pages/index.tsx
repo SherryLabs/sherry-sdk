@@ -8,7 +8,12 @@ import styles from './index.module.css';
 import { useColorMode } from '@docusaurus/theme-common';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import { FaPaintBrush, FaExchangeAlt, FaVoteYea, FaChartLine, FaHeart } from 'react-icons/fa';
-import { MdOutlineRocketLaunch, MdOutlinePsychology, MdOutlineLibraryBooks, MdOutlineSearch } from 'react-icons/md';
+import {
+    MdOutlineRocketLaunch,
+    MdOutlinePsychology,
+    MdOutlineLibraryBooks,
+    MdOutlineSearch,
+} from 'react-icons/md';
 
 // Hero section with dynamic background
 function HomepageHeader() {
@@ -166,39 +171,43 @@ function QuickLinksSection(): ReactNode {
         {
             title: 'Getting Started',
             description: 'Learn the basics and set up your development environment',
-            icon: <MdOutlineRocketLaunch  />, // Added consistent color
+            icon: <MdOutlineRocketLaunch />, // Added consistent color
             url: '/docs/getting-started',
         },
         {
             title: 'Core Concepts',
             description: 'Understand the key concepts behind mini-apps',
-            icon: <MdOutlinePsychology  />, // Added consistent color
+            icon: <MdOutlinePsychology />, // Added consistent color
             url: '/docs/core-concepts',
         },
         {
             title: 'API Reference',
             description: 'Explore the complete API documentation',
-            icon: <MdOutlineLibraryBooks  />, // Added consistent color
+            icon: <MdOutlineLibraryBooks />, // Added consistent color
             url: '/docs/api-reference',
         },
         {
             title: 'Examples',
             description: 'View example mini-apps for different use cases',
-            icon: <MdOutlineSearch  />, // Added consistent color
+            icon: <MdOutlineSearch />, // Added consistent color
             url: '/docs/guides',
         },
     ];
 
     return (
-        <section className={styles.useCasesSection}> 
+        <section className={styles.useCasesSection}>
             <div className="container">
                 <div className={styles.sectionHeader}>
                     <Heading as="h2">Quick Links</Heading>
                     <p>Essential resources to get you building fast</p>
                 </div>
-                <div className={styles.useCasesGrid}> {/* Reused grid layout */}
+                <div className={styles.useCasesGrid}>
+                    {' '}
+                    {/* Reused grid layout */}
                     {quickLinks.map((link, idx) => (
-                        <div key={idx} className={styles.useCaseCard}> {/* Reused card styles */}
+                        <div key={idx} className={styles.useCaseCard}>
+                            {' '}
+                            {/* Reused card styles */}
                             <div className={styles.useCaseIcon}>{link.icon}</div>
                             <Heading as="h4">{link.title}</Heading>
                             <p>{link.description}</p>

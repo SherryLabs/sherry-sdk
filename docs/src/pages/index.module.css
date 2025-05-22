@@ -607,7 +607,10 @@
 .buttons a.button.button--outline.button--lg:hover,
 .ctaButtons a.button.button--outline.button--lg:hover {
   color: white !important; /* Ensure text color remains white on hover */
-  background-color: rgba(var(--ifm-color-primary-rgb), 0.25) !important; /* Theme-based background */
+  background-color: rgba(
+    var(--ifm-color-primary-rgb),
+    0.25
+  ) !important; /* Theme-based background */
   border-color: white !important; /* Keep border white */
   box-shadow: 0 0 10px rgba(var(--ifm-color-primary-rgb), 0.4); /* Theme-based glow */
   transform: scale(1.03);
@@ -617,7 +620,10 @@
 /* The base style (non-hover) already ensures white border/text in dark mode due to !important */
 [data-theme='dark'] .buttons a.button.button--outline.button--lg:hover,
 [data-theme='dark'] .ctaButtons a.button.button--outline.button--lg:hover {
-  background-color: rgba(var(--ifm-color-primary-lighter-rgb), 0.2) !important; /* Themed background on hover */
+  background-color: rgba(
+    var(--ifm-color-primary-lighter-rgb),
+    0.2
+  ) !important; /* Themed background on hover */
   border-color: white !important; /* Still ensure border is white */
   box-shadow: 0 0 12px rgba(var(--ifm-color-primary-lighter-rgb), 0.5); /* Themed glow */
   /* color: var(--ifm-color-primary-lighter) !important; */ /* Optional: themed text color on hover */
@@ -1000,15 +1006,15 @@
 
 [data-theme='dark'] .quickLinksCard {
   background: #2d2d30;
-  box-shadow: 0 6px 12px rgba(0,0,0,0.2); /* Consistent base shadow for dark cards */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Consistent base shadow for dark cards */
 }
 
 [data-theme='dark'] .quickLinksCard:hover {
   border-color: transparent;
-  box-shadow: 
+  box-shadow:
     0 0 15px rgba(var(--ifm-color-primary-lighter-rgb), 0.6),
     0 0 30px rgba(var(--ifm-color-primary-lighter-rgb), 0.3),
-    0 8px 25px rgba(0,0,0,0.15);
+    0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
 [data-theme='dark'] .quickLinksTitle {
@@ -1068,16 +1074,15 @@
 [data-theme='dark'] .featureCard {
   background: #2d2d30;
   color: #e3e3e3;
-  box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 [data-theme='dark'] .featureCard:hover {
   border-color: transparent;
-  box-shadow: 
+  box-shadow:
     0 0 15px rgba(var(--ifm-color-primary-lighter-rgb), 0.6),
     0 0 30px rgba(var(--ifm-color-primary-lighter-rgb), 0.3),
-    0 8px 25px rgba(0,0,0,0.15);
+    0 8px 25px rgba(0, 0, 0, 0.15);
 }
-
 
 [data-theme='dark'] .featureContent p {
   color: #b3b3b3;
@@ -1110,16 +1115,15 @@
 [data-theme='dark'] .useCaseCard {
   background: #2d2d30;
   color: #e3e3e3;
-  box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 [data-theme='dark'] .useCaseCard:hover {
   border-color: transparent;
-  box-shadow: 
+  box-shadow:
     0 0 15px rgba(var(--ifm-color-primary-lighter-rgb), 0.6),
     0 0 30px rgba(var(--ifm-color-primary-lighter-rgb), 0.3),
-    0 8px 25px rgba(0,0,0,0.15);
+    0 8px 25px rgba(0, 0, 0, 0.15);
 }
-
 
 [data-theme='dark'] .useCaseCard p {
   color: #b3b3b3;
@@ -1131,7 +1135,7 @@
 }
 
 [data-theme='dark'] .postContent p {
-  color: #ffffff; 
+  color: #ffffff;
   margin: 0 0 1rem 0;
 }
 
@@ -1140,7 +1144,7 @@
 }
 
 [data-theme='dark'] .timestamp {
-  color: rgba(255, 255, 255, 0.7); 
+  color: rgba(255, 255, 255, 0.7);
 }
 
 [data-theme='dark'] .sherryWidget {

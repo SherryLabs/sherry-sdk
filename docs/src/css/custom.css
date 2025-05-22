@@ -53,8 +53,6 @@
 /* Specific Icons based on href or structure */
 /* Adjust href values based on your actual sidebar structure and slugs */
 
-
-
 /* Optional: Adjust spacing for nested items */
 .menu__list .menu__list .menu__link::before {
   margin-left: 0.5em; /* Indent nested icons slightly */
