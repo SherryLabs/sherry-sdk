@@ -47,7 +47,7 @@ export class TransferActionValidator {
             throw new InvalidMetadataError('Source chain is required');
         }
 
-        const validChains = ['fuji', 'avalanche', 'alfajores', 'celo', 'monad-testnet', 'ethereum'];
+        const validChains = ['fuji', 'avalanche', 'alfajores', 'celo'];
         if (!validChains.includes(chains.source)) {
             throw new InvalidMetadataError(`Invalid source chain: ${chains.source}`);
         }

@@ -13,111 +13,113 @@ import type { SidebarsConfig } from '@docusaurus/plugin-content-docs';
 const sidebars: SidebarsConfig = {
     // Define the sidebar structure for the documentation
     tutorialSidebar: [
-        // 1. Main Introduction (points to the SDK intro)
-        'intro', // Assuming 'intro.md' is now your main SDK introduction
-
-        // 2. First Main Section: Getting Started / Core Concepts
-        //{
-        // type: 'category',
-        // label: 'Quickstart',
-        // collapsed: false,
-        // Optional: Add a link to a specific doc if needed, otherwise it's just a category
-        // link: { type: 'doc', id: 'sdk/getting-started-overview' },
-        // items: [
-        // 'quickstart/quickstart',
-
-        // Docs about the key concepts of the SDK
-        // Add other getting started guides here if you have them
-        // ],
-        // },
-        // 3. Second Main Section: Key Concepts
+        // 1. Getting Started Section
         {
             type: 'category',
             label: 'Getting Started',
             collapsed: false,
-            // Optional: Add a link to a specific doc if needed, otherwise it's just a category
-            // link: { type: 'doc', id: 'sdk/getting-started-overview' },
-            items: [
-                'keyconcepts/keyconcepts',
-                'keyconcepts/creatingminiapp',
-                'keyconcepts/actions',
-                'keyconcepts/metadata',
-                'keyconcepts/stepbystep',
-                'keyconcepts/examples',
-                'keyconcepts/nextsteps',
-
-                // How to create Metadata/Mini-apps
-                // Docs about the key concepts of the SDK
-                // Add other getting started guides here if you have them
-            ],
-        },
-
-        {
-            type: 'category',
-            label: 'Chain Logic & Examples',
-            collapsed: false,
-            // Optional: Add a link to a specific doc if needed, otherwise it's just a category
-            // link: { type: 'doc', id: 'sdk/getting-started-overview' },
-            items: [
-                'chainlogic/chains',
-                'chainlogic/crosschain',
-                'chainlogic/supported',
-
-                // How to create Metadata/Mini-apps
-                // Docs about the key concepts of the SDK
-                // Add other getting started guides here if you have them
-            ],
-        },
-
-        {
-            type: 'category',
-            label: 'Building Blocks',
             link: {
-                // Link to the Action Types overview page
                 type: 'generated-index',
-                title: 'Action Types & Parameters',
-                description: 'Learn about the core components for building mini-apps.',
-                slug: '/sdk/building-blocks', // Define a URL slug for this overview
+                title: 'Getting Started with Sherry SDK',
+                description: 'Learn the basics and start building your first mini-app quickly.',
+                slug: '/getting-started',
+            },
+            items: [
+                'intro', // Introduction to the SDK
+                'getting-started/quickstart', // Quick Start Guide
+                'getting-started/creatingminiapp', // Creating Your First Mini-App
+                'sdk/examples', // Examples
+            ],
+        },
+
+        // 2. Core Concepts Section
+        {
+            type: 'category',
+            label: 'Core Concepts',
+            collapsed: false,
+            link: {
+                type: 'generated-index',
+                title: 'Core Concepts',
+                description: 'Understand the fundamental concepts behind the Sherry SDK.',
+                slug: '/core-concepts',
+            },
+            items: [
+                'getting-started/actions', // Actions overview
+                'sdk/parameters', // Parameters documentation
+                'getting-started/metadata', // Metadata Structure
+                'sdk/validation', // Validation
+                'api-reference/chainlogic/chains', // Chain Logic
+            ],
+        },
+
+        // 3. API Reference Section
+        {
+            type: 'category',
+            label: 'API Reference',
+            collapsed: false,
+            link: {
+                type: 'generated-index',
+                title: 'API Reference',
+                description: 'Detailed technical reference for all SDK components.',
+                slug: '/api-reference',
             },
             items: [
                 {
                     type: 'category',
                     label: 'Action Types',
                     link: {
-                        // Link to the Action Types sub-overview
                         type: 'generated-index',
                         title: 'SDK Action Types',
                         description: 'Explore the different actions you can define.',
                         slug: '/sdk/action-types',
                     },
                     items: [
-                        'sdk/action-types/blockchain-actions',
-                        'sdk/action-types/transfer-actions',
-                        'sdk/action-types/http-actions',
-                        'sdk/action-types/nested-action-flows', // Renamed from Action Flows for clarity? Adjust if needed
+                        'api-reference/action-types/blockchain-actions',
+                        'api-reference/action-types/transfer-actions',
+                        'api-reference/action-types/http-actions',
+                        'api-reference/action-types/nested-action-flows',
                     ],
                 },
-                'sdk/parameters', // Parameters documentation sits alongside Action Types
+                'sdk/parameters', // Parameters API Reference
+                //'sdk/chains', // Chains API Reference
+                'sdk/validation', // Validation API Reference
             ],
         },
 
-        // 4. Third Main Section: Advanced & Reference
-        {
-            type: 'category',
-            label: 'Advanced & Reference',
-            items: [
-                'sdk/chains', // Chains documentation
-                'sdk/validation', // Validation documentation
-                'sdk/examples', // Reference to examples
-                // Add other advanced topics or reference pages here
-                // 'sdk/advanced/some-topic',
-            ],
-        },
-        // Removed the placeholder Tutorial sections
+        // 4. Guides Section
         {
             type: 'category',
             label: 'Guides',
-            items: ['guides/guide-en', 'guides/guide-es'],
+            collapsed: false,
+            link: {
+                type: 'generated-index',
+                title: 'Guides & Tutorials',
+                description: 'Step-by-step tutorials and guides for building with Sherry SDK.',
+                slug: '/guides',
+            },
+            items: [
+                'guides/guide-en', // Complete Tutorial (EN)
+                'guides/guide-es', // Complete Tutorial (ES)
+                //'guides/advanced-examples', // Advanced Examples
+            ],
+        },
+
+        // 5. Cross-Chain Section
+        {
+            type: 'category',
+            label: 'Cross-Chain',
+            collapsed: false,
+            link: {
+                type: 'generated-index',
+                title: 'Cross-Chain Functionality',
+                description: 'Learn about cross-chain capabilities and integrations.',
+                slug: '/cross-chain',
+            },
+            items: [
+                //'chainlogic/supported', // Supported Chains
+                //'chainlogic/crosschain', // Cross-Chain Actions
+                //'chainlogic/wormhole-integration', // Wormhole Integration
+            ],
         },
     ],
 };

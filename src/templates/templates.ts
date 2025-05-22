@@ -203,5 +203,4 @@ export const CHAIN_OPTIONS: SelectOption[] = [
     { label: 'Celo', value: 'celo', description: 'Celo Mainnet' },
     { label: 'Fuji', value: 'fuji', description: 'Avalanche Fuji Testnet' },
     { label: 'Alfajores', value: 'alfajores', description: 'Celo Alfajores Testnet' },
-    { label: 'Monad Testnet', value: 'monad-testnet', description: 'Monad Testnet' },
 ];
