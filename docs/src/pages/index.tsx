@@ -163,30 +163,30 @@ function QuickLinksSection(): ReactNode {
             title: 'Getting Started',
             description: 'Learn the basics and set up your development environment',
             icon: '🚀',
-            url: '/docs/intro',
+            url: '/docs/getting-started',
         },
         {
             title: 'Core Concepts',
             description: 'Understand the key concepts behind mini-apps',
             icon: '🧠',
-            url: '/docs/keyconcepts/overview',
+            url: '/docs/core-concepts',
         },
         {
             title: 'API Reference',
             description: 'Explore the complete API documentation',
             icon: '📚',
-            url: '/docs/api',
+            url: '/docs/api-reference',
         },
         {
             title: 'Examples',
             description: 'View example mini-apps for different use cases',
             icon: '🔍',
-            url: '/docs/keyconcepts/examples',
+            url: '/docs/guides',
         },
     ];
 
     return (
-        <section className="padding-vert--xl">
+        <section className={clsx("padding-vert--xl", styles.quickLinksSection)}>
             <div className="container">
                 <div className="text--center margin-bottom--xl">
                     <Heading as="h2">Quick Links</Heading>
@@ -196,35 +196,23 @@ function QuickLinksSection(): ReactNode {
                     {quickLinks.map((link, idx) => (
                         <div key={idx} className="col col--3 margin-bottom--lg">
                             <Link
-                                to={useBaseUrl(link.url)}
-                                className="card padding--lg cardContainer"
+                                to={link.url}
+                                className={clsx("card padding--lg cardContainer", styles.quickLinksCard)}
                                 style={{
-                                    height: '100%',
                                     textDecoration: 'none',
                                     border: `1px solid ${isDarkTheme ? '#333' : '#eee'}`,
                                     borderRadius: '8px',
                                     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.05)',
-                                    transition: 'all 0.3s',
-                                }}
-                                onMouseEnter={e => {
-                                    e.currentTarget.style.transform = 'translateY(-5px)';
-                                    e.currentTarget.style.boxShadow =
-                                        '0 8px 20px rgba(0, 0, 0, 0.1)';
-                                }}
-                                onMouseLeave={e => {
-                                    e.currentTarget.style.transform = 'translateY(0)';
-                                    e.currentTarget.style.boxShadow =
-                                        '0 4px 8px rgba(0, 0, 0, 0.05)';
                                 }}
                             >
                                 <div className="card__header">
-                                    <div className="margin-bottom--sm" style={{ fontSize: '2rem' }}>
+                                    <div className={clsx("margin-bottom--sm", styles.quickLinksIcon)}>
                                         {link.icon}
                                     </div>
-                                    <h3>{link.title}</h3>
+                                    <h3 className={styles.quickLinksTitle}>{link.title}</h3>
                                 </div>
                                 <div className="card__body">
-                                    <p>{link.description}</p>
+                                    <p className={styles.quickLinksDescription}>{link.description}</p>
                                 </div>
                             </Link>
                         </div>
@@ -260,7 +248,7 @@ function CodeExampleSection(): ReactNode {
                         </div>
                         <Link
                             className="button button--primary button--lg"
-                            to="/docs/keyconcepts/creatingminiapp"
+                            to="/docs/getting-started"
                         >
                             Start Building →
                         </Link>
@@ -386,6 +374,8 @@ function CTASection(): ReactNode {
                         <Link
                             className="button button--outline button--lg"
                             to="https://github.com/SherryLabs/sherry-sdk"
+                            target="_blank"
+                            rel="noopener noreferrer"
                         >
                             View on GitHub
                         </Link>

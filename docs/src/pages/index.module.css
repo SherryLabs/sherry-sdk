@@ -7,6 +7,26 @@
  * Enhanced CSS for the new Sherry SDK homepage
  */
 
+/* Add global transitions for all components */
+.heroBanner,
+.heroContent,
+.socialPost,
+.sherryWidget,
+.featureCard,
+.useCaseCard,
+.codeSection,
+.macWindow,
+.ctaSection,
+.buttons a,
+.ctaButtons a,
+.actionButton,
+.stepNumber,
+.inputGroup input,
+.inputGroup select {
+  transition: all 0.3s ease;
+}
+
+/* Hero Section */
 .heroBanner {
   padding: 6rem 0;
   text-align: left;
@@ -72,6 +92,7 @@
   transform: perspective(1000px) rotateY(-10deg) rotateX(0deg);
 }
 
+/* Social Post Styles */
 .socialPost {
   background: white;
   border-radius: 16px;
@@ -114,6 +135,7 @@
   color: #333;
 }
 
+/* Widget Styles */
 .sherryWidget {
   background: #f8f9fa;
   border: 2px solid #e9ecef;
@@ -177,6 +199,38 @@
   background: var(--ifm-color-primary-dark);
 }
 
+/* Quick Links Section */
+.quickLinksSection {
+  padding: 5rem 0;
+  background: white;
+}
+
+.quickLinksCard {
+  height: 100%;
+  transition: all 0.3s ease;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer; /* Add cursor pointer to make it look clickable */
+}
+
+.quickLinksCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.quickLinksIcon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.quickLinksTitle {
+  color: var(--ifm-heading-color);
+}
+
+.quickLinksDescription {
+  color: var(--ifm-color-content);
+}
+
 /* Features Section */
 .featuresSection {
   padding: 5rem 0;
@@ -213,9 +267,10 @@
   padding: 2rem;
   border-radius: 16px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
+  transition: all 0.3s ease;
+  height: 100%; /* Ensure consistent height */
+  display: flex;
+  flex-direction: column;
 }
 
 .featureCard:hover {
@@ -226,6 +281,12 @@
 .featureIcon {
   font-size: 3rem;
   margin-bottom: 1rem;
+}
+
+.featureContent {
+  flex: 1; /* Allow content to fill space */
+  display: flex;
+  flex-direction: column;
 }
 
 .featureContent h3 {
@@ -244,6 +305,7 @@
   list-style: none;
   padding: 0;
   margin: 0;
+  margin-top: auto; /* Push list to bottom of card */
 }
 
 .featureList li {
@@ -266,6 +328,7 @@
   padding: 5rem 0;
   background: white;
   overflow-x: hidden; /* Prevent section from causing overflow */
+  transition: background 0.3s ease;
 }
 
 .codeContainer {
@@ -321,105 +384,6 @@
   overflow-x: hidden; /* Hide overflow */
 }
 
-.codeBlock {
-  background: #1e1e1e;
-  color: #d4d4d4;
-  padding: 16px;
-  border-radius: 0; /* Remove border radius inside window */
-  font-family: 'Fira Code', monospace;
-  font-size: 0.9rem;
-  line-height: 1.5;
-  overflow-x: auto; /* Allow horizontal scrolling within code block */
-  box-shadow: none; /* Remove shadow inside window */
-  margin: 0;
-  width: 100%;
-}
-
-.codeBlock code {
-  font-family: SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
-  font-size: 14px;
-  line-height: 1.6;
-  display: block;
-  white-space: pre;
-  overflow-x: auto; /* Allow horizontal scrolling */
-  tab-size: 2; /* Smaller tab size to save space */
-}
-
-/* Syntax highlighting can be customized further if needed */
-.codeBlock .language-typescript {
-  color: #9cdcfe;
-}
-
-/* Use Cases Section */
-.useCasesSection {
-  padding: 5rem 0;
-  background: #f8f9fa;
-}
-
-.useCasesGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.5rem;
-}
-
-.useCaseCard {
-  background: white;
-  padding: 2rem;
-  border-radius: 12px;
-  text-align: center;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  transition: transform 0.3s ease;
-}
-
-.useCaseCard:hover {
-  transform: translateY(-2px);
-}
-
-.useCaseIcon {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-}
-
-.useCaseCard h4 {
-  font-size: 1.2rem;
-  margin-bottom: 0.5rem;
-  color: var(--ifm-color-primary);
-}
-
-.useCaseCard p {
-  color: #666;
-  line-height: 1.5;
-}
-
-/* CTA Section */
-.ctaSection {
-  padding: 5rem 0;
-  background: var(--ifm-color-primary);
-  color: white;
-  text-align: center;
-}
-
-.ctaContent h2 {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-}
-
-.ctaContent p {
-  font-size: 1.2rem;
-  margin-bottom: 2rem;
-  opacity: 0.9;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.ctaButtons {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
 /* macOS Window styles */
 .macWindow {
   background-color: #1e1e1e;
@@ -428,6 +392,7 @@
   overflow: hidden;
   width: 100%;
   max-width: 100%; /* Ensure it doesn't exceed parent */
+  transition: all 0.3s ease, box-shadow 0.3s ease;
 }
 
 .macWindowHeader {
@@ -471,6 +436,154 @@
   font-family:
     -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans',
     'Helvetica Neue', sans-serif;
+}
+
+.codeBlock {
+  background: #1e1e1e;
+  color: #d4d4d4;
+  padding: 16px;
+  border-radius: 0; /* Remove border radius inside window */
+  font-family: 'Fira Code', monospace;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  overflow-x: auto; /* Allow horizontal scrolling within code block */
+  box-shadow: none; /* Remove shadow inside window */
+  margin: 0;
+  width: 100%;
+}
+
+.codeBlock code {
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  display: block;
+  white-space: pre;
+  overflow-x: auto; /* Allow horizontal scrolling */
+  tab-size: 2; /* Smaller tab size to save space */
+}
+
+/* Use Cases Section */
+.useCasesSection {
+  padding: 5rem 0;
+  background: #f8f9fa;
+}
+
+.useCasesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.useCaseCard {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.useCaseCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.useCaseIcon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 5rem;
+}
+
+.useCaseCard h4 {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  color: var(--ifm-color-primary);
+}
+
+.useCaseCard p {
+  color: #666;
+  line-height: 1.5;
+}
+
+/* CTA Section */
+.ctaSection {
+  padding: 5rem 0;
+  background: var(--ifm-color-primary);
+  color: white;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.3s ease;
+}
+
+.ctaSection::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(0, 0, 0, 0.1) 100%);
+  pointer-events: none;
+}
+
+.ctaContent {
+  position: relative;
+  z-index: 1;
+}
+
+.ctaContent h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.ctaContent p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  opacity: 0.9;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.ctaButtons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.ctaButtons a {
+  transition: all 0.3s ease, background-color 0.2s ease, transform 0.2s ease;
+}
+
+.ctaButtons a:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Ensure buttons are clickable */
+.buttons a,
+.ctaButtons a,
+.quickLinksCard {
+  position: relative;
+  z-index: 10; /* Ensure links are above other elements */
+}
+
+/* Improve button hover effects globally */
+.buttons a:hover,
+.ctaButtons a:hover,
+.actionButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
 /* Responsive Design */
@@ -521,20 +634,6 @@
     text-align: center;
   }
 
-  .heroBanner {
-    padding: 4rem 0;
-    text-align: center;
-  }
-
-  .heroContent {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-  }
-
-  .heroSubtitle {
-    font-size: 1.5rem;
-  }
-
   .codeContainer {
     grid-template-columns: 1fr;
     gap: 2rem;
@@ -577,15 +676,32 @@
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   }
 
-  .buttons {
-    justify-content: center;
+  .quickLinksSection,
+  .featuresSection,
+  .codeSection,
+  .useCasesSection,
+  .ctaSection {
+    padding: 4rem 0;
   }
 
-  .ctaButtons {
-    flex-direction: column;
-    align-items: center;
+  .featuresGrid,
+  .useCasesGrid {
+    gap: 1.5rem;
   }
 
+  .featureIcon,
+  .useCaseIcon {
+    font-size: 2rem;
+  }
+
+  .ctaContent h2 {
+    font-size: 2rem;
+  }
+
+  .ctaContent p {
+    font-size: 1.1rem;
+  }
+  
   .codeSection {
     padding: 3rem 0; /* Reduce padding */
   }
@@ -642,18 +758,6 @@
     font-size: 0.9rem !important;
   }
 
-  .heroBanner {
-    padding: 2rem 0;
-  }
-
-  .sectionHeader h2 {
-    font-size: 2rem;
-  }
-
-  .heroSubtitle {
-    font-size: 1.3rem;
-  }
-
   .socialPost {
     max-width: 100%;
   }
@@ -693,8 +797,25 @@
     font-size: 0.9rem;
   }
 
-  .codeSection {
-    padding: 2rem 0;
+  .sectionHeader h2 {
+    font-size: 1.8rem;
+  }
+
+  .sectionHeader p {
+    font-size: 1rem;
+  }
+
+  .featureCard, 
+  .useCaseCard {
+    padding: 1.5rem;
+  }
+  
+  .quickLinksSection,
+  .featuresSection,
+  .codeSection,
+  .useCasesSection,
+  .ctaSection {
+    padding: 3rem 0;
   }
   
   .macWindow {
@@ -735,11 +856,12 @@
 
   .codeBlock {
     border-radius: 8px;
-    padding: 8px;
+    padding: 8px 4px; /* Minimal padding on very small screens */
+    font-size: 0.7rem; /* Smaller font */
   }
 
   .codeBlock code {
-    font-size: 11px;
+    font-size: 10px; /* Smaller code font */
   }
 
   .stepNumber {
@@ -752,23 +874,66 @@
     gap: 0.5rem;
     font-size: 0.85rem;
   }
-
-  .codeBlock {
-    padding: 8px 4px; /* Minimal padding on very small screens */
-    font-size: 0.7rem; /* Smaller font */
-  }
   
-  .codeBlock code {
-    font-size: 10px; /* Smaller code font */
+  .quickLinksSection,
+  .featuresSection,
+  .codeSection,
+  .useCasesSection {
+    padding: 2rem 0;
   }
+
+  .ctaSection {
+    padding: 2.5rem 0;
+  }
+
+  .ctaContent h2 {
+    font-size: 1.6rem;
+  }
+
+  .ctaContent p {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
+/* Enhanced dark mode transitions */
+[data-theme='dark'] .quickLinksSection,
+[data-theme='dark'] .featuresSection,
+[data-theme='dark'] .codeSection,
+[data-theme='dark'] .useCasesSection,
+[data-theme='dark'] .ctaSection,
+[data-theme='dark'] .heroBanner,
+[data-theme='dark'] .socialPost,
+[data-theme='dark'] .sherryWidget,
+[data-theme='dark'] .featureCard,
+[data-theme='dark'] .useCaseCard,
+[data-theme='dark'] .macWindow,
+[data-theme='dark'] .inputGroup input,
+[data-theme='dark'] .inputGroup select {
+  transition: all 0.3s ease, background 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
 }
 
 /* Dark mode adjustments */
-[data-theme='dark'] .featuresSection {
-  background: #1b1b1d;
+[data-theme='dark'] .quickLinksSection {
+  background: #181818;
 }
 
-/* Dark mode hero section improvements */
+[data-theme='dark'] .quickLinksCard {
+  background: #2d2d30;
+}
+
+[data-theme='dark'] .quickLinksCard:hover {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme='dark'] .quickLinksTitle {
+  color: #ffffff;
+}
+
+[data-theme='dark'] .quickLinksDescription {
+  color: rgba(255, 255, 255, 0.8);
+}
+
 [data-theme='dark'] .heroBanner {
   background: linear-gradient(
     135deg,
@@ -786,7 +951,6 @@
   color: rgba(255, 255, 255, 0.8);
 }
 
-/* Enhance button contrast in dark mode */
 [data-theme='dark'] .buttons .button--secondary {
   background-color: #ffffff;
   color: var(--ifm-color-primary-darker);
@@ -802,6 +966,10 @@
   background-color: rgba(255, 255, 255, 0.1);
 }
 
+[data-theme='dark'] .featuresSection {
+  background: #1b1b1d;
+}
+
 [data-theme='dark'] .featureCard {
   background: #2d2d30;
   color: #e3e3e3;
@@ -813,6 +981,22 @@
 
 [data-theme='dark'] .featureList li {
   color: #d4d4d4;
+}
+
+[data-theme='dark'] .codeSection {
+  background: #181818;
+}
+
+[data-theme='dark'] .codeExplanation h2 {
+  color: var(--ifm-color-primary-lighter);
+}
+
+[data-theme='dark'] .codeExplanation p {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+[data-theme='dark'] .step {
+  color: rgba(255, 255, 255, 0.8);
 }
 
 [data-theme='dark'] .useCasesSection {
@@ -833,7 +1017,6 @@
   color: #e3e3e3;
 }
 
-/* Fix specific text elements losing contrast in dark mode */
 [data-theme='dark'] .postContent p {
   color: #ffffff; /* Brighter white for better contrast */
   margin: 0 0 1rem 0;
@@ -852,16 +1035,6 @@
   border-color: #444;
 }
 
-[data-theme='dark'] .socialPost {
-  background: #2d2d30;
-  color: #e3e3e3;
-}
-
-[data-theme='dark'] .sherryWidget {
-  background: #1b1b1d;
-  border-color: #444;
-}
-
 [data-theme='dark'] .inputGroup input,
 [data-theme='dark'] .inputGroup select {
   background: #2d2d30;
@@ -871,4 +1044,26 @@
 
 [data-theme='dark'] .inputGroup label {
   color: #b3b3b3;
+}
+
+[data-theme='dark'] .ctaSection {
+  background: linear-gradient(
+    135deg,
+    var(--ifm-color-primary-darker) 0%,
+    #1a1c29 100%
+  );
+}
+
+[data-theme='dark'] .ctaContent h2,
+[data-theme='dark'] .ctaContent p {
+  color: #ffffff;
+}
+
+[data-theme='dark'] .ctaButtons .button--outline {
+  border-color: rgba(255, 255, 255, 0.8);
+  color: #ffffff;
+}
+
+[data-theme='dark'] .ctaButtons .button--outline:hover {
+  background: rgba(255, 255, 255, 0.1);
 }
