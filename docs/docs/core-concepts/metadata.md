@@ -1,3 +1,5 @@
+# Metadata
+
 # Metadata Validation
 
 Validation ensures your mini-app is correctly structured and prevents runtime errors.

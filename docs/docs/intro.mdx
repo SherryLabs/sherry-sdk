@@ -31,7 +31,6 @@ With Sherry, you can transform any post into an interactive dApp that allows use
   - **Transfer Actions**: Enable native token transfers with customizable UIs.
   - **Blockchain Actions**: Call smart contract functions with rich parameter configuration.
   - **Dynamic Actions**: Create flexible mini-apps that compute actions server-side.
-  - **HTTP Actions**: Integrate with external APIs and services.
   - **Action Flows**: Create interactive multi-step processes with conditional paths using `decision` and `completion` steps.
 - 📋 **Built-in Validation**: Ensures your mini-app metadata is valid and well-formed before use via `createMetadata` or `validateMetadata`.
 - ⚡ **Type Safety**: Full TypeScript support with comprehensive type definitions.
@@ -46,15 +45,15 @@ Ready to build your first mini-app? Here are the main paths:
 
 ### Quick Start Options
 
-1. **[Create Your First Mini-App](./keyconcepts/creatingminiapp.mdx)** - Start with the basics
-2. **[View Examples](./keyconcepts/examples.md)** - See working examples
-3. **[Follow the Complete Guide](./guides/guide-en.md)** - Step-by-step tutorial
+1. **[Create Your First Mini-App](getting-started/creatingminiapp)** - Start with the basics
+2. **[View Examples](getting-started/examples.md)** - See working examples
+3. **[Follow the Complete Guide](guides/guide-en.md)** - Step-by-step tutorial
 
 ### Core Concepts
 
-- **[Understanding Actions](./keyconcepts/actions.md)** - Learn about different action types
-- **[Metadata Structure](./keyconcepts/metadata.md)** - Understand the mini-app definition format
-- **[Chain Support](./chainlogic/chains.md)** - Multi-chain and cross-chain capabilities
+- **[Understanding Actions](api/action-types)** - Learn about different action types
+- **[Metadata Structure](core-concepts/metadata.md)** - Understand the mini-app definition format
+- **[Chain Support](core-concepts/chains)** - Multi-chain and cross-chain capabilities
 
 ---
 
@@ -81,25 +80,25 @@ export const QuickLinks = () => {
   const links = [
     {
       title: "🏗️ Build Your First Mini-App",
-      href: "./keyconcepts/creatingminiapp",
+      href: "getting-started/creatingminiapp",
       description: "Learn the basics with a simple example",
       time: "5 min"
     },
     {
       title: "🎯 Explore Action Types", 
-      href: "./sdk/action-types/blockchain-actions",
+      href: "api-reference/action-types/blockchain-actions",
       description: "Understand different ways to interact with blockchain",
       time: "10 min"
     },
     {
       title: "📖 Complete Guide",
-      href: "./guides/guide-en",
+      href: "guides/guide-en",
       description: "Step-by-step tutorial with Next.js",
       time: "30 min"
     },
     {
       title: "💡 View Examples",
-      href: "./keyconcepts/examples",
+      href: "/sdk/examples",
       description: "Ready-to-use examples for common use cases",
       time: "2 min"
     }

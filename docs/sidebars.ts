@@ -28,7 +28,7 @@ const sidebars: SidebarsConfig = {
                 'intro', // Introduction to the SDK
                 'getting-started/quickstart', // Quick Start Guide
                 'getting-started/creatingminiapp', // Creating Your First Mini-App
-                'sdk/examples', // Examples
+                'getting-started/examples', // Examples
             ],
         },
 
@@ -44,9 +44,9 @@ const sidebars: SidebarsConfig = {
                 slug: '/core-concepts',
             },
             items: [
-                'getting-started/actions', // Actions overview
-                'getting-started/metadata', // Metadata Structure
-                'api-reference/chainlogic/chains', // Chain Logic
+                'core-concepts/actions', // Actions overview
+                'core-concepts/metadata', // Metadata Structure
+                'core-concepts/chains', // Chain Logic
             ],
         },
 
@@ -69,12 +69,11 @@ const sidebars: SidebarsConfig = {
                         type: 'generated-index',
                         title: 'SDK Action Types',
                         description: 'Explore the different actions you can define.',
-                        slug: '/sdk/action-types',
+                        slug: '/api/action-types',
                     },
                     items: [
                         'api-reference/action-types/blockchain-actions',
                         'api-reference/action-types/transfer-actions',
-                        'api-reference/action-types/http-actions',
                         'api-reference/action-types/nested-action-flows',
                     ],
                 },
