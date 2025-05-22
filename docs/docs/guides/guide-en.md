@@ -44,9 +44,9 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
 ```
 
 ## Creating the GET Endpoint - Metadata
@@ -58,8 +58,8 @@ The GET endpoint is the heart of your mini app. Here you define all the informat
 Create the file `app/api/my-app/route.ts`:
 
 ```typescript
-import { NextRequest, NextResponse } from "next/server";
-import { createMetadata, Metadata, ValidatedMetadata } from "@sherrylinks/sdk";
+import { NextRequest, NextResponse } from 'next/server';
+import { createMetadata, Metadata, ValidatedMetadata } from '@sherrylinks/sdk';
 ```
 
 ### 2. Configure General Information
@@ -100,19 +100,19 @@ Now let's add the actions that users can perform:
 
 ```typescript
 const metadata: Metadata = {
-    // ... previous general information ...
-    actions: [
-        {
-            type: "dynamic", // Action type (always "dynamic" for mini apps)
-            label: "Execute Action", // Text that will appear on the button
-            description: "Description of what this specific action does",
-            chains: { 
-                source: "fuji" // Blockchain where it will execute (fuji = Avalanche Fuji Testnet)
-            },
-            path: `/api/my-app`, // Path of the POST endpoint that will handle execution
-            // Parameters will be defined in the next step
-        }
-    ]
+  // ... previous general information ...
+  actions: [
+    {
+      type: 'dynamic', // Action type (always "dynamic" for mini apps)
+      label: 'Execute Action', // Text that will appear on the button
+      description: 'Description of what this specific action does',
+      chains: {
+        source: 'fuji', // Blockchain where it will execute (fuji = Avalanche Fuji Testnet)
+      },
+      path: `/api/my-app`, // Path of the POST endpoint that will handle execution
+      // Parameters will be defined in the next step
+    },
+  ],
 };
 ```
 
@@ -130,28 +130,28 @@ Parameters are the data that the user must provide. If they don't have a default
 
 ```typescript
 const metadata: Metadata = {
-    // ... previous information ...
-    actions: [
+  // ... previous information ...
+  actions: [
+    {
+      // ... previous configuration ...
+      params: [
         {
-            // ... previous configuration ...
-            params: [
-                {
-                    name: "message", // Parameter name (will be used as query param)
-                    label: "Your Message", // Label that the user will see
-                    type: "text", // Input type (text, number, email, etc.)
-                    required: true, // Whether it's mandatory or not
-                    description: "Enter the message you want to store on the blockchain"
-                },
-                {
-                    name: "amount",
-                    label: "Amount (ETH)",
-                    type: "number",
-                    required: false,
-                    description: "Amount in ETH (optional)"
-                }
-            ]
-        }
-    ]
+          name: 'message', // Parameter name (will be used as query param)
+          label: 'Your Message', // Label that the user will see
+          type: 'text', // Input type (text, number, email, etc.)
+          required: true, // Whether it's mandatory or not
+          description: 'Enter the message you want to store on the blockchain',
+        },
+        {
+          name: 'amount',
+          label: 'Amount (ETH)',
+          type: 'number',
+          required: false,
+          description: 'Amount in ETH (optional)',
+        },
+      ],
+    },
+  ],
 };
 ```
 
@@ -168,26 +168,23 @@ const metadata: Metadata = {
 
 ```typescript
 export async function GET(req: NextRequest) {
-    try {
-        // ... previous metadata construction ...
+  try {
+    // ... previous metadata construction ...
 
-        // Validate metadata using SDK
-        const validated: ValidatedMetadata = createMetadata(metadata);
+    // Validate metadata using SDK
+    const validated: ValidatedMetadata = createMetadata(metadata);
 
-        // Return with CORS headers
-        return NextResponse.json(validated, {
-            headers: {
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-            },
-        });
-    } catch (error) {
-        console.error("Error creating metadata:", error);
-        return NextResponse.json(
-            { error: "Failed to create metadata" },
-            { status: 500 }
-        );
-    }
+    // Return with CORS headers
+    return NextResponse.json(validated, {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+      },
+    });
+  } catch (error) {
+    console.error('Error creating metadata:', error);
+    return NextResponse.json({ error: 'Failed to create metadata' }, { status: 500 });
+  }
 }
 ```
 
@@ -208,7 +205,7 @@ export async function POST(req: NextRequest) {
         const { searchParams } = new URL(req.url);
         const message = searchParams.get("message");
         const amount = searchParams.get("amount");
-        
+
         // Validate required parameters
         if (!message) {
             return NextResponse.json(
@@ -228,17 +225,17 @@ export async function POST(req: NextRequest) {
 ### 2. Process Data and Create Transaction
 
 ```typescript
-        // Process data (you can add your business logic here)
-        console.log("Message received:", message);
-        console.log("Amount received:", amount);
-        
-        // Create transaction
-        const tx = {
-            to: '0x5ee75a1B1648C023e885E58bD3735Ae273f2cc52', // Destination address
-            value: BigInt(amount ? parseFloat(amount) * 1e18 : 1000000), // Value in wei
-            chainId: avalancheFuji.id, // Blockchain ID
-            // data: "0x..." // You can add contract data here
-        };
+// Process data (you can add your business logic here)
+console.log('Message received:', message);
+console.log('Amount received:', amount);
+
+// Create transaction
+const tx = {
+  to: '0x5ee75a1B1648C023e885E58bD3735Ae273f2cc52', // Destination address
+  value: BigInt(amount ? parseFloat(amount) * 1e18 : 1000000), // Value in wei
+  chainId: avalancheFuji.id, // Blockchain ID
+  // data: "0x..." // You can add contract data here
+};
 ```
 
 ### 3. Serialize and Return Transaction
@@ -278,14 +275,15 @@ To allow your mini app to be used from different domains, you need to handle OPT
 
 ```typescript
 export async function OPTIONS(request: NextRequest) {
-    return new NextResponse(null, {
-        status: 204,
-        headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-            "Access-Control-Allow-Headers": "Content-Type, Authorization, X-CSRF-Token, X-Requested-With, Accept",
-        },
-    });
+  return new NextResponse(null, {
+    status: 204,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+      'Access-Control-Allow-Headers':
+        'Content-Type, Authorization, X-CSRF-Token, X-Requested-With, Accept',
+    },
+  });
 }
 ```
 
@@ -315,15 +313,18 @@ The debugger allows you to test your mini app in multiple ways:
 ### Testing Steps:
 
 1. **Start your development server**:
+
    ```bash
    npm run dev
    ```
 
 2. **Verify your GET endpoint**:
+
    - Go to `http://localhost:3000/api/my-app`
    - You should see the metadata JSON
 
 3. **Test in debugger**:
+
    - Use URL: `http://localhost:3000/api/my-app`
    - Verify that input fields render correctly
    - Try completing the form and submitting
@@ -336,24 +337,29 @@ The debugger allows you to test your mini app in multiple ways:
 ## Troubleshooting
 
 ### Error: "CORS policy"
+
 - Make sure all your endpoints include correct CORS headers
 - Verify that the OPTIONS method is implemented
 
 ### Error: "Metadata validation failed"
+
 - Check that all required fields are present
 - Verify that data types are correct
 - Use `createMetadata()` to validate your metadata
 
 ### Error: "Parameter required"
+
 - Make sure required parameters are marked as `required: true`
 - Verify that parameter names match between metadata and POST
 
 ### Mini app doesn't render correctly
+
 - Verify that your GET endpoint URL is publicly accessible
 - Check browser console for JavaScript errors
 - Make sure the JSON response is valid
 
 ### Transaction serialization errors
+
 - Verify that values are in the correct format (BigInt for wei values)
 - Make sure chainId is valid
 - Check that the 'to' address is a valid Ethereum address
@@ -361,6 +367,7 @@ The debugger allows you to test your mini app in multiple ways:
 ## Example Code
 
 ### English
+
 You can find a complete example of this tutorial in the following repository:
 [https://github.com/SherryLabs/sherry-example](https://github.com/SherryLabs/sherry-example)
 

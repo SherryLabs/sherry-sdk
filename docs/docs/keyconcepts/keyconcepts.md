@@ -48,6 +48,7 @@ In Sherry, **actions** are the core interactive units that define what a mini-ap
 Each action represents a specific task the user can trigger—such as sending tokens, calling a smart contract, making an HTTP request, or initiating a multi-step flow.
 
 Actions determine:
+
 - What will be executed (e.g., a transfer, a contract call, an API request)
 - What input the user must provide
 - On which blockchain(s) the action will take place
@@ -68,20 +69,24 @@ const nftMintAction: Metadata = {
   icon: 'https://example.com/icon.png',
   title: 'NFT Minter',
   description: 'Mint awesome NFTs',
-  actions: [{
-    type: 'blockchain',
-    label: 'Mint NFT',
-    address: '0x1234567890abcdef1234567890abcdef12345678',
-    abi: nftAbi,
-    functionName: 'safeMint',
-    chains: { source: 'avalanche' },
-    params: [{
-      name: 'to',
-      label: 'Recipient Address',
-      type: 'address',
-      required: true
-    }]
-  }]
+  actions: [
+    {
+      type: 'blockchain',
+      label: 'Mint NFT',
+      address: '0x1234567890abcdef1234567890abcdef12345678',
+      abi: nftAbi,
+      functionName: 'safeMint',
+      chains: { source: 'avalanche' },
+      params: [
+        {
+          name: 'to',
+          label: 'Recipient Address',
+          type: 'address',
+          required: true,
+        },
+      ],
+    },
+  ],
 };
 ```
 
@@ -92,16 +97,18 @@ For sending native tokens between addresses.
 ```typescript
 const transferAction: Metadata = {
   url: 'https://myapp.example',
-  icon: 'https://example.com/icon.png', 
+  icon: 'https://example.com/icon.png',
   title: 'Send AVAX',
   description: 'Quick AVAX transfer',
-  actions: [{
-    type: 'transfer',
-    label: 'Send 0.1 AVAX',
-    to: '0x1234567890123456789012345678901234567890',
-    amount: 0.1,
-    chains: { source: 'avalanche' }
-  }]
+  actions: [
+    {
+      type: 'transfer',
+      label: 'Send 0.1 AVAX',
+      to: '0x1234567890123456789012345678901234567890',
+      amount: 0.1,
+      chains: { source: 'avalanche' },
+    },
+  ],
 };
 ```
 
@@ -115,26 +122,31 @@ const httpAction: Metadata = {
   icon: 'https://example.com/icon.png',
   title: 'Submit Feedback',
   description: 'Send feedback to our API',
-  actions: [{
-    type: 'http',
-    label: 'Submit Feedback',
-    path: 'https://api.example.com/feedback',
-    params: [{
-      name: 'message',
-      label: 'Your Message',
-      type: 'textarea',
-      required: true
-    }, {
-      name: 'rating',
-      label: 'Rating',
-      type: 'select',
-      required: true,
-      options: [
-        { label: '⭐', value: 1 },
-        { label: '⭐⭐⭐⭐⭐', value: 5 }
-      ]
-    }]
-  }]
+  actions: [
+    {
+      type: 'http',
+      label: 'Submit Feedback',
+      path: 'https://api.example.com/feedback',
+      params: [
+        {
+          name: 'message',
+          label: 'Your Message',
+          type: 'textarea',
+          required: true,
+        },
+        {
+          name: 'rating',
+          label: 'Rating',
+          type: 'select',
+          required: true,
+          options: [
+            { label: '⭐', value: 1 },
+            { label: '⭐⭐⭐⭐⭐', value: 5 },
+          ],
+        },
+      ],
+    },
+  ],
 };
 ```
 
@@ -149,18 +161,22 @@ const dynamicAction: Metadata = {
   title: 'Dynamic Swap',
   description: 'Smart token swapping',
   baseUrl: 'https://myapp.example',
-  actions: [{
-    type: 'dynamic',
-    label: 'Smart Swap',
-    path: '/api/swap',
-    chains: { source: 'avalanche' },
-    params: [{
-      name: 'amount',
-      label: 'Amount to Swap',
-      type: 'number',
-      required: true
-    }]
-  }]
+  actions: [
+    {
+      type: 'dynamic',
+      label: 'Smart Swap',
+      path: '/api/swap',
+      chains: { source: 'avalanche' },
+      params: [
+        {
+          name: 'amount',
+          label: 'Amount to Swap',
+          type: 'number',
+          required: true,
+        },
+      ],
+    },
+  ],
 };
 ```
 
@@ -184,28 +200,32 @@ const swapFlow: ActionFlow = {
       abi: erc20Abi,
       functionName: 'approve',
       chains: { source: 'avalanche' },
-      params: [/* ... */],
-      nextActions: [{ actionId: 'execute-swap' }]
+      params: [
+        /* ... */
+      ],
+      nextActions: [{ actionId: 'execute-swap' }],
     },
     {
-      id: 'execute-swap', 
+      id: 'execute-swap',
       type: 'blockchain',
       label: 'Execute Swap',
       address: '0xDEXAddress',
       abi: dexAbi,
       functionName: 'swap',
       chains: { source: 'avalanche' },
-      params: [/* ... */],
-      nextActions: [{ actionId: 'swap-complete' }]
+      params: [
+        /* ... */
+      ],
+      nextActions: [{ actionId: 'swap-complete' }],
     },
     {
       id: 'swap-complete',
       type: 'completion',
       label: 'Swap Complete',
       message: 'Your swap was successful!',
-      status: 'success'
-    }
-  ]
+      status: 'success',
+    },
+  ],
 };
 ```
 
@@ -219,13 +239,13 @@ All parameters extend from `BaseParameter`:
 
 ```typescript
 interface BaseParameter {
-  name: string;           // Parameter identifier
-  label: string;          // UI label  
-  type: string;           // Input type
-  required?: boolean;     // Is mandatory?
-  description?: string;   // Help text
-  fixed?: boolean;        // Is non-editable?
-  value?: any;           // Default/fixed value
+  name: string; // Parameter identifier
+  label: string; // UI label
+  type: string; // Input type
+  required?: boolean; // Is mandatory?
+  description?: string; // Help text
+  fixed?: boolean; // Is non-editable?
+  value?: any; // Default/fixed value
 }
 ```
 
@@ -244,7 +264,7 @@ For common input types (text, numbers, addresses, booleans):
   maxLength: 100
 }
 
-// Number input  
+// Number input
 {
   name: 'amount',
   label: 'Amount',
@@ -257,7 +277,7 @@ For common input types (text, numbers, addresses, booleans):
 // Address input
 {
   name: 'recipient',
-  label: 'Recipient Address', 
+  label: 'Recipient Address',
   type: 'address',
   required: true
 }
@@ -296,7 +316,7 @@ For radio button selections:
 {
   name: 'priority',
   label: 'Priority Level',
-  type: 'radio', 
+  type: 'radio',
   required: true,
   options: [
     { label: 'Low', value: 'low', description: 'Standard processing' },
@@ -315,24 +335,25 @@ import { PARAM_TEMPLATES, createParameter } from '@sherrylinks/sdk';
 // Address parameter
 const recipientParam = createParameter(PARAM_TEMPLATES.ADDRESS, {
   name: 'recipient',
-  label: 'Destination Address'
+  label: 'Destination Address',
 });
 
 // Amount parameter
 const amountParam = createParameter(PARAM_TEMPLATES.AMOUNT, {
-  name: 'transferAmount', 
+  name: 'transferAmount',
   label: 'Amount to Send',
-  min: 0.01
+  min: 0.01,
 });
 
 // Yes/No selection
 const confirmParam = createParameter(PARAM_TEMPLATES.YES_NO, {
   name: 'confirmation',
-  label: 'Confirm transaction?'
+  label: 'Confirm transaction?',
 });
 ```
 
 Available templates include:
+
 - `ADDRESS` - Ethereum address input
 - `AMOUNT` - Numeric amount for transfers
 - `EMAIL` - Email address input

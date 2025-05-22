@@ -21,18 +21,16 @@ function HomepageHeader() {
                             Embed Interactive Blockchain Actions Anywhere
                         </Heading>
                         <p className={styles.heroDescription}>
-                            Transform static social media posts into dynamic Web3 experiences. 
-                            Create token swaps, NFT mints, DAO votes, and more—all embedded directly in posts.
+                            Transform static social media posts into dynamic Web3 experiences.
+                            Create token swaps, NFT mints, DAO votes, and more—all embedded directly
+                            in posts.
                         </p>
                         <div className={styles.buttons}>
-                            <Link 
-                                className="button button--secondary button--lg" 
-                                to="/docs/intro"
-                            >
+                            <Link className="button button--secondary button--lg" to="/docs/intro">
                                 Get Started
                             </Link>
-                            <Link 
-                                className="button button--outline button--lg" 
+                            <Link
+                                className="button button--outline button--lg"
                                 to="/docs/keyconcepts/examples"
                             >
                                 View Examples
@@ -89,37 +87,40 @@ function HomepageHeader() {
 function FeaturesSection(): ReactNode {
     const features = [
         {
-            title: "Multi-Chain Support",
-            icon: "⛓️",
-            description: "Deploy across Avalanche, Celo, Ethereum, and more blockchains with a single codebase.",
+            title: 'Multi-Chain Support',
+            icon: '⛓️',
+            description:
+                'Deploy across Avalanche, Celo, Ethereum, and more blockchains with a single codebase.',
             details: [
-                "Cross-chain transactions via Wormhole",
-                "Unified API for all supported chains",
-                "Automatic chain detection and switching"
-            ]
+                'Cross-chain transactions via Wormhole',
+                'Unified API for all supported chains',
+                'Automatic chain detection and switching',
+            ],
         },
         {
-            title: "Rich Action Types",
-            icon: "⚡",
-            description: "From simple transfers to complex multi-step flows, create any Web3 interaction.",
+            title: 'Rich Action Types',
+            icon: '⚡',
+            description:
+                'From simple transfers to complex multi-step flows, create any Web3 interaction.',
             details: [
-                "Smart contract interactions",
-                "Token transfers & swaps", 
-                "Multi-step conditional flows",
-                "HTTP API integrations"
-            ]
+                'Smart contract interactions',
+                'Token transfers & swaps',
+                'Multi-step conditional flows',
+                'HTTP API integrations',
+            ],
         },
         {
-            title: "Developer Experience",
-            icon: "🛠️",
-            description: "Built for developers with TypeScript, validation, and comprehensive tooling.",
+            title: 'Developer Experience',
+            icon: '🛠️',
+            description:
+                'Built for developers with TypeScript, validation, and comprehensive tooling.',
             details: [
-                "Full TypeScript support",
-                "Built-in validation & error handling",
-                "Rich parameter configuration",
-                "Extensive documentation & examples"
-            ]
-        }
+                'Full TypeScript support',
+                'Built-in validation & error handling',
+                'Rich parameter configuration',
+                'Extensive documentation & examples',
+            ],
+        },
     ];
 
     return (
@@ -173,8 +174,8 @@ function CodeExampleSection(): ReactNode {
                                 <span>Deploy and embed anywhere</span>
                             </div>
                         </div>
-                        <Link 
-                            className="button button--primary button--lg" 
+                        <Link
+                            className="button button--primary button--lg"
                             to="/docs/keyconcepts/creatingminiapp"
                         >
                             Start Building →
@@ -231,35 +232,35 @@ const validated = createMetadata(metadata);`}</code>
 function UseCasesSection(): ReactNode {
     const useCases = [
         {
-            title: "Social Token Trading",
-            description: "Enable token swaps directly in Twitter/X posts",
-            icon: "💱"
+            title: 'Social Token Trading',
+            description: 'Enable token swaps directly in Twitter/X posts',
+            icon: '💱',
         },
         {
-            title: "NFT Minting", 
-            description: "Let users mint NFTs without leaving social feeds",
-            icon: "🎨"
+            title: 'NFT Minting',
+            description: 'Let users mint NFTs without leaving social feeds',
+            icon: '🎨',
         },
         {
-            title: "DAO Governance",
-            description: "Embed voting and proposal creation in communities",
-            icon: "🗳️"
+            title: 'DAO Governance',
+            description: 'Embed voting and proposal creation in communities',
+            icon: '🗳️',
         },
         {
-            title: "DeFi Interactions",
-            description: "Provide lending, staking, and yield farming actions",
-            icon: "📈"
+            title: 'DeFi Interactions',
+            description: 'Provide lending, staking, and yield farming actions',
+            icon: '📈',
         },
         {
-            title: "Cross-chain Transfers",
-            description: "Bridge assets between blockchains seamlessly", 
-            icon: "🌉"
+            title: 'Cross-chain Transfers',
+            description: 'Bridge assets between blockchains seamlessly',
+            icon: '🌉',
         },
         {
-            title: "Fundraising",
-            description: "Accept donations and crowdfunding contributions",
-            icon: "💝"
-        }
+            title: 'Fundraising',
+            description: 'Accept donations and crowdfunding contributions',
+            icon: '💝',
+        },
     ];
 
     return (
@@ -291,18 +292,15 @@ function CTASection(): ReactNode {
                 <div className={styles.ctaContent}>
                     <Heading as="h2">Ready to Build the Future of Web3?</Heading>
                     <p>
-                        Join developers creating the next generation of social Web3 experiences. 
+                        Join developers creating the next generation of social Web3 experiences.
                         Start building your first mini-app today.
                     </p>
                     <div className={styles.ctaButtons}>
-                        <Link 
-                            className="button button--primary button--lg" 
-                            to="/docs/intro"
-                        >
+                        <Link className="button button--primary button--lg" to="/docs/intro">
                             Get Started Now
                         </Link>
-                        <Link 
-                            className="button button--outline button--lg" 
+                        <Link
+                            className="button button--outline button--lg"
                             to="https://github.com/SherryLabs/sherry-sdk"
                         >
                             View on GitHub

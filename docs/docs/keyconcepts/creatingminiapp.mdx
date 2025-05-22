@@ -1,13 +1,13 @@
-# Creating Your First Mini App 
+# Creating Your First Mini App
 
-Learn how to develop your mini-app with TypeScript 
+Learn how to develop your mini-app with TypeScript
 
 ## Prerequisites
+
 To follow this guide you will need to have installed
 
-+ Code editor as [**VSCode**](https://code.visualstudio.com/) 
-+ [**NodeJS**](https://nodejs.org/en/) 
-
+- Code editor as [**VSCode**](https://code.visualstudio.com/)
+- [**NodeJS**](https://nodejs.org/en/)
 
 ## 1️⃣ Install
 
@@ -22,57 +22,60 @@ yarn add @sherrylinks/sdk
 ```
 
 ## 2️⃣ Import
+
 Import the Metadata interface from the SDK
 
 ```typescript
-import { Metadata } from "@sherrylinks/sdk"
+import { Metadata } from '@sherrylinks/sdk';
 ```
 
 ## 3️⃣ Utilize
+
 Use the Metadata interface to start defining your miniapp
 
 `metadata.ts`
 
 ```typescript
 const metadata: Metadata = {
-  url: "sherry.social",
-  icon: "icon",
-  title: "title",
-  description: "description",
+  url: 'sherry.social',
+  icon: 'icon',
+  title: 'title',
+  description: 'description',
   actions: [
-      {
-          label: "Test Action 1",
-          address: "0x1234567890abcdef1234567890abcdef12345678",
-          abi: exampleAbi,
-          functionName: "safeTransferFrom",
-          chains: { source: "avalanche" } 
-      },
-    ]
-  };
+    {
+      label: 'Test Action 1',
+      address: '0x1234567890abcdef1234567890abcdef12345678',
+      abi: exampleAbi,
+      functionName: 'safeTransferFrom',
+      chains: { source: 'avalanche' },
+    },
+  ],
+};
 ```
+
 `example-abi.ts`
 
 ```typescript
 const exampleAbi = [
-    {
-      name: 'balanceOf',
-      type: 'function',
-      stateMutability: 'view',
-      inputs: [{ name: 'owner', type: 'address' }],
-      outputs: [{ name: 'balance', type: 'uint256' }],
-    },
-    {
-      name: 'safeTransferFrom',
-      type: 'function',
-      stateMutability: 'nonpayable',
-      inputs: [
-        { name: 'from', type: 'address' },
-        { name: 'to', type: 'address' },
-        { name: 'tokenId', type: 'uint256' },
-      ],
-      outputs: [],
-    },
-  ] as const
+  {
+    name: 'balanceOf',
+    type: 'function',
+    stateMutability: 'view',
+    inputs: [{ name: 'owner', type: 'address' }],
+    outputs: [{ name: 'balance', type: 'uint256' }],
+  },
+  {
+    name: 'safeTransferFrom',
+    type: 'function',
+    stateMutability: 'nonpayable',
+    inputs: [
+      { name: 'from', type: 'address' },
+      { name: 'to', type: 'address' },
+      { name: 'tokenId', type: 'uint256' },
+    ],
+    outputs: [],
+  },
+] as const;
 ```
 
 # 4️⃣ Finally
@@ -80,55 +83,59 @@ const exampleAbi = [
 Finally your file will look as follows
 
 `metadata.ts `
-```typescript 
-import { Metadata } from "@sherrylinks/sdk"
-import { exampleAbi } from "./example-abi.ts"
-  
+
+```typescript
+import { Metadata } from '@sherrylinks/sdk';
+import { exampleAbi } from './example-abi.ts';
+
 const metadata: Metadata = {
-  url: "sherry.social",
-  icon: "icon",
-  title: "title",
-  description: "description",
+  url: 'sherry.social',
+  icon: 'icon',
+  title: 'title',
+  description: 'description',
   actions: [
-      {
-          label: "Test Action 1",
-          address: "0x1234567890abcdef1234567890abcdef12345678",
-          abi: exampleAbi,
-          functionName: "safeTransferFrom",
-          chains: { source: "avalanche" } 
-      },
-    ]
-  };
+    {
+      label: 'Test Action 1',
+      address: '0x1234567890abcdef1234567890abcdef12345678',
+      abi: exampleAbi,
+      functionName: 'safeTransferFrom',
+      chains: { source: 'avalanche' },
+    },
+  ],
+};
 ```
+
 `example-abi.ts`
+
 ```typescript
 const exampleAbi = [
-        {
-            name: 'balanceOf',
-            type: 'function',
-            stateMutability: 'view',
-            inputs: [{ name: 'owner', type: 'address' }],
-            outputs: [{ name: 'balance', type: 'uint256' }],
-        },
-        {
-            name: 'safeTransferFrom',
-            type: 'function',
-            stateMutability: 'nonpayable',
-            inputs: [
-                { name: 'from', type: 'address' },
-                { name: 'to', type: 'address' },
-                { name: 'tokenId', type: 'uint256' },
-            ],
-            outputs: [],
-        },
-    ] as const
+  {
+    name: 'balanceOf',
+    type: 'function',
+    stateMutability: 'view',
+    inputs: [{ name: 'owner', type: 'address' }],
+    outputs: [{ name: 'balance', type: 'uint256' }],
+  },
+  {
+    name: 'safeTransferFrom',
+    type: 'function',
+    stateMutability: 'nonpayable',
+    inputs: [
+      { name: 'from', type: 'address' },
+      { name: 'to', type: 'address' },
+      { name: 'tokenId', type: 'uint256' },
+    ],
+    outputs: [],
+  },
+] as const;
 ```
+
 # 5️⃣ Validate
 
 Validate your `Metadata` using the createMetadata function. This function will check the definition and return the validated metadata of your mini-app. The type returned will be `ValidatedMetadata`.
 
 ```typescript
-import { createMetadata, ValidatedMetadata } from "@sherrylinks/sdk"
+import { createMetadata, ValidatedMetadata } from '@sherrylinks/sdk';
 
 const finalMetadata: ValidatedMetadata = await createMetadata(metadata);
 ```
@@ -150,7 +157,7 @@ Metadata: {
       "address": "0x1234567890abcdef1234567890abcdef12345678",
       "abi": [ ... ],
       "functionName": "safeTransferFrom",
-      "chains": { "source": "avalanche" } 
+      "chains": { "source": "avalanche" }
       "params": [
         {
           "name": "From",

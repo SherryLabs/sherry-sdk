@@ -105,18 +105,18 @@ export const QuickLinks = () => {
     }
   ];
 
-  return (
-    <div style={{
+return (
+<div style={{
       display: 'grid',
       gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
       gap: '1.5rem',
       margin: '2rem 0'
     }}>
-      {links.map((link, idx) => (
-        <a 
-          key={idx}
-          href={link.href}
-          style={{
+{links.map((link, idx) => (
+<a
+key={idx}
+href={link.href}
+style={{
             display: 'block',
             padding: '1.5rem',
             border: colorMode === 'dark' ? '1px solid #444' : '1px solid #e0e0e0',
@@ -130,38 +130,37 @@ export const QuickLinks = () => {
               boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
             }
           }}
-          onMouseEnter={(e) => {
-            e.target.style.transform = 'translateY(-2px)';
-            e.target.style.boxShadow = colorMode === 'dark' 
-              ? '0 4px 12px rgba(255,255,255,0.1)' 
-              : '0 4px 12px rgba(0,0,0,0.1)';
-          }}
-          onMouseLeave={(e) => {
-            e.target.style.transform = 'none';
-            e.target.style.boxShadow = 'none';
-          }}
-        >
-          <div style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>
-            {link.title}
-          </div>
-          <div style={{ 
-            fontSize: '0.9rem', 
+onMouseEnter={(e) => {
+e.target.style.transform = 'translateY(-2px)';
+e.target.style.boxShadow = colorMode === 'dark'
+? '0 4px 12px rgba(255,255,255,0.1)'
+: '0 4px 12px rgba(0,0,0,0.1)';
+}}
+onMouseLeave={(e) => {
+e.target.style.transform = 'none';
+e.target.style.boxShadow = 'none';
+}} >
+<div style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>
+{link.title}
+</div>
+<div style={{
+            fontSize: '0.9rem',
             color: colorMode === 'dark' ? '#b3b3b3' : '#666',
-            marginBottom: '0.5rem' 
+            marginBottom: '0.5rem'
           }}>
-            {link.description}
-          </div>
-          <div style={{ 
-            fontSize: '0.8rem', 
+{link.description}
+</div>
+<div style={{
+            fontSize: '0.8rem',
             color: 'var(--ifm-color-primary)',
             fontWeight: '500'
           }}>
-            {link.time}
-          </div>
-        </a>
-      ))}
-    </div>
-  );
+{link.time}
+</div>
+</a>
+))}
+</div>
+);
 };
 
 <QuickLinks />
@@ -188,13 +187,15 @@ const metadata: Metadata = {
   icon: 'https://example.com/icon.png',
   title: 'Token Transfer',
   description: 'Send tokens easily',
-  actions: [{
-    type: 'transfer',
-    label: 'Send 0.1 AVAX',
-    to: '0x1234567890123456789012345678901234567890',
-    amount: 0.1,
-    chains: { source: 'avalanche' }
-  }]
+  actions: [
+    {
+      type: 'transfer',
+      label: 'Send 0.1 AVAX',
+      to: '0x1234567890123456789012345678901234567890',
+      amount: 0.1,
+      chains: { source: 'avalanche' },
+    },
+  ],
 };
 
 // Validate and use

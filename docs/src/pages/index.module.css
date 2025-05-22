@@ -7,12 +7,16 @@
  * Enhanced CSS for the new Sherry SDK homepage
  */
 
- .heroBanner {
+.heroBanner {
   padding: 6rem 0;
   text-align: left;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(135deg, var(--ifm-color-primary) 0%, var(--ifm-color-primary-dark) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--ifm-color-primary) 0%,
+    var(--ifm-color-primary-dark) 100%
+  );
   color: white;
 }
 
@@ -208,7 +212,9 @@
   padding: 2rem;
   border-radius: 16px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .featureCard:hover {
@@ -247,7 +253,7 @@
 }
 
 .featureList li::before {
-  content: "✓";
+  content: '✓';
   color: var(--ifm-color-success);
   font-weight: bold;
   position: absolute;
@@ -328,7 +334,7 @@
 }
 
 .codeBlock code {
-  font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
   font-size: 14px;
   line-height: 1.6;
 }
@@ -431,7 +437,9 @@
   margin-right: 16px;
 }
 
-.closeButton, .minimizeButton, .maximizeButton {
+.closeButton,
+.minimizeButton,
+.maximizeButton {
   width: 12px;
   height: 12px;
   border-radius: 50%;
@@ -453,7 +461,9 @@
 .windowTitle {
   color: #cccccc;
   font-size: 14px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans',
+    'Helvetica Neue', sans-serif;
 }
 
 /* Responsive Design */
@@ -462,33 +472,33 @@
     padding: 4rem 0;
     text-align: center;
   }
-  
+
   .heroContent {
     grid-template-columns: 1fr;
     gap: 2rem;
   }
-  
+
   .heroSubtitle {
     font-size: 1.5rem;
   }
-  
+
   .codeContainer {
     grid-template-columns: 1fr;
     gap: 2rem;
   }
-  
+
   .featuresGrid {
     grid-template-columns: 1fr;
   }
-  
+
   .useCasesGrid {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   }
-  
+
   .buttons {
     justify-content: center;
   }
-  
+
   .ctaButtons {
     flex-direction: column;
     align-items: center;
@@ -499,23 +509,23 @@
   .heroBanner {
     padding: 2rem 0;
   }
-  
+
   .sectionHeader h2 {
     font-size: 2rem;
   }
-  
+
   .heroSubtitle {
     font-size: 1.3rem;
   }
-  
+
   .socialPost {
     max-width: 100%;
   }
-  
+
   .mockupContainer {
     transform: none;
   }
-  
+
   .mockupContainer:hover {
     transform: none;
   }
