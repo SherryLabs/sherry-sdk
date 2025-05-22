@@ -319,7 +319,7 @@
 .codeBlock {
   background: #1e1e1e;
   color: #d4d4d4;
-  padding: 2rem;
+  padding: 16px;
   border-radius: 12px;
   font-family: 'Fira Code', monospace;
   font-size: 0.9rem;
@@ -327,16 +327,17 @@
   overflow-x: auto;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
   margin: 0;
-  padding: 16px;
-  border-radius: 0;
-  background-color: transparent;
-  overflow-x: auto;
+  width: 100%;
 }
 
 .codeBlock code {
   font-family: SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
   font-size: 14px;
   line-height: 1.6;
+  display: block;
+  white-space: pre;
+  word-break: normal;
+  word-wrap: normal;
 }
 
 /* Syntax highlighting can be customized further if needed */
@@ -487,6 +488,35 @@
     gap: 2rem;
   }
 
+  .codeExample {
+    order: -1;
+    margin-bottom: 2rem;
+  }
+
+  .macWindow {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  .codeBlock {
+    padding: 12px;
+    font-size: 0.8rem;
+  }
+
+  .codeBlock code {
+    font-size: 12px;
+  }
+
+  .codeExplanation {
+    text-align: center;
+  }
+
+  .stepsList {
+    display: inline-block;
+    text-align: left;
+    margin: 0 auto 2rem;
+  }
+
   .featuresGrid {
     grid-template-columns: 1fr;
   }
@@ -528,6 +558,53 @@
 
   .mockupContainer:hover {
     transform: none;
+  }
+
+  .macWindowHeader {
+    padding: 6px 12px;
+  }
+
+  .windowButtons {
+    gap: 6px;
+  }
+
+  .closeButton, .minimizeButton, .maximizeButton {
+    width: 10px;
+    height: 10px;
+  }
+
+  .windowTitle {
+    font-size: 12px;
+  }
+
+  .codeExplanation h2 {
+    font-size: 1.8rem;
+  }
+
+  .step {
+    font-size: 0.9rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .codeBlock {
+    border-radius: 8px;
+    padding: 8px;
+  }
+
+  .codeBlock code {
+    font-size: 11px;
+  }
+
+  .stepNumber {
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: 0.8rem;
+  }
+
+  .step {
+    gap: 0.5rem;
+    font-size: 0.85rem;
   }
 }
 
