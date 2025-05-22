@@ -106,62 +106,68 @@ export const QuickLinks = () => {
   ];
 
 return (
-<div style={{
-      display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-      gap: '1.5rem',
-      margin: '2rem 0'
-    }}>
-{links.map((link, idx) => (
-<a
-key={idx}
-href={link.href}
-style={{
-            display: 'block',
-            padding: '1.5rem',
-            border: colorMode === 'dark' ? '1px solid #444' : '1px solid #e0e0e0',
-            borderRadius: '8px',
-            textDecoration: 'none',
-            color: 'inherit',
-            backgroundColor: colorMode === 'dark' ? '#2d2d30' : '#f9f9f9',
-            transition: 'all 0.2s ease',
-            ':hover': {
-              transform: 'translateY(-2px)',
-              boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
-            }
-          }}
-onMouseEnter={(e) => {
-e.target.style.transform = 'translateY(-2px)';
-e.target.style.boxShadow = colorMode === 'dark'
-? '0 4px 12px rgba(255,255,255,0.1)'
-: '0 4px 12px rgba(0,0,0,0.1)';
-}}
-onMouseLeave={(e) => {
-e.target.style.transform = 'none';
-e.target.style.boxShadow = 'none';
-}} >
-<div style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>
-{link.title}
+
+<div
+  style={{
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+    gap: '1.5rem',
+    margin: '2rem 0',
+  }}
+>
+  {links.map((link, idx) => (
+    <a
+      key={idx}
+      href={link.href}
+      style={{
+        display: 'block',
+        padding: '1.5rem',
+        border: colorMode === 'dark' ? '1px solid #444' : '1px solid #e0e0e0',
+        borderRadius: '8px',
+        textDecoration: 'none',
+        color: 'inherit',
+        backgroundColor: colorMode === 'dark' ? '#2d2d30' : '#f9f9f9',
+        transition: 'all 0.2s ease',
+        ':hover': {
+          transform: 'translateY(-2px)',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+        },
+      }}
+      onMouseEnter={e => {
+        e.target.style.transform = 'translateY(-2px)';
+        e.target.style.boxShadow =
+          colorMode === 'dark' ? '0 4px 12px rgba(255,255,255,0.1)' : '0 4px 12px rgba(0,0,0,0.1)';
+      }}
+      onMouseLeave={e => {
+        e.target.style.transform = 'none';
+        e.target.style.boxShadow = 'none';
+      }}
+    >
+      <div style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>
+        {link.title}
+      </div>
+      <div
+        style={{
+          fontSize: '0.9rem',
+          color: colorMode === 'dark' ? '#b3b3b3' : '#666',
+          marginBottom: '0.5rem',
+        }}
+      >
+        {link.description}
+      </div>
+      <div
+        style={{
+          fontSize: '0.8rem',
+          color: 'var(--ifm-color-primary)',
+          fontWeight: '500',
+        }}
+      >
+        {link.time}
+      </div>
+    </a>
+  ))}
 </div>
-<div style={{
-            fontSize: '0.9rem',
-            color: colorMode === 'dark' ? '#b3b3b3' : '#666',
-            marginBottom: '0.5rem'
-          }}>
-{link.description}
-</div>
-<div style={{
-            fontSize: '0.8rem',
-            color: 'var(--ifm-color-primary)',
-            fontWeight: '500'
-          }}>
-{link.time}
-</div>
-</a>
-))}
-</div>
-);
-};
+); };
 
 <QuickLinks />
 

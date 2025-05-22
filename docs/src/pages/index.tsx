@@ -5,6 +5,8 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import Heading from '@theme/Heading';
 import styles from './index.module.css';
+import { useColorMode } from '@docusaurus/theme-common';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 
 // Hero section with dynamic background
 function HomepageHeader() {
@@ -143,6 +145,86 @@ function FeaturesSection(): ReactNode {
                                     ))}
                                 </ul>
                             </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </section>
+    );
+}
+
+// QuickLinks section using Docusaurus native components
+function QuickLinksSection(): ReactNode {
+    const { colorMode } = useColorMode();
+    const isDarkTheme = colorMode === 'dark';
+    
+    const quickLinks = [
+        {
+            title: 'Getting Started',
+            description: 'Learn the basics and set up your development environment',
+            icon: '🚀',
+            url: '/docs/intro',
+        },
+        {
+            title: 'Core Concepts',
+            description: 'Understand the key concepts behind mini-apps',
+            icon: '🧠',
+            url: '/docs/keyconcepts/overview',
+        },
+        {
+            title: 'API Reference',
+            description: 'Explore the complete API documentation',
+            icon: '📚',
+            url: '/docs/api',
+        },
+        {
+            title: 'Examples',
+            description: 'View example mini-apps for different use cases',
+            icon: '🔍',
+            url: '/docs/keyconcepts/examples',
+        },
+    ];
+
+    return (
+        <section className="padding-vert--xl">
+            <div className="container">
+                <div className="text--center margin-bottom--xl">
+                    <Heading as="h2">Quick Links</Heading>
+                    <p>Essential resources to get you building fast</p>
+                </div>
+                <div className="row">
+                    {quickLinks.map((link, idx) => (
+                        <div key={idx} className="col col--3 margin-bottom--lg">
+                            <Link
+                                to={useBaseUrl(link.url)}
+                                className="card padding--lg cardContainer"
+                                style={{
+                                    height: '100%',
+                                    textDecoration: 'none',
+                                    border: `1px solid ${isDarkTheme ? '#333' : '#eee'}`,
+                                    borderRadius: '8px',
+                                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.05)',
+                                    transition: 'all 0.3s',
+                                }}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.transform = 'translateY(-5px)';
+                                    e.currentTarget.style.boxShadow = '0 8px 20px rgba(0, 0, 0, 0.1)';
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.transform = 'translateY(0)';
+                                    e.currentTarget.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.05)';
+                                }}
+                            >
+                                <div className="card__header">
+                                    <div className="margin-bottom--sm" style={{ fontSize: '2rem' }}>
+                                        {link.icon}
+                                    </div>
+                                    <h3>{link.title}</h3>
+                                </div>
+                                <div className="card__body">
+                                    <p>{link.description}</p>
+                                </div>
+                            </Link>
                         </div>
                     ))}
                 </div>
@@ -321,6 +403,7 @@ export default function Home(): ReactNode {
         >
             <HomepageHeader />
             <main>
+                <QuickLinksSection />
                 <FeaturesSection />
                 <CodeExampleSection />
                 <UseCasesSection />
