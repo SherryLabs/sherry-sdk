@@ -1,0 +1,176 @@
+# Creating Your First Mini App 
+
+Learn how to develop your mini-app with TypeScript 
+
+## Prerequisites
+To follow this guide you will need to have installed
+
++ Code editor as [**VSCode**](https://code.visualstudio.com/) 
++ [**NodeJS**](https://nodejs.org/en/) 
+
+
+## 1️⃣ Install
+
+Install the **Sherry SDK** using your preferred package manager:
+
+```bash
+npm install @sherrylinks/sdk
+```
+
+```bash
+yarn add @sherrylinks/sdk
+```
+
+## 2️⃣ Import
+Import the Metadata interface from the SDK
+
+```typescript
+import { Metadata } from "@sherrylinks/sdk"
+```
+
+## 3️⃣ Utilize
+Use the Metadata interface to start defining your miniapp
+
+`metadata.ts`
+
+```typescript
+const metadata: Metadata = {
+  url: "sherry.social",
+  icon: "icon",
+  title: "title",
+  description: "description",
+  actions: [
+      {
+          label: "Test Action 1",
+          address: "0x1234567890abcdef1234567890abcdef12345678",
+          abi: exampleAbi,
+          functionName: "safeTransferFrom",
+          chains: { source: "avalanche" } 
+      },
+    ]
+  };
+```
+`example-abi.ts`
+
+```typescript
+const exampleAbi = [
+    {
+      name: 'balanceOf',
+      type: 'function',
+      stateMutability: 'view',
+      inputs: [{ name: 'owner', type: 'address' }],
+      outputs: [{ name: 'balance', type: 'uint256' }],
+    },
+    {
+      name: 'safeTransferFrom',
+      type: 'function',
+      stateMutability: 'nonpayable',
+      inputs: [
+        { name: 'from', type: 'address' },
+        { name: 'to', type: 'address' },
+        { name: 'tokenId', type: 'uint256' },
+      ],
+      outputs: [],
+    },
+  ] as const
+```
+
+# 4️⃣ Finally
+
+Finally your file will look as follows
+
+`metadata.ts `
+```typescript 
+import { Metadata } from "@sherrylinks/sdk"
+import { exampleAbi } from "./example-abi.ts"
+  
+const metadata: Metadata = {
+  url: "sherry.social",
+  icon: "icon",
+  title: "title",
+  description: "description",
+  actions: [
+      {
+          label: "Test Action 1",
+          address: "0x1234567890abcdef1234567890abcdef12345678",
+          abi: exampleAbi,
+          functionName: "safeTransferFrom",
+          chains: { source: "avalanche" } 
+      },
+    ]
+  };
+```
+`example-abi.ts`
+```typescript
+const exampleAbi = [
+        {
+            name: 'balanceOf',
+            type: 'function',
+            stateMutability: 'view',
+            inputs: [{ name: 'owner', type: 'address' }],
+            outputs: [{ name: 'balance', type: 'uint256' }],
+        },
+        {
+            name: 'safeTransferFrom',
+            type: 'function',
+            stateMutability: 'nonpayable',
+            inputs: [
+                { name: 'from', type: 'address' },
+                { name: 'to', type: 'address' },
+                { name: 'tokenId', type: 'uint256' },
+            ],
+            outputs: [],
+        },
+    ] as const
+```
+# 5️⃣ Validate
+
+Validate your `Metadata` using the createMetadata function. This function will check the definition and return the validated metadata of your mini-app. The type returned will be `ValidatedMetadata`.
+
+```typescript
+import { createMetadata, ValidatedMetadata } from "@sherrylinks/sdk"
+
+const finalMetadata: ValidatedMetadata = await createMetadata(metadata);
+```
+
+# 6️⃣ Result
+
+Once your metadata is validated, this is the metadata that will be returned by your application, and will be consumed by Sherry.
+
+```typescript
+Metadata: {
+  "type": "action",
+  "url": "sherry.social",
+  "icon": "icon",
+  "title": "title",
+  "description": "description",
+  "actions": [
+    {
+      "label": "Test Action 1",
+      "address": "0x1234567890abcdef1234567890abcdef12345678",
+      "abi": [ ... ],
+      "functionName": "safeTransferFrom",
+      "chains": { "source": "avalanche" } 
+      "params": [
+        {
+          "name": "From",
+          "type": "address"
+        },
+        {
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "name": "tokenId",
+          "type": "uint256"
+        }
+      ],
+      "blockchainActionType": "nonpayable"
+    }
+  ]
+}
+```
+
+# 7️⃣ Deploy your Sherry Link
+
+Publish your application according to your preferences. The metadata must be exposed through an endpoint that must be accessed through a GET request so that the client applications can render the mini-app.

@@ -1,3 +1,4 @@
+
 # Cross-Chain
 
 When using a Sherry Link to perform transfers from one chain to another, you are leveraging the power of cross-chain operations enabled by the Wormhole protocol. This advanced integration allows seamless communication and asset transfers between blockchains, breaking the barriers of isolated networks and enabling a unified decentralized experience.
@@ -14,8 +15,8 @@ In this section, we will delve into the core concepts behind cross-chain operati
 
 When sending cross-chain messages, it is important to consider certain aspects: the cost associated with the message, which includes executing a transaction on the destination blockchain, and any potential gas surplus that may occur.
 
-Gas Cost: Cross-chain transfers require additional gas to facilitate the communication between chains. When specifying Celo (or any supported chain
-) as the chains, the transaction includes a gas cost which is more than standard transfers due to the complexity of cross-chain operations.
+
+Gas Cost: Cross-chain transfers require additional gas to facilitate the communication between chains. When specifying Celo (or any supported chain) as the chains, the transaction includes a gas cost which is more than standard transfers due to the complexity of cross-chain operations.
 Excess Gas Refund: Any excess gas, after the transaction is completed, is refunded to the sender on the Avalanche chain, ensuring you only pay for what is necessary.
 
 ## Cross-Chain Message Costs
@@ -48,9 +49,61 @@ function quoteCrossChainCost(
 - \_receiverValue: The amount in wei to be transferred to the recipient in the destination chain. This amount will be the amount the user will receive. If no native tokens are transferred, 0 will be set.
 - \_gasLimit: An estimated gas limit for the transaction on the target chain.
 
-:::For a TransferAction corresponding to a transfer of native tokens from a blockchain to a source blockchain we send a gas_limit of **100_000**.
+# Cross-Chain TransferAction Example
+
+This example demonstrates a `TransferAction` that facilitates a cross-chain transaction between two test networks: **Fuji** (Avalanche Testnet) and **Alfajores** (Celo Testnet).
+
+Key Features:
+
++ **Functionality**: Invokes the `captureTheFlag` function on a smart contract.
+
++ **Cross-Chain Interaction**: Transfers tokens from the Fuji network to the Alfajores network.
+
++ **Fixed Amount**: Transfers a fixed amount of **0.1** tokens.
+
++ **User Input**: Prompts the user to input a recipient `address`.
+
+This setup allows users to engage in a cross-chain `Capture the Flag` activity by specifying a recipient address and initiating the token transfer across networks.
+
+Here's how the `TransferAction` is defined:
+
+```typescript
+{
+  "url": "tuurl",
+  "icon": "tuicon",
+  "title": "Capture the flag Cross-Chain",
+  "description": "Be the Best and Capture the Flag",
+  "actions": [
+    {
+      "label": "CAPTURE FOR 0.1",
+      "address": "0x812810512193d623a68e467cc314511a581E4546",
+      "type": "blockchain",
+      "abi": [ ... ],
+      "functionName": "captureFlag",
+      "chains": {
+        "source": "fuji",
+        "destination": "alfajores"
+      },
+      "amount": 0.1,
+      "params": [
+        {
+          "name": "_participant",
+          "label": "To",
+          "value": "sender",
+          "required": true,
+          "type": "address"
+        }
+      ],
+    }
+  ]
+}
+```
+
+:::  For a TransferAction corresponding to a transfer of native tokens from a blockchain to a source blockchain we send a gas_limit of **100_000**.
 For Blockchain Actions, depending on the state of the network we send a maximum of **800_000**.
 :::
+
+
 
 This function interacts with the Wormhole Relayer to quote the cost of the cross-chain message delivery, helping you understand the exact fee before initiating the transfer. This is crucial for budgeting gas costs accurately in cross-chain operations facilitated by the Wormhole protocol.
 
