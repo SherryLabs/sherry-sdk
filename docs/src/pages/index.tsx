@@ -46,7 +46,7 @@ function HomepageHeader() {
                                 <div className={styles.postHeader}>
                                     <div className={styles.avatar}></div>
                                     <div className={styles.userInfo}>
-                                        <div className={styles.username}>@web3builder</div>
+                                        <div className={styles.username}>@sherryBuilder</div>
                                         <div className={styles.timestamp}>2 min ago</div>
                                     </div>
                                 </div>

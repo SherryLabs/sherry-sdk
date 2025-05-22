@@ -27,6 +27,7 @@
   align-items: center;
   max-width: 1200px;
   margin: 0 auto;
+  padding: 0 1rem; /* Add padding to prevent content from touching screen edges */
 }
 
 .heroText {
@@ -264,6 +265,7 @@
 .codeSection {
   padding: 5rem 0;
   background: white;
+  overflow-x: hidden; /* Prevent section from causing overflow */
 }
 
 .codeContainer {
@@ -271,6 +273,7 @@
   grid-template-columns: 1fr 1fr;
   gap: 4rem;
   align-items: center;
+  max-width: 100%; /* Ensure container doesn't exceed viewport */
 }
 
 .codeExplanation h2 {
@@ -314,18 +317,20 @@
 
 .codeExample {
   position: relative;
+  max-width: 100%; /* Constrain width */
+  overflow-x: hidden; /* Hide overflow */
 }
 
 .codeBlock {
   background: #1e1e1e;
   color: #d4d4d4;
   padding: 16px;
-  border-radius: 12px;
+  border-radius: 0; /* Remove border radius inside window */
   font-family: 'Fira Code', monospace;
   font-size: 0.9rem;
   line-height: 1.5;
-  overflow-x: auto;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  overflow-x: auto; /* Allow horizontal scrolling within code block */
+  box-shadow: none; /* Remove shadow inside window */
   margin: 0;
   width: 100%;
 }
@@ -336,8 +341,8 @@
   line-height: 1.6;
   display: block;
   white-space: pre;
-  word-break: normal;
-  word-wrap: normal;
+  overflow-x: auto; /* Allow horizontal scrolling */
+  tab-size: 2; /* Smaller tab size to save space */
 }
 
 /* Syntax highlighting can be customized further if needed */
@@ -422,6 +427,7 @@
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   overflow: hidden;
   width: 100%;
+  max-width: 100%; /* Ensure it doesn't exceed parent */
 }
 
 .macWindowHeader {
@@ -469,6 +475,52 @@
 
 /* Responsive Design */
 @media screen and (max-width: 996px) {
+  .heroBanner {
+    padding: 4rem 1rem; /* Add horizontal padding */
+    text-align: center;
+  }
+
+  .heroContent {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 0; /* Remove padding as the parent has it */
+    width: 100%;
+    max-width: 600px; /* Constrain width for better readability */
+  }
+
+  .heroText {
+    width: 100%;
+    align-items: center; /* Center-align text content */
+  }
+  
+  .hero__title {
+    font-size: 2rem !important; /* Override any other styles */
+    word-break: break-word;
+    width: 100%;
+  }
+
+  .heroSubtitle {
+    font-size: 1.5rem;
+    width: 100%;
+    word-break: break-word;
+  }
+  
+  .heroDescription {
+    width: 100%;
+    font-size: 1rem;
+  }
+
+  .buttons {
+    justify-content: center;
+    width: 100%;
+    flex-wrap: wrap; /* Allow buttons to wrap if needed */
+  }
+  
+  .buttons a {
+    min-width: 140px; /* Ensure buttons have sufficient width */
+    text-align: center;
+  }
+
   .heroBanner {
     padding: 4rem 0;
     text-align: center;
@@ -533,9 +585,63 @@
     flex-direction: column;
     align-items: center;
   }
+
+  .codeSection {
+    padding: 3rem 0; /* Reduce padding */
+  }
+  
+  .codeContainer {
+    gap: 1.5rem; /* Reduce gap */
+  }
+  
+  .codeExample {
+    margin-bottom: 1.5rem;
+  }
+  
+  .codeBlock {
+    padding: 12px 8px; /* Reduce padding */
+    font-size: 0.8rem;
+    border-radius: 0;
+  }
 }
 
 @media screen and (max-width: 768px) {
+  .heroBanner {
+    padding: 2rem 1rem;
+  }
+  
+  .heroContent {
+    max-width: 100%; /* Use full width on very small screens */
+    padding: 0 0.5rem;
+  }
+
+  .heroText {
+    gap: 1rem; /* Reduce gap between elements */
+  }
+
+  .hero__title {
+    font-size: 1.8rem !important;
+  }
+
+  .heroSubtitle {
+    font-size: 1.3rem;
+  }
+  
+  .heroDescription {
+    font-size: 0.95rem;
+  }
+  
+  .buttons {
+    gap: 0.7rem; /* Reduce gap between buttons */
+    margin-top: 0.5rem;
+  }
+  
+  .buttons a {
+    min-width: 120px;
+    padding: 0.5rem 1rem !important;
+    font-size: 0.9rem !important;
+  }
+
   .heroBanner {
     padding: 2rem 0;
   }
@@ -586,9 +692,47 @@
   .step {
     font-size: 0.9rem;
   }
+
+  .codeSection {
+    padding: 2rem 0;
+  }
+  
+  .macWindow {
+    border-radius: 6px;
+  }
+  
+  .codeBlock {
+    padding: 10px 6px; /* Further reduce padding */
+  }
 }
 
 @media screen and (max-width: 480px) {
+  .heroBanner {
+    padding: 2rem 0.75rem;
+  }
+  
+  .hero__title {
+    font-size: 1.6rem !important;
+  }
+
+  .heroSubtitle {
+    font-size: 1.1rem;
+  }
+  
+  .heroDescription {
+    font-size: 0.9rem;
+  }
+  
+  .buttons {
+    flex-direction: column; /* Stack buttons vertically on very small screens */
+    width: 80%; /* Constrain width for better appearance */
+  }
+  
+  .buttons a {
+    width: 100%;
+    margin: 0;
+  }
+
   .codeBlock {
     border-radius: 8px;
     padding: 8px;
@@ -608,11 +752,54 @@
     gap: 0.5rem;
     font-size: 0.85rem;
   }
+
+  .codeBlock {
+    padding: 8px 4px; /* Minimal padding on very small screens */
+    font-size: 0.7rem; /* Smaller font */
+  }
+  
+  .codeBlock code {
+    font-size: 10px; /* Smaller code font */
+  }
 }
 
 /* Dark mode adjustments */
 [data-theme='dark'] .featuresSection {
   background: #1b1b1d;
+}
+
+/* Dark mode hero section improvements */
+[data-theme='dark'] .heroBanner {
+  background: linear-gradient(
+    135deg,
+    var(--ifm-color-primary-darker) 0%,
+    #1a1c29 100%
+  );
+  color: #ffffff;
+}
+
+[data-theme='dark'] .heroSubtitle {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+[data-theme='dark'] .heroDescription {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Enhance button contrast in dark mode */
+[data-theme='dark'] .buttons .button--secondary {
+  background-color: #ffffff;
+  color: var(--ifm-color-primary-darker);
+  border-color: #ffffff;
+}
+
+[data-theme='dark'] .buttons .button--outline {
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.8);
+}
+
+[data-theme='dark'] .buttons .button--outline:hover {
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 [data-theme='dark'] .featureCard {
@@ -639,6 +826,30 @@
 
 [data-theme='dark'] .useCaseCard p {
   color: #b3b3b3;
+}
+
+[data-theme='dark'] .socialPost {
+  background: #2d2d30;
+  color: #e3e3e3;
+}
+
+/* Fix specific text elements losing contrast in dark mode */
+[data-theme='dark'] .postContent p {
+  color: #ffffff; /* Brighter white for better contrast */
+  margin: 0 0 1rem 0;
+}
+
+[data-theme='dark'] .username {
+  color: #ffffff;
+}
+
+[data-theme='dark'] .timestamp {
+  color: rgba(255, 255, 255, 0.7); /* Improved visibility for timestamp */
+}
+
+[data-theme='dark'] .sherryWidget {
+  background: #1b1b1d;
+  border-color: #444;
 }
 
 [data-theme='dark'] .socialPost {
