@@ -45,9 +45,7 @@ const sidebars: SidebarsConfig = {
             },
             items: [
                 'getting-started/actions', // Actions overview
-                'sdk/parameters', // Parameters documentation
                 'getting-started/metadata', // Metadata Structure
-                'sdk/validation', // Validation
                 'api-reference/chainlogic/chains', // Chain Logic
             ],
         },
@@ -80,9 +78,7 @@ const sidebars: SidebarsConfig = {
                         'api-reference/action-types/nested-action-flows',
                     ],
                 },
-                'sdk/parameters', // Parameters API Reference
-                //'sdk/chains', // Chains API Reference
-                'sdk/validation', // Validation API Reference
+                'api-reference/parameters/parameters',
             ],
         },
 
