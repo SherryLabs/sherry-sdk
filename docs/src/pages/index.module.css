@@ -216,6 +216,7 @@
 .quickLinksCard:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  border-color: var(--ifm-color-primary); /* Using theme primary color */
 }
 
 .quickLinksIcon {
@@ -276,6 +277,7 @@
 .featureCard:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  border-color: var(--ifm-color-primary); /* Using theme primary color */
 }
 
 .featureIcon {
@@ -496,6 +498,7 @@
 .useCaseCard:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  border-color: var(--ifm-color-primary); /* Using theme primary color */
 }
 
 .useCaseIcon {
@@ -586,12 +589,77 @@
   z-index: 10; /* Ensure links are above other elements */
 }
 
-/* Improve button hover effects globally */
-.buttons a:hover,
-.ctaButtons a:hover,
-.actionButton:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+/* --- REMOVE/CONSOLIDATE PREVIOUS GENERAL BUTTON HOVER EFFECTS --- */
+/* The :hover effects will be handled by more specific rules below or by Infima defaults for other buttons */
+
+/* --- Specific Styling for Hero and CTA Outline Buttons --- */
+/* Targets: <Link className="button button--outline button--lg" ...> */
+.buttons a.button.button--outline.button--lg,
+.ctaButtons a.button.button--outline.button--lg {
+  color: white !important;
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  border: 2px solid white !important; /* <<< SOLID WHITE BORDER, ALWAYS >>> */
+  font-weight: 600;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease-in-out;
+}
+
+.buttons a.button.button--outline.button--lg:hover,
+.ctaButtons a.button.button--outline.button--lg:hover {
+  color: white !important; /* Ensure text color remains white on hover */
+  background-color: rgba(var(--ifm-color-primary-rgb), 0.25) !important; /* Theme-based background */
+  border-color: white !important; /* Keep border white */
+  box-shadow: 0 0 10px rgba(var(--ifm-color-primary-rgb), 0.4); /* Theme-based glow */
+  transform: scale(1.03);
+}
+
+/* Dark Mode HOVER for these specific outline buttons - only if different from above */
+/* The base style (non-hover) already ensures white border/text in dark mode due to !important */
+[data-theme='dark'] .buttons a.button.button--outline.button--lg:hover,
+[data-theme='dark'] .ctaButtons a.button.button--outline.button--lg:hover {
+  background-color: rgba(var(--ifm-color-primary-lighter-rgb), 0.2) !important; /* Themed background on hover */
+  border-color: white !important; /* Still ensure border is white */
+  box-shadow: 0 0 12px rgba(var(--ifm-color-primary-lighter-rgb), 0.5); /* Themed glow */
+  /* color: var(--ifm-color-primary-lighter) !important; */ /* Optional: themed text color on hover */
+}
+
+/* Standardized Card Styling - Restored Previous Working Version */
+.quickLinksCard,
+.featureCard,
+.useCaseCard {
+  background: white;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border: 2px solid transparent;
+}
+
+.quickLinksCard:hover,
+.featureCard:hover,
+.useCaseCard:hover {
+  transform: translateY(-5px); /* Restore the float up effect */
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  border-color: var(--ifm-color-primary);
+}
+
+/* Dark mode card styles */
+[data-theme='dark'] .quickLinksCard,
+[data-theme='dark'] .featureCard,
+[data-theme='dark'] .useCaseCard {
+  background: #2d2d30;
+  color: #e3e3e3;
+  border: 2px solid transparent;
+}
+
+[data-theme='dark'] .quickLinksCard:hover,
+[data-theme='dark'] .featureCard:hover,
+[data-theme='dark'] .useCaseCard:hover {
+  border-color: var(--ifm-color-primary-lighter);
+  box-shadow: 0 0 20px rgba(var(--ifm-color-primary-lighter-rgb), 0.5);
 }
 
 /* Responsive Design */
@@ -932,10 +1000,15 @@
 
 [data-theme='dark'] .quickLinksCard {
   background: #2d2d30;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.2); /* Consistent base shadow for dark cards */
 }
 
 [data-theme='dark'] .quickLinksCard:hover {
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  border-color: transparent;
+  box-shadow: 
+    0 0 15px rgba(var(--ifm-color-primary-lighter-rgb), 0.6),
+    0 0 30px rgba(var(--ifm-color-primary-lighter-rgb), 0.3),
+    0 8px 25px rgba(0,0,0,0.15);
 }
 
 [data-theme='dark'] .quickLinksTitle {
@@ -962,17 +1035,31 @@
 [data-theme='dark'] .buttons .button--secondary {
   background-color: #ffffff;
   color: var(--ifm-color-primary-darker);
-  border-color: #ffffff;
+  border-color: #ffffff; /* Ensure secondary button border is also visible if needed */
 }
 
-[data-theme='dark'] .buttons .button--outline {
-  color: #ffffff;
-  border-color: rgba(255, 255, 255, 0.8);
+/* 
+  IMPORTANT: The following general dark mode rules for .button--outline
+  were likely causing the white border issue. They are removed.
+  The specific rules for .button--lg.button--outline above will handle those buttons.
+  If you have other .button--outline instances that are NOT .button--lg and need
+  different dark mode styling, you'd add those rules carefully here.
+*/
+/*
+[data-theme='dark'] .buttons .button--outline,
+[data-theme='dark'] .ctaButtons .button--outline {
+  // These rules would make the border semi-transparent, conflicting with the solid white requirement
+  // background-color: rgba(255, 255, 255, 0.05);
+  // border: 2px solid rgba(255, 255, 255, 0.4); 
+  // color: #ffffff;
 }
 
-[data-theme='dark'] .buttons .button--outline:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+[data-theme='dark'] .buttons .button--outline:hover,
+[data-theme='dark'] .ctaButtons .button--outline:hover {
+  // background-color: rgba(255, 255, 255, 0.15);
+  // border-color: white;
 }
+*/
 
 [data-theme='dark'] .featuresSection {
   background: #1b1b1d;
@@ -981,7 +1068,16 @@
 [data-theme='dark'] .featureCard {
   background: #2d2d30;
   color: #e3e3e3;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.2);
 }
+[data-theme='dark'] .featureCard:hover {
+  border-color: transparent;
+  box-shadow: 
+    0 0 15px rgba(var(--ifm-color-primary-lighter-rgb), 0.6),
+    0 0 30px rgba(var(--ifm-color-primary-lighter-rgb), 0.3),
+    0 8px 25px rgba(0,0,0,0.15);
+}
+
 
 [data-theme='dark'] .featureContent p {
   color: #b3b3b3;
@@ -1014,7 +1110,16 @@
 [data-theme='dark'] .useCaseCard {
   background: #2d2d30;
   color: #e3e3e3;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.2);
 }
+[data-theme='dark'] .useCaseCard:hover {
+  border-color: transparent;
+  box-shadow: 
+    0 0 15px rgba(var(--ifm-color-primary-lighter-rgb), 0.6),
+    0 0 30px rgba(var(--ifm-color-primary-lighter-rgb), 0.3),
+    0 8px 25px rgba(0,0,0,0.15);
+}
+
 
 [data-theme='dark'] .useCaseCard p {
   color: #b3b3b3;
@@ -1026,7 +1131,7 @@
 }
 
 [data-theme='dark'] .postContent p {
-  color: #ffffff; /* Brighter white for better contrast */
+  color: #ffffff; 
   margin: 0 0 1rem 0;
 }
 
@@ -1035,7 +1140,7 @@
 }
 
 [data-theme='dark'] .timestamp {
-  color: rgba(255, 255, 255, 0.7); /* Improved visibility for timestamp */
+  color: rgba(255, 255, 255, 0.7); 
 }
 
 [data-theme='dark'] .sherryWidget {
@@ -1063,11 +1168,12 @@
   color: #ffffff;
 }
 
-[data-theme='dark'] .ctaButtons .button--outline {
-  border-color: rgba(255, 255, 255, 0.8);
-  color: #ffffff;
+/* Card hover effects for dark mode (already defined above, ensure consistency) */
+/*
+[data-theme='dark'] .quickLinksCard:hover,
+[data-theme='dark'] .featureCard:hover,
+[data-theme='dark'] .useCaseCard:hover {
+  border-color: var(--ifm-color-primary-lighter); // This was for solid border, now using glow
+  box-shadow: 0 0 20px rgba(var(--ifm-color-primary-lighter-rgb), 0.5); // This is a simpler glow
 }
-
-[data-theme='dark'] .ctaButtons .button--outline:hover {
-  background: rgba(255, 255, 255, 0.1);
-}
+*/

@@ -7,6 +7,8 @@ import Heading from '@theme/Heading';
 import styles from './index.module.css';
 import { useColorMode } from '@docusaurus/theme-common';
 import useBaseUrl from '@docusaurus/useBaseUrl';
+import { FaPaintBrush, FaExchangeAlt, FaVoteYea, FaChartLine, FaHeart } from 'react-icons/fa';
+import { MdOutlineRocketLaunch, MdOutlinePsychology, MdOutlineLibraryBooks, MdOutlineSearch } from 'react-icons/md';
 
 // Hero section with dynamic background
 function HomepageHeader() {
@@ -33,7 +35,12 @@ function HomepageHeader() {
                             </Link>
                             <Link
                                 className="button button--outline button--lg"
-                                to="/docs/keyconcepts/examples"
+                                to="/docs/guides"
+                                style={{
+                                    border: '2px solid white',
+                                    color: 'white',
+                                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                                }}
                             >
                                 View Examples
                             </Link>
@@ -90,7 +97,7 @@ function FeaturesSection(): ReactNode {
     const features = [
         {
             title: 'Multi-Chain Support',
-            icon: '⛓️',
+            icon: <FaChartLine />, // Replaced emoji with icon
             description:
                 'Deploy across Avalanche, Celo, Ethereum, and more blockchains with a single codebase.',
             details: [
@@ -101,7 +108,7 @@ function FeaturesSection(): ReactNode {
         },
         {
             title: 'Rich Action Types',
-            icon: '⚡',
+            icon: <FaChartLine />, // Replaced emoji with icon
             description:
                 'From simple transfers to complex multi-step flows, create any Web3 interaction.',
             details: [
@@ -113,7 +120,7 @@ function FeaturesSection(): ReactNode {
         },
         {
             title: 'Developer Experience',
-            icon: '🛠️',
+            icon: <FaHeart />, // Replaced emoji with icon
             description:
                 'Built for developers with TypeScript, validation, and comprehensive tooling.',
             details: [
@@ -155,72 +162,48 @@ function FeaturesSection(): ReactNode {
 
 // QuickLinks section using Docusaurus native components
 function QuickLinksSection(): ReactNode {
-    const { colorMode } = useColorMode();
-    const isDarkTheme = colorMode === 'dark';
-
     const quickLinks = [
         {
             title: 'Getting Started',
             description: 'Learn the basics and set up your development environment',
-            icon: '🚀',
+            icon: <MdOutlineRocketLaunch  />, // Added consistent color
             url: '/docs/getting-started',
         },
         {
             title: 'Core Concepts',
             description: 'Understand the key concepts behind mini-apps',
-            icon: '🧠',
+            icon: <MdOutlinePsychology  />, // Added consistent color
             url: '/docs/core-concepts',
         },
         {
             title: 'API Reference',
             description: 'Explore the complete API documentation',
-            icon: '📚',
+            icon: <MdOutlineLibraryBooks  />, // Added consistent color
             url: '/docs/api-reference',
         },
         {
             title: 'Examples',
             description: 'View example mini-apps for different use cases',
-            icon: '🔍',
+            icon: <MdOutlineSearch  />, // Added consistent color
             url: '/docs/guides',
         },
     ];
 
     return (
-        <section className={clsx('padding-vert--xl', styles.quickLinksSection)}>
+        <section className={styles.useCasesSection}> 
             <div className="container">
-                <div className="text--center margin-bottom--xl">
+                <div className={styles.sectionHeader}>
                     <Heading as="h2">Quick Links</Heading>
                     <p>Essential resources to get you building fast</p>
                 </div>
-                <div className="row">
+                <div className={styles.useCasesGrid}> {/* Reused grid layout */}
                     {quickLinks.map((link, idx) => (
-                        <div key={idx} className="col col--3 margin-bottom--lg">
-                            <Link
-                                to={link.url}
-                                className={clsx(
-                                    'card padding--lg cardContainer',
-                                    styles.quickLinksCard,
-                                )}
-                                style={{
-                                    textDecoration: 'none',
-                                    border: `1px solid ${isDarkTheme ? '#333' : '#eee'}`,
-                                    borderRadius: '8px',
-                                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.05)',
-                                }}
-                            >
-                                <div className="card__header">
-                                    <div
-                                        className={clsx('margin-bottom--sm', styles.quickLinksIcon)}
-                                    >
-                                        {link.icon}
-                                    </div>
-                                    <h3 className={styles.quickLinksTitle}>{link.title}</h3>
-                                </div>
-                                <div className="card__body">
-                                    <p className={styles.quickLinksDescription}>
-                                        {link.description}
-                                    </p>
-                                </div>
+                        <div key={idx} className={styles.useCaseCard}> {/* Reused card styles */}
+                            <div className={styles.useCaseIcon}>{link.icon}</div>
+                            <Heading as="h4">{link.title}</Heading>
+                            <p>{link.description}</p>
+                            <Link to={link.url} className="button button--primary button--md">
+                                Learn More
                             </Link>
                         </div>
                     ))}
@@ -313,32 +296,32 @@ function UseCasesSection(): ReactNode {
         {
             title: 'Social Token Trading',
             description: 'Enable token swaps directly in Twitter/X posts',
-            icon: '💱',
+            icon: <FaExchangeAlt />, // Replaced emoji with icon
         },
         {
             title: 'NFT Minting',
             description: 'Let users mint NFTs without leaving social feeds',
-            icon: '🎨',
+            icon: <FaPaintBrush />, // Replaced emoji with icon
         },
         {
             title: 'DAO Governance',
             description: 'Embed voting and proposal creation in communities',
-            icon: '🗳️',
+            icon: <FaVoteYea />, // Replaced emoji with icon
         },
         {
             title: 'DeFi Interactions',
             description: 'Provide lending, staking, and yield farming actions',
-            icon: '📈',
+            icon: <FaChartLine />, // Replaced emoji with icon
         },
         {
             title: 'Cross-chain Transfers',
             description: 'Bridge assets between blockchains seamlessly',
-            icon: '🌉',
+            icon: <FaChartLine />, // Replaced emoji with icon
         },
         {
             title: 'Fundraising',
             description: 'Accept donations and crowdfunding contributions',
-            icon: '💝',
+            icon: <FaHeart />, // Replaced emoji with icon
         },
     ];
 
@@ -383,6 +366,11 @@ function CTASection(): ReactNode {
                             to="https://github.com/SherryLabs/sherry-sdk"
                             target="_blank"
                             rel="noopener noreferrer"
+                            style={{
+                                border: '2px solid white',
+                                color: 'white',
+                                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                            }}
                         >
                             View on GitHub
                         </Link>
