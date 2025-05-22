@@ -23,7 +23,6 @@ export const VALID_CHAINS = [
   'avalanche', // Avalanche C-Chain Mainnet
   'alfajores', // Celo Alfajores Testnet
   'celo', // Celo Mainnet
-  'monad-testnet', // Monad Testnet
   // 'ethereum' - Could be added if supported
 ] as const;
 ```
@@ -39,7 +38,6 @@ The chains currently defined in `VALID_CHAINS` are officially supported by the S
 - `avalanche`
 - `alfajores`
 - `celo`
-- `monad-testnet`
 
 ## Examples
 

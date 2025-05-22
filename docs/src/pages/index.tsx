@@ -157,7 +157,7 @@ function FeaturesSection(): ReactNode {
 function QuickLinksSection(): ReactNode {
     const { colorMode } = useColorMode();
     const isDarkTheme = colorMode === 'dark';
-    
+
     const quickLinks = [
         {
             title: 'Getting Started',
@@ -206,13 +206,15 @@ function QuickLinksSection(): ReactNode {
                                     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.05)',
                                     transition: 'all 0.3s',
                                 }}
-                                onMouseEnter={(e) => {
+                                onMouseEnter={e => {
                                     e.currentTarget.style.transform = 'translateY(-5px)';
-                                    e.currentTarget.style.boxShadow = '0 8px 20px rgba(0, 0, 0, 0.1)';
+                                    e.currentTarget.style.boxShadow =
+                                        '0 8px 20px rgba(0, 0, 0, 0.1)';
                                 }}
-                                onMouseLeave={(e) => {
+                                onMouseLeave={e => {
                                     e.currentTarget.style.transform = 'translateY(0)';
-                                    e.currentTarget.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.05)';
+                                    e.currentTarget.style.boxShadow =
+                                        '0 4px 8px rgba(0, 0, 0, 0.05)';
                                 }}
                             >
                                 <div className="card__header">

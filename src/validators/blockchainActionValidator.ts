@@ -172,7 +172,7 @@ export class BlockchainActionValidator {
      */
     static isValidChain(chain: any): boolean {
         // Consider making this list configurable or importing from a central place
-        const validChains = ['fuji', 'avalanche', 'alfajores', 'celo', 'monad-testnet', 'ethereum'];
+        const validChains = ['fuji', 'avalanche', 'alfajores', 'celo', 'ethereum'];
         return typeof chain === 'string' && validChains.includes(chain);
     }
 

@@ -365,7 +365,6 @@ const tokenParam = createParameter(PARAM_TEMPLATES.TOKEN_SELECT, {
 - Celo Mainnet (`celo`)
 - Avalanche Fuji Testnet (`fuji`)
 - Celo Alfajores Testnet (`alfajores`)
-- Monad Testnet (`monad-testnet`)
 
 ## 📚 Examples
 

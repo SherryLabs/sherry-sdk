@@ -12,13 +12,13 @@ All parameters extend from `BaseParameter`:
 
 ```typescript
 interface BaseParameter {
-  name: string;           // Parameter identifier (must match ABI/API field)
-  label: string;          // Label displayed to user
-  type: string;           // Input type
-  required?: boolean;     // Is this field mandatory?
-  description?: string;   // Help text for the user
-  fixed?: boolean;        // Is the value fixed (non-editable)?
-  value?: any;           // Default or fixed value
+  name: string; // Parameter identifier (must match ABI/API field)
+  label: string; // Label displayed to user
+  type: string; // Input type
+  required?: boolean; // Is this field mandatory?
+  description?: string; // Help text for the user
+  fixed?: boolean; // Is the value fixed (non-editable)?
+  value?: any; // Default or fixed value
 }
 ```
 
@@ -38,7 +38,7 @@ For common input types like text, numbers, addresses, and booleans:
   description: 'Enter your message here'
 }
 
-// Number input  
+// Number input
 {
   name: 'amount',
   label: 'Amount',
@@ -51,7 +51,7 @@ For common input types like text, numbers, addresses, and booleans:
 // Address input (with validation)
 {
   name: 'recipient',
-  label: 'Recipient Address', 
+  label: 'Recipient Address',
   type: 'address',
   required: true,
   pattern: '^0x[a-fA-F0-9]{40}$'
@@ -95,20 +95,20 @@ For dropdown selections:
   type: 'select',
   required: true,
   options: [
-    { 
-      label: 'USDC', 
-      value: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', 
-      description: 'USD Coin' 
+    {
+      label: 'USDC',
+      value: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
+      description: 'USD Coin'
     },
-    { 
-      label: 'USDT', 
-      value: '0xdAC17F958D2ee523a2206206994597C13D831ec7', 
-      description: 'Tether USD' 
+    {
+      label: 'USDT',
+      value: '0xdAC17F958D2ee523a2206206994597C13D831ec7',
+      description: 'Tether USD'
     },
-    { 
-      label: 'DAI', 
-      value: '0x6B175474E89094C44Da98b954EedeAC495271d0F', 
-      description: 'Dai Stablecoin' 
+    {
+      label: 'DAI',
+      value: '0x6B175474E89094C44Da98b954EedeAC495271d0F',
+      description: 'Dai Stablecoin'
     }
   ]
 }
@@ -122,23 +122,23 @@ For radio button groups:
 {
   name: 'priority',
   label: 'Priority Level',
-  type: 'radio', 
+  type: 'radio',
   required: true,
   options: [
-    { 
-      label: 'Low', 
-      value: 'low', 
-      description: 'Standard processing time' 
+    {
+      label: 'Low',
+      value: 'low',
+      description: 'Standard processing time'
     },
-    { 
-      label: 'Medium', 
-      value: 'medium', 
-      description: 'Faster processing' 
+    {
+      label: 'Medium',
+      value: 'medium',
+      description: 'Faster processing'
     },
-    { 
-      label: 'High', 
-      value: 'high', 
-      description: 'Priority processing' 
+    {
+      label: 'High',
+      value: 'high',
+      description: 'Priority processing'
     }
   ]
 }
@@ -155,51 +155,51 @@ import { PARAM_TEMPLATES, createParameter } from '@sherrylinks/sdk';
 const recipientParam = createParameter(PARAM_TEMPLATES.ADDRESS, {
   name: 'recipient',
   label: 'Destination Address',
-  description: 'Where to send the tokens'
+  description: 'Where to send the tokens',
 });
 
 // Amount parameter
 const amountParam = createParameter(PARAM_TEMPLATES.AMOUNT, {
-  name: 'transferAmount', 
+  name: 'transferAmount',
   label: 'Amount to Send',
   min: 0.01,
-  max: 1000
+  max: 1000,
 });
 
 // Email parameter
 const emailParam = createParameter(PARAM_TEMPLATES.EMAIL, {
   name: 'userEmail',
-  label: 'Your Email Address'
+  label: 'Your Email Address',
 });
 
 // Yes/No selection
 const confirmParam = createParameter(PARAM_TEMPLATES.YES_NO, {
   name: 'confirmation',
-  label: 'Confirm this action?'
+  label: 'Confirm this action?',
 });
 
 // Token selection
 const tokenParam = createParameter(PARAM_TEMPLATES.TOKEN_SELECT, {
   name: 'selectedToken',
-  label: 'Choose Token'
+  label: 'Choose Token',
 });
 ```
 
 ### Available Templates
 
-| Template | Type | Description |
-|----------|------|-------------|
-| `ADDRESS` | address | Ethereum address input with validation |
-| `AMOUNT` | number | Numeric amount for transfers |
-| `TOKEN_AMOUNT` | number | Token amount with decimal support |
-| `INTEGER` | number | Integer-only number input |
-| `EMAIL` | email | Email address with validation |
-| `TEXT` | text | Basic text input |
-| `TEXTAREA` | textarea | Multi-line text input |
-| `BOOLEAN` | boolean | Boolean checkbox |
-| `YES_NO` | radio | Yes/No radio selection |
-| `TOKEN_SELECT` | select | Common token dropdown |
-| `CHAIN_SELECT` | select | Blockchain selection |
+| Template       | Type     | Description                            |
+| -------------- | -------- | -------------------------------------- |
+| `ADDRESS`      | address  | Ethereum address input with validation |
+| `AMOUNT`       | number   | Numeric amount for transfers           |
+| `TOKEN_AMOUNT` | number   | Token amount with decimal support      |
+| `INTEGER`      | number   | Integer-only number input              |
+| `EMAIL`        | email    | Email address with validation          |
+| `TEXT`         | text     | Basic text input                       |
+| `TEXTAREA`     | textarea | Multi-line text input                  |
+| `BOOLEAN`      | boolean  | Boolean checkbox                       |
+| `YES_NO`       | radio    | Yes/No radio selection                 |
+| `TOKEN_SELECT` | select   | Common token dropdown                  |
+| `CHAIN_SELECT` | select   | Blockchain selection                   |
 
 ## Helper Functions
 
@@ -215,16 +215,16 @@ const prioritySelect = createSelectParam(
   [
     { label: 'Low', value: 1 },
     { label: 'Medium', value: 2 },
-    { label: 'High', value: 3 }
+    { label: 'High', value: 3 },
   ],
   true, // required
-  'Select the priority for this action'
+  'Select the priority for this action',
 );
 
 // Using helper for options
 const tokenOptions = [
   { label: 'ETH', value: 'eth', description: 'Ethereum' },
-  { label: 'AVAX', value: 'avax', description: 'Avalanche' }
+  { label: 'AVAX', value: 'avax', description: 'Avalanche' },
 ];
 
 const tokenSelect = createSelectParam(
@@ -232,7 +232,7 @@ const tokenSelect = createSelectParam(
   'Select Token',
   createSelectOptions(tokenOptions),
   true,
-  'Choose the token to use'
+  'Choose the token to use',
 );
 ```
 
@@ -246,10 +246,10 @@ const confirmRadio = createRadioParam(
   'Confirm Action',
   [
     { label: 'Yes, proceed', value: true },
-    { label: 'No, cancel', value: false }
+    { label: 'No, cancel', value: false },
   ],
   true,
-  'Please confirm your choice'
+  'Please confirm your choice',
 );
 ```
 
@@ -346,14 +346,14 @@ Some parameters accept special values:
 
 For `BlockchainAction` parameters, the SDK automatically validates compatibility between parameter types and ABI types:
 
-| ABI Type | Compatible Parameter Types |
-|----------|---------------------------|
-| `address` | `address` |
-| `bool` | `boolean`, `bool` |
-| `string` | `text`, `email`, `url`, `textarea`, `string` |
-| `uint256`, `int256` | `number`, `uint256`, `int256` |
-| `bytes`, `bytes32` | `text`, `bytes`, `bytes32` |
-| `address[]` | `text` (as JSON array) |
+| ABI Type            | Compatible Parameter Types                   |
+| ------------------- | -------------------------------------------- |
+| `address`           | `address`                                    |
+| `bool`              | `boolean`, `bool`                            |
+| `string`            | `text`, `email`, `url`, `textarea`, `string` |
+| `uint256`, `int256` | `number`, `uint256`, `int256`                |
+| `bytes`, `bytes32`  | `text`, `bytes`, `bytes32`                   |
+| `address[]`         | `text` (as JSON array)                       |
 
 ## Best Practices
 
@@ -369,16 +369,16 @@ params: [
     name: 'to',
     label: 'Recipient',
     type: 'address',
-    required: true
+    required: true,
   },
-  // Second parameter: 'amount' 
+  // Second parameter: 'amount'
   {
     name: 'amount',
     label: 'Amount',
     type: 'uint256',
-    required: true
-  }
-]
+    required: true,
+  },
+];
 ```
 
 ### 2. User-Friendly Labels
@@ -477,13 +477,13 @@ For select/radio parameters, organize options logically:
 const transferParams = [
   createParameter(PARAM_TEMPLATES.ADDRESS, {
     name: 'to',
-    label: 'Recipient Address'
+    label: 'Recipient Address',
   }),
   createParameter(PARAM_TEMPLATES.TOKEN_AMOUNT, {
     name: 'amount',
     label: 'Amount to Send',
-    min: 0.000001
-  })
+    min: 0.000001,
+  }),
 ];
 ```
 
@@ -494,7 +494,7 @@ const mintParams = [
   createParameter(PARAM_TEMPLATES.ADDRESS, {
     name: 'to',
     label: 'Mint To Address',
-    value: 'sender'  // Default to current user
+    value: 'sender', // Default to current user
   }),
   {
     name: 'quantity',
@@ -504,9 +504,9 @@ const mintParams = [
     options: [
       { label: '1 NFT', value: 1 },
       { label: '3 NFTs', value: 3 },
-      { label: '5 NFTs', value: 5 }
-    ]
-  }
+      { label: '5 NFTs', value: 5 },
+    ],
+  },
 ];
 ```
 
@@ -516,7 +516,7 @@ const mintParams = [
 const voteParams = [
   createParameter(PARAM_TEMPLATES.INTEGER, {
     name: 'proposalId',
-    label: 'Proposal ID'
+    label: 'Proposal ID',
   }),
   {
     name: 'support',
@@ -525,9 +525,9 @@ const voteParams = [
     required: true,
     options: [
       { label: 'Yes - Support this proposal', value: true },
-      { label: 'No - Oppose this proposal', value: false }
-    ]
-  }
+      { label: 'No - Oppose this proposal', value: false },
+    ],
+  },
 ];
 ```
 
@@ -537,7 +537,7 @@ const voteParams = [
 const formParams = [
   createParameter(PARAM_TEMPLATES.EMAIL, {
     name: 'email',
-    label: 'Email Address'
+    label: 'Email Address',
   }),
   {
     name: 'feedback',
@@ -545,7 +545,7 @@ const formParams = [
     type: 'textarea',
     required: true,
     maxLength: 1000,
-    description: 'Tell us what you think'
+    description: 'Tell us what you think',
   },
   {
     name: 'rating',
@@ -557,9 +557,9 @@ const formParams = [
       { label: '⭐⭐ Fair', value: 2 },
       { label: '⭐⭐⭐ Good', value: 3 },
       { label: '⭐⭐⭐⭐ Very Good', value: 4 },
-      { label: '⭐⭐⭐⭐⭐ Excellent', value: 5 }
-    ]
-  }
+      { label: '⭐⭐⭐⭐⭐ Excellent', value: 5 },
+    ],
+  },
 ];
 ```
 

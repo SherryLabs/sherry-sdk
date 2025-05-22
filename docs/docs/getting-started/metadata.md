@@ -36,11 +36,11 @@ const metadata: Metadata = {
           name: 'to',
           label: 'Recipient',
           type: 'address',
-          required: true
-        }
-      ]
-    }
-  ]
+          required: true,
+        },
+      ],
+    },
+  ],
 };
 
 try {
@@ -58,7 +58,7 @@ try {
 Validates metadata without throwing errors, returning a detailed result object.
 
 ```typescript
-interface ValidationResult = 
+interface ValidationResult =
   | { isValid: true; type: 'ValidatedMetadata'; data: ValidatedMetadata }
   | { isValid: false; type: 'ValidationError'; errors: ValidationErrorInfo[] };
 
@@ -171,7 +171,7 @@ if (result.isValid) {
 ### Chain Validation
 
 ```typescript
-✅ Supported chains: 'fuji', 'avalanche', 'alfajores', 'celo', 'monad-testnet'
+✅ Supported chains: 'fuji', 'avalanche', 'alfajores', 'celo'
 ✅ Source chain: always required
 ✅ Destination chain: optional, valid if provided
 ✅ Cross-chain logic: proper source/destination combination
@@ -187,40 +187,44 @@ const validMetadata: Metadata = {
   icon: 'https://myapp.example/icon.png',
   title: 'NFT Minter',
   description: 'Mint your unique NFT',
-  actions: [{
-    type: 'blockchain',
-    label: 'Mint NFT',
-    address: '0x5ee75a1B1648C023e885E58bD3735Ae273f2cc52',
-    abi: [{
-      name: 'safeMint',
-      type: 'function',
-      stateMutability: 'payable',
-      inputs: [
-        { name: 'to', type: 'address' },
-        { name: 'tokenURI', type: 'string' }
+  actions: [
+    {
+      type: 'blockchain',
+      label: 'Mint NFT',
+      address: '0x5ee75a1B1648C023e885E58bD3735Ae273f2cc52',
+      abi: [
+        {
+          name: 'safeMint',
+          type: 'function',
+          stateMutability: 'payable',
+          inputs: [
+            { name: 'to', type: 'address' },
+            { name: 'tokenURI', type: 'string' },
+          ],
+          outputs: [{ name: 'tokenId', type: 'uint256' }],
+        },
       ],
-      outputs: [{ name: 'tokenId', type: 'uint256' }]
-    }],
-    functionName: 'safeMint',
-    chains: { source: 'avalanche' },
-    amount: 0.1,
-    params: [
-      {
-        name: 'to',
-        label: 'Recipient Address',
-        type: 'address',
-        required: true
-      },
-      {
-        name: 'tokenURI',
-        label: 'Token URI',
-        type: 'string',
-        required: true,
-        value: 'ipfs://QmHash',
-        fixed: true
-      }
-    ]
-  }]
+      functionName: 'safeMint',
+      chains: { source: 'avalanche' },
+      amount: 0.1,
+      params: [
+        {
+          name: 'to',
+          label: 'Recipient Address',
+          type: 'address',
+          required: true,
+        },
+        {
+          name: 'tokenURI',
+          label: 'Token URI',
+          type: 'string',
+          required: true,
+          value: 'ipfs://QmHash',
+          fixed: true,
+        },
+      ],
+    },
+  ],
 };
 
 // This will validate successfully
@@ -235,7 +239,7 @@ const validated = createMetadata(validMetadata);
 const invalidMetadata = {
   // Missing required fields
   title: 'My App',
-  actions: []
+  actions: [],
 };
 
 // Error: "Metadata missing required 'url' field"
@@ -251,13 +255,15 @@ const invalidAction = {
   type: 'blockchain',
   label: 'Transfer',
   address: '0x...',
-  abi: [{
-    name: 'transfer',
-    inputs: [
-      { name: 'to', type: 'address' },
-      { name: 'amount', type: 'uint256' }
-    ]
-  }],
+  abi: [
+    {
+      name: 'transfer',
+      inputs: [
+        { name: 'to', type: 'address' },
+        { name: 'amount', type: 'uint256' },
+      ],
+    },
+  ],
   functionName: 'transfer',
   chains: { source: 'avalanche' },
   params: [
@@ -265,14 +271,14 @@ const invalidAction = {
     {
       name: 'amount',
       label: 'Amount',
-      type: 'uint256'
+      type: 'uint256',
     },
     {
-      name: 'to', 
+      name: 'to',
       label: 'Recipient',
-      type: 'address'
-    }
-  ]
+      type: 'address',
+    },
+  ],
 };
 
 // Error: "Parameter name mismatch at index 0. Expected 'to', received 'amount'"
@@ -285,7 +291,7 @@ const invalidChain = {
   type: 'transfer',
   label: 'Send Tokens',
   chains: { source: 'invalid-chain' }, // Invalid chain
-  amount: 0.1
+  amount: 0.1,
 };
 
 // Error: "Invalid source chain: invalid-chain"
@@ -300,12 +306,14 @@ const invalidDynamic: Metadata = {
   title: 'Dynamic App',
   description: 'App with dynamic action',
   // Missing baseUrl!
-  actions: [{
-    type: 'dynamic',
-    label: 'Dynamic Action',
-    path: '/api/dynamic', // Relative path but no baseUrl
-    chains: { source: 'avalanche' }
-  }]
+  actions: [
+    {
+      type: 'dynamic',
+      label: 'Dynamic Action',
+      path: '/api/dynamic', // Relative path but no baseUrl
+      chains: { source: 'avalanche' },
+    },
+  ],
 };
 
 // Error: "Dynamic action has a relative path '/api/dynamic' but no baseUrl is provided"
@@ -330,10 +338,7 @@ try {
   return NextResponse.json(validated);
 } catch (error) {
   console.error('Validation error:', error);
-  return NextResponse.json(
-    { error: 'Invalid metadata configuration' },
-    { status: 500 }
-  );
+  return NextResponse.json({ error: 'Invalid metadata configuration' }, { status: 500 });
 }
 ```
 
@@ -345,11 +350,14 @@ if (process.env.NODE_ENV === 'development') {
     const validated = createMetadata(metadata);
     return NextResponse.json(validated);
   } catch (error) {
-    return NextResponse.json({
-      error: 'Validation failed',
-      details: error.message,
-      validationErrors: error.validationErrors || []
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: 'Validation failed',
+        details: error.message,
+        validationErrors: error.validationErrors || [],
+      },
+      { status: 500 },
+    );
   }
 }
 ```
@@ -390,7 +398,7 @@ const metadata: Metadata = {
   description: 'Description',
   actions: [
     // TypeScript will validate action structure
-  ]
+  ],
 };
 ```
 
