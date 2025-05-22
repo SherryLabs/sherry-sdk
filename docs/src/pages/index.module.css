@@ -568,7 +568,9 @@
     gap: 6px;
   }
 
-  .closeButton, .minimizeButton, .maximizeButton {
+  .closeButton,
+  .minimizeButton,
+  .maximizeButton {
     width: 10px;
     height: 10px;
   }
