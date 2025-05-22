@@ -105,67 +105,74 @@ export const QuickLinks = () => {
   ];
 
 return (
+  <>
+    {/* Add embedded style tag with CSS classes */}
+    <style>
+      {`
+        .quick-link-card {
+          display: block;
+          padding: 1.5rem;
+          border-radius: 8px;
+          text-decoration: none;
+          color: inherit;
+          transition: all 0.3s ease;
+          border: ${colorMode === 'dark' ? '1px solid #444' : '1px solid #e0e0e0'};
+          background-color: ${colorMode === 'dark' ? '#2d2d30' : '#f9f9f9'};
+        }
+        
+        .quick-link-card:hover {
+          transform: translateY(-5px);
+          box-shadow: ${colorMode === 'dark' ? '0 8px 20px rgba(255,255,255,0.15)' : '0 8px 20px rgba(0,0,0,0.1)'};
+          border-color: var(--ifm-color-primary);
+        }
+        
+        .card-title {
+          font-size: 1.2rem;
+          font-weight: bold;
+          margin-bottom: 0.5rem;
+        }
+        
+        .card-description {
+          font-size: 0.9rem;
+          color: ${colorMode === 'dark' ? '#b3b3b3' : '#666'};
+          margin-bottom: 0.5rem;
+        }
+        
+        .card-time {
+          font-size: 0.8rem;
+          color: var(--ifm-color-primary);
+          font-weight: 500;
+        }
+      `}
+    </style>
 
-<div
-  style={{
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-    gap: '1.5rem',
-    margin: '2rem 0',
-  }}
->
-  {links.map((link, idx) => (
-    <a
-      key={idx}
-      href={link.href}
+    <div
       style={{
-        display: 'block',
-        padding: '1.5rem',
-        border: colorMode === 'dark' ? '1px solid #444' : '1px solid #e0e0e0',
-        borderRadius: '8px',
-        textDecoration: 'none',
-        color: 'inherit',
-        backgroundColor: colorMode === 'dark' ? '#2d2d30' : '#f9f9f9',
-        transition: 'all 0.2s ease',
-        ':hover': {
-          transform: 'translateY(-2px)',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-        },
-      }}
-      onMouseEnter={e => {
-        e.target.style.transform = 'translateY(-2px)';
-        e.target.style.boxShadow =
-          colorMode === 'dark' ? '0 4px 12px rgba(255,255,255,0.1)' : '0 4px 12px rgba(0,0,0,0.1)';
-      }}
-      onMouseLeave={e => {
-        e.target.style.transform = 'none';
-        e.target.style.boxShadow = 'none';
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+        gap: '1.5rem',
+        margin: '2rem 0',
       }}
     >
-      <div style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>
-        {link.title}
-      </div>
-      <div
-        style={{
-          fontSize: '0.9rem',
-          color: colorMode === 'dark' ? '#b3b3b3' : '#666',
-          marginBottom: '0.5rem',
-        }}
-      >
-        {link.description}
-      </div>
-      <div
-        style={{
-          fontSize: '0.8rem',
-          color: 'var(--ifm-color-primary)',
-          fontWeight: '500',
-        }}
-      >
-        {link.time}
-      </div>
-    </a>
-  ))}
-</div>
+      {links.map((link, idx) => (
+        <a
+          key={idx}
+          href={link.href}
+          className="quick-link-card"
+        >
+          <div className="card-title">
+            {link.title}
+          </div>
+          <div className="card-description">
+            {link.description}
+          </div>
+          <div className="card-time">
+            {link.time}
+          </div>
+        </a>
+      ))}
+    </div>
+  </>
 ); };
 
 <QuickLinks />
