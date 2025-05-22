@@ -392,7 +392,9 @@
   overflow: hidden;
   width: 100%;
   max-width: 100%; /* Ensure it doesn't exceed parent */
-  transition: all 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    all 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .macWindowHeader {
@@ -480,7 +482,10 @@
   border-radius: 12px;
   text-align: center;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  transition: all 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    all 0.3s ease,
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -562,7 +567,10 @@
 }
 
 .ctaButtons a {
-  transition: all 0.3s ease, background-color 0.2s ease, transform 0.2s ease;
+  transition:
+    all 0.3s ease,
+    background-color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .ctaButtons a:hover {
@@ -605,7 +613,7 @@
     width: 100%;
     align-items: center; /* Center-align text content */
   }
-  
+
   .hero__title {
     font-size: 2rem !important; /* Override any other styles */
     word-break: break-word;
@@ -617,7 +625,7 @@
     width: 100%;
     word-break: break-word;
   }
-  
+
   .heroDescription {
     width: 100%;
     font-size: 1rem;
@@ -628,7 +636,7 @@
     width: 100%;
     flex-wrap: wrap; /* Allow buttons to wrap if needed */
   }
-  
+
   .buttons a {
     min-width: 140px; /* Ensure buttons have sufficient width */
     text-align: center;
@@ -701,19 +709,19 @@
   .ctaContent p {
     font-size: 1.1rem;
   }
-  
+
   .codeSection {
     padding: 3rem 0; /* Reduce padding */
   }
-  
+
   .codeContainer {
     gap: 1.5rem; /* Reduce gap */
   }
-  
+
   .codeExample {
     margin-bottom: 1.5rem;
   }
-  
+
   .codeBlock {
     padding: 12px 8px; /* Reduce padding */
     font-size: 0.8rem;
@@ -725,7 +733,7 @@
   .heroBanner {
     padding: 2rem 1rem;
   }
-  
+
   .heroContent {
     max-width: 100%; /* Use full width on very small screens */
     padding: 0 0.5rem;
@@ -742,16 +750,16 @@
   .heroSubtitle {
     font-size: 1.3rem;
   }
-  
+
   .heroDescription {
     font-size: 0.95rem;
   }
-  
+
   .buttons {
     gap: 0.7rem; /* Reduce gap between buttons */
     margin-top: 0.5rem;
   }
-  
+
   .buttons a {
     min-width: 120px;
     padding: 0.5rem 1rem !important;
@@ -805,11 +813,11 @@
     font-size: 1rem;
   }
 
-  .featureCard, 
+  .featureCard,
   .useCaseCard {
     padding: 1.5rem;
   }
-  
+
   .quickLinksSection,
   .featuresSection,
   .codeSection,
@@ -817,11 +825,11 @@
   .ctaSection {
     padding: 3rem 0;
   }
-  
+
   .macWindow {
     border-radius: 6px;
   }
-  
+
   .codeBlock {
     padding: 10px 6px; /* Further reduce padding */
   }
@@ -831,7 +839,7 @@
   .heroBanner {
     padding: 2rem 0.75rem;
   }
-  
+
   .hero__title {
     font-size: 1.6rem !important;
   }
@@ -839,16 +847,16 @@
   .heroSubtitle {
     font-size: 1.1rem;
   }
-  
+
   .heroDescription {
     font-size: 0.9rem;
   }
-  
+
   .buttons {
     flex-direction: column; /* Stack buttons vertically on very small screens */
     width: 80%; /* Constrain width for better appearance */
   }
-  
+
   .buttons a {
     width: 100%;
     margin: 0;
@@ -874,7 +882,7 @@
     gap: 0.5rem;
     font-size: 0.85rem;
   }
-  
+
   .quickLinksSection,
   .featuresSection,
   .codeSection,
@@ -910,7 +918,11 @@
 [data-theme='dark'] .macWindow,
 [data-theme='dark'] .inputGroup input,
 [data-theme='dark'] .inputGroup select {
-  transition: all 0.3s ease, background 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+  transition:
+    all 0.3s ease,
+    background 0.3s ease,
+    box-shadow 0.3s ease,
+    color 0.3s ease;
 }
 
 /* Dark mode adjustments */
@@ -935,11 +947,7 @@
 }
 
 [data-theme='dark'] .heroBanner {
-  background: linear-gradient(
-    135deg,
-    var(--ifm-color-primary-darker) 0%,
-    #1a1c29 100%
-  );
+  background: linear-gradient(135deg, var(--ifm-color-primary-darker) 0%, #1a1c29 100%);
   color: #ffffff;
 }
 
@@ -1047,11 +1055,7 @@
 }
 
 [data-theme='dark'] .ctaSection {
-  background: linear-gradient(
-    135deg,
-    var(--ifm-color-primary-darker) 0%,
-    #1a1c29 100%
-  );
+  background: linear-gradient(135deg, var(--ifm-color-primary-darker) 0%, #1a1c29 100%);
 }
 
 [data-theme='dark'] .ctaContent h2,

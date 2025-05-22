@@ -186,7 +186,7 @@ function QuickLinksSection(): ReactNode {
     ];
 
     return (
-        <section className={clsx("padding-vert--xl", styles.quickLinksSection)}>
+        <section className={clsx('padding-vert--xl', styles.quickLinksSection)}>
             <div className="container">
                 <div className="text--center margin-bottom--xl">
                     <Heading as="h2">Quick Links</Heading>
@@ -197,7 +197,10 @@ function QuickLinksSection(): ReactNode {
                         <div key={idx} className="col col--3 margin-bottom--lg">
                             <Link
                                 to={link.url}
-                                className={clsx("card padding--lg cardContainer", styles.quickLinksCard)}
+                                className={clsx(
+                                    'card padding--lg cardContainer',
+                                    styles.quickLinksCard,
+                                )}
                                 style={{
                                     textDecoration: 'none',
                                     border: `1px solid ${isDarkTheme ? '#333' : '#eee'}`,
@@ -206,13 +209,17 @@ function QuickLinksSection(): ReactNode {
                                 }}
                             >
                                 <div className="card__header">
-                                    <div className={clsx("margin-bottom--sm", styles.quickLinksIcon)}>
+                                    <div
+                                        className={clsx('margin-bottom--sm', styles.quickLinksIcon)}
+                                    >
                                         {link.icon}
                                     </div>
                                     <h3 className={styles.quickLinksTitle}>{link.title}</h3>
                                 </div>
                                 <div className="card__body">
-                                    <p className={styles.quickLinksDescription}>{link.description}</p>
+                                    <p className={styles.quickLinksDescription}>
+                                        {link.description}
+                                    </p>
                                 </div>
                             </Link>
                         </div>
