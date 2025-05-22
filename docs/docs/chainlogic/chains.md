@@ -4,10 +4,7 @@ The Chain type describes the supported chains and must be defined in the metadat
 
 # Chain Type
 
-
 The Chain type has the following definition
-
-
 
 ```TypeScript
 export type Chain = "fuji" | "avalanche" | "alfajores" | "celo" | "monad-testnet"
@@ -40,6 +37,7 @@ export type Chain = "fuji" | "avalanche" | "alfajores" | "celo" | "monad-testnet
   }
 }
 ```
+
 ## Chain Context
 
 ```TypeScript
@@ -48,7 +46,8 @@ export interface ChainContext {
   destination?: Chain;  // undefined for single-chain actions
 }
 ```
-## Example: 
+
+## Example:
 
 ```TypeScript
 {
@@ -68,5 +67,3 @@ export interface ChainContext {
     ]
 };
 ```
-
-

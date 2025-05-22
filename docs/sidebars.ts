@@ -18,19 +18,19 @@ const sidebars: SidebarsConfig = {
 
         // 2. First Main Section: Getting Started / Core Concepts
         //{
-          // type: 'category',
-           // label: 'Quickstart',
-           // collapsed: false,
-            // Optional: Add a link to a specific doc if needed, otherwise it's just a category
-            // link: { type: 'doc', id: 'sdk/getting-started-overview' },
-           // items: [
-               // 'quickstart/quickstart',
-                
-                 // Docs about the key concepts of the SDK
-                // Add other getting started guides here if you have them
-           // ],
-       // },
-    // 3. Second Main Section: Key Concepts
+        // type: 'category',
+        // label: 'Quickstart',
+        // collapsed: false,
+        // Optional: Add a link to a specific doc if needed, otherwise it's just a category
+        // link: { type: 'doc', id: 'sdk/getting-started-overview' },
+        // items: [
+        // 'quickstart/quickstart',
+
+        // Docs about the key concepts of the SDK
+        // Add other getting started guides here if you have them
+        // ],
+        // },
+        // 3. Second Main Section: Key Concepts
         {
             type: 'category',
             label: 'Getting Started',
@@ -45,10 +45,9 @@ const sidebars: SidebarsConfig = {
                 'keyconcepts/stepbystep',
                 'keyconcepts/examples',
                 'keyconcepts/nextsteps',
-                
-              
-                 // How to create Metadata/Mini-apps
-                 // Docs about the key concepts of the SDK
+
+                // How to create Metadata/Mini-apps
+                // Docs about the key concepts of the SDK
                 // Add other getting started guides here if you have them
             ],
         },
@@ -63,13 +62,12 @@ const sidebars: SidebarsConfig = {
                 'chainlogic/chains',
                 'chainlogic/crosschain',
                 'chainlogic/supported',
-                
-                 // How to create Metadata/Mini-apps
-                 // Docs about the key concepts of the SDK
+
+                // How to create Metadata/Mini-apps
+                // Docs about the key concepts of the SDK
                 // Add other getting started guides here if you have them
             ],
         },
-
 
         {
             type: 'category',
@@ -116,6 +114,11 @@ const sidebars: SidebarsConfig = {
             ],
         },
         // Removed the placeholder Tutorial sections
+        {
+            type: 'category',
+            label: 'Guides',
+            items: ['guides/guide-en', 'guides/guide-es'],
+        },
     ],
 };
 

@@ -1,3 +1,3 @@
-# Step by Step 
+# Step by Step
 
 How to install
