@@ -1,441 +1,371 @@
-# Guía Español - para crear Mini-Apps con Sherry SDK y Next.js
+# Creando Mini Apps con Next.js y Sherry SDK
 
-Esta guía detalla el proceso paso a paso para crear mini-aplicaciones (mini-apps) utilizando el SDK de Sherry Links dentro de una aplicación Next.js, permitiéndote exponer metadatos de acción y gestionar su ejecución.
+Esta guía te enseñará paso a paso cómo crear una mini app utilizando Next.js y el SDK de Sherry Links. Las mini apps son aplicaciones dinámicas que pueden ser integradas en diferentes plataformas y permiten a los usuarios interactuar con contratos inteligentes de manera sencilla.
 
 ## Tabla de Contenidos
 
-- [Requisitos Previos](#requisitos-previos)
-- [Configuración del Proyecto](#configuración-del-proyecto)
-- [Implementación del Endpoint GET](#implementación-del-endpoint-get)
-- [Implementación del Endpoint POST](#implementación-del-endpoint-post)
-- [Manejo de CORS](#manejo-de-cors)
-- [Prueba de la Mini-App](#prueba-de-la-mini-app)
-- [Despliegue en Producción](#despliegue-en-producción)
-- [Tipos de Parámetros Admitidos](#tipos-de-parámetros-admitidos)
+1. [Requisitos Previos](#requisitos-previos)
+2. [Configuración Inicial](#configuración-inicial)
+3. [Creando el Endpoint GET - Metadata](#creando-el-endpoint-get---metadata)
+4. [Creando el Endpoint POST - Ejecución](#creando-el-endpoint-post---ejecución)
+5. [Manejo de CORS](#manejo-de-cors)
+6. [Probando tu Mini App](#probando-tu-mini-app)
+7. [Resolución de Problemas](#resolución-de-problemas)
 
 ## Requisitos Previos
 
-- Node.js (versión 18.x o superior recomendada)
+- Node.js (versión 18.x o superior)
 - npm, yarn o pnpm
 - Conocimientos básicos de Next.js y TypeScript
-- Conocimientos básicos de blockchain (cadenas, transacciones)
+- Cuenta en una plataforma blockchain (para pruebas)
 
-## Configuración del Proyecto
+## Configuración Inicial
 
-### 1. Crea un nuevo proyecto Next.js
+### 1. Crear el Proyecto Next.js
 
 ```bash
-npx create-next-app@latest sherry-miniapp --typescript --eslint --tailwind --src-dir --app --import-alias "@/*"
-cd sherry-miniapp
+npx create-next-app@latest mi-sherry-app --typescript --eslint --tailwind --src-dir --app --import-alias "@/*"
+cd mi-sherry-app
 ```
 
-### 2. Instala las dependencias necesarias
+### 2. Instalar Dependencias
 
 ```bash
 npm install @sherrylinks/sdk viem wagmi
 ```
 
-### 3. Configura las variables de entorno
+### 3. Configurar Next.js (Opcional)
 
-Crea un archivo `.env.local` en la raíz del proyecto:
+Para evitar errores de build con ESLint, puedes deshabilitarlo en `next.config.js`:
 
-```
-NEXT_PUBLIC_API_URL=http://localhost:3000
-```
-
-## Implementación del Endpoint GET
-
-El endpoint GET se encarga de exponer los metadatos de la mini-app, que serán utilizados por las plataformas de Sherry Links para mostrar información sobre la acción.
-
-### 1. Crea la estructura de directorios
-
-```
-mkdir -p app/api/example
-```
-
-### 2. Crea el archivo de ruta
-
-Crea el archivo `app/api/example/route.ts` con el siguiente contenido:
-
-```typescript
-import { NextRequest, NextResponse } from 'next/server';
-import { avalancheFuji } from 'viem/chains';
-import { createMetadata, Metadata, ValidatedMetadata } from '@sherrylinks/sdk';
-
-export async function GET(_req: NextRequest, _res: NextResponse) {
-  // Dirección del contrato - debe coincidir con la dirección en el endpoint POST
-  const CONTRACT_ADDRESS = '0xYourContractAddressHere';
-
-  try {
-    // Creamos el objeto de metadatos paso a paso
-    const metadata: Metadata = {
-      // ----- Propiedades generales de la mini-app -----
-
-      // URL completa a la que se debe acceder para obtener los metadatos
-      url: `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/api/dynamic-action`,
-
-      // URL del ícono que se mostrará para la mini-app
-      icon: 'https://avatars.githubusercontent.com/u/117962315',
-
-      // Título de la mini-app que aparecerá en la interfaz
-      title: 'Mensaje con Timestamp',
-
-      // URL base para las llamadas a la API
-      baseUrl: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000',
-
-      // Descripción detallada de lo que hace la mini-app
-      description:
-        'Almacena un mensaje con un timestamp optimizado calculado por nuestro algoritmo',
-
-      // ----- Definición de las acciones disponibles -----
-      actions: [
-        {
-          // Tipo de acción: 'dynamic' indica que se ejecutará con una llamada a un endpoint
-          type: 'dynamic',
-
-          // Texto que se mostrará en el botón de acción
-          label: 'Almacenar Mensaje',
-
-          // Descripción detallada de lo que hace esta acción específica
-          description:
-            'Almacena tu mensaje con un timestamp personalizado calculado para un almacenamiento óptimo',
-
-          // Cadenas blockchain compatibles
-          chains: {
-            source: 'fuji', // Cadena de origen (Avalanche Fuji)
-          },
-
-          // Ruta del endpoint POST que procesará esta acción
-          path: `/api/example`,
-
-          // ----- Parámetros que necesita la acción -----
-          // Cada parámetro sin valor predefinido generará un campo de entrada en la UI
-          params: [
-            {
-              // Nombre del parámetro (se usará como nombre de queryParam en la petición POST)
-              name: 'message',
-
-              // Etiqueta que verá el usuario junto al campo de entrada
-              label: 'Tu Mensaje',
-
-              // Tipo de dato del campo (text, number, select, etc.)
-              type: 'text',
-
-              // Si es obligatorio completar este campo
-              required: true,
-
-              // Descripción o instrucciones para el usuario
-              description: 'Ingresa el mensaje que deseas almacenar en la blockchain',
-
-              // NOTA: Si quisiéramos un valor predefinido, podríamos usar:
-              // value: "Valor predeterminado",
-              // Cuando se incluye 'value', no se renderiza un input para este parámetro
-            },
-            // Podríamos añadir más parámetros según sea necesario
-          ],
-
-          // Podrían definirse más acciones según sea necesario
-        },
-      ],
-    };
-
-    // Validamos los metadatos utilizando la función del SDK
-    const validated: ValidatedMetadata = createMetadata(metadata);
-
-    // Retornamos los metadatos validados con cabeceras CORS
-    return NextResponse.json(validated, {
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-      },
-    });
-  } catch (error) {
-    return NextResponse.json({ error: 'Error al crear metadatos' }, { status: 500 });
-  }
+```javascript
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 }
+
+module.exports = nextConfig
 ```
 
-### Claves del Endpoint GET
+## Creando el Endpoint GET - Metadata
 
-#### Estructura de los Metadatos
+El endpoint GET es el corazón de tu mini app. Aquí defines toda la información y estructura que las plataformas necesitan para renderizar tu aplicación.
 
-Los metadatos son la base de la mini-app y se construyen de manera jerárquica:
+### 1. Crear el Archivo de Ruta
 
-1. **Propiedades generales de la mini-app**:
-
-   - `url`: URL completa del endpoint de la mini-app.
-   - `icon`: URL del ícono que se mostrará.
-   - `title`: Nombre de la mini-app.
-   - `baseUrl`: URL base para todas las llamadas API.
-   - `description`: Descripción general de la mini-app.
-
-2. **Acciones disponibles** (array `actions`):
-
-   - `type`: Tipo de acción (generalmente `"dynamic"` para mini-apps).
-   - `label`: Texto del botón que ejecutará la acción.
-   - `description`: Descripción detallada de la acción.
-   - `chains`: Cadenas blockchain compatibles con la acción.
-   - `path`: Ruta del endpoint POST que procesará la acción.
-
-3. **Parámetros de la acción** (array `params` dentro de cada acción):
-   - `name`: Identificador del parámetro (se usará como nombre en la queryParam).
-   - `label`: Etiqueta que verá el usuario en la interfaz.
-   - `type`: Tipo de dato (text, number, select, etc.).
-   - `required`: Si el campo es obligatorio.
-   - `description`: Instrucciones para el usuario.
-   - `value` (opcional): Valor predeterminado. **Importante**: Si se proporciona un valor, no se renderizará un campo de entrada para este parámetro.
-
-#### Comportamiento de los Parámetros
-
-- Cada parámetro **sin** valor predefinido (`value`) generará automáticamente un campo de entrada en la interfaz de usuario.
-- Cuando el usuario envía el formulario, cada valor ingresado se enviará como un parámetro de consulta al endpoint POST.
-- El nombre del parámetro en la URL será exactamente el mismo que se definió en la propiedad `name`.
-
-#### Otras Consideraciones
-
-- **Validación**: El método `createMetadata` del SDK valida la estructura completa.
-- **CORS**: Se configuran las cabeceras para permitir solicitudes desde diferentes orígenes.
-
-## Implementación del Endpoint POST
-
-El endpoint POST se encarga de ejecutar la acción dinámica, recibiendo los parámetros y devolviendo una respuesta de ejecución.
-
-### Añade el código del endpoint POST al archivo `route.ts`:
+Crea el archivo `app/api/mi-app/route.ts`:
 
 ```typescript
-import { serialize } from 'wagmi';
-import { ExecutionResponse } from '@sherrylinks/sdk';
+import { NextRequest, NextResponse } from "next/server";
+import { createMetadata, Metadata, ValidatedMetadata } from "@sherrylinks/sdk";
+```
 
-export async function POST(req: NextRequest, res: NextResponse) {
-  try {
-    // Obtenemos los parámetros de la URL
-    // Los nombres de los queryParams coinciden con los nombres definidos en 'name' en la configuración de metadatos
-    const { searchParams } = new URL(req.url);
-    const message = searchParams.get('message');
+### 2. Configurar la Información General
 
-    // Validamos que el parámetro 'message' exista (marcado como required en los metadatos)
-    if (!message) {
-      return NextResponse.json(
-        { error: "El parámetro 'message' es requerido" },
-        {
-          status: 400,
-          headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-          },
-        },
-      );
+Comencemos definiendo la información básica de tu mini app:
+
+```typescript
+export async function GET(req: NextRequest) {
+    try {
+        // Obtener la URL base del servidor
+        const host = req.headers.get('host') || 'localhost:3000';
+        const protocol = req.headers.get('x-forwarded-proto') || 'http';
+        const serverUrl = `${protocol}://${host}`;
+
+        const metadata: Metadata = {
+            url: "https://tu-sitio-web.com", // URL de tu sitio web principal
+            icon: "https://tu-sitio-web.com/icon.png", // URL del ícono de tu app
+            title: "Mi Mini App", // Título que aparecerá en las plataformas
+            baseUrl: serverUrl, // URL base donde está hospedada tu app
+            description: "Descripción detallada de lo que hace tu mini app",
+            // Las acciones las definiremos en el siguiente paso
+        };
     }
-
-    // ---- Procesamiento de los datos recibidos ----
-    // Aquí puedes realizar cualquier lógica necesaria con los parámetros recibidos
-    // Por ejemplo, podrías:
-    // - Añadir un timestamp al mensaje
-    // - Validar datos adicionales
-    // - Interactuar con otros servicios
-
-    // ---- Creación de la transacción ----
-    // En un caso real, aquí crearías la transacción para interactuar con tu contrato
-    const tx = {
-      to: '0x5ee75a1B1648C023e885E58bD3735Ae273f2cc52', // Dirección del contrato
-      value: BigInt(1000000), // Valor a enviar (en wei)
-      chainId: avalancheFuji.id, // ID de la cadena (Avalanche Fuji)
-      // También podrías incluir:
-      // - data: para llamadas a funciones de contratos
-      // - maxFeePerGas, maxPriorityFeePerGas: para configurar fees
-      // - nonce: para control de transacciones
-    };
-
-    // ---- Serialización de la transacción ----
-    // Convierte la transacción a un formato que puede ser firmado y enviado a la blockchain
-    const serialized = serialize(tx);
-
-    // ---- Creación de la respuesta ----
-    // Formato específico que espera el SDK de Sherry
-    const resp: ExecutionResponse = {
-      serializedTransaction: serialized, // Transacción serializada lista para ser firmada
-      chainId: avalancheFuji.name, // Nombre de la cadena (importante: debe coincidir con la especificada en los metadatos)
-    };
-
-    // Retornamos la respuesta
-    return NextResponse.json(resp, {
-      status: 200,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-      },
-    });
-  } catch (error) {
-    console.error('Error en la solicitud POST:', error);
-    return NextResponse.json({ error: 'Error interno del servidor' }, { status: 500 });
-  }
 }
 ```
 
-### Claves del Endpoint POST
+#### Explicación de Campos Generales:
 
-#### Flujo de Procesamiento
+- **url**: URL de tu sitio web o documentación principal
+- **icon**: Imagen que representará tu mini app (debe ser accesible públicamente)
+- **title**: Nombre corto y descriptivo de tu aplicación
+- **baseUrl**: URL donde está corriendo tu aplicación (se construye automáticamente)
+- **description**: Explicación clara de qué hace tu mini app
 
-1. **Recepción de Parámetros**:
+### 3. Definir las Acciones
 
-   - Los parámetros se reciben como query params en la URL.
-   - Los nombres de los parámetros coinciden exactamente con los nombres definidos en la propiedad `name` de cada parámetro en los metadatos.
-   - Ejemplo: Si definiste un parámetro con `name: "message"`, se accede con `searchParams.get("message")`.
+Ahora vamos a agregar las acciones que los usuarios pueden realizar:
 
-2. **Validación de Parámetros**:
+```typescript
+const metadata: Metadata = {
+    // ... información general anterior ...
+    actions: [
+        {
+            type: "dynamic", // Tipo de acción (siempre "dynamic" para mini apps)
+            label: "Ejecutar Acción", // Texto que aparecerá en el botón
+            description: "Descripción de lo que hace esta acción específica",
+            chains: { 
+                source: "fuji" // Blockchain donde se ejecutará (fuji = Avalanche Fuji Testnet)
+            },
+            path: `/api/mi-app`, // Ruta del endpoint POST que manejará la ejecución
+            // Los parámetros los definiremos en el siguiente paso
+        }
+    ]
+};
+```
 
-   - Se verifica que los parámetros marcados como `required: true` en los metadatos estén presentes.
-   - Si falta algún parámetro requerido, se devuelve un error 400 (Bad Request).
+#### Explicación de Campos de Acción:
 
-3. **Procesamiento de Datos**:
+- **type**: Siempre debe ser "dynamic" para mini apps
+- **label**: Texto del botón que verán los usuarios
+- **description**: Explicación de qué hace esta acción
+- **chains.source**: Nombre de la blockchain (ej: "fuji", "ethereum", "polygon")
+- **path**: Ruta de tu endpoint POST que ejecutará la acción
 
-   - Aquí puedes implementar cualquier lógica de negocio necesaria.
-   - Ejemplos: añadir timestamps, validaciones adicionales, interacciones con APIs externas.
+### 4. Configurar Parámetros
 
-4. **Creación de la Transacción**:
+Los parámetros son los datos que el usuario debe proporcionar. Si no tienen un valor predeterminado, se renderizará un input:
 
-   - Se construye el objeto de transacción con los parámetros necesarios para interactuar con la blockchain.
-   - Componentes principales:
-     - `to`: Dirección del contrato inteligente.
-     - `value`: Cantidad de tokens nativos a enviar (en wei).
-     - `chainId`: ID numérico de la cadena blockchain.
-     - `data` (opcional): Datos codificados para llamadas a funciones de contratos.
+```typescript
+const metadata: Metadata = {
+    // ... información anterior ...
+    actions: [
+        {
+            // ... configuración anterior ...
+            params: [
+                {
+                    name: "mensaje", // Nombre del parámetro (se usará como query param)
+                    label: "Tu Mensaje", // Etiqueta que verá el usuario
+                    type: "text", // Tipo de input (text, number, email, etc.)
+                    required: true, // Si es obligatorio o no
+                    description: "Ingresa el mensaje que quieres guardar en la blockchain"
+                },
+                {
+                    name: "cantidad",
+                    label: "Cantidad (ETH)",
+                    type: "number",
+                    required: false,
+                    description: "Cantidad en ETH (opcional)"
+                }
+            ]
+        }
+    ]
+};
+```
 
-5. **Serialización**:
+#### Tipos de Parámetros Disponibles:
 
-   - La transacción se serializa usando la función `serialize` de `wagmi`.
-   - Esto convierte la transacción a un formato que puede ser firmado por una wallet.
+- **text**: Campo de texto libre
+- **number**: Solo números
+- **email**: Validación de email
+- **url**: Validación de URL
+- **password**: Campo de contraseña
+- **textarea**: Texto largo
 
-6. **Respuesta**:
-   - Se devuelve un objeto `ExecutionResponse` que contiene:
-     - `serializedTransaction`: La transacción serializada lista para ser firmada.
-     - `chainId`: El nombre de la cadena (debe coincidir con la especificada en los metadatos).
+### 5. Validar y Retornar la Metadata
 
-#### Relación con los Metadatos
+```typescript
+export async function GET(req: NextRequest) {
+    try {
+        // ... construcción de metadata anterior ...
 
-- Cada parámetro definido en los metadatos que no tiene un `value` predefinido generará un campo de entrada en la interfaz de usuario.
-- Los valores introducidos por el usuario se envían automáticamente al endpoint POST cuando se activa la acción.
-- Es crucial que los nombres de los parámetros en el código `searchParams.get()` coincidan con los nombres definidos en los metadatos.
+        // Validar la metadata usando el SDK
+        const validated: ValidatedMetadata = createMetadata(metadata);
+
+        // Retornar con headers CORS
+        return NextResponse.json(validated, {
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+            },
+        });
+    } catch (error) {
+        console.error("Error creando metadata:", error);
+        return NextResponse.json(
+            { error: "Error al crear metadata" },
+            { status: 500 }
+        );
+    }
+}
+```
+
+## Creando el Endpoint POST - Ejecución
+
+El endpoint POST maneja la ejecución real de tu mini app. Recibe los parámetros del usuario y devuelve una transacción serializada.
+
+### 1. Configurar el Handler POST
+
+```typescript
+import { avalancheFuji } from "viem/chains";
+import { ExecutionResponse } from "@sherrylinks/sdk";
+import { serialize } from 'wagmi';
+
+export async function POST(req: NextRequest) {
+    try {
+        // Obtener parámetros de la URL
+        const { searchParams } = new URL(req.url);
+        const mensaje = searchParams.get("mensaje");
+        const cantidad = searchParams.get("cantidad");
+        
+        // Validar parámetros requeridos
+        if (!mensaje) {
+            return NextResponse.json(
+                { error: "El parámetro 'mensaje' es requerido" },
+                {
+                    status: 400,
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
+                        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+                        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+                    },
+                }
+            );
+        }
+```
+
+### 2. Procesar los Datos y Crear la Transacción
+
+```typescript
+        // Procesar los datos (aquí puedes agregar tu lógica de negocio)
+        console.log("Mensaje recibido:", mensaje);
+        console.log("Cantidad recibida:", cantidad);
+        
+        // Crear la transacción
+        const tx = {
+            to: '0x5ee75a1B1648C023e885E58bD3735Ae273f2cc52', // Dirección destino
+            value: BigInt(cantidad ? parseFloat(cantidad) * 1e18 : 1000000), // Valor en wei
+            chainId: avalancheFuji.id, // ID de la blockchain
+            // data: "0x..." // Puedes agregar datos de contrato aquí
+        };
+```
+
+### 3. Serializar y Retornar la Transacción
+
+```typescript
+        // Serializar la transacción
+        const serializedTx = serialize(tx);
+
+        // Crear la respuesta
+        const response: ExecutionResponse = {
+            serializedTransaction: serializedTx,
+            chainId: avalancheFuji.name, // Nombre de la chain
+        };
+
+        return NextResponse.json(response, {
+            status: 200,
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+                "Access-Control-Allow-Headers": "Content-Type, Authorization",
+            },
+        });
+
+    } catch (error) {
+        console.error("Error en POST:", error);
+        return NextResponse.json(
+            { error: "Error interno del servidor" },
+            { status: 500 }
+        );
+    }
+}
+```
 
 ## Manejo de CORS
 
-Para permitir solicitudes desde diferentes orígenes, necesitamos manejar correctamente las solicitudes CORS, incluidas las solicitudes preflight.
-
-### Añade el manejador OPTIONS al archivo `route.ts`:
+Para permitir que tu mini app sea utilizada desde diferentes dominios, necesitas manejar las peticiones OPTIONS:
 
 ```typescript
 export async function OPTIONS(request: NextRequest) {
-  return new NextResponse(null, {
-    status: 204, // Sin contenido
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-      'Access-Control-Allow-Headers':
-        'Content-Type, Authorization, X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Date, X-Api-Version',
-    },
-  });
+    return new NextResponse(null, {
+        status: 204,
+        headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type, Authorization, X-CSRF-Token, X-Requested-With, Accept",
+        },
+    });
 }
 ```
 
-## Prueba de la Mini-App
+## Probando tu Mini App
 
-Una vez implementados los endpoints, puedes probarlos de dos maneras:
+Una vez que hayas creado tu endpoint GET, tienes varias opciones para probar tu mini app:
 
-### 1. Inicia el servidor de desarrollo
+### Opción 1: Sherry Social App
 
-```bash
-npm run dev
-```
+1. Ve a [https://app.sherry.social/home](https://app.sherry.social/home)
+2. En el campo de dirección, ingresa la URL de tu endpoint GET
+3. Ejemplo: `http://localhost:3000/api/mi-app` (para desarrollo local)
+4. La plataforma renderizará automáticamente tu mini app
 
-### 2. Prueba el endpoint GET directamente
+### Opción 2: Debugger de Sherry (Recomendado para Desarrollo)
 
-Abre un navegador y visita `http://localhost:3000/api/example`. Deberías ver los metadatos de la mini-app en formato JSON.
+El debugger te permite probar tu mini app de múltiples maneras:
 
-### 3. Prueba el endpoint POST manualmente
+1. Ve a [https://app.sherry.social/debugger](https://app.sherry.social/debugger)
 
-Usa Postman o curl para hacer una solicitud POST a `http://localhost:3000/api/example?message=HolaMundo`. Deberías recibir la transacción serializada en la respuesta.
+2. **Opción A - URL**: Pega la URL de tu endpoint GET
+3. **Opción B - JSON**: Copia y pega la respuesta JSON de tu endpoint
+4. **Opción C - TypeScript**: Pega directamente tu código TypeScript
 
-```bash
-curl -X POST "http://localhost:3000/api/example?message=HolaMundo"
-```
+**Nota**: El debugger está en desarrollo y puede tener bugs. Puedes reportar problemas directamente desde la interfaz del debugger.
 
-### 4. Prueba con las herramientas de Sherry
+### Pasos para Probar:
 
-#### A. Usando la aplicación principal de Sherry
+1. **Inicia tu servidor de desarrollo**:
+   ```bash
+   npm run dev
+   ```
 
-1. Inicia tu servidor de desarrollo para que tu endpoint esté accesible.
-2. Visita [https://app.sherry.social/home](https://app.sherry.social/home)
-3. Busca el campo de entrada para ingresar URLs de mini-apps.
-4. Ingresa la URL de tu endpoint GET (por ejemplo, `http://localhost:3000/api/example`).
-5. La plataforma Sherry se encargará de renderizar la interfaz basada en tus metadatos.
+2. **Verifica tu endpoint GET**:
+   - Ve a `http://localhost:3000/api/mi-app`
+   - Deberías ver la metadata JSON
 
-#### B. Usando el Debugger de Sherry
+3. **Prueba en el debugger**:
+   - Usa la URL: `http://localhost:3000/api/mi-app`
+   - Verifica que se rendericen correctamente los campos de entrada
+   - Prueba completar el formulario y enviar
 
-El debugger de Sherry es una herramienta especializada para validar y probar tus mini-apps. Ofrece más opciones para debug y te permite probar rápidamente tus metadatos.
+4. **Verifica la ejecución**:
+   - Completa los campos requeridos
+   - Haz clic en el botón de acción
+   - Deberías recibir una transacción serializada
 
-1. Visita [https://app.sherry.social/debugger](https://app.sherry.social/debugger)
-2. Tienes tres opciones para probar tus metadatos:
-   - **URL**: Ingresa la URL de tu endpoint GET.
-   - **JSON**: Copia y pega el JSON de metadatos directamente en el campo.
-   - **TypeScript**: Pega tu código TypeScript que genera los metadatos.
-3. El debugger validará tus metadatos y te mostrará una previsualización de cómo se verá tu mini-app.
-4. Si hay errores o problemas con tus metadatos, el debugger los señalará.
-5. También puedes reportar bugs o problemas directamente desde el debugger.
+## Resolución de Problemas
 
-> **Nota**: El debugger está en desarrollo, por lo que podrías encontrar algunos errores. Si encuentras algún problema, puedes reportarlo directamente desde la herramienta.
+### Error: "CORS policy"
+- Asegúrate de que todos tus endpoints incluyan los headers CORS correctos
+- Verifica que el método OPTIONS esté implementado
 
-## Despliegue en Producción
+### Error: "Metadata validation failed"
+- Revisa que todos los campos requeridos estén presentes
+- Verifica que los tipos de datos sean correctos
+- Usa `createMetadata()` para validar tu metadata
 
-Para desplegar tu mini-app en un entorno de producción:
+### Error: "Parameter required"
+- Asegúrate de que los parámetros requeridos estén marcados como `required: true`
+- Verifica que los nombres de los parámetros coincidan entre la metadata y el POST
 
-### 1. Construye la aplicación Next.js:
+### La mini app no se renderiza correctamente
+- Verifica que la URL de tu endpoint GET sea accesible públicamente
+- Revisa la consola del navegador para errores de JavaScript
+- Asegúrate de que el JSON de respuesta sea válido
 
-```bash
-npm run build
-```
+### Errores de serialización de transacciones
+- Verifica que los valores estén en el formato correcto (BigInt para valores de wei)
+- Asegúrate de que el chainId sea válido
+- Revisa que la dirección 'to' sea una dirección Ethereum válida
 
-### 2. Configura variables de entorno para producción:
+## Código de Ejemplo 
 
-```
-NEXT_PUBLIC_API_URL=https://tu-dominio.com
-```
+### Español
+Puedes encontrar un ejemplo completo de este tutorial en el siguiente repositorio:
+[https://github.com/SherryLabs/sherry-example](https://github.com/SherryLabs/sherry-example)
 
-### 3. Inicia el servidor de producción:
+Este repositorio contiene todo el código necesario para implementar una mini app funcional usando Next.js y Sherry SDK.
 
-```bash
-npm start
-```
+---
 
-Alternativamente, puedes desplegar en servicios como Vercel, Netlify o cualquier proveedor que soporte aplicaciones Next.js.
-
-## Tipos de Parámetros Admitidos
-
-El SDK de Sherry admite varios tipos de parámetros que puedes utilizar en tus mini-apps:
-
-| Tipo      | Descripción                   | Ejemplo de Uso                                  |
-| --------- | ----------------------------- | ----------------------------------------------- |
-| `text`    | Campo de texto simple         | Mensajes, nombres, identificadores              |
-| `number`  | Valores numéricos             | Cantidades, IDs numéricos                       |
-| `select`  | Lista desplegable de opciones | Seleccionar una opción de una lista predefinida |
-| `boolean` | Valor verdadero/falso         | Opciones de activación/desactivación            |
-| `date`    | Selector de fecha             | Fechas de vencimiento, programación             |
-| `file`    | Carga de archivos             | Subir imágenes, documentos                      |
-
-Para utilizar el tipo `select`, necesitas definir las opciones disponibles:
-
-```javascript
-{
-  name: "priority",
-  label: "Prioridad",
-  type: "select",
-  required: true,
-  description: "Selecciona la prioridad del mensaje",
-  options: [
-    { value: "low", label: "Baja" },
-    { value: "medium", label: "Media" },
-    { value: "high", label: "Alta" }
-  ]
-}
-```
+¡Felicidades! Ya tienes tu primera mini app funcionando con Sherry SDK. Puedes expandir la funcionalidad agregando más parámetros, validaciones personalizadas, o integrando con contratos inteligentes más complejos.
