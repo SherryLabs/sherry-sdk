@@ -77,7 +77,6 @@ const sidebars: SidebarsConfig = {
                         'api-reference/action-types/http-actions',
                         'api-reference/action-types/nested-action-flows',
                     ],
-                    
                 },
                 'api-reference/parameters/parameters',
             ],
