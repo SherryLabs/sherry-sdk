@@ -1,4 +1,4 @@
-# Transfer Actions 
+# Transfer Actions
 
 ## Simple & Interactive Native Token Transfers
 
@@ -9,7 +9,7 @@ Transfer Actions are designed for **simple, user-friendly native token transfers
 Unlike Blockchain Actions that require contract knowledge, or Dynamic Actions that need server logic, Transfer Actions are:
 
 - 🎯 **Purpose-built** for native token transfers
-- 🎨 **Highly interactive** with built-in UI configurability  
+- 🎨 **Highly interactive** with built-in UI configurability
 - 🚀 **Zero complexity** - no ABIs, no contracts, just send tokens
 - 📱 **Mobile-optimized** with beautiful selection interfaces
 - ⚡ **Instant setup** - works in minutes, not hours
@@ -19,17 +19,17 @@ Unlike Blockchain Actions that require contract knowledge, or Dynamic Actions th
 ```typescript
 interface TransferAction {
   type: 'transfer';
-  label: string;                    // Button text shown to users
-  description?: string;             // Optional help text
-  chains: ChainContext;            // Source and optional destination
-  
+  label: string; // Button text shown to users
+  description?: string; // Optional help text
+  chains: ChainContext; // Source and optional destination
+
   // Simple Configuration (fixed values)
-  to?: `0x${string}`;              // Fixed recipient address
-  amount?: number;                 // Fixed amount in native units
-  
+  to?: `0x${string}`; // Fixed recipient address
+  amount?: number; // Fixed amount in native units
+
   // Interactive Configuration (user choices)
-  recipient?: RecipientConfig;     // Let user choose recipient
-  amountConfig?: AmountConfig;     // Let user choose amount
+  recipient?: RecipientConfig; // Let user choose recipient
+  amountConfig?: AmountConfig; // Let user choose amount
 }
 ```
 
@@ -46,7 +46,7 @@ const simpleDonation: TransferAction = {
   description: 'Support our project development',
   chains: { source: 'avalanche' },
   to: '0x742d35Cc6734C0532925a3b8D4ccd306f6F4B26C',
-  amount: 0.1
+  amount: 0.1,
 };
 ```
 
@@ -68,21 +68,21 @@ const charityDonation: TransferAction = {
       {
         label: 'Education Fund 🎓',
         value: '0x1234567890123456789012345678901234567890',
-        description: 'Supporting education initiatives worldwide'
+        description: 'Supporting education initiatives worldwide',
       },
       {
         label: 'Climate Action 🌍',
         value: '0x2345678901234567890123456789012345678901',
-        description: 'Fighting climate change through technology'
+        description: 'Fighting climate change through technology',
       },
       {
         label: 'Healthcare Access 🏥',
         value: '0x3456789012345678901234567890123456789012',
-        description: 'Improving healthcare in underserved communities'
-      }
-    ]
+        description: 'Improving healthcare in underserved communities',
+      },
+    ],
   },
-  amount: 0.05 // Fixed amount, user chooses recipient
+  amount: 0.05, // Fixed amount, user chooses recipient
 };
 ```
 
@@ -102,28 +102,28 @@ const creatorTipping: TransferAction = {
     label: 'Tip Amount',
     required: true,
     options: [
-      { 
-        label: 'Coffee ☕', 
-        value: 0.01, 
-        description: '0.01 AVAX (~$0.50)'
+      {
+        label: 'Coffee ☕',
+        value: 0.01,
+        description: '0.01 AVAX (~$0.50)',
       },
-      { 
-        label: 'Lunch 🍕', 
-        value: 0.05, 
-        description: '0.05 AVAX (~$2.50)'
+      {
+        label: 'Lunch 🍕',
+        value: 0.05,
+        description: '0.05 AVAX (~$2.50)',
       },
-      { 
-        label: 'Dinner 🍽️', 
-        value: 0.1, 
-        description: '0.1 AVAX (~$5.00)'
+      {
+        label: 'Dinner 🍽️',
+        value: 0.1,
+        description: '0.1 AVAX (~$5.00)',
       },
-      { 
-        label: 'Generous 💰', 
-        value: 0.5, 
-        description: '0.5 AVAX (~$25.00)'
-      }
-    ]
-  }
+      {
+        label: 'Generous 💰',
+        value: 0.5,
+        description: '0.5 AVAX (~$25.00)',
+      },
+    ],
+  },
 };
 ```
 
@@ -137,7 +137,7 @@ const flexiblePayment: TransferAction = {
   label: 'Send Payment',
   description: 'Send AVAX to team members',
   chains: { source: 'avalanche' },
-  
+
   recipient: {
     type: 'select',
     label: 'Team Member',
@@ -146,43 +146,43 @@ const flexiblePayment: TransferAction = {
       {
         label: 'Alice - Frontend Dev 👩‍💻',
         value: '0x1111111111111111111111111111111111111111',
-        description: 'Lead Frontend Developer'
+        description: 'Lead Frontend Developer',
       },
       {
         label: 'Bob - Backend Dev 👨‍💻',
         value: '0x2222222222222222222222222222222222222222',
-        description: 'Senior Backend Engineer'
+        description: 'Senior Backend Engineer',
       },
       {
         label: 'Carol - Designer 🎨',
         value: '0x3333333333333333333333333333333333333333',
-        description: 'UI/UX Designer'
-      }
-    ]
+        description: 'UI/UX Designer',
+      },
+    ],
   },
-  
+
   amountConfig: {
     type: 'select',
     label: 'Payment Amount',
     required: true,
     options: [
-      { 
-        label: 'Bonus Payment', 
-        value: 0.5, 
-        description: '0.5 AVAX bonus'
+      {
+        label: 'Bonus Payment',
+        value: 0.5,
+        description: '0.5 AVAX bonus',
       },
-      { 
-        label: 'Weekly Salary', 
-        value: 2.0, 
-        description: '2.0 AVAX weekly'
+      {
+        label: 'Weekly Salary',
+        value: 2.0,
+        description: '2.0 AVAX weekly',
       },
-      { 
-        label: 'Project Completion', 
-        value: 5.0, 
-        description: '5.0 AVAX milestone'
-      }
-    ]
-  }
+      {
+        label: 'Project Completion',
+        value: 5.0,
+        description: '5.0 AVAX milestone',
+      },
+    ],
+  },
 };
 ```
 
@@ -195,9 +195,9 @@ const crossChainTransfer: TransferAction = {
   type: 'transfer',
   label: 'Bridge to Celo',
   description: 'Send tokens from Avalanche to Celo network',
-  chains: { 
-    source: 'avalanche', 
-    destination: 'celo' 
+  chains: {
+    source: 'avalanche',
+    destination: 'celo',
   },
   // When neither to/amount nor configs are specified,
   // user gets standard input fields for both
@@ -210,25 +210,25 @@ const crossChainTransfer: TransferAction = {
 
 ```typescript
 interface RecipientConfig {
-  type?: 'select' | 'radio';        // UI component type
-  label?: string;                   // Field label
-  description?: string;             // Help text
-  required?: boolean;               // Is selection required
-  defaultValue?: `0x${string}`;    // Default selection
-  options?: SelectOption[];         // Predefined recipients
+  type?: 'select' | 'radio'; // UI component type
+  label?: string; // Field label
+  description?: string; // Help text
+  required?: boolean; // Is selection required
+  defaultValue?: `0x${string}`; // Default selection
+  options?: SelectOption[]; // Predefined recipients
 }
 ```
 
-### AmountConfig  
+### AmountConfig
 
 ```typescript
 interface AmountConfig {
-  type?: 'select' | 'radio';        // UI component type
-  label?: string;                   // Field label
-  description?: string;             // Help text
-  required?: boolean;               // Is selection required
-  defaultValue?: number;            // Default amount
-  options?: SelectOption[];         // Predefined amounts
+  type?: 'select' | 'radio'; // UI component type
+  label?: string; // Field label
+  description?: string; // Help text
+  required?: boolean; // Is selection required
+  defaultValue?: number; // Default amount
+  options?: SelectOption[]; // Predefined amounts
 }
 ```
 
@@ -236,9 +236,9 @@ interface AmountConfig {
 
 ```typescript
 interface SelectOption {
-  label: string;                    // Display text
-  value: string | number;           // Actual value (address or amount)
-  description?: string;             // Optional help text
+  label: string; // Display text
+  value: string | number; // Actual value (address or amount)
+  description?: string; // Optional help text
 }
 ```
 
@@ -253,29 +253,29 @@ const contextualTipping: TransferAction = {
   description: 'Reward quality content creation',
   chains: { source: 'celo' },
   to: '0xContentCreatorAddress',
-  
+
   amountConfig: {
     type: 'radio',
     label: 'How much did you enjoy this?',
     required: true,
     options: [
-      { 
-        label: 'Liked it 👍', 
-        value: 0.01, 
-        description: '0.01 CELO - Quick appreciation'
+      {
+        label: 'Liked it 👍',
+        value: 0.01,
+        description: '0.01 CELO - Quick appreciation',
       },
-      { 
-        label: 'Loved it ❤️', 
-        value: 0.05, 
-        description: '0.05 CELO - Great content!'
+      {
+        label: 'Loved it ❤️',
+        value: 0.05,
+        description: '0.05 CELO - Great content!',
       },
-      { 
-        label: 'Mind blown 🤯', 
-        value: 0.1, 
-        description: '0.1 CELO - This was amazing!'
-      }
-    ]
-  }
+      {
+        label: 'Mind blown 🤯',
+        value: 0.1,
+        description: '0.1 CELO - This was amazing!',
+      },
+    ],
+  },
 };
 ```
 
@@ -288,34 +288,34 @@ const crowdfunding: TransferAction = {
   description: 'Help us reach our funding goal',
   chains: { source: 'avalanche' },
   to: '0xProjectFundingAddress',
-  
+
   amountConfig: {
     type: 'select',
     label: 'Contribution Level',
     required: true,
     options: [
-      { 
-        label: 'Supporter 🙌', 
-        value: 0.1, 
-        description: '0.1 AVAX - Every bit helps!'
+      {
+        label: 'Supporter 🙌',
+        value: 0.1,
+        description: '0.1 AVAX - Every bit helps!',
       },
-      { 
-        label: 'Believer 💪', 
-        value: 0.5, 
-        description: '0.5 AVAX - You believe in us!'
+      {
+        label: 'Believer 💪',
+        value: 0.5,
+        description: '0.5 AVAX - You believe in us!',
       },
-      { 
-        label: 'Champion 🏆', 
-        value: 1.0, 
-        description: '1.0 AVAX - Major supporter!'
+      {
+        label: 'Champion 🏆',
+        value: 1.0,
+        description: '1.0 AVAX - Major supporter!',
       },
-      { 
-        label: 'Hero 🦸', 
-        value: 5.0, 
-        description: '5.0 AVAX - Project hero status!'
-      }
-    ]
-  }
+      {
+        label: 'Hero 🦸',
+        value: 5.0,
+        description: '5.0 AVAX - Project hero status!',
+      },
+    ],
+  },
 };
 ```
 
@@ -327,7 +327,7 @@ const splitPayment: TransferAction = {
   label: 'Pay Team Share',
   description: 'Distribute project earnings',
   chains: { source: 'fuji' },
-  
+
   recipient: {
     type: 'radio',
     label: 'Team Member (Equal Split)',
@@ -336,26 +336,26 @@ const splitPayment: TransferAction = {
       {
         label: 'Development Team (40%)',
         value: '0xDevTeamMultisig',
-        description: '4 developers, 10% each'
+        description: '4 developers, 10% each',
       },
       {
         label: 'Marketing Team (30%)',
-        value: '0xMarketingTeamMultisig', 
-        description: '3 marketers, 10% each'
+        value: '0xMarketingTeamMultisig',
+        description: '3 marketers, 10% each',
       },
       {
         label: 'Operations (20%)',
         value: '0xOperationsAddress',
-        description: 'Infrastructure and support'
+        description: 'Infrastructure and support',
       },
       {
         label: 'Reserve Fund (10%)',
         value: '0xReserveFundAddress',
-        description: 'Emergency fund'
-      }
-    ]
+        description: 'Emergency fund',
+      },
+    ],
   },
-  
+
   amountConfig: {
     type: 'select',
     label: 'Distribution Amount',
@@ -363,30 +363,32 @@ const splitPayment: TransferAction = {
     options: [
       { label: 'Weekly Distribution', value: 0.5 },
       { label: 'Monthly Distribution', value: 2.0 },
-      { label: 'Quarterly Distribution', value: 6.0 }
-    ]
-  }
+      { label: 'Quarterly Distribution', value: 6.0 },
+    ],
+  },
 };
 ```
 
 ## UI Components Generated
 
 ### Select Component (Dropdown)
+
 ```typescript
-type: 'select'
+type: 'select';
 // Renders as:
 // [Select Recipient ▼]
 //   ├─ Education Fund 🎓
-//   ├─ Climate Action 🌍  
+//   ├─ Climate Action 🌍
 //   └─ Healthcare Access 🏥
 ```
 
 ### Radio Component (Button Group)
+
 ```typescript
-type: 'radio'
+type: 'radio';
 // Renders as:
 // ○ Coffee ☕ (0.01 AVAX)
-// ○ Lunch 🍕 (0.05 AVAX)  
+// ○ Lunch 🍕 (0.05 AVAX)
 // ● Dinner 🍽️ (0.1 AVAX) [selected]
 ```
 
@@ -416,19 +418,20 @@ try {
 
 ## Comparison with Other Action Types
 
-| Feature | Transfer Action | Blockchain Action | Dynamic Action |
-|---------|----------------|-------------------|----------------|
-| **Purpose** | Native token transfers | Contract interactions | Complex server logic |
-| **Complexity** | Simple | Medium | Advanced |
-| **Setup Time** | Minutes | Hours | Days |
-| **ABI Required** | No | Yes | No |
-| **Server Logic** | No | No | Yes |
-| **UI Configurability** | High | Medium | Medium |
-| **Gas Efficiency** | High | Medium | Variable |
+| Feature                | Transfer Action        | Blockchain Action     | Dynamic Action       |
+| ---------------------- | ---------------------- | --------------------- | -------------------- |
+| **Purpose**            | Native token transfers | Contract interactions | Complex server logic |
+| **Complexity**         | Simple                 | Medium                | Advanced             |
+| **Setup Time**         | Minutes                | Hours                 | Days                 |
+| **ABI Required**       | No                     | Yes                   | No                   |
+| **Server Logic**       | No                     | No                    | Yes                  |
+| **UI Configurability** | High                   | Medium                | Medium               |
+| **Gas Efficiency**     | High                   | Medium                | Variable             |
 
 ## When to Use Transfer Actions
 
 ### ✅ **Perfect for:**
+
 - Tips and donations
 - Social media rewards
 - Simple payments
@@ -439,6 +442,7 @@ try {
 - Content creator support
 
 ### ❌ **Not suitable for:**
+
 - Token transfers (ERC-20) - use Blockchain Actions
 - Complex DeFi operations - use Dynamic Actions
 - Multi-step workflows - use Action Flows
@@ -447,11 +451,12 @@ try {
 ## Best Practices
 
 ### 1. **Make Options Descriptive**
+
 ```typescript
 // ✅ Good - Clear context and value
-{ 
-  label: 'Premium Support 💎', 
-  value: 0.1, 
+{
+  label: 'Premium Support 💎',
+  value: 0.1,
   description: '0.1 AVAX - Priority support for 1 month'
 }
 
@@ -460,15 +465,17 @@ try {
 ```
 
 ### 2. **Use Appropriate UI Components**
+
 ```typescript
 // ✅ Radio for 2-5 options (visual comparison)
-type: 'radio'  // Good for tip amounts
+type: 'radio'; // Good for tip amounts
 
 // ✅ Select for 5+ options (saves space)
-type: 'select' // Good for many recipients
+type: 'select'; // Good for many recipients
 ```
 
 ### 3. **Provide Context in Descriptions**
+
 ```typescript
 {
   label: 'Monthly Subscription',
@@ -477,6 +484,7 @@ type: 'select' // Good for many recipients
 ```
 
 ### 4. **Use Meaningful Defaults**
+
 ```typescript
 amountConfig: {
   defaultValue: 0.05, // Common tip amount
@@ -485,26 +493,28 @@ amountConfig: {
 ```
 
 ### 5. **Group Related Options**
+
 ```typescript
 // Group by purpose or value range
 options: [
   // Small tips
   { label: 'Quick Thanks ☕', value: 0.01 },
   { label: 'Nice Work 👍', value: 0.02 },
-  
-  // Medium tips  
+
+  // Medium tips
   { label: 'Great Content 🔥', value: 0.05 },
   { label: 'Excellent Post ⭐', value: 0.1 },
-  
+
   // Large tips
   { label: 'Outstanding 🏆', value: 0.5 },
-  { label: 'Life Changing 🚀', value: 1.0 }
-]
+  { label: 'Life Changing 🚀', value: 1.0 },
+];
 ```
 
 ## Common Patterns
 
 ### Pattern 1: Fixed Recipient, Variable Amount
+
 ```typescript
 // Use case: Tipping a content creator
 {
@@ -513,7 +523,8 @@ options: [
 }
 ```
 
-### Pattern 2: Variable Recipient, Fixed Amount  
+### Pattern 2: Variable Recipient, Fixed Amount
+
 ```typescript
 // Use case: Equal donations to different charities
 {
@@ -523,6 +534,7 @@ options: [
 ```
 
 ### Pattern 3: Both Variable
+
 ```typescript
 // Use case: Flexible team payments
 {
@@ -532,6 +544,7 @@ options: [
 ```
 
 ### Pattern 4: Both Fixed
+
 ```typescript
 // Use case: Simple one-click donation
 {
@@ -545,6 +558,6 @@ options: [
 ## Next Steps
 
 - [**Dynamic Actions**](./dynamic-actions) - For complex server-side logic
-- [**Blockchain Actions**](./blockchain-actions) - For contract interactions  
+- [**Blockchain Actions**](./blockchain-actions) - For contract interactions
 - [**Action Flows**](./action-flows) - Combine transfers in multi-step workflows
 - [**Parameters Guide**](../parameters/parameters) - Advanced parameter configuration

@@ -7,18 +7,18 @@ Blockchain Actions allow you to interact with smart contract functions on variou
 ```typescript
 interface BlockchainActionMetadata {
   type: 'blockchain';
-  label: string;                    // Button text shown to users
-  address: `0x${string}`;          // Smart contract address  
-  abi: Abi;                        // Contract ABI
-  functionName: string;            // Function name to call
-  chains: ChainContext;            // Source blockchain
-  amount?: number;                 // Native token amount for payable functions
-  params?: Parameter[];            // Function parameters (must match ABI order)
+  label: string; // Button text shown to users
+  address: `0x${string}`; // Smart contract address
+  abi: Abi; // Contract ABI
+  functionName: string; // Function name to call
+  chains: ChainContext; // Source blockchain
+  amount?: number; // Native token amount for payable functions
+  params?: Parameter[]; // Function parameters (must match ABI order)
 }
 
 interface ChainContext {
-  source: Chain;                   // Required: where transaction executes
-  destination?: Chain;             // Optional: for cross-chain actions
+  source: Chain; // Required: where transaction executes
+  destination?: Chain; // Optional: for cross-chain actions
 }
 
 type Chain = 'avalanche' | 'celo' | 'fuji' | 'alfajores';
@@ -42,12 +42,12 @@ type Chain = 'avalanche' | 'celo' | 'fuji' | 'alfajores';
 
 ## Supported Chains
 
-| Chain | Network | Type | Chain ID |
-|-------|---------|------|----------|
-| `avalanche` | Avalanche C-Chain | Mainnet | 43114 |
-| `celo` | Celo | Mainnet | 42220 |
-| `fuji` | Avalanche Fuji | Testnet | 43113 |
-| `alfajores` | Celo Alfajores | Testnet | 44787 |
+| Chain       | Network           | Type    | Chain ID |
+| ----------- | ----------------- | ------- | -------- |
+| `avalanche` | Avalanche C-Chain | Mainnet | 43114    |
+| `celo`      | Celo              | Mainnet | 42220    |
+| `fuji`      | Avalanche Fuji    | Testnet | 43113    |
+| `alfajores` | Celo Alfajores    | Testnet | 44787    |
 
 ## Examples
 
@@ -63,10 +63,10 @@ const erc20Abi = [
     stateMutability: 'nonpayable',
     inputs: [
       { name: 'spender', type: 'address' },
-      { name: 'amount', type: 'uint256' }
+      { name: 'amount', type: 'uint256' },
     ],
-    outputs: [{ name: '', type: 'bool' }]
-  }
+    outputs: [{ name: '', type: 'bool' }],
+  },
 ] as const;
 
 const approveAction: BlockchainActionMetadata = {
@@ -82,7 +82,7 @@ const approveAction: BlockchainActionMetadata = {
       label: 'Spender Contract',
       type: 'address',
       value: '0x1234567890123456789012345678901234567890',
-      fixed: true // User cannot change this value
+      fixed: true, // User cannot change this value
     },
     {
       name: 'amount',
@@ -90,9 +90,9 @@ const approveAction: BlockchainActionMetadata = {
       type: 'number',
       required: true,
       min: 0.000001,
-      description: 'Amount of USDC to approve for spending'
-    }
-  ]
+      description: 'Amount of USDC to approve for spending',
+    },
+  ],
 };
 ```
 
@@ -106,10 +106,10 @@ const nftAbi = [
     stateMutability: 'payable',
     inputs: [
       { name: 'to', type: 'address' },
-      { name: 'tokenURI', type: 'string' }
+      { name: 'tokenURI', type: 'string' },
     ],
-    outputs: [{ name: 'tokenId', type: 'uint256' }]
-  }
+    outputs: [{ name: 'tokenId', type: 'uint256' }],
+  },
 ] as const;
 
 const mintAction: BlockchainActionMetadata = {
@@ -126,7 +126,7 @@ const mintAction: BlockchainActionMetadata = {
       label: 'Recipient Address',
       type: 'address',
       required: true,
-      description: 'Address that will receive the NFT'
+      description: 'Address that will receive the NFT',
     },
     {
       name: 'tokenURI',
@@ -134,9 +134,9 @@ const mintAction: BlockchainActionMetadata = {
       type: 'text',
       value: 'ipfs://QmYourNftMetadata...',
       fixed: true,
-      description: 'IPFS URI for NFT metadata'
-    }
-  ]
+      description: 'IPFS URI for NFT metadata',
+    },
+  ],
 };
 ```
 
@@ -150,10 +150,10 @@ const daoAbi = [
     stateMutability: 'nonpayable',
     inputs: [
       { name: 'proposalId', type: 'uint256' },
-      { name: 'support', type: 'bool' }
+      { name: 'support', type: 'bool' },
     ],
-    outputs: []
-  }
+    outputs: [],
+  },
 ] as const;
 
 const voteAction: BlockchainActionMetadata = {
@@ -170,17 +170,17 @@ const voteAction: BlockchainActionMetadata = {
       type: 'select',
       required: true,
       options: [
-        { 
-          label: 'Proposal #42: Increase Treasury Allocation', 
+        {
+          label: 'Proposal #42: Increase Treasury Allocation',
           value: 42,
-          description: 'Allocate 100K tokens for ecosystem development'
+          description: 'Allocate 100K tokens for ecosystem development',
         },
-        { 
-          label: 'Proposal #43: New Partnership', 
+        {
+          label: 'Proposal #43: New Partnership',
           value: 43,
-          description: 'Strategic partnership with DeFi protocol'
-        }
-      ]
+          description: 'Strategic partnership with DeFi protocol',
+        },
+      ],
     },
     {
       name: 'support',
@@ -189,10 +189,10 @@ const voteAction: BlockchainActionMetadata = {
       required: true,
       options: [
         { label: 'Yes - Support this proposal', value: true },
-        { label: 'No - Oppose this proposal', value: false }
-      ]
-    }
-  ]
+        { label: 'No - Oppose this proposal', value: false },
+      ],
+    },
+  ],
 };
 ```
 
@@ -208,10 +208,10 @@ const bridgeAbi = [
       { name: 'token', type: 'address' },
       { name: 'amount', type: 'uint256' },
       { name: 'recipient', type: 'address' },
-      { name: 'destinationChainId', type: 'uint256' }
+      { name: 'destinationChainId', type: 'uint256' },
     ],
-    outputs: []
-  }
+    outputs: [],
+  },
 ] as const;
 
 const bridgeAction: BlockchainActionMetadata = {
@@ -220,9 +220,9 @@ const bridgeAction: BlockchainActionMetadata = {
   address: '0xBridgeContractAddress',
   abi: bridgeAbi,
   functionName: 'bridgeTokens',
-  chains: { 
-    source: 'avalanche', 
-    destination: 'celo' // Cross-chain action
+  chains: {
+    source: 'avalanche',
+    destination: 'celo', // Cross-chain action
   },
   params: [
     {
@@ -231,17 +231,17 @@ const bridgeAction: BlockchainActionMetadata = {
       type: 'select',
       required: true,
       options: [
-        { 
-          label: 'USDC', 
+        {
+          label: 'USDC',
           value: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
-          description: 'USD Coin'
+          description: 'USD Coin',
         },
-        { 
-          label: 'USDT', 
+        {
+          label: 'USDT',
           value: '0xdAC17F958D2ee523a2206206994597C13D831ec7',
-          description: 'Tether USD'
-        }
-      ]
+          description: 'Tether USD',
+        },
+      ],
     },
     {
       name: 'amount',
@@ -249,23 +249,23 @@ const bridgeAction: BlockchainActionMetadata = {
       type: 'number',
       required: true,
       min: 0.01,
-      description: 'Amount of tokens to send to Celo'
+      description: 'Amount of tokens to send to Celo',
     },
     {
       name: 'recipient',
       label: 'Recipient on Celo',
       type: 'address',
       required: true,
-      description: 'Address that will receive tokens on Celo'
+      description: 'Address that will receive tokens on Celo',
     },
     {
       name: 'destinationChainId',
       label: 'Destination Chain',
       type: 'number',
       value: 42220, // Celo chain ID
-      fixed: true
-    }
-  ]
+      fixed: true,
+    },
+  ],
 };
 ```
 
@@ -273,38 +273,40 @@ const bridgeAction: BlockchainActionMetadata = {
 
 Parameters must be compatible with the corresponding ABI types:
 
-| ABI Type | Compatible Parameter Types | Example |
-|----------|---------------------------|---------|
-| `address` | `address` | Wallet addresses |
-| `bool` | `boolean`, `radio` with boolean values | True/false choices |
-| `string` | `text`, `email`, `url`, `textarea` | Text inputs |
-| `uint256`, `int256` | `number` | Numeric inputs |
-| `bytes`, `bytes32` | `text` (hex format) | Hex-encoded data |
-| `address[]` | `text` (JSON array format) | `["0x...", "0x..."]` |
+| ABI Type            | Compatible Parameter Types             | Example              |
+| ------------------- | -------------------------------------- | -------------------- |
+| `address`           | `address`                              | Wallet addresses     |
+| `bool`              | `boolean`, `radio` with boolean values | True/false choices   |
+| `string`            | `text`, `email`, `url`, `textarea`     | Text inputs          |
+| `uint256`, `int256` | `number`                               | Numeric inputs       |
+| `bytes`, `bytes32`  | `text` (hex format)                    | Hex-encoded data     |
+| `address[]`         | `text` (JSON array format)             | `["0x...", "0x..."]` |
 
 ## Parameter Validation
 
 The SDK automatically validates parameters against the ABI:
 
 ### Order Validation
+
 Parameters **must** be in the same order as the ABI function inputs:
 
 ```typescript
 // ✅ Correct order matching ABI
 // ABI: transfer(address to, uint256 amount)
 params: [
-  { name: 'to', label: 'Recipient', type: 'address' },     // First
-  { name: 'amount', label: 'Amount', type: 'number' }      // Second  
-]
+  { name: 'to', label: 'Recipient', type: 'address' }, // First
+  { name: 'amount', label: 'Amount', type: 'number' }, // Second
+];
 
 // ❌ Wrong order will cause validation error
 params: [
-  { name: 'amount', label: 'Amount', type: 'number' },     // Wrong!
-  { name: 'to', label: 'Recipient', type: 'address' }      // Wrong!
-]
+  { name: 'amount', label: 'Amount', type: 'number' }, // Wrong!
+  { name: 'to', label: 'Recipient', type: 'address' }, // Wrong!
+];
 ```
 
 ### Type Validation
+
 Parameter types must be compatible with ABI types:
 
 ```typescript
@@ -319,6 +321,7 @@ Parameter types must be compatible with ABI types:
 ```
 
 ### Value Validation
+
 Fixed and default values are validated against ABI types:
 
 ```typescript
@@ -327,7 +330,7 @@ Fixed and default values are validated against ABI types:
 { name: 'amount', type: 'number', value: 100.5 }
 { name: 'active', type: 'boolean', value: true }
 
-// ❌ Invalid values will cause validation error  
+// ❌ Invalid values will cause validation error
 { name: 'spender', type: 'address', value: 'invalid-address', fixed: true }
 { name: 'amount', type: 'number', value: 'not-a-number' }
 ```
@@ -350,9 +353,9 @@ const payableAction: BlockchainActionMetadata = {
       name: 'message',
       label: 'Donation Message',
       type: 'text',
-      required: false
-    }
-  ]
+      required: false,
+    },
+  ],
 };
 ```
 
@@ -368,13 +371,13 @@ import { PARAM_TEMPLATES, createParameter } from '@sherrylinks/sdk';
 const params = [
   createParameter(PARAM_TEMPLATES.ADDRESS, {
     name: 'recipient',
-    label: 'Token Recipient'
+    label: 'Token Recipient',
   }),
   createParameter(PARAM_TEMPLATES.AMOUNT, {
     name: 'tokenAmount',
     label: 'Tokens to Send',
-    min: 0.01
-  })
+    min: 0.01,
+  }),
 ];
 ```
 
@@ -428,9 +431,9 @@ try {
     icon: 'https://myapp.com/icon.png',
     title: 'My Blockchain App',
     description: 'Interact with smart contracts',
-    actions: [blockchainAction]
+    actions: [blockchainAction],
   });
-  
+
   console.log('✅ Action validated successfully');
 } catch (error) {
   console.error('❌ Validation failed:', error.message);
@@ -440,13 +443,13 @@ try {
 
 ## Common Validation Errors
 
-| Error | Cause | Solution |
-|-------|-------|----------|
-| `Function not found in ABI` | `functionName` doesn't exist | Check ABI contains the function |
-| `Parameter name mismatch` | Parameter names don't match ABI | Ensure parameter names match exactly |
-| `Parameter order mismatch` | Parameters in wrong order | Reorder parameters to match ABI |
-| `Invalid address` | Malformed contract address | Use valid `0x...` format address |
-| `Type compatibility error` | Parameter type incompatible with ABI | Use compatible parameter types |
+| Error                            | Cause                                 | Solution                                 |
+| -------------------------------- | ------------------------------------- | ---------------------------------------- |
+| `Function not found in ABI`      | `functionName` doesn't exist          | Check ABI contains the function          |
+| `Parameter name mismatch`        | Parameter names don't match ABI       | Ensure parameter names match exactly     |
+| `Parameter order mismatch`       | Parameters in wrong order             | Reorder parameters to match ABI          |
+| `Invalid address`                | Malformed contract address            | Use valid `0x...` format address         |
+| `Type compatibility error`       | Parameter type incompatible with ABI  | Use compatible parameter types           |
 | `Amount on non-payable function` | `amount` set for non-payable function | Remove `amount` or make function payable |
 
 ## Best Practices
@@ -464,5 +467,5 @@ try {
 ## Next Steps
 
 - [**Transfer Actions**](./transfer-actions) - Learn about native token transfers
-- [**Action Flows**](./nested-action-flows) - Create multi-step workflows  
+- [**Action Flows**](./nested-action-flows) - Create multi-step workflows
 - [**Parameters Guide**](../parameters/parameters) - Deep dive into parameter configuration

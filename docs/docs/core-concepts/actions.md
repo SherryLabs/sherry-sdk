@@ -38,6 +38,7 @@ The most sophisticated action type for complex Web3 operations. Your server comp
 ```
 
 **Perfect for:**
+
 - Multi-step DeFi strategies (yield farming, arbitrage)
 - Dynamic pricing and routing
 - Complex contract interactions requiring server-side computation
@@ -45,6 +46,7 @@ The most sophisticated action type for complex Web3 operations. Your server comp
 - Cross-protocol optimizations
 
 **How it works:**
+
 1. User fills out parameters
 2. Your server receives the data via API call
 3. Server analyzes market conditions, calculates optimal strategy
@@ -76,6 +78,7 @@ For direct smart contract interactions where you know exactly which function to 
 ```
 
 **Perfect for:**
+
 - Token approvals and transfers
 - NFT minting with fixed parameters
 - DAO voting on specific proposals
@@ -83,6 +86,7 @@ For direct smart contract interactions where you know exactly which function to 
 - Direct contract function calls
 
 **When to use vs Dynamic Actions:**
+
 - Use Blockchain Actions when the contract call is straightforward
 - Use Dynamic Actions when you need server-side logic to determine what to call
 
@@ -109,6 +113,7 @@ The most user-friendly way to send native tokens (ETH, AVAX, CELO) with customiz
 ```
 
 **Perfect for:**
+
 - Tips and donations
 - Simple payments
 - Crowdfunding contributions
@@ -134,7 +139,7 @@ For complex multi-step processes that combine different action types with condit
       path: '/api/analyze-portfolio',
       // ... params
       nextActions: [
-        { 
+        {
           actionId: 'suggest-strategy',
           conditions: [{ field: 'balance', operator: 'gt', value: 100 }]
         }
@@ -155,6 +160,7 @@ For complex multi-step processes that combine different action types with condit
 ```
 
 **Perfect for:**
+
 - User onboarding sequences
 - Complex DeFi workflows (approve → swap → stake)
 - Conditional business logic
@@ -176,22 +182,22 @@ Do you need complex server-side logic or real-time calculations?
 └─ No → Continue...
 
 Are you just sending native tokens (ETH/AVAX/CELO)?
-├─ Yes → Transfer Action  
+├─ Yes → Transfer Action
 └─ No → Blockchain Action
 ```
 
 ### Examples by Use Case:
 
-| Use Case | Best Action Type | Why |
-|----------|------------------|-----|
-| NFT Mint (fixed price) | Blockchain | Simple contract call |
-| NFT Mint (dynamic pricing) | Dynamic | Server calculates current price |
-| Token Swap (simple) | Blockchain | Direct DEX interaction |
-| Token Swap (optimal routing) | Dynamic | Server finds best route |
-| Tip/Donation | Transfer | Simple native token send |
-| DAO Vote | Blockchain | Direct governance contract call |
-| DeFi Strategy | Dynamic | Complex optimization needed |
-| User Onboarding | Flow | Multiple steps with decisions |
+| Use Case                     | Best Action Type | Why                             |
+| ---------------------------- | ---------------- | ------------------------------- |
+| NFT Mint (fixed price)       | Blockchain       | Simple contract call            |
+| NFT Mint (dynamic pricing)   | Dynamic          | Server calculates current price |
+| Token Swap (simple)          | Blockchain       | Direct DEX interaction          |
+| Token Swap (optimal routing) | Dynamic          | Server finds best route         |
+| Tip/Donation                 | Transfer         | Simple native token send        |
+| DAO Vote                     | Blockchain       | Direct governance contract call |
+| DeFi Strategy                | Dynamic          | Complex optimization needed     |
+| User Onboarding              | Flow             | Multiple steps with decisions   |
 
 ---
 
@@ -205,19 +211,20 @@ All parameters extend from `BaseParameter`:
 
 ```typescript
 interface BaseParameter {
-  name: string;        // Parameter identifier
-  label: string;       // UI label shown to user
-  type: string;        // Input type
-  required?: boolean;  // Is this field mandatory?
+  name: string; // Parameter identifier
+  label: string; // UI label shown to user
+  type: string; // Input type
+  required?: boolean; // Is this field mandatory?
   description?: string; // Help text
-  fixed?: boolean;     // Is the value non-editable?
-  value?: any;         // Default or fixed value
+  fixed?: boolean; // Is the value non-editable?
+  value?: any; // Default or fixed value
 }
 ```
 
 ### Parameter Types by Action
 
 #### **Dynamic Actions** - Most Flexible
+
 - Can use any parameter type
 - Server processes all inputs
 - Perfect for complex forms
@@ -228,18 +235,21 @@ params: [
     name: 'strategy',
     label: 'Investment Strategy',
     type: 'select',
-    options: [/* multiple options */]
+    options: [
+      /* multiple options */
+    ],
   },
   {
     name: 'amount',
     label: 'Amount',
     type: 'number',
-    min: 0.01
-  }
-]
+    min: 0.01,
+  },
+];
 ```
 
 #### **Blockchain Actions** - ABI-Constrained
+
 - Must match contract function parameters exactly
 - Types must be compatible with ABI
 - Order must match ABI function signature
@@ -247,12 +257,13 @@ params: [
 ```typescript
 // For contract function: mint(address to, uint256 quantity)
 params: [
-  { name: 'to', type: 'address' },      // First parameter
-  { name: 'quantity', type: 'number' }  // Second parameter
-]
+  { name: 'to', type: 'address' }, // First parameter
+  { name: 'quantity', type: 'number' }, // Second parameter
+];
 ```
 
 #### **Transfer Actions** - Configuration-Based
+
 - Uses `amountConfig` and `recipient` instead of `params`
 - Built-in UI components
 - No ABI knowledge required
@@ -264,7 +275,7 @@ amountConfig: {
   options: [/* amount options */]
 },
 recipient: {
-  type: 'select', 
+  type: 'select',
   options: [/* recipient options */]
 }
 ```
@@ -279,13 +290,13 @@ import { PARAM_TEMPLATES, createParameter } from '@sherrylinks/sdk';
 // Address parameter
 const recipientParam = createParameter(PARAM_TEMPLATES.ADDRESS, {
   name: 'recipient',
-  label: 'Destination Address'
+  label: 'Destination Address',
 });
 
-// Amount parameter  
+// Amount parameter
 const amountParam = createParameter(PARAM_TEMPLATES.AMOUNT, {
   name: 'transferAmount',
-  label: 'Amount to Send'
+  label: 'Amount to Send',
 });
 ```
 
@@ -294,12 +305,14 @@ const amountParam = createParameter(PARAM_TEMPLATES.AMOUNT, {
 ## 🎯 Best Practices
 
 ### 1. **Start Simple, Scale Complex**
+
 ```typescript
 // Start with Blockchain Action for simple contract calls
 // Upgrade to Dynamic Action when you need server-side logic
 ```
 
 ### 2. **Use Transfer Actions for Native Tokens**
+
 ```typescript
 // ✅ Good - Use Transfer Action for AVAX/ETH/CELO
 { type: 'transfer', amount: 0.1, chains: { source: 'avalanche' } }
@@ -309,6 +322,7 @@ const amountParam = createParameter(PARAM_TEMPLATES.AMOUNT, {
 ```
 
 ### 3. **Dynamic Actions for Complex Logic**
+
 ```typescript
 // ✅ Perfect use case - Server calculates optimal swap route
 {
@@ -319,13 +333,14 @@ const amountParam = createParameter(PARAM_TEMPLATES.AMOUNT, {
 
 // ❌ Overkill - Simple fixed swap
 {
-  type: 'blockchain', 
+  type: 'blockchain',
   functionName: 'swapExactTokensForTokens',
   // Known parameters, no calculation needed
 }
 ```
 
 ### 4. **Action Flows for Multi-Step UX**
+
 ```typescript
 // ✅ Great for onboarding
 {
