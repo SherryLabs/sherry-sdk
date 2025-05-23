@@ -82,6 +82,8 @@ export async function GET(req: NextRequest) {
             description: "Detailed description of what your mini app does",
             // Actions will be defined in the next step
         };
+    } catch (error) {
+
     }
 }
 ```
@@ -103,7 +105,7 @@ const metadata: Metadata = {
   // ... previous general information ...
   actions: [
     {
-      type: 'dynamic', // Action type (always "dynamic" for mini apps)
+      type: 'dynamic', // Action type 
       label: 'Execute Action', // Text that will appear on the button
       description: 'Description of what this specific action does',
       chains: {
@@ -118,10 +120,10 @@ const metadata: Metadata = {
 
 #### Action Fields Explanation:
 
-- **type**: Must always be "dynamic" for mini apps
+- **type**: Must always be "dynamic" for more complex mini apps
 - **label**: Button text that users will see
 - **description**: Explanation of what this action does
-- **chains.source**: Blockchain name (e.g: "fuji", "ethereum", "polygon")
+- **chains.source**: Blockchain name (e.g: "avalanche", "fuji")
 - **path**: Path of your POST endpoint that will execute the action
 
 ### 4. Configure Parameters
@@ -141,13 +143,6 @@ const metadata: Metadata = {
           type: 'text', // Input type (text, number, email, etc.)
           required: true, // Whether it's mandatory or not
           description: 'Enter the message you want to store on the blockchain',
-        },
-        {
-          name: 'amount',
-          label: 'Amount (ETH)',
-          type: 'number',
-          required: false,
-          description: 'Amount in ETH (optional)',
         },
       ],
     },
@@ -204,7 +199,6 @@ export async function POST(req: NextRequest) {
         // Get parameters from URL
         const { searchParams } = new URL(req.url);
         const message = searchParams.get("message");
-        const amount = searchParams.get("amount");
 
         // Validate required parameters
         if (!message) {
@@ -227,12 +221,11 @@ export async function POST(req: NextRequest) {
 ```typescript
 // Process data (you can add your business logic here)
 console.log('Message received:', message);
-console.log('Amount received:', amount);
 
 // Create transaction
 const tx = {
   to: '0x5ee75a1B1648C023e885E58bD3735Ae273f2cc52', // Destination address
-  value: BigInt(amount ? parseFloat(amount) * 1e18 : 1000000), // Value in wei
+  value: 1 * 1e18 : 1000000), // Value in wei
   chainId: avalancheFuji.id, // Blockchain ID
   // data: "0x..." // You can add contract data here
 };

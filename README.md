@@ -8,24 +8,24 @@
 
 ## 🌟 Overview
 
-Sherry SDK is a powerful toolkit for building interactive Web3 mini-apps that can be embedded within social media posts. The SDK enables developers to create rich, composable blockchain experiences without requiring users to leave their social media feed.
+Sherry SDK is a powerful toolkit for building interactive Web3 mini-apps that can be embedded within social media posts and platforms. The SDK enables developers to create rich, composable blockchain experiences without requiring users to leave their social media feed.
 
 With Sherry, you can transform any post into an interactive dApp that allows users to swap tokens, vote on proposals, mint NFTs, sign transactions, and much more - all with built-in validation and a unified experience across chains.
 
 ## ✨ Features
 
-- 🔗 **Multi-chain Support**: Build once, deploy across Ethereum, Avalanche, Celo, Monad, and more
+- 🔗 **Multi-chain Support**: Build once, deploy across Ethereum, Avalanche, Celo, and more
 - 🧩 **Multiple Action Types**:
-  - **Blockchain Actions**: Call smart contract functions with rich parameter configuration
-  - **Transfer Actions**: Enable token transfers with customizable UIs
-  - **HTTP Actions**: Make API calls and form submissions
-  - **Nested Action Flows**: Create interactive multi-step processes with conditional paths
+  - **Transfer Actions**: Native token transfers with customizable UIs
+  - **Blockchain Actions**: Smart contract interactions with rich parameter configuration
+  - **Dynamic Actions**: Server-side logic with HTTP endpoints
+  - **Nested Action Flows**: Interactive multi-step processes with conditional paths
 - 📋 **Built-in Validation**: Ensure your mini-apps are valid and well-formed before deployment
 - ⚡ **Type Safety**: Full TypeScript support with comprehensive type definitions
 - 🔄 **Cross-chain Interactions**: Enable transactions across multiple blockchains
-- 📊 **Metadata Templates**: Ready-to-use templates for common Web3 use cases
-- 💻 **Developer Tools**: Built-in metadata analysis and action transformation utilities
-- 📱 **User-friendly Parameter Configuration**: Flexible UI specifications for better user experience
+- 📊 **Rich Parameter Types**: Select dropdowns, radio buttons, text inputs, and more
+- 💻 **Developer Tools**: Built-in metadata analysis and debugging utilities
+- 📱 **Responsive Design**: Mini-apps that work across all platforms and screen sizes
 
 ## 📦 Installation
 
@@ -37,21 +37,24 @@ npm install @sherrylinks/sdk
 
 # Using yarn
 yarn add @sherrylinks/sdk
+
+# Using pnpm
+pnpm add @sherrylinks/sdk
 ```
 
 ## 🚀 Quick Start
 
-### Basic Mini-App
+### Simple Token Transfer
 
 ```typescript
 import { createMetadata, Metadata } from '@sherrylinks/sdk';
 
-// Create a simple token transfer metadata
+// Create a simple AVAX transfer mini-app
 const metadata: Metadata = {
   url: 'https://myapp.example',
   icon: 'https://example.com/icon.png',
   title: 'Send AVAX',
-  description: 'Quick AVAX transfer',
+  description: 'Quick AVAX transfer to support creators',
   actions: [
     {
       label: 'Send 0.1 AVAX',
@@ -67,362 +70,239 @@ const metadata: Metadata = {
 const validatedMetadata = createMetadata(metadata);
 ```
 
-### Nested Action Flow
+### Creator Tip with Amount Selection
 
 ```typescript
-import { createMetadata, Metadata, ActionFlow } from '@sherrylinks/sdk';
-
-// Create a flow with multiple steps and decision points
-const swapFlow: ActionFlow = {
-  type: 'flow',
-  label: 'Token Swap',
-  initialActionId: 'select-tokens',
+const creatorTipApp: Metadata = {
+  url: 'https://creator-tips.example',
+  icon: 'https://example.com/tip-icon.png',
+  title: 'Support Creator',
+  description: 'Show your support with AVAX tips',
   actions: [
-    // Step 1: Select tokens and amount
     {
-      id: 'select-tokens',
-      type: 'http',
-      label: 'Select Tokens',
-      path: 'https://api.example.com/quote',
-      params: [
-        // Token selection parameters...
-      ],
-      nextActions: [{ actionId: 'review-quote' }],
-    },
-
-    // Step 2: Review and decide
-    {
-      id: 'review-quote',
-      type: 'decision',
-      label: 'Review Quote',
-      title: 'Review Your Swap',
-      options: [
-        { label: 'Confirm', value: 'confirm', nextActionId: 'execute-swap' },
-        { label: 'Cancel', value: 'cancel', nextActionId: 'cancelled' },
-      ],
-    },
-
-    // Step 3: Execute swap
-    {
-      id: 'execute-swap',
-      type: 'blockchain',
-      label: 'Swap Tokens',
-      address: '0xRouterAddress',
-      // ... other blockchain action properties
-      nextActions: [
-        {
-          actionId: 'success',
-          conditions: [{ field: 'lastResult.status', operator: 'eq', value: 'success' }],
-        },
-        {
-          actionId: 'failed',
-          conditions: [{ field: 'lastResult.status', operator: 'eq', value: 'error' }],
-        },
-      ],
-    },
-
-    // Completion states
-    {
-      id: 'success',
-      type: 'completion',
-      label: 'Swap Complete',
-      message: 'Your swap was successful!',
-      status: 'success',
-    },
-
-    {
-      id: 'failed',
-      type: 'completion',
-      label: 'Swap Failed',
-      message: 'Your swap failed. Please try again.',
-      status: 'error',
-    },
-
-    {
-      id: 'cancelled',
-      type: 'completion',
-      label: 'Swap Cancelled',
-      message: 'You cancelled the swap.',
-      status: 'info',
+      label: 'Send Tip',
+      to: '0xCreatorAddress123',
+      chains: { source: 'avalanche' },
+      amountConfig: {
+        type: 'radio',
+        label: 'Select tip amount',
+        options: [
+          { label: 'Coffee ☕', value: 0.01, description: '0.01 AVAX' },
+          { label: 'Lunch 🍕', value: 0.05, description: '0.05 AVAX' },
+          { label: 'Dinner 🍽️', value: 0.1, description: '0.1 AVAX' },
+        ],
+      },
     },
   ],
 };
+```
 
-// Add to metadata
-const flowMetadata: Metadata = {
-  url: 'https://swap.example',
-  icon: 'https://example.com/swap-icon.png',
-  title: 'Advanced Token Swap',
-  description: 'Swap tokens with our guided flow',
-  actions: [swapFlow],
+### Smart Contract Interaction
+
+```typescript
+const nftMintApp: Metadata = {
+  url: 'https://nft-mint.example',
+  icon: 'https://example.com/nft-icon.png',
+  title: 'Mint NFT Collection',
+  description: 'Mint your unique NFT from our collection',
+  actions: [
+    {
+      type: 'blockchain',
+      label: 'Mint NFT',
+      address: '0xNFTContractAddress',
+      abi: nftContractAbi,
+      functionName: 'mint',
+      chains: { source: 'avalanche' },
+      amount: 0.1, // Mint cost
+      params: [
+        {
+          name: 'to',
+          label: 'Recipient Address',
+          type: 'address',
+          required: true,
+          description: 'Address that will receive the NFT',
+        },
+        {
+          name: 'tier',
+          label: 'NFT Tier',
+          type: 'select',
+          required: true,
+          options: [
+            { label: 'Common 🥉', value: 'common' },
+            { label: 'Rare 🥈', value: 'rare' },
+            { label: 'Epic 🥇', value: 'epic' },
+          ],
+        },
+      ],
+    },
+  ],
 };
+```
 
-// Validate and process
-const validatedFlow = createMetadata(flowMetadata);
+### Dynamic Action with Server Logic
+
+```typescript
+const dynamicApp: Metadata = {
+  url: 'https://dynamic-app.example',
+  icon: 'https://example.com/dynamic-icon.png',
+  title: 'AI Token Optimizer',
+  description: 'Get AI-powered recommendations for optimal token allocation',
+  actions: [
+    {
+      type: 'dynamic',
+      label: 'Optimize Portfolio',
+      path: '/api/optimize-portfolio',
+      chains: { source: 'avalanche' },
+      params: [
+        {
+          name: 'amount',
+          label: 'Investment Amount (USDC)',
+          type: 'number',
+          required: true,
+          min: 100,
+        },
+        {
+          name: 'riskTolerance',
+          label: 'Risk Level',
+          type: 'select',
+          required: true,
+          options: [
+            { label: 'Conservative', value: 'low' },
+            { label: 'Moderate', value: 'medium' },
+            { label: 'Aggressive', value: 'high' },
+          ],
+        },
+      ],
+    },
+  ],
+};
 ```
 
 ## 🧩 Action Types
 
-### Blockchain Actions
-
-Interact with smart contract functions:
-
-```typescript
-{
-  label: 'Approve Token',
-  address: '0xContractAddress',
-  abi: [...],  // Contract ABI
-  functionName: 'approve',
-  chains: { source: 'avalanche' },
-  params: [
-    {
-      name: 'spender',
-      label: 'Spender Address',
-      type: 'address',
-      required: true,
-      value: '0xSpenderAddress',
-      fixed: true  // User cannot change this value
-    },
-    {
-      name: 'amount',
-      label: 'Amount',
-      type: 'number',
-      required: true,
-      min: 0
-    }
-  ]
-}
-```
-
 ### Transfer Actions
+Send native tokens with customizable recipient and amount selection:
+- Fixed or user-selectable recipients
+- Predefined amounts or custom input
+- Multiple payment options with descriptions
 
-Send native tokens or assets:
+### Blockchain Actions
+Interact directly with smart contracts:
+- Call any contract function
+- Rich parameter configuration
+- Support for all Solidity types
+- Automatic gas estimation
 
-```typescript
-{
-  label: 'Donate',
-  description: 'Support our project',
-  chains: { source: 'ethereum' },
-
-  // Fixed recipient
-  to: '0xRecipientAddress',
-
-  // Or let the user choose
-  recipient: {
-    type: 'select',
-    label: 'Select Charity',
-    options: [
-      { label: 'Education Fund', value: '0xAddress1' },
-      { label: 'Climate Action', value: '0xAddress2' }
-    ]
-  },
-
-  // Fixed amount
-  amount: 0.1,
-
-  // Or let the user choose
-  amountConfig: {
-    type: 'radio',
-    label: 'Donation Amount',
-    options: [
-      { label: 'Small', value: 0.01 },
-      { label: 'Medium', value: 0.05 },
-      { label: 'Large', value: 0.1 }
-    ]
-  }
-}
-```
-
-### HTTP Actions
-
-Make API calls and form submissions:
-
-```typescript
-{
-  label: 'Submit Feedback',
-  path: 'https://api.example.com/feedback',
-  params: [
-    {
-      name: 'email',
-      label: 'Email Address',
-      type: 'email',
-      required: true
-    },
-    {
-      name: 'rating',
-      label: 'Rating',
-      type: 'select',
-      required: true,
-      options: [
-        { label: '⭐', value: 1 },
-        { label: '⭐⭐', value: 2 },
-        { label: '⭐⭐⭐', value: 3 },
-        { label: '⭐⭐⭐⭐', value: 4 },
-        { label: '⭐⭐⭐⭐⭐', value: 5 }
-      ]
-    },
-    {
-      name: 'comment',
-      label: 'Comments',
-      type: 'textarea',
-      required: false
-    }
-  ]
-}
-```
+### Dynamic Actions
+Server-side processing with HTTP endpoints:
+- Custom business logic
+- External API integrations
+- Real-time data processing
+- Complex calculations and optimizations
 
 ### Nested Action Flows
-
-Create interactive, multi-step experiences with conditional paths:
-
-```typescript
-{
-  type: 'flow',
-  label: 'DAO Voting',
-  initialActionId: 'select-proposal',
-  actions: [
-    // Each step in the flow...
-    {
-      id: 'select-proposal',
-      type: 'http',
-      label: 'Select Proposal',
-      // ... properties for this step
-      nextActions: [
-        { actionId: 'next-step' }
-      ]
-    },
-    // Decision points with multiple paths
-    {
-      id: 'vote-decision',
-      type: 'decision',
-      label: 'Cast Vote',
-      title: 'How do you vote?',
-      options: [
-        { label: 'Yes', value: true, nextActionId: 'submit-yes-vote' },
-        { label: 'No', value: false, nextActionId: 'submit-no-vote' }
-      ]
-    },
-    // Steps with conditional branching
-    {
-      id: 'submit-vote',
-      type: 'blockchain',
-      // ... properties
-      nextActions: [
-        {
-          actionId: 'success-path',
-          conditions: [{ field: 'lastResult.status', operator: 'eq', value: 'success' }]
-        },
-        {
-          actionId: 'error-path',
-          conditions: [{ field: 'lastResult.status', operator: 'eq', value: 'error' }]
-        }
-      ]
-    },
-    // Completion states
-    {
-      id: 'completion',
-      type: 'completion',
-      label: 'Vote Submitted',
-      message: 'Your vote has been recorded!',
-      status: 'success'
-    }
-  ]
-}
-```
-
-## 🔧 Advanced Usage
-
-### Template Helpers
-
-The SDK provides template helpers for common parameter types:
-
-```typescript
-import { createParameter, PARAM_TEMPLATES } from '@sherrylinks/sdk';
-
-// Create a parameter using a template
-const emailParam = createParameter(PARAM_TEMPLATES.EMAIL, {
-  name: 'email',
-  label: 'Your Email',
-  required: true,
-});
-
-// Create a select parameter with custom options
-const tokenParam = createParameter(PARAM_TEMPLATES.TOKEN_SELECT, {
-  name: 'token',
-  label: 'Select Token',
-  // Override default options
-  options: [
-    { label: 'USDC', value: 'usdc' },
-    { label: 'DAI', value: 'dai' },
-  ],
-});
-```
+Create multi-step interactive experiences:
+- Conditional branching
+- Decision points
+- Progress tracking
+- Completion states
 
 ## 🌐 Supported Chains
 
-- Ethereum Mainnet (`ethereum`)
-- Avalanche C-Chain (`avalanche`)
-- Celo Mainnet (`celo`)
-- Avalanche Fuji Testnet (`fuji`)
-- Celo Alfajores Testnet (`alfajores`)
+- **Ethereum Mainnet** (`ethereum`)
+- **Avalanche C-Chain** (`avalanche`)
+- **Avalanche Fuji Testnet** (`fuji`)
+- **Celo Mainnet** (`celo`)
+- **Celo Alfajores Testnet** (`alfajores`)
 
-## 📚 Examples
+*More chains being added regularly*
 
-The SDK includes several example mini-apps to help you get started:
+## 📚 Live Examples
 
-### Single Action Examples
+Check out real working examples across different complexity levels:
 
-- Token Swap mini-app
-- NFT Marketplace mini-app
-- DAO Voting mini-app
-- Fundraising mini-app
-- Cross-chain Bridge mini-app
+[**View All Examples →**](https://docs.sherry.social/docs/getting-started/examples)
 
-### Flow Examples
+## 🔧 Development Tools
 
-- User Onboarding Flow
-- DeFi Token Swap Flow
-- DAO Governance Flow
+### Sherry Debugger
+Test and validate your mini-apps during development:
+- **[Sherry Debugger](https://app.sherry.social/debugger)** - Interactive testing environment
+- Real-time validation
+- Parameter testing
+- JSON and TypeScript input support
 
-Check the `src/examples` directory for complete implementations.
-
-## 🔍 Validation
-
-The SDK provides extensive validation to ensure your mini-apps work correctly:
-
+### Validation
 ```typescript
 import { validateMetadata } from '@sherrylinks/sdk';
 
-// Validate metadata
 const validationResult = validateMetadata(myMetadata);
 
 if (validationResult.isValid) {
-  // Ready to use!
-  console.log('Metadata is valid:', validationResult.type);
+  console.log('✅ Metadata is valid');
 } else {
-  // Handle validation errors
-  console.error('Validation errors:', validationResult.errors);
+  console.error('❌ Validation errors:', validationResult.errors);
 }
+```
+
+## 📖 Complete Guides
+
+### Next.js Integration
+- **[English Guide](https://docs.sherry.social/docs/guides/guide-en)** - Complete Next.js integration tutorial
+- **[Spanish Guide](https://docs.sherry.social/docs/guides/guide-es)** - Guía completa en español para Next.js
+
+### Getting Started
+- **[Quick Start](https://docs.sherry.social/docs/getting-started/quickstart)** - 5-minute setup
+- **[Your First Mini App](https://docs.sherry.social/docs/getting-started/creatingminiapp)** - Step-by-step tutorial
+- **[Core Concepts](https://docs.sherry.social/docs/core-concepts)** - Understanding the fundamentals
+
+## 📊 SDK Stats
+
+- **📦 Bundle Size**: ~50KB gzipped
+- **🔧 Dependencies**: Minimal (viem, abitype)
+- **🧪 Test Coverage**: >90%
+- **📚 TypeScript**: 100% type coverage
+- **⚡ Performance**: <100ms validation time
+
+## 🎯 Popular Use Cases
+
+- **🎨 NFT Collections** - Let users mint NFTs directly from social posts
+- **🔄 Token Swaps** - Enable DeFi trading without leaving social media
+- **🗳️ DAO Governance** - Streamline proposal voting and participation
+- **💰 Creator Economy** - Direct support and tipping mechanisms
+- **🏦 DeFi Integration** - Seamless access to lending, staking, and yield farming
+- **🎮 Gaming** - In-game transactions and asset management
+- **🏪 Commerce** - Crypto payments and NFT marketplace integration
+
+## 🔧 Advanced Configuration
+
+### Custom Parameter Templates
+```typescript
+import { createParameter, PARAM_TEMPLATES } from '@sherrylinks/sdk';
+
+const customEmailParam = createParameter(PARAM_TEMPLATES.EMAIL, {
+  name: 'userEmail',
+  label: 'Your Email Address',
+  required: true,
+  description: 'We'll send updates about your transaction',
+});
 ```
 
 ## 📖 API Reference
 
 ### Core Functions
-
-- `createMetadata(metadata)`: Validates and processes metadata.
-- `validateMetadata(input)`: Validates metadata and returns detailed results.
+- `createMetadata(metadata)` - Validates and processes metadata
+- `validateMetadata(input)` - Validates metadata with detailed error reporting
 
 ### Type Guards
+- `isBlockchainActionMetadata(action)` - Type guard for blockchain actions
+- `isTransferAction(action)` - Type guard for transfer actions
+- `isHttpAction(action)` - Type guard for HTTP actions
+- `isActionFlow(obj)` - Type guard for nested action flows
 
-- `isBlockchainActionMetadata(action)`: Type guard for blockchain actions.
-- `isTransferAction(action)`: Type guard for transfer actions.
-- `isHttpAction(action)`: Type guard for HTTP actions.
-- `isActionFlow(obj)`: Type guard for nested action flows.
-
-### Helper Functions
-
-- `createParameter(template, customizations)`: Helper for parameter creation.
-- `PARAM_TEMPLATES`: Library of predefined parameter templates.
+### Helper Utilities
+- `createParameter(template, customizations)` - Parameter creation helper
+- `PARAM_TEMPLATES` - Library of predefined parameter templates
 
 ## 🧪 Development
 
@@ -439,56 +319,16 @@ yarn test --coverage
 # Build the package
 yarn build
 
-# Generate/serve documentation (run from docs/ directory)
-cd docs
-yarn start # For development server
-yarn build # To build static files
+# Start documentation server
+cd docs && yarn start
 ```
 
-## Browser Usage
+## 🌍 Community & Support
 
-When using Sherry SDK in browser environments, you'll need to configure your bundler (Webpack, Rollup, etc.) to handle Node.js built-ins:
-
-### Webpack
-
-```javascript
-// webpack.config.js
-module.exports = {
-  // ...your other config
-  resolve: {
-    fallback: {
-      crypto: require.resolve('crypto-browserify'),
-      stream: require.resolve('stream-browserify'),
-      buffer: require.resolve('buffer/'),
-    },
-  },
-  plugins: [
-    new webpack.ProvidePlugin({
-      Buffer: ['buffer', 'Buffer'],
-    }),
-  ],
-};
-```
-
-### Vite
-
-```javascript
-// vite.config.js
-import { defineConfig } from 'vite';
-import { nodePolyfills } from 'vite-plugin-node-polyfills';
-
-export default defineConfig({
-  plugins: [
-    nodePolyfills({
-      globals: {
-        Buffer: true,
-        process: true,
-      },
-      include: ['crypto', 'stream', 'buffer'],
-    }),
-  ],
-});
-```
+- **[Documentation](https://docs.sherry.social)** - Complete guides and API reference
+- **[Discord](https://discord.gg/69brTf6J)** - Community support and discussions
+- **[GitHub Issues](https://github.com/SherryLabs/sherry-sdk/issues)** - Bug reports and feature requests
+- **[Twitter](https://x.com/sherryprotocol)** - Latest updates and announcements
 
 ## 🤝 Contributing
 
@@ -506,6 +346,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 🔗 Links
 
-- [Project Website](https://sherry.social)
-- [Documentation](https://docs.sherry.social)
-- [GitHub Repository](https://github.com/SherryLabs/sherry-sdk)
+- **[Sherry Platform](https://sherry.social)** - Live platform and mini-app gallery
+- **[Documentation](https://docs.sherry.social)** - Complete developer documentation
+- **[GitHub Repository](https://github.com/SherryLabs/sherry-sdk)** - Source code and issues
+- **[npm Package](https://www.npmjs.com/package/@sherrylinks/sdk)** - Package registry
