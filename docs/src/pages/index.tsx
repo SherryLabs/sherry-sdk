@@ -36,47 +36,48 @@ function HomepageHeader() {
             <div className="container">
                 <div className={styles.heroContent}>
                     <div className={styles.heroText}>
-                        <Heading as="h1" className="hero__title">
-                            Build Interactive Web3 Mini-Apps
-                        </Heading>
-                        <Heading as="h2" className={styles.heroSubtitle}>
-                            Embed Blockchain Actions Directly in Social Media Posts
-                        </Heading>
+                        <div className={styles.heroTitleGroup}>
+                            <Heading as="h1" className="hero__title">
+                                Build Interactive Web3 Mini-Apps
+                            </Heading>
+                            <Heading as="h2" className={styles.heroSubtitle}>
+                                Embed Blockchain Actions Directly in Social Media Posts
+                            </Heading>
+                        </div>
                         <p className={styles.heroDescription}>
                             Create token swaps, NFT mints, DAO votes, and more that run directly in
                             social feeds. Multi-chain support, TypeScript-first, with built-in
                             validation and seamless UX.
                         </p>
 
-                        {/* Stats Row */}
-                        <div className={styles.statsRow}>
-                            <div className={styles.stat}>
-                                <span className={styles.statNumber}>4</span>
-                                <span className={styles.statLabel}>Supported Chains</span>
-                            </div>
-                            <div className={styles.stat}>
-                                <span className={styles.statNumber}>5</span>
-                                <span className={styles.statLabel}>Action Types</span>
-                            </div>
-                            <div className={styles.stat}>
-                                <span className={styles.statNumber}>100%</span>
-                                <span className={styles.statLabel}>TypeScript</span>
+                        {/* Enhanced Stats Row */}
+                        <div className={styles.statsContainer}>
+                            <div className={styles.statsRow}>
+                                <div className={styles.stat}>
+                                    <span className={styles.statNumber}>4+</span>
+                                    <span className={styles.statLabel}>Supported Chains</span>
+                                </div>
+                                <div className={styles.statDivider}></div>
+                                <div className={styles.stat}>
+                                    <span className={styles.statNumber}>5+</span>
+                                    <span className={styles.statLabel}>Action Types</span>
+                                </div>
+                                <div className={styles.statDivider}></div>
+                                <div className={styles.stat}>
+                                    <span className={styles.statNumber}>100%</span>
+                                    <span className={styles.statLabel}>TypeScript</span>
+                                </div>
                             </div>
                         </div>
 
                         <div className={styles.buttons}>
-                            <Link className="button button--secondary button--lg" to="/docs/intro">
+                            <Link className={clsx("button button--secondary button--lg", styles.primaryButton)} to="/docs/intro">
                                 <FaRocket style={{ marginRight: '8px' }} />
                                 Get Started
                             </Link>
                             <Link
-                                className="button button--outline button--lg"
+                                className={clsx("button button--outline button--lg", styles.secondaryButton)}
                                 to="/docs/getting-started/examples"
-                                style={{
-                                    border: '2px solid white',
-                                    color: 'white',
-                                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                                }}
                             >
                                 <FaCode style={{ marginRight: '8px' }} />
                                 View Examples
