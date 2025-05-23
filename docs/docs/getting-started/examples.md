@@ -28,13 +28,16 @@ Explore working examples of Sherry SDK mini-apps across different complexity lev
 ## 🎯 **Getting Started Guide**
 
 ### Step 1: Choose Your Level
+
 - **🟢 Beginner**: Start with Transfer Actions or simple Blockchain Actions
-- **🟡 Intermediate**: Try Action Flows and more complex parameter handling  
+- **🟡 Intermediate**: Try Action Flows and more complex parameter handling
 - **🔴 Advanced**: Build Dynamic Actions with server-side logic
 - **🚀 Applications**: Combine multiple action types for complete solutions
 
 ### Step 2: Clone & Deploy
+
 Each example includes:
+
 - ✅ Complete source code
 - ✅ Step-by-step setup instructions
 - ✅ Deployment scripts
@@ -42,6 +45,7 @@ Each example includes:
 - ✅ Explanation of key concepts
 
 ### Step 3: Customize & Extend
+
 - Modify parameters for your use case
 - Change contract addresses and ABIs
 - Add your own business logic
@@ -53,7 +57,8 @@ Each example includes:
 
 Perfect for getting started with the SDK basics.
 
-### 1. **Simple Creator Tip** 
+### 1. **Simple Creator Tip**
+
 **⏱️ Setup: 2 minutes** | **Action Type: Transfer**
 
 A one-click tipping system for content creators.
@@ -66,27 +71,30 @@ const creatorTipApp: Metadata = {
   icon: '☕',
   title: 'Tip the Creator',
   description: 'Show appreciation for great content',
-  actions: [{
-    type: 'transfer',
-    label: 'Send Tip',
-    chains: { source: 'avalanche' },
-    to: '0x742d35Cc6734C0532925a3b8D4ccd306f6F4B26C',
-    amountConfig: {
-      type: 'radio',
-      label: 'Tip Amount',
-      options: [
-        { label: 'Coffee ☕', value: 0.01, description: '0.01 AVAX' },
-        { label: 'Lunch 🍕', value: 0.05, description: '0.05 AVAX' },
-        { label: 'Dinner 🍽️', value: 0.1, description: '0.1 AVAX' }
-      ]
-    }
-  }]
+  actions: [
+    {
+      type: 'transfer',
+      label: 'Send Tip',
+      chains: { source: 'avalanche' },
+      to: '0x742d35Cc6734C0532925a3b8D4ccd306f6F4B26C',
+      amountConfig: {
+        type: 'radio',
+        label: 'Tip Amount',
+        options: [
+          { label: 'Coffee ☕', value: 0.01, description: '0.01 AVAX' },
+          { label: 'Lunch 🍕', value: 0.05, description: '0.05 AVAX' },
+          { label: 'Dinner 🍽️', value: 0.1, description: '0.1 AVAX' },
+        ],
+      },
+    },
+  ],
 };
 
 export default createMetadata(creatorTipApp);
 ```
 
 **🎯 What you'll learn:**
+
 - Basic Transfer Action setup
 - Interactive amount selection
 - User-friendly option labeling
@@ -96,6 +104,7 @@ export default createMetadata(creatorTipApp);
 ---
 
 ### 2. **Charity Donation Selector**
+
 **⏱️ Setup: 3 minutes** | **Action Type: Transfer**
 
 Let users choose between multiple charities with custom amounts.
@@ -106,45 +115,48 @@ const charityApp: Metadata = {
   icon: '💝',
   title: 'Support a Cause',
   description: 'Make a difference with crypto donations',
-  actions: [{
-    type: 'transfer',
-    label: 'Donate Now',
-    chains: { source: 'celo' },
-    recipient: {
-      type: 'select',
-      label: 'Choose Your Cause',
-      options: [
-        {
-          label: 'Education Fund 🎓',
-          value: '0x1234567890123456789012345678901234567890',
-          description: 'Supporting education worldwide'
-        },
-        {
-          label: 'Climate Action 🌍',
-          value: '0x2345678901234567890123456789012345678901',
-          description: 'Fighting climate change'
-        },
-        {
-          label: 'Healthcare Access 🏥',
-          value: '0x3456789012345678901234567890123456789012',
-          description: 'Improving global healthcare'
-        }
-      ]
+  actions: [
+    {
+      type: 'transfer',
+      label: 'Donate Now',
+      chains: { source: 'celo' },
+      recipient: {
+        type: 'select',
+        label: 'Choose Your Cause',
+        options: [
+          {
+            label: 'Education Fund 🎓',
+            value: '0x1234567890123456789012345678901234567890',
+            description: 'Supporting education worldwide',
+          },
+          {
+            label: 'Climate Action 🌍',
+            value: '0x2345678901234567890123456789012345678901',
+            description: 'Fighting climate change',
+          },
+          {
+            label: 'Healthcare Access 🏥',
+            value: '0x3456789012345678901234567890123456789012',
+            description: 'Improving global healthcare',
+          },
+        ],
+      },
+      amountConfig: {
+        type: 'select',
+        label: 'Donation Amount',
+        options: [
+          { label: '$5 worth', value: 0.01 },
+          { label: '$25 worth', value: 0.05 },
+          { label: '$50 worth', value: 0.1 },
+        ],
+      },
     },
-    amountConfig: {
-      type: 'select',
-      label: 'Donation Amount',
-      options: [
-        { label: '$5 worth', value: 0.01 },
-        { label: '$25 worth', value: 0.05 },
-        { label: '$50 worth', value: 0.1 }
-      ]
-    }
-  }]
+  ],
 };
 ```
 
 **🎯 What you'll learn:**
+
 - Both recipient and amount selection
 - Dropdown vs radio button UX
 - Meaningful option descriptions
@@ -154,6 +166,7 @@ const charityApp: Metadata = {
 ---
 
 ### 3. **Fixed-Price NFT Mint**
+
 **⏱️ Setup: 5 minutes** | **Action Type: Blockchain**
 
 Simple NFT minting with fixed price and metadata.
@@ -166,10 +179,10 @@ const nftMintAbi = [
     stateMutability: 'payable',
     inputs: [
       { name: 'to', type: 'address' },
-      { name: 'tokenURI', type: 'string' }
+      { name: 'tokenURI', type: 'string' },
     ],
-    outputs: [{ name: 'tokenId', type: 'uint256' }]
-  }
+    outputs: [{ name: 'tokenId', type: 'uint256' }],
+  },
 ] as const;
 
 const simpleNFTApp: Metadata = {
@@ -177,36 +190,39 @@ const simpleNFTApp: Metadata = {
   icon: '🎨',
   title: 'Mint Cosmic NFT',
   description: 'Get your unique cosmic NFT',
-  actions: [{
-    type: 'blockchain',
-    label: 'Mint for 0.1 AVAX',
-    address: '0x742d35Cc6734C0532925a3b8D4ccd306f6F4B26C',
-    abi: nftMintAbi,
-    functionName: 'mint',
-    chains: { source: 'fuji' },
-    amount: 0.1,
-    params: [
-      {
-        name: 'to',
-        label: 'Your Address',
-        type: 'address',
-        required: true,
-        description: 'Address that will receive the NFT'
-      },
-      {
-        name: 'tokenURI',
-        label: 'Metadata',
-        type: 'text',
-        value: 'ipfs://QmYourNftMetadata123',
-        fixed: true,
-        description: 'NFT metadata URI'
-      }
-    ]
-  }]
+  actions: [
+    {
+      type: 'blockchain',
+      label: 'Mint for 0.1 AVAX',
+      address: '0x742d35Cc6734C0532925a3b8D4ccd306f6F4B26C',
+      abi: nftMintAbi,
+      functionName: 'mint',
+      chains: { source: 'fuji' },
+      amount: 0.1,
+      params: [
+        {
+          name: 'to',
+          label: 'Your Address',
+          type: 'address',
+          required: true,
+          description: 'Address that will receive the NFT',
+        },
+        {
+          name: 'tokenURI',
+          label: 'Metadata',
+          type: 'text',
+          value: 'ipfs://QmYourNftMetadata123',
+          fixed: true,
+          description: 'NFT metadata URI',
+        },
+      ],
+    },
+  ],
 };
 ```
 
 **🎯 What you'll learn:**
+
 - Basic Blockchain Action setup
 - Working with contract ABIs
 - Fixed vs user-input parameters
@@ -217,6 +233,7 @@ const simpleNFTApp: Metadata = {
 ---
 
 ### 4. **Simple Newsletter Signup**
+
 **⏱️ Setup: 3 minutes** | **Action Type: HTTP**
 
 Collect user emails with optional preferences.
@@ -227,54 +244,57 @@ const newsletterApp: Metadata = {
   icon: '📧',
   title: 'Join Our Newsletter',
   description: 'Stay updated with the latest Web3 news',
-  actions: [{
-    type: 'http',
-    label: 'Subscribe Now',
-    path: 'https://api.newsletter.com/subscribe',
-    params: [
-      {
-        name: 'email',
-        label: 'Email Address',
-        type: 'email',
-        required: true,
-        description: 'We\'ll never spam you'
-      },
-      {
-        name: 'name',
-        label: 'First Name',
-        type: 'text',
-        required: false,
-        description: 'Help us personalize your experience'
-      },
-      {
-        name: 'interests',
-        label: 'Your Interests',
-        type: 'select',
-        required: false,
-        options: [
-          { label: 'DeFi', value: 'defi' },
-          { label: 'NFTs', value: 'nfts' },
-          { label: 'Gaming', value: 'gaming' },
-          { label: 'Development', value: 'dev' }
-        ]
-      },
-      {
-        name: 'frequency',
-        label: 'Email Frequency',
-        type: 'radio',
-        required: true,
-        options: [
-          { label: 'Daily', value: 'daily' },
-          { label: 'Weekly', value: 'weekly' },
-          { label: 'Monthly', value: 'monthly' }
-        ]
-      }
-    ]
-  }]
+  actions: [
+    {
+      type: 'http',
+      label: 'Subscribe Now',
+      path: 'https://api.newsletter.com/subscribe',
+      params: [
+        {
+          name: 'email',
+          label: 'Email Address',
+          type: 'email',
+          required: true,
+          description: "We'll never spam you",
+        },
+        {
+          name: 'name',
+          label: 'First Name',
+          type: 'text',
+          required: false,
+          description: 'Help us personalize your experience',
+        },
+        {
+          name: 'interests',
+          label: 'Your Interests',
+          type: 'select',
+          required: false,
+          options: [
+            { label: 'DeFi', value: 'defi' },
+            { label: 'NFTs', value: 'nfts' },
+            { label: 'Gaming', value: 'gaming' },
+            { label: 'Development', value: 'dev' },
+          ],
+        },
+        {
+          name: 'frequency',
+          label: 'Email Frequency',
+          type: 'radio',
+          required: true,
+          options: [
+            { label: 'Daily', value: 'daily' },
+            { label: 'Weekly', value: 'weekly' },
+            { label: 'Monthly', value: 'monthly' },
+          ],
+        },
+      ],
+    },
+  ],
 };
 ```
 
 **🎯 What you'll learn:**
+
 - HTTP Action basics
 - Form parameter types
 - Email validation
@@ -289,6 +309,7 @@ const newsletterApp: Metadata = {
 Ready to build more sophisticated mini-apps.
 
 ### 5. **Token Approval + Swap Flow**
+
 **⏱️ Setup: 15 minutes** | **Action Type: Flow**
 
 A two-step process: approve tokens, then swap them.
@@ -316,7 +337,7 @@ const tokenSwapFlow: ActionFlow = {
           label: 'DEX Router',
           type: 'address',
           value: '0x60aE616a2155Ee3d9A68541Ba4544862310933d4',
-          fixed: true
+          fixed: true,
         },
         {
           name: 'amount',
@@ -324,25 +345,23 @@ const tokenSwapFlow: ActionFlow = {
           type: 'number',
           required: true,
           min: 1,
-          max: 10000
-        }
+          max: 10000,
+        },
       ],
       nextActions: [
         {
           actionId: 'execute-swap',
-          conditions: [
-            { field: 'lastResult.status', operator: 'eq', value: 'success' }
-          ]
+          conditions: [{ field: 'lastResult.status', operator: 'eq', value: 'success' }],
         },
         {
-          actionId: 'approval-failed'
-        }
-      ]
+          actionId: 'approval-failed',
+        },
+      ],
     },
 
     // Step 2: Execute the swap
     {
-      id: 'execute-swap', 
+      id: 'execute-swap',
       type: 'blockchain',
       label: 'Step 2: Swap Tokens',
       address: '0x60aE616a2155Ee3d9A68541Ba4544862310933d4',
@@ -355,37 +374,38 @@ const tokenSwapFlow: ActionFlow = {
           label: 'Amount In',
           type: 'number',
           value: '{{amount}}', // From previous step
-          fixed: true
+          fixed: true,
         },
         {
           name: 'amountOutMin',
           label: 'Min AVAX Out',
           type: 'number',
-          required: true
+          required: true,
         },
         {
           name: 'path',
           label: 'Swap Path',
           type: 'text',
-          value: '["0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48","0xB31f66AA3C1e785363F0875A1B74E27b85FD66c7"]',
-          fixed: true
+          value:
+            '["0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48","0xB31f66AA3C1e785363F0875A1B74E27b85FD66c7"]',
+          fixed: true,
         },
         {
           name: 'to',
           label: 'Recipient',
           type: 'address',
           value: '{{userAddress}}',
-          fixed: true
+          fixed: true,
         },
         {
           name: 'deadline',
           label: 'Deadline',
           type: 'number',
           value: '{{timestamp + 1200}}',
-          fixed: true
-        }
+          fixed: true,
+        },
       ],
-      nextActions: [{ actionId: 'swap-complete' }]
+      nextActions: [{ actionId: 'swap-complete' }],
     },
 
     // Completion states
@@ -394,20 +414,21 @@ const tokenSwapFlow: ActionFlow = {
       type: 'completion',
       label: 'Swap Successful',
       message: 'Your USDC has been swapped for AVAX! 🎉',
-      status: 'success'
+      status: 'success',
     },
     {
       id: 'approval-failed',
-      type: 'completion', 
+      type: 'completion',
       label: 'Approval Failed',
       message: 'Token approval failed. Please try again.',
-      status: 'error'
-    }
-  ]
+      status: 'error',
+    },
+  ],
 };
 ```
 
 **🎯 What you'll learn:**
+
 - Multi-step Action Flows
 - Conditional navigation between steps
 - Parameter passing between actions
@@ -418,6 +439,7 @@ const tokenSwapFlow: ActionFlow = {
 ---
 
 ### 6. **DAO Voting with Proposals**
+
 **⏱️ Setup: 10 minutes** | **Action Type: Blockchain**
 
 Vote on DAO proposals with real-time proposal data.
@@ -428,61 +450,64 @@ const daoVotingApp: Metadata = {
   icon: '🗳️',
   title: 'DAO Governance',
   description: 'Vote on community proposals',
-  actions: [{
-    type: 'blockchain',
-    label: 'Cast Your Vote',
-    address: '0xDAOGovernanceContract',
-    abi: daoAbi,
-    functionName: 'castVote',
-    chains: { source: 'celo' },
-    params: [
-      {
-        name: 'proposalId',
-        label: 'Active Proposals',
-        type: 'select',
-        required: true,
-        options: [
-          {
-            label: 'Proposal #42: Treasury Allocation',
-            value: 42,
-            description: 'Allocate 100K tokens for ecosystem development'
-          },
-          {
-            label: 'Proposal #43: Partnership with Protocol X',
-            value: 43,
-            description: 'Strategic partnership for cross-chain expansion'
-          },
-          {
-            label: 'Proposal #44: Governance Token Split',
-            value: 44,
-            description: '2:1 token split with updated tokenomics'
-          }
-        ]
-      },
-      {
-        name: 'support',
-        label: 'Your Vote',
-        type: 'radio',
-        required: true,
-        options: [
-          { 
-            label: '✅ Yes - I support this proposal', 
-            value: true,
-            description: 'Vote in favor of the proposal'
-          },
-          { 
-            label: '❌ No - I oppose this proposal', 
-            value: false,
-            description: 'Vote against the proposal'
-          }
-        ]
-      }
-    ]
-  }]
+  actions: [
+    {
+      type: 'blockchain',
+      label: 'Cast Your Vote',
+      address: '0xDAOGovernanceContract',
+      abi: daoAbi,
+      functionName: 'castVote',
+      chains: { source: 'celo' },
+      params: [
+        {
+          name: 'proposalId',
+          label: 'Active Proposals',
+          type: 'select',
+          required: true,
+          options: [
+            {
+              label: 'Proposal #42: Treasury Allocation',
+              value: 42,
+              description: 'Allocate 100K tokens for ecosystem development',
+            },
+            {
+              label: 'Proposal #43: Partnership with Protocol X',
+              value: 43,
+              description: 'Strategic partnership for cross-chain expansion',
+            },
+            {
+              label: 'Proposal #44: Governance Token Split',
+              value: 44,
+              description: '2:1 token split with updated tokenomics',
+            },
+          ],
+        },
+        {
+          name: 'support',
+          label: 'Your Vote',
+          type: 'radio',
+          required: true,
+          options: [
+            {
+              label: '✅ Yes - I support this proposal',
+              value: true,
+              description: 'Vote in favor of the proposal',
+            },
+            {
+              label: '❌ No - I oppose this proposal',
+              value: false,
+              description: 'Vote against the proposal',
+            },
+          ],
+        },
+      ],
+    },
+  ],
 };
 ```
 
 **🎯 What you'll learn:**
+
 - Complex parameter selection
 - Boolean parameter handling
 - Real-world DAO integration
@@ -493,6 +518,7 @@ const daoVotingApp: Metadata = {
 ---
 
 ### 7. **Cross-Chain Asset Bridge**
+
 **⏱️ Setup: 12 minutes** | **Action Type: Blockchain**
 
 Bridge tokens between Avalanche and Celo networks.
@@ -503,61 +529,64 @@ const bridgeApp: Metadata = {
   icon: '🌉',
   title: 'Cross-Chain Bridge',
   description: 'Move assets between Avalanche and Celo',
-  actions: [{
-    type: 'blockchain',
-    label: 'Bridge to Celo',
-    address: '0xBridgeContractAddress',
-    abi: bridgeAbi,
-    functionName: 'bridgeTokens',
-    chains: { source: 'avalanche', destination: 'celo' },
-    params: [
-      {
-        name: 'token',
-        label: 'Token to Bridge',
-        type: 'select',
-        required: true,
-        options: [
-          {
-            label: 'USDC (USD Coin)',
-            value: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
-            description: 'Stable USD-pegged token'
-          },
-          {
-            label: 'USDT (Tether)',
-            value: '0xdAC17F958D2ee523a2206206994597C13D831ec7',
-            description: 'Widely used stablecoin'
-          }
-        ]
-      },
-      {
-        name: 'amount',
-        label: 'Amount to Bridge',
-        type: 'number',
-        required: true,
-        min: 1,
-        max: 100000,
-        description: 'Amount of tokens to send to Celo'
-      },
-      {
-        name: 'recipient',
-        label: 'Recipient on Celo',
-        type: 'address',
-        required: true,
-        description: 'Address that will receive tokens on Celo network'
-      },
-      {
-        name: 'destinationChainId',
-        label: 'Destination Chain',
-        type: 'number',
-        value: 42220,
-        fixed: true
-      }
-    ]
-  }]
+  actions: [
+    {
+      type: 'blockchain',
+      label: 'Bridge to Celo',
+      address: '0xBridgeContractAddress',
+      abi: bridgeAbi,
+      functionName: 'bridgeTokens',
+      chains: { source: 'avalanche', destination: 'celo' },
+      params: [
+        {
+          name: 'token',
+          label: 'Token to Bridge',
+          type: 'select',
+          required: true,
+          options: [
+            {
+              label: 'USDC (USD Coin)',
+              value: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
+              description: 'Stable USD-pegged token',
+            },
+            {
+              label: 'USDT (Tether)',
+              value: '0xdAC17F958D2ee523a2206206994597C13D831ec7',
+              description: 'Widely used stablecoin',
+            },
+          ],
+        },
+        {
+          name: 'amount',
+          label: 'Amount to Bridge',
+          type: 'number',
+          required: true,
+          min: 1,
+          max: 100000,
+          description: 'Amount of tokens to send to Celo',
+        },
+        {
+          name: 'recipient',
+          label: 'Recipient on Celo',
+          type: 'address',
+          required: true,
+          description: 'Address that will receive tokens on Celo network',
+        },
+        {
+          name: 'destinationChainId',
+          label: 'Destination Chain',
+          type: 'number',
+          value: 42220,
+          fixed: true,
+        },
+      ],
+    },
+  ],
 };
 ```
 
 **🎯 What you'll learn:**
+
 - Cross-chain action configuration
 - Token selection with descriptions
 - Address validation across chains
@@ -568,6 +597,7 @@ const bridgeApp: Metadata = {
 ---
 
 ### 8. **Multi-Step User Onboarding**
+
 **⏱️ Setup: 20 minutes** | **Action Type: Flow**
 
 Complete user onboarding with email, wallet, and NFT mint.
@@ -591,13 +621,13 @@ const onboardingFlow: ActionFlow = {
           type: 'text',
           required: true,
           minLength: 2,
-          maxLength: 50
+          maxLength: 50,
         },
         {
           name: 'email',
           label: 'Email Address',
           type: 'email',
-          required: true
+          required: true,
         },
         {
           name: 'experience',
@@ -607,11 +637,11 @@ const onboardingFlow: ActionFlow = {
           options: [
             { label: 'Complete Beginner', value: 'beginner' },
             { label: 'Some Experience', value: 'intermediate' },
-            { label: 'Very Experienced', value: 'expert' }
-          ]
-        }
+            { label: 'Very Experienced', value: 'expert' },
+          ],
+        },
       ],
-      nextActions: [{ actionId: 'choose-path' }]
+      nextActions: [{ actionId: 'choose-path' }],
     },
 
     // Step 2: Choose onboarding path
@@ -624,19 +654,19 @@ const onboardingFlow: ActionFlow = {
         {
           label: 'Get my welcome NFT',
           value: 'nft',
-          nextActionId: 'mint-welcome-nft'
+          nextActionId: 'mint-welcome-nft',
         },
         {
           label: 'Learn more about the platform',
           value: 'learn',
-          nextActionId: 'learning-complete'
+          nextActionId: 'learning-complete',
         },
         {
           label: 'Explore features',
           value: 'explore',
-          nextActionId: 'exploration-complete'
-        }
-      ]
+          nextActionId: 'exploration-complete',
+        },
+      ],
     },
 
     // Step 3: Mint welcome NFT
@@ -653,17 +683,17 @@ const onboardingFlow: ActionFlow = {
           name: 'to',
           label: 'Your Address',
           type: 'address',
-          required: true
+          required: true,
         },
         {
           name: 'experience',
           label: 'Experience Level',
           type: 'text',
           value: '{{experience}}', // From step 1
-          fixed: true
-        }
+          fixed: true,
+        },
       ],
-      nextActions: [{ actionId: 'onboarding-complete' }]
+      nextActions: [{ actionId: 'onboarding-complete' }],
     },
 
     // Completion states
@@ -672,27 +702,28 @@ const onboardingFlow: ActionFlow = {
       type: 'completion',
       label: 'Welcome Aboard! 🎉',
       message: 'Your onboarding is complete! Check your wallet for your welcome NFT.',
-      status: 'success'
+      status: 'success',
     },
     {
       id: 'learning-complete',
       type: 'completion',
       label: 'Keep Learning!',
       message: 'Great choice! Check out our documentation to learn more.',
-      status: 'success'
+      status: 'success',
     },
     {
       id: 'exploration-complete',
       type: 'completion',
       label: 'Happy Exploring!',
       message: 'Dive in and explore all our features. Welcome to the community!',
-      status: 'success'
-    }
-  ]
+      status: 'success',
+    },
+  ],
 };
 ```
 
 **🎯 What you'll learn:**
+
 - Complex multi-step flows
 - Decision trees and branching
 - Data passing between steps
@@ -707,6 +738,7 @@ const onboardingFlow: ActionFlow = {
 Complex mini-apps with server-side logic and optimization.
 
 ### 9. **AI-Powered Yield Optimizer**
+
 **⏱️ Setup: 30 minutes** | **Action Type: Dynamic**
 
 Server calculates optimal DeFi yield strategies across multiple protocols.
@@ -718,65 +750,67 @@ const yieldOptimizerApp: Metadata = {
   title: 'AI Yield Optimizer',
   description: 'Maximize your DeFi yields with AI-powered strategies',
   baseUrl: 'https://api.yield-optimizer.com',
-  actions: [{
-    type: 'dynamic',
-    label: 'Optimize My Yield',
-    path: '/api/calculate-optimal-yield',
-    chains: { source: 'avalanche' },
-    params: [
-      {
-        name: 'amount',
-        label: 'Investment Amount (USDC)',
-        type: 'number',
-        required: true,
-        min: 100,
-        max: 1000000,
-        description: 'Minimum $100 for optimal strategy calculation'
-      },
-      {
-        name: 'riskTolerance',
-        label: 'Risk Tolerance',
-        type: 'select',
-        required: true,
-        options: [
-          {
-            label: 'Conservative (3-5% APY)',
-            value: 'low',
-            description: 'Stable protocols only, lower risk'
-          },
-          {
-            label: 'Moderate (5-12% APY)',
-            value: 'medium', 
-            description: 'Balanced risk/reward approach'
-          },
-          {
-            label: 'Aggressive (12%+ APY)',
-            value: 'high',
-            description: 'Higher risk for maximum returns'
-          }
-        ]
-      },
-      {
-        name: 'timeHorizon',
-        label: 'Investment Duration',
-        type: 'radio',
-        required: true,
-        options: [
-          { label: '1 Week', value: 7, description: 'Short-term gains' },
-          { label: '1 Month', value: 30, description: 'Medium-term strategy' },
-          { label: '3 Months', value: 90, description: 'Long-term optimization' },
-          { label: '1 Year', value: 365, description: 'Maximum compounding' }
-        ]
-      },
-      {
-        name: 'autoCompound',
-        label: 'Auto-compound rewards',
-        type: 'boolean',
-        value: true,
-        description: 'Automatically reinvest rewards for compound growth'
-      }
-    ]
-  }]
+  actions: [
+    {
+      type: 'dynamic',
+      label: 'Optimize My Yield',
+      path: '/api/calculate-optimal-yield',
+      chains: { source: 'avalanche' },
+      params: [
+        {
+          name: 'amount',
+          label: 'Investment Amount (USDC)',
+          type: 'number',
+          required: true,
+          min: 100,
+          max: 1000000,
+          description: 'Minimum $100 for optimal strategy calculation',
+        },
+        {
+          name: 'riskTolerance',
+          label: 'Risk Tolerance',
+          type: 'select',
+          required: true,
+          options: [
+            {
+              label: 'Conservative (3-5% APY)',
+              value: 'low',
+              description: 'Stable protocols only, lower risk',
+            },
+            {
+              label: 'Moderate (5-12% APY)',
+              value: 'medium',
+              description: 'Balanced risk/reward approach',
+            },
+            {
+              label: 'Aggressive (12%+ APY)',
+              value: 'high',
+              description: 'Higher risk for maximum returns',
+            },
+          ],
+        },
+        {
+          name: 'timeHorizon',
+          label: 'Investment Duration',
+          type: 'radio',
+          required: true,
+          options: [
+            { label: '1 Week', value: 7, description: 'Short-term gains' },
+            { label: '1 Month', value: 30, description: 'Medium-term strategy' },
+            { label: '3 Months', value: 90, description: 'Long-term optimization' },
+            { label: '1 Year', value: 365, description: 'Maximum compounding' },
+          ],
+        },
+        {
+          name: 'autoCompound',
+          label: 'Auto-compound rewards',
+          type: 'boolean',
+          value: true,
+          description: 'Automatically reinvest rewards for compound growth',
+        },
+      ],
+    },
+  ],
 };
 ```
 
@@ -804,7 +838,7 @@ export async function POST(req: NextRequest) {
       protocols: filteredProtocols,
       amount,
       timeHorizon,
-      autoCompound
+      autoCompound,
     });
 
     // Build optimized transaction
@@ -820,9 +854,9 @@ export async function POST(req: NextRequest) {
           strategy: optimalStrategy.name,
           expectedAPY: `${optimalStrategy.projectedAPY}%`,
           protocols: optimalStrategy.protocols.join(', '),
-          projectedValue: `$${(amount * (1 + optimalStrategy.projectedAPY/100)).toFixed(2)} after ${timeHorizon} days`
-        }
-      }
+          projectedValue: `$${(amount * (1 + optimalStrategy.projectedAPY / 100)).toFixed(2)} after ${timeHorizon} days`,
+        },
+      },
     };
 
     return NextResponse.json(response);
@@ -837,7 +871,7 @@ async function fetchProtocolYields() {
   const protocols = await Promise.all([
     fetch('https://api.aave.com/data/liquidity/v1').then(r => r.json()),
     fetch('https://api.compound.finance/api/v2/ctoken').then(r => r.json()),
-    fetch('https://api.yearn.finance/v1/chains/1/vaults/all').then(r => r.json())
+    fetch('https://api.yearn.finance/v1/chains/1/vaults/all').then(r => r.json()),
   ]);
   return protocols.flat();
 }
@@ -854,12 +888,13 @@ async function calculateOptimalAllocation(config: any) {
     protocols: ['Aave USDC', 'Compound DAI', 'Yearn USDT'],
     allocation: [0.4, 0.35, 0.25],
     projectedAPY: 8.7,
-    riskScore: 4.2
+    riskScore: 4.2,
   };
 }
 ```
 
 **🎯 What you'll learn:**
+
 - Complex Dynamic Action implementation
 - Server-side AI/ML integration
 - Multi-protocol yield optimization
@@ -871,6 +906,7 @@ async function calculateOptimalAllocation(config: any) {
 ---
 
 ### 10. **Dynamic NFT Pricing Engine**
+
 **⏱️ Setup: 25 minutes** | **Action Type: Dynamic**
 
 NFT pricing that adapts to market conditions, demand, and whale activity.
@@ -882,61 +918,63 @@ const dynamicNFTApp: Metadata = {
   title: 'Smart NFT Mint',
   description: 'AI-powered dynamic pricing based on market conditions',
   baseUrl: 'https://api.dynamic-nft.com',
-  actions: [{
-    type: 'dynamic',
-    label: 'Mint at Current Price',
-    path: '/api/calculate-nft-price',
-    chains: { source: 'avalanche' },
-    params: [
-      {
-        name: 'tier',
-        label: 'NFT Tier',
-        type: 'select',
-        required: true,
-        options: [
-          {
-            label: 'Common ⚪',
-            value: 'common',
-            description: 'Basic tier with standard traits'
-          },
-          {
-            label: 'Rare 🔵',
-            value: 'rare', 
-            description: 'Enhanced traits and special effects'
-          },
-          {
-            label: 'Epic 🟣',
-            value: 'epic',
-            description: 'Unique animations and rare attributes'
-          },
-          {
-            label: 'Legendary 🟡',
-            value: 'legendary',
-            description: 'Ultra-rare with exclusive benefits'
-          }
-        ]
-      },
-      {
-        name: 'quantity',
-        label: 'Quantity',
-        type: 'radio',
-        required: true,
-        options: [
-          { label: '1 NFT', value: 1, description: 'Single mint' },
-          { label: '3 NFTs', value: 3, description: '5% bulk discount' },
-          { label: '5 NFTs', value: 5, description: '10% bulk discount' },
-          { label: '10 NFTs', value: 10, description: '15% bulk discount' }
-        ]
-      }
-    ]
-  }]
+  actions: [
+    {
+      type: 'dynamic',
+      label: 'Mint at Current Price',
+      path: '/api/calculate-nft-price',
+      chains: { source: 'avalanche' },
+      params: [
+        {
+          name: 'tier',
+          label: 'NFT Tier',
+          type: 'select',
+          required: true,
+          options: [
+            {
+              label: 'Common ⚪',
+              value: 'common',
+              description: 'Basic tier with standard traits',
+            },
+            {
+              label: 'Rare 🔵',
+              value: 'rare',
+              description: 'Enhanced traits and special effects',
+            },
+            {
+              label: 'Epic 🟣',
+              value: 'epic',
+              description: 'Unique animations and rare attributes',
+            },
+            {
+              label: 'Legendary 🟡',
+              value: 'legendary',
+              description: 'Ultra-rare with exclusive benefits',
+            },
+          ],
+        },
+        {
+          name: 'quantity',
+          label: 'Quantity',
+          type: 'radio',
+          required: true,
+          options: [
+            { label: '1 NFT', value: 1, description: 'Single mint' },
+            { label: '3 NFTs', value: 3, description: '5% bulk discount' },
+            { label: '5 NFTs', value: 5, description: '10% bulk discount' },
+            { label: '10 NFTs', value: 10, description: '15% bulk discount' },
+          ],
+        },
+      ],
+    },
+  ],
 };
 ```
 
 **Backend Implementation:**
 
 ```typescript
-// pages/api/calculate-nft-price.ts  
+// pages/api/calculate-nft-price.ts
 export async function POST(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
@@ -947,15 +985,15 @@ export async function POST(req: NextRequest) {
     const marketData = await analyzeMarketConditions();
     const demandMetrics = await calculateDemandMetrics(tier);
     const whaleActivity = await detectWhaleActivity();
-    
+
     const basePrice = getTierBasePrice(tier);
     const dynamicMultiplier = calculatePriceMultiplier({
       marketData,
-      demandMetrics, 
+      demandMetrics,
       whaleActivity,
-      quantity
+      quantity,
     });
-    
+
     const finalPrice = basePrice * dynamicMultiplier * quantity;
     const bulkDiscount = getBulkDiscount(quantity);
     const totalPrice = finalPrice * (1 - bulkDiscount);
@@ -965,7 +1003,7 @@ export async function POST(req: NextRequest) {
       tier,
       quantity,
       price: totalPrice,
-      recipient: searchParams.get('userAddress')
+      recipient: searchParams.get('userAddress'),
     });
 
     const response: ExecutionResponse = {
@@ -980,9 +1018,9 @@ export async function POST(req: NextRequest) {
           marketCondition: marketData.condition,
           demandLevel: demandMetrics.level,
           priceChange: `${((dynamicMultiplier - 1) * 100).toFixed(1)}%`,
-          bulkDiscount: `${(bulkDiscount * 100).toFixed(0)}%`
-        }
-      }
+          bulkDiscount: `${(bulkDiscount * 100).toFixed(0)}%`,
+        },
+      },
     };
 
     return NextResponse.json(response);
@@ -997,7 +1035,7 @@ async function analyzeMarketConditions() {
   return {
     condition: 'bullish', // bearish, neutral, bullish
     volatility: 0.15,
-    volume24h: 1500000
+    volume24h: 1500000,
   };
 }
 
@@ -1007,7 +1045,7 @@ async function calculateDemandMetrics(tier: string) {
     level: 'high', // low, medium, high
     recentMints: 47,
     uniqueWallets: 156,
-    socialSentiment: 0.8
+    socialSentiment: 0.8,
   };
 }
 
@@ -1015,12 +1053,13 @@ async function detectWhaleActivity() {
   // Monitor large wallet movements and buying patterns
   return {
     recentWhaleActivity: true,
-    largeWalletInterest: 0.7
+    largeWalletInterest: 0.7,
   };
 }
 ```
 
 **🎯 What you'll learn:**
+
 - Real-time market analysis
 - Dynamic pricing algorithms
 - Whale detection systems
@@ -1032,6 +1071,7 @@ async function detectWhaleActivity() {
 ---
 
 ### 11. **Advanced Arbitrage Bot**
+
 **⏱️ Setup: 35 minutes** | **Action Type: Dynamic**
 
 Multi-DEX arbitrage with flash loans and optimal routing.
@@ -1043,65 +1083,67 @@ const arbitrageBotApp: Metadata = {
   title: 'Flash Arbitrage Bot',
   description: 'Execute profitable arbitrage opportunities across DEXs',
   baseUrl: 'https://api.arbitrage-bot.com',
-  actions: [{
-    type: 'dynamic',
-    label: 'Find & Execute Arbitrage',
-    path: '/api/find-arbitrage',
-    chains: { source: 'avalanche' },
-    params: [
-      {
-        name: 'tokenPair',
-        label: 'Token Pair',
-        type: 'select',
-        required: true,
-        options: [
-          {
-            label: 'AVAX/USDC',
-            value: 'AVAX_USDC',
-            description: 'Most liquid pair with frequent opportunities'
-          },
-          {
-            label: 'AVAX/USDT',
-            value: 'AVAX_USDT',
-            description: 'High volume, good for large trades'
-          },
-          {
-            label: 'USDC/USDT',
-            value: 'USDC_USDT',
-            description: 'Stable pair with smaller but consistent profits'
-          }
-        ]
-      },
-      {
-        name: 'maxSlippage',
-        label: 'Max Slippage (%)',
-        type: 'radio',
-        required: true,
-        options: [
-          { label: '0.1%', value: 0.1, description: 'Conservative, safer trades' },
-          { label: '0.5%', value: 0.5, description: 'Balanced approach' },
-          { label: '1.0%', value: 1.0, description: 'Aggressive, higher profits' }
-        ]
-      },
-      {
-        name: 'minProfitThreshold',
-        label: 'Minimum Profit Threshold',
-        type: 'number',
-        required: true,
-        min: 0.01,
-        max: 5.0,
-        value: 0.1,
-        description: 'Minimum profit % to execute trade'
-      },
-      {
-        name: 'useFlashLoan',
-        label: 'Use Flash Loans',
-        type: 'boolean',
-        value: true,
-        description: 'Enable flash loans for capital-free arbitrage'
-      }
-    ]
-  }]
+  actions: [
+    {
+      type: 'dynamic',
+      label: 'Find & Execute Arbitrage',
+      path: '/api/find-arbitrage',
+      chains: { source: 'avalanche' },
+      params: [
+        {
+          name: 'tokenPair',
+          label: 'Token Pair',
+          type: 'select',
+          required: true,
+          options: [
+            {
+              label: 'AVAX/USDC',
+              value: 'AVAX_USDC',
+              description: 'Most liquid pair with frequent opportunities',
+            },
+            {
+              label: 'AVAX/USDT',
+              value: 'AVAX_USDT',
+              description: 'High volume, good for large trades',
+            },
+            {
+              label: 'USDC/USDT',
+              value: 'USDC_USDT',
+              description: 'Stable pair with smaller but consistent profits',
+            },
+          ],
+        },
+        {
+          name: 'maxSlippage',
+          label: 'Max Slippage (%)',
+          type: 'radio',
+          required: true,
+          options: [
+            { label: '0.1%', value: 0.1, description: 'Conservative, safer trades' },
+            { label: '0.5%', value: 0.5, description: 'Balanced approach' },
+            { label: '1.0%', value: 1.0, description: 'Aggressive, higher profits' },
+          ],
+        },
+        {
+          name: 'minProfitThreshold',
+          label: 'Minimum Profit Threshold',
+          type: 'number',
+          required: true,
+          min: 0.01,
+          max: 5.0,
+          value: 0.1,
+          description: 'Minimum profit % to execute trade',
+        },
+        {
+          name: 'useFlashLoan',
+          label: 'Use Flash Loans',
+          type: 'boolean',
+          value: true,
+          description: 'Enable flash loans for capital-free arbitrage',
+        },
+      ],
+    },
+  ],
 };
 ```
 
@@ -1120,21 +1162,24 @@ export async function POST(req: NextRequest) {
     // 🔍 SCAN MULTIPLE DEXs FOR ARBITRAGE OPPORTUNITIES
     const dexPrices = await scanDEXPrices(tokenPair);
     const opportunities = findArbitrageOpportunities(dexPrices, minProfitThreshold);
-    
+
     if (opportunities.length === 0) {
-      return NextResponse.json({ 
-        error: 'No profitable arbitrage opportunities found' 
-      }, { status: 404 });
+      return NextResponse.json(
+        {
+          error: 'No profitable arbitrage opportunities found',
+        },
+        { status: 404 },
+      );
     }
 
     // Select best opportunity
     const bestOpportunity = opportunities[0];
-    
+
     // Calculate optimal trade size
     const optimalSize = calculateOptimalTradeSize(bestOpportunity, maxSlippage);
-    
+
     // Build arbitrage transaction
-    const transaction = useFlashLoan 
+    const transaction = useFlashLoan
       ? await buildFlashLoanArbitrage(bestOpportunity, optimalSize)
       : await buildDirectArbitrage(bestOpportunity, optimalSize);
 
@@ -1149,10 +1194,10 @@ export async function POST(req: NextRequest) {
           sellDEX: bestOpportunity.sellDEX,
           tradeSize: `${optimalSize} tokens`,
           expectedProfit: `${bestOpportunity.profitPercent.toFixed(2)}%`,
-          estimatedGain: `${(optimalSize * bestOpportunity.profitPercent / 100).toFixed(2)}`,
-          flashLoan: useFlashLoan
-        }
-      }
+          estimatedGain: `${((optimalSize * bestOpportunity.profitPercent) / 100).toFixed(2)}`,
+          flashLoan: useFlashLoan,
+        },
+      },
     };
 
     return NextResponse.json(response);
@@ -1166,20 +1211,19 @@ async function scanDEXPrices(tokenPair: string) {
   const dexAPIs = [
     'https://api.traderjoe.xyz/v1/prices',
     'https://api.pangolin.exchange/v1/prices',
-    'https://api.sushi.com/v1/prices'
+    'https://api.sushi.com/v1/prices',
   ];
-  
+
   const prices = await Promise.all(
-    dexAPIs.map(api => 
-      fetch(`${api}/${tokenPair}`).then(r => r.json())
-    )
+    dexAPIs.map(api => fetch(`${api}/${tokenPair}`).then(r => r.json())),
   );
-  
+
   return prices;
 }
 ```
 
 **🎯 What you'll learn:**
+
 - Multi-DEX price scanning
 - Flash loan implementation
 - Optimal trade sizing
@@ -1195,6 +1239,7 @@ async function scanDEXPrices(tokenPair: string) {
 Complete mini-app implementations ready for production.
 
 ### 12. **DeFi Portfolio Manager**
+
 **⏱️ Setup: 45 minutes** | **Multiple Action Types**
 
 Complete DeFi portfolio management with rebalancing, yield optimization, and risk management.
@@ -1219,11 +1264,11 @@ const portfolioManagerApp: Metadata = {
           label: 'Portfolio Address',
           type: 'address',
           required: true,
-          description: 'Wallet address to analyze'
-        }
-      ]
+          description: 'Wallet address to analyze',
+        },
+      ],
     },
-    
+
     // Action 2: Rebalance Portfolio
     {
       type: 'dynamic',
@@ -1240,19 +1285,19 @@ const portfolioManagerApp: Metadata = {
             {
               label: 'Conservative Rebalance',
               value: 'conservative',
-              description: 'Minimal changes, low risk'
+              description: 'Minimal changes, low risk',
             },
             {
               label: 'Aggressive Optimization',
-              value: 'aggressive', 
-              description: 'Maximum yield optimization'
+              value: 'aggressive',
+              description: 'Maximum yield optimization',
             },
             {
               label: 'Risk Parity',
               value: 'risk_parity',
-              description: 'Equal risk contribution'
-            }
-          ]
+              description: 'Equal risk contribution',
+            },
+          ],
         },
         {
           name: 'maxSlippage',
@@ -1261,9 +1306,9 @@ const portfolioManagerApp: Metadata = {
           required: true,
           min: 0.1,
           max: 5.0,
-          value: 1.0
-        }
-      ]
+          value: 1.0,
+        },
+      ],
     },
 
     // Action 3: Emergency Exit
@@ -1280,7 +1325,7 @@ const portfolioManagerApp: Metadata = {
           label: 'Withdrawal Address',
           type: 'address',
           required: true,
-          description: 'Where to send all withdrawn funds'
+          description: 'Where to send all withdrawn funds',
         },
         {
           name: 'confirmation',
@@ -1291,16 +1336,16 @@ const portfolioManagerApp: Metadata = {
             {
               label: '⚠️ YES - Exit all positions immediately',
               value: true,
-              description: 'This will close ALL positions and withdraw funds'
+              description: 'This will close ALL positions and withdraw funds',
             },
             {
               label: '❌ NO - Cancel emergency exit',
               value: false,
-              description: 'Keep current positions'
-            }
-          ]
-        }
-      ]
+              description: 'Keep current positions',
+            },
+          ],
+        },
+      ],
     },
 
     // Action 4: Set Stop Loss
@@ -1321,19 +1366,19 @@ const portfolioManagerApp: Metadata = {
             { label: '5% Loss', value: 5, description: 'Conservative protection' },
             { label: '10% Loss', value: 10, description: 'Balanced protection' },
             { label: '15% Loss', value: 15, description: 'Allow for volatility' },
-            { label: '20% Loss', value: 20, description: 'High risk tolerance' }
-          ]
+            { label: '20% Loss', value: 20, description: 'High risk tolerance' },
+          ],
         },
         {
           name: 'autoRebalance',
           label: 'Auto-rebalance after stop loss',
           type: 'boolean',
           value: false,
-          description: 'Automatically rebalance portfolio after stop loss is triggered'
-        }
-      ]
-    }
-  ]
+          description: 'Automatically rebalance portfolio after stop loss is triggered',
+        },
+      ],
+    },
+  ],
 };
 ```
 
@@ -1344,36 +1389,36 @@ const portfolioManagerApp: Metadata = {
 export async function POST(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const walletAddress = searchParams.get('walletAddress');
-  
+
   // Fetch portfolio data from multiple protocols
   const [aavePositions, compoundPositions, uniswapV3Positions, yearnVaults] = await Promise.all([
     getAavePositions(walletAddress),
     getCompoundPositions(walletAddress),
     getUniswapV3Positions(walletAddress),
-    getYearnPositions(walletAddress)
+    getYearnPositions(walletAddress),
   ]);
-  
+
   // Calculate portfolio metrics
   const portfolioValue = calculateTotalValue(positions);
   const riskScore = calculateRiskScore(positions);
   const apy = calculateWeightedAPY(positions);
   const diversificationScore = calculateDiversification(positions);
-  
+
   // Generate recommendations
   const recommendations = generateRecommendations({
     positions,
     riskScore,
-    diversificationScore
+    diversificationScore,
   });
-  
+
   // Build dashboard transaction
   const transaction = await buildDashboardTransaction({
     portfolioValue,
     riskScore,
     apy,
-    recommendations
+    recommendations,
   });
-  
+
   return NextResponse.json({
     serializedTransaction: serialize(transaction),
     chainId: 'avalanche',
@@ -1384,9 +1429,9 @@ export async function POST(req: NextRequest) {
         riskScore: `${riskScore}/10`,
         weightedAPY: `${apy.toFixed(2)}%`,
         diversificationScore: `${diversificationScore}/10`,
-        recommendations: recommendations.slice(0, 3).join(', ')
-      }
-    }
+        recommendations: recommendations.slice(0, 3).join(', '),
+      },
+    },
   });
 }
 
@@ -1395,23 +1440,23 @@ export async function POST(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const strategy = searchParams.get('strategy');
   const maxSlippage = parseFloat(searchParams.get('maxSlippage') || '1.0');
-  
+
   // Get current portfolio state
   const currentPortfolio = await getCurrentPortfolio(walletAddress);
-  
+
   // Calculate optimal allocation based on strategy
   const targetAllocation = await calculateOptimalAllocation(strategy, currentPortfolio);
-  
+
   // Generate rebalancing transactions
   const rebalancingSteps = await generateRebalancingSteps(
     currentPortfolio,
     targetAllocation,
-    maxSlippage
+    maxSlippage,
   );
-  
+
   // Build batch transaction
   const batchTransaction = await buildBatchRebalanceTransaction(rebalancingSteps);
-  
+
   return NextResponse.json({
     serializedTransaction: serialize(batchTransaction),
     chainId: 'avalanche',
@@ -1422,14 +1467,15 @@ export async function POST(req: NextRequest) {
         transactionCount: rebalancingSteps.length,
         estimatedGasCost: `${estimateGasCost(rebalancingSteps)} AVAX`,
         projectedImprovement: `+${calculateProjectedImprovement(targetAllocation)}% APY`,
-        maxSlippage: `${maxSlippage}%`
-      }
-    }
+        maxSlippage: `${maxSlippage}%`,
+      },
+    },
   });
 }
 ```
 
 **🎯 What you'll learn:**
+
 - Multi-protocol portfolio analysis
 - Risk scoring algorithms
 - Automated rebalancing strategies
@@ -1441,6 +1487,7 @@ export async function POST(req: NextRequest) {
 ---
 
 ### 13. **Social Trading Platform**
+
 **⏱️ Setup: 60 minutes** | **Action Flow**
 
 Follow successful traders and automatically copy their strategies.
@@ -1467,8 +1514,8 @@ const socialTradingFlow: ActionFlow = {
             { label: 'Last 7 days', value: '7d', description: 'Recent performance' },
             { label: 'Last 30 days', value: '30d', description: 'Monthly track record' },
             { label: 'Last 90 days', value: '90d', description: 'Quarterly performance' },
-            { label: 'All time', value: 'all', description: 'Complete history' }
-          ]
+            { label: 'All time', value: 'all', description: 'Complete history' },
+          ],
         },
         {
           name: 'riskProfile',
@@ -1478,8 +1525,8 @@ const socialTradingFlow: ActionFlow = {
           options: [
             { label: 'Conservative (Max 5% drawdown)', value: 'conservative' },
             { label: 'Moderate (Max 15% drawdown)', value: 'moderate' },
-            { label: 'Aggressive (Max 30% drawdown)', value: 'aggressive' }
-          ]
+            { label: 'Aggressive (Max 30% drawdown)', value: 'aggressive' },
+          ],
         },
         {
           name: 'minFollowers',
@@ -1489,10 +1536,10 @@ const socialTradingFlow: ActionFlow = {
           min: 10,
           max: 10000,
           value: 100,
-          description: 'Traders with proven social proof'
-        }
+          description: 'Traders with proven social proof',
+        },
       ],
-      nextActions: [{ actionId: 'select-trader' }]
+      nextActions: [{ actionId: 'select-trader' }],
     },
 
     // Step 2: Select a trader to follow
@@ -1506,24 +1553,24 @@ const socialTradingFlow: ActionFlow = {
         {
           label: 'CryptoWhale42 - 89% Win Rate, 156% YTD',
           value: 'whale42',
-          nextActionId: 'configure-copy-trading'
+          nextActionId: 'configure-copy-trading',
         },
         {
           label: 'DeFiMaster - 76% Win Rate, 134% YTD',
           value: 'defi_master',
-          nextActionId: 'configure-copy-trading'
+          nextActionId: 'configure-copy-trading',
         },
         {
           label: 'SafeTrader - 45% Win Rate, 67% YTD (Low Risk)',
           value: 'safe_trader',
-          nextActionId: 'configure-copy-trading'
+          nextActionId: 'configure-copy-trading',
         },
         {
           label: 'Browse more traders',
           value: 'browse_more',
-          nextActionId: 'discover-traders'
-        }
-      ]
+          nextActionId: 'discover-traders',
+        },
+      ],
     },
 
     // Step 3: Configure copy trading settings
@@ -1541,7 +1588,7 @@ const socialTradingFlow: ActionFlow = {
           min: 100,
           max: 100000,
           value: 1000,
-          description: 'Amount to allocate for copy trading'
+          description: 'Amount to allocate for copy trading',
         },
         {
           name: 'copyPercentage',
@@ -1552,8 +1599,8 @@ const socialTradingFlow: ActionFlow = {
             { label: '10% of trader positions', value: 10 },
             { label: '25% of trader positions', value: 25 },
             { label: '50% of trader positions', value: 50 },
-            { label: '100% exact copy', value: 100 }
-          ]
+            { label: '100% exact copy', value: 100 },
+          ],
         },
         {
           name: 'stopLoss',
@@ -1564,8 +1611,8 @@ const socialTradingFlow: ActionFlow = {
             { label: '5% Loss', value: 5 },
             { label: '10% Loss', value: 10 },
             { label: '20% Loss', value: 20 },
-            { label: 'No Stop Loss', value: 0 }
-          ]
+            { label: 'No Stop Loss', value: 0 },
+          ],
         },
         {
           name: 'autoRebalance',
@@ -1576,11 +1623,11 @@ const socialTradingFlow: ActionFlow = {
             { label: 'Real-time (Immediate)', value: 'realtime' },
             { label: 'Hourly', value: 'hourly' },
             { label: 'Daily', value: 'daily' },
-            { label: 'Manual only', value: 'manual' }
-          ]
-        }
+            { label: 'Manual only', value: 'manual' },
+          ],
+        },
       ],
-      nextActions: [{ actionId: 'confirm-setup' }]
+      nextActions: [{ actionId: 'confirm-setup' }],
     },
 
     // Step 4: Confirm copy trading setup
@@ -1594,19 +1641,19 @@ const socialTradingFlow: ActionFlow = {
         {
           label: '✅ Start Copy Trading',
           value: 'confirm',
-          nextActionId: 'deploy-copy-trading'
+          nextActionId: 'deploy-copy-trading',
         },
         {
           label: '⚙️ Modify Settings',
           value: 'modify',
-          nextActionId: 'configure-copy-trading'
+          nextActionId: 'configure-copy-trading',
         },
         {
           label: '❌ Cancel',
           value: 'cancel',
-          nextActionId: 'setup-cancelled'
-        }
-      ]
+          nextActionId: 'setup-cancelled',
+        },
+      ],
     },
 
     // Step 5: Deploy copy trading contract
@@ -1624,39 +1671,39 @@ const socialTradingFlow: ActionFlow = {
           label: 'Trader Address',
           type: 'address',
           value: '{{selectedTrader}}',
-          fixed: true
+          fixed: true,
         },
         {
           name: 'initialDeposit',
           label: 'Initial Deposit',
           type: 'number',
           value: '{{allocation}}',
-          fixed: true
+          fixed: true,
         },
         {
           name: 'copyPercentage',
           label: 'Copy Percentage',
           type: 'number',
           value: '{{copyPercentage}}',
-          fixed: true
+          fixed: true,
         },
         {
           name: 'stopLossPercentage',
           label: 'Stop Loss',
           type: 'number',
           value: '{{stopLoss}}',
-          fixed: true
-        }
+          fixed: true,
+        },
       ],
       nextActions: [
         {
           actionId: 'copy-trading-active',
-          conditions: [{ field: 'lastResult.status', operator: 'eq', value: 'success' }]
+          conditions: [{ field: 'lastResult.status', operator: 'eq', value: 'success' }],
         },
         {
-          actionId: 'deployment-failed'
-        }
-      ]
+          actionId: 'deployment-failed',
+        },
+      ],
     },
 
     // Completion states
@@ -1664,28 +1711,30 @@ const socialTradingFlow: ActionFlow = {
       id: 'copy-trading-active',
       type: 'completion',
       label: 'Copy Trading Active! 🎉',
-      message: 'Your copy trading vault is now live and will automatically follow your selected trader\'s moves.',
-      status: 'success'
+      message:
+        "Your copy trading vault is now live and will automatically follow your selected trader's moves.",
+      status: 'success',
     },
     {
       id: 'deployment-failed',
       type: 'completion',
       label: 'Deployment Failed',
       message: 'Failed to deploy copy trading contract. Please try again or contact support.',
-      status: 'error'
+      status: 'error',
     },
     {
       id: 'setup-cancelled',
       type: 'completion',
       label: 'Setup Cancelled',
       message: 'Copy trading setup has been cancelled. You can start over anytime.',
-      status: 'info'
-    }
-  ]
+      status: 'info',
+    },
+  ],
 };
 ```
 
 **🎯 What you'll learn:**
+
 - Social trading mechanics
 - Dynamic trader discovery
 - Risk management integration
@@ -1697,6 +1746,7 @@ const socialTradingFlow: ActionFlow = {
 ---
 
 ### 14. **Decentralized Insurance Platform**
+
 **⏱️ Setup: 50 minutes** | **Multiple Action Types**
 
 Complete insurance platform with policy creation, claims, and payouts.
@@ -1785,7 +1835,7 @@ const insurancePlatformApp: Metadata = {
         }
       ]
     },
-    
+
     // Action 2: File Insurance Claim
     {
       type: 'http',
@@ -1957,23 +2007,23 @@ const insurancePlatformApp: Metadata = {
           type: 'radio',
           required: true,
           options: [
-            { 
-              label: '30 days (5% APY)', 
+            {
+              label: '30 days (5% APY)',
               value: 30,
               description: 'Short commitment, lower rewards'
             },
-            { 
-              label: '90 days (8% APY)', 
+            {
+              label: '90 days (8% APY)',
               value: 90,
               description: 'Medium commitment, balanced rewards'
             },
-            { 
-              label: '180 days (12% APY)', 
+            {
+              label: '180 days (12% APY)',
               value: 180,
               description: 'Long commitment, higher rewards'
             },
-            { 
-              label: '365 days (18% APY)', 
+            {
+              label: '365 days (18% APY)',
               value: 365,
               description: 'Maximum commitment, maximum rewards'
             }
@@ -2007,29 +2057,31 @@ export async function POST(req: NextRequest) {
   const protocolRisk = await assessProtocolRisk(protocolAddress);
   const marketConditions = await getMarketConditions();
   const historicalClaims = await getHistoricalClaims(protocolAddress);
-  
+
   // Calculate base premium
   const basePremium = calculateBasePremium({
     coverageAmount,
     coveragePeriod,
     protocolRisk,
     marketConditions,
-    historicalClaims
+    historicalClaims,
   });
 
   // Apply risk tolerance modifier
-  const riskMultiplier = {
-    conservative: 1.5,  // Higher premium, better coverage
-    balanced: 1.0,      // Standard premium
-    aggressive: 0.7     // Lower premium, basic coverage
-  }[riskTolerance] || 1.0;
+  const riskMultiplier =
+    {
+      conservative: 1.5, // Higher premium, better coverage
+      balanced: 1.0, // Standard premium
+      aggressive: 0.7, // Lower premium, basic coverage
+    }[riskTolerance] || 1.0;
 
   const finalPremium = basePremium * riskMultiplier;
-  const coveragePercentage = {
-    conservative: 95,   // Covers 95% of losses
-    balanced: 80,       // Covers 80% of losses  
-    aggressive: 60      // Covers 60% of losses
-  }[riskTolerance] || 80;
+  const coveragePercentage =
+    {
+      conservative: 95, // Covers 95% of losses
+      balanced: 80, // Covers 80% of losses
+      aggressive: 60, // Covers 60% of losses
+    }[riskTolerance] || 80;
 
   // Build insurance purchase transaction
   const transaction = await buildInsurancePurchaseTransaction({
@@ -2037,7 +2089,7 @@ export async function POST(req: NextRequest) {
     coverageAmount,
     premium: finalPremium,
     period: coveragePeriod,
-    coveragePercentage
+    coveragePercentage,
   });
 
   return NextResponse.json({
@@ -2052,9 +2104,9 @@ export async function POST(req: NextRequest) {
         period: `${coveragePeriod} days`,
         coveragePercent: `${coveragePercentage}%`,
         riskScore: `${protocolRisk.score}/10`,
-        estimatedAPY: `${((finalPremium / coverageAmount) * (365 / coveragePeriod) * 100).toFixed(2)}%`
-      }
-    }
+        estimatedAPY: `${((finalPremium / coverageAmount) * (365 / coveragePeriod) * 100).toFixed(2)}%`,
+      },
+    },
   });
 }
 
@@ -2064,20 +2116,25 @@ async function assessProtocolRisk(protocolAddress: string) {
   const auditHistory = await getAuditHistory(protocolAddress);
   const tvlStability = await getTVLStability(protocolAddress);
   const timeInOperation = await getTimeInOperation(protocolAddress);
-  
+
   // Calculate composite risk score (1-10, where 1 is highest risk)
-  const riskScore = Math.min(10, Math.max(1, 
-    (securityScore * 0.3) + 
-    (auditHistory * 0.25) + 
-    (tvlStability * 0.25) + 
-    (timeInOperation * 0.2)
-  ));
-  
-  return { score: riskScore, factors: { securityScore, auditHistory, tvlStability, timeInOperation }};
+  const riskScore = Math.min(
+    10,
+    Math.max(
+      1,
+      securityScore * 0.3 + auditHistory * 0.25 + tvlStability * 0.25 + timeInOperation * 0.2,
+    ),
+  );
+
+  return {
+    score: riskScore,
+    factors: { securityScore, auditHistory, tvlStability, timeInOperation },
+  };
 }
 ```
 
 **🎯 What you'll learn:**
+
 - Risk assessment algorithms
 - Decentralized claims processing
 - Liquidity provision mechanics
@@ -2091,11 +2148,13 @@ async function assessProtocolRisk(protocolAddress: string) {
 ## 🔧 **Development Tools**
 
 ### Testing Your Mini-Apps
+
 - **[Sherry Debugger](https://app.sherry.social/debugger)** - Test your metadata JSON
-<!-- - **[Live Preview](https://app.sherry.social/preview)** - See how your mini-app renders -->
-<!-- - **[Validation Tools](https://app.sherry.social/validate)** - Check for errors before deployment -->
+  <!-- - **[Live Preview](https://app.sherry.social/preview)** - See how your mini-app renders -->
+  <!-- - **[Validation Tools](https://app.sherry.social/validate)** - Check for errors before deployment -->
 
 ### Deployment Options
+
 - **Next.js Vercel**: Fastest for dynamic actions
 - **Static Hosting**: Perfect for simple blockchain/transfer actions
 - **Docker Containers**: For complex server-side logic
@@ -2103,7 +2162,7 @@ async function assessProtocolRisk(protocolAddress: string) {
 
 ---
 
-<!-- 
+<!--
 ## 🤝 **Community Examples**
 
 Want to contribute your own examples? Check out our [Community Examples Repository](https://github.com/SherryLabs/community-examples) where developers share:
@@ -2118,8 +2177,8 @@ Want to contribute your own examples? Check out our [Community Examples Reposito
 ## 📚 **Additional Resources**
 
 - [**SDK Documentation**](/docs/api-reference/action-types/blockchain-actions) - Complete API reference
-<!-- - [**Best Practices Guide**](/docs/guides/best-practices) - Optimization tips and patterns -->
-<!-- - [**Troubleshooting**](/docs/guides/troubleshooting) - Common issues and solutions -->
+  <!-- - [**Best Practices Guide**](/docs/guides/best-practices) - Optimization tips and patterns -->
+  <!-- - [**Troubleshooting**](/docs/guides/troubleshooting) - Common issues and solutions -->
 - [**Discord Community**](https://discord.gg/sherry) - Get help from other developers
 
 ---
@@ -2129,7 +2188,7 @@ Want to contribute your own examples? Check out our [Community Examples Reposito
 Ready to build your own mini-app? Here are some great starting points:
 
 1. **Fork an example** that's closest to your use case
-2. **Modify the parameters** for your specific needs  
+2. **Modify the parameters** for your specific needs
 3. **Test thoroughly** using our debugging tools
 4. **Deploy and share** with the community
 
