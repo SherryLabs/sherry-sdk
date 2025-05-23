@@ -68,23 +68,21 @@ Let's start by defining the basic information of your mini app:
 
 ```typescript
 export async function GET(req: NextRequest) {
-    try {
-        // Get server base URL
-        const host = req.headers.get('host') || 'localhost:3000';
-        const protocol = req.headers.get('x-forwarded-proto') || 'http';
-        const serverUrl = `${protocol}://${host}`;
+  try {
+    // Get server base URL
+    const host = req.headers.get('host') || 'localhost:3000';
+    const protocol = req.headers.get('x-forwarded-proto') || 'http';
+    const serverUrl = `${protocol}://${host}`;
 
-        const metadata: Metadata = {
-            url: "https://your-website.com", // Your main website URL
-            icon: "https://your-website.com/icon.png", // Your app icon URL
-            title: "My Mini App", // Title that will appear on platforms
-            baseUrl: serverUrl, // Base URL where your app is hosted
-            description: "Detailed description of what your mini app does",
-            // Actions will be defined in the next step
-        };
-    } catch (error) {
-
-    }
+    const metadata: Metadata = {
+      url: 'https://your-website.com', // Your main website URL
+      icon: 'https://your-website.com/icon.png', // Your app icon URL
+      title: 'My Mini App', // Title that will appear on platforms
+      baseUrl: serverUrl, // Base URL where your app is hosted
+      description: 'Detailed description of what your mini app does',
+      // Actions will be defined in the next step
+    };
+  } catch (error) {}
 }
 ```
 
@@ -105,7 +103,7 @@ const metadata: Metadata = {
   // ... previous general information ...
   actions: [
     {
-      type: 'dynamic', // Action type 
+      type: 'dynamic', // Action type
       label: 'Execute Action', // Text that will appear on the button
       description: 'Description of what this specific action does',
       chains: {

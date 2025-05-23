@@ -181,27 +181,35 @@ const dynamicApp: Metadata = {
 ## 🧩 Action Types
 
 ### Transfer Actions
+
 Send native tokens with customizable recipient and amount selection:
+
 - Fixed or user-selectable recipients
 - Predefined amounts or custom input
 - Multiple payment options with descriptions
 
 ### Blockchain Actions
+
 Interact directly with smart contracts:
+
 - Call any contract function
 - Rich parameter configuration
 - Support for all Solidity types
 - Automatic gas estimation
 
 ### Dynamic Actions
+
 Server-side processing with HTTP endpoints:
+
 - Custom business logic
 - External API integrations
 - Real-time data processing
 - Complex calculations and optimizations
 
 ### Nested Action Flows
+
 Create multi-step interactive experiences:
+
 - Conditional branching
 - Decision points
 - Progress tracking
@@ -215,7 +223,7 @@ Create multi-step interactive experiences:
 - **Celo Mainnet** (`celo`)
 - **Celo Alfajores Testnet** (`alfajores`)
 
-*More chains being added regularly*
+_More chains being added regularly_
 
 ## 📚 Live Examples
 
@@ -226,13 +234,16 @@ Check out real working examples across different complexity levels:
 ## 🔧 Development Tools
 
 ### Sherry Debugger
+
 Test and validate your mini-apps during development:
+
 - **[Sherry Debugger](https://app.sherry.social/debugger)** - Interactive testing environment
 - Real-time validation
 - Parameter testing
 - JSON and TypeScript input support
 
 ### Validation
+
 ```typescript
 import { validateMetadata } from '@sherrylinks/sdk';
 
@@ -248,10 +259,12 @@ if (validationResult.isValid) {
 ## 📖 Complete Guides
 
 ### Next.js Integration
+
 - **[English Guide](https://docs.sherry.social/docs/guides/guide-en)** - Complete Next.js integration tutorial
 - **[Spanish Guide](https://docs.sherry.social/docs/guides/guide-es)** - Guía completa en español para Next.js
 
 ### Getting Started
+
 - **[Quick Start](https://docs.sherry.social/docs/getting-started/quickstart)** - 5-minute setup
 - **[Your First Mini App](https://docs.sherry.social/docs/getting-started/creatingminiapp)** - Step-by-step tutorial
 - **[Core Concepts](https://docs.sherry.social/docs/core-concepts)** - Understanding the fundamentals
@@ -277,6 +290,7 @@ if (validationResult.isValid) {
 ## 🔧 Advanced Configuration
 
 ### Custom Parameter Templates
+
 ```typescript
 import { createParameter, PARAM_TEMPLATES } from '@sherrylinks/sdk';
 
@@ -291,16 +305,19 @@ const customEmailParam = createParameter(PARAM_TEMPLATES.EMAIL, {
 ## 📖 API Reference
 
 ### Core Functions
+
 - `createMetadata(metadata)` - Validates and processes metadata
 - `validateMetadata(input)` - Validates metadata with detailed error reporting
 
 ### Type Guards
+
 - `isBlockchainActionMetadata(action)` - Type guard for blockchain actions
 - `isTransferAction(action)` - Type guard for transfer actions
 - `isHttpAction(action)` - Type guard for HTTP actions
 - `isActionFlow(obj)` - Type guard for nested action flows
 
 ### Helper Utilities
+
 - `createParameter(template, customizations)` - Parameter creation helper
 - `PARAM_TEMPLATES` - Library of predefined parameter templates
 

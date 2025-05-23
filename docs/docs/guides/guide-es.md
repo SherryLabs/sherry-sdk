@@ -68,23 +68,21 @@ Comencemos definiendo la información básica de tu mini app:
 
 ```typescript
 export async function GET(req: NextRequest) {
-    try {
-        // Obtener la URL base del servidor
-        const host = req.headers.get('host') || 'localhost:3000';
-        const protocol = req.headers.get('x-forwarded-proto') || 'http';
-        const serverUrl = `${protocol}://${host}`;
+  try {
+    // Obtener la URL base del servidor
+    const host = req.headers.get('host') || 'localhost:3000';
+    const protocol = req.headers.get('x-forwarded-proto') || 'http';
+    const serverUrl = `${protocol}://${host}`;
 
-        const metadata: Metadata = {
-            url: "https://tu-sitio-web.com", // URL de tu sitio web principal
-            icon: "https://tu-sitio-web.com/icon.png", // URL del ícono de tu app
-            title: "Mi Mini App", // Título que aparecerá en las plataformas
-            baseUrl: serverUrl, // URL base donde está hospedada tu app
-            description: "Descripción detallada de lo que hace tu mini app",
-            // Las acciones las definiremos en el siguiente paso
-        };
-    } catch (error) {
-      
-    }
+    const metadata: Metadata = {
+      url: 'https://tu-sitio-web.com', // URL de tu sitio web principal
+      icon: 'https://tu-sitio-web.com/icon.png', // URL del ícono de tu app
+      title: 'Mi Mini App', // Título que aparecerá en las plataformas
+      baseUrl: serverUrl, // URL base donde está hospedada tu app
+      description: 'Descripción detallada de lo que hace tu mini app',
+      // Las acciones las definiremos en el siguiente paso
+    };
+  } catch (error) {}
 }
 ```
 
