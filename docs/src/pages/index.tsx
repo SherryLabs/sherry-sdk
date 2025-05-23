@@ -71,12 +71,21 @@ function HomepageHeader() {
                         </div>
 
                         <div className={styles.buttons}>
-                            <Link className={clsx("button button--secondary button--lg", styles.primaryButton)} to="/docs/intro">
+                            <Link
+                                className={clsx(
+                                    'button button--secondary button--lg',
+                                    styles.primaryButton,
+                                )}
+                                to="/docs/intro"
+                            >
                                 <FaRocket style={{ marginRight: '8px' }} />
                                 Get Started
                             </Link>
                             <Link
-                                className={clsx("button button--outline button--lg", styles.secondaryButton)}
+                                className={clsx(
+                                    'button button--outline button--lg',
+                                    styles.secondaryButton,
+                                )}
                                 to="/docs/getting-started/examples"
                             >
                                 <FaCode style={{ marginRight: '8px' }} />

@@ -20,8 +20,16 @@
   --sherry-shadow-md: 0 4px 20px rgba(0, 0, 0, 0.08);
   --sherry-shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.12);
   --sherry-shadow-xl: 0 12px 40px rgba(0, 0, 0, 0.15);
-  --sherry-gradient-primary: linear-gradient(135deg, var(--ifm-color-primary) 0%, var(--ifm-color-primary-dark) 100%);
-  --sherry-gradient-subtle: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(0, 0, 0, 0.05) 100%);
+  --sherry-gradient-primary: linear-gradient(
+    135deg,
+    var(--ifm-color-primary) 0%,
+    var(--ifm-color-primary-dark) 100%
+  );
+  --sherry-gradient-subtle: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(0, 0, 0, 0.05) 100%
+  );
 }
 
 /* Smooth transitions for all interactive elements */
@@ -506,7 +514,11 @@
 }
 
 .quickLinksBadge {
-  background: linear-gradient(135deg, var(--ifm-color-primary) 0%, var(--ifm-color-primary-dark) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--ifm-color-primary) 0%,
+    var(--ifm-color-primary-dark) 100%
+  );
   color: white;
   padding: var(--sherry-spacing-xs) var(--sherry-spacing-md);
   border-radius: var(--sherry-border-radius-lg);
