@@ -72,8 +72,9 @@ const sidebars: SidebarsConfig = {
                         slug: '/api/action-types',
                     },
                     items: [
-                        'api-reference/action-types/blockchain-actions',
                         'api-reference/action-types/transfer-actions',
+                        'api-reference/action-types/blockchain-actions',
+                        'api-reference/action-types/dynamic-actions',
                         'api-reference/action-types/nested-action-flows',
                     ],
                 },

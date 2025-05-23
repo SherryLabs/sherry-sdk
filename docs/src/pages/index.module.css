@@ -1,10 +1,5 @@
 /**
- * CSS files with the .module.css suffix will be treated as CSS modules
- * and scoped locally.
- */
-
-/**
- * Enhanced CSS for the new Sherry SDK homepage
+ * Enhanced CSS for the Sherry SDK homepage
  */
 
 /* Add global transitions for all components */
@@ -13,7 +8,9 @@
 .socialPost,
 .sherryWidget,
 .featureCard,
+.quickLinksCard,
 .useCaseCard,
+.communityCard,
 .codeSection,
 .macWindow,
 .ctaSection,
@@ -47,7 +44,7 @@
   align-items: center;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1rem; /* Add padding to prevent content from touching screen edges */
+  padding: 0 1rem;
 }
 
 .heroText {
@@ -68,6 +65,31 @@
   line-height: 1.6;
   opacity: 0.9;
   margin: 0;
+}
+
+.statsRow {
+  display: flex;
+  gap: 2rem;
+  margin: 1rem 0;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.statNumber {
+  font-size: 2rem;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 0.25rem;
+}
+
+.statLabel {
+  font-size: 0.9rem;
+  opacity: 0.8;
 }
 
 .buttons {
@@ -92,7 +114,7 @@
   transform: perspective(1000px) rotateY(-10deg) rotateX(0deg);
 }
 
-/* Social Post Styles */
+/* Enhanced Social Post Styles */
 .socialPost {
   background: white;
   border-radius: 16px;
@@ -135,7 +157,7 @@
   color: #333;
 }
 
-/* Widget Styles */
+/* Enhanced Widget Styles */
 .sherryWidget {
   background: #f8f9fa;
   border: 2px solid #e9ecef;
@@ -159,6 +181,51 @@
 
 .widgetTitle {
   font-size: 1rem;
+  flex: 1;
+}
+
+.widgetBadge {
+  background: var(--ifm-color-primary);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.nftPreview {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.nftImage {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(45deg, #667eea, #764ba2);
+  border-radius: 8px;
+}
+
+.nftInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.nftName {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.25rem;
+}
+
+.nftPrice {
+  color: var(--ifm-color-primary);
+  font-weight: 500;
 }
 
 .inputGroup {
@@ -192,11 +259,19 @@
   border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.2s ease;
 }
 
 .actionButton:hover {
   background: var(--ifm-color-primary-dark);
+  transform: translateY(-1px);
+}
+
+.buttonIcon {
+  font-size: 1.2rem;
 }
 
 /* Quick Links Section */
@@ -205,31 +280,79 @@
   background: white;
 }
 
+.quickLinksGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
 .quickLinksCard {
   height: 100%;
   transition: all 0.3s ease;
   border-radius: 12px;
   overflow: hidden;
-  cursor: pointer; /* Add cursor pointer to make it look clickable */
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  padding: 2rem;
+  background: white;
+  border: 2px solid #f0f0f0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
 }
 
 .quickLinksCard:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-  border-color: var(--ifm-color-primary); /* Using theme primary color */
+  border-color: var(--ifm-color-primary);
+  text-decoration: none;
+  color: inherit;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
 }
 
 .quickLinksIcon {
   font-size: 2.5rem;
-  margin-bottom: 1rem;
+  color: var(--ifm-color-primary);
+}
+
+.quickLinksBadge {
+  background: var(--ifm-color-primary);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
 }
 
 .quickLinksTitle {
+  margin-bottom: 0.5rem;
   color: var(--ifm-heading-color);
 }
 
 .quickLinksDescription {
   color: var(--ifm-color-content);
+  margin-bottom: auto;
+  line-height: 1.5;
+}
+
+.cardFooter {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #f0f0f0;
+}
+
+.learnMore {
+  color: var(--ifm-color-primary);
+  font-weight: 500;
+  font-size: 0.9rem;
 }
 
 /* Features Section */
@@ -269,24 +392,26 @@
   border-radius: 16px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
-  height: 100%; /* Ensure consistent height */
+  height: 100%;
   display: flex;
   flex-direction: column;
+  border: 2px solid transparent;
 }
 
 .featureCard:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-  border-color: var(--ifm-color-primary); /* Using theme primary color */
+  border-color: var(--ifm-color-primary);
 }
 
 .featureIcon {
   font-size: 3rem;
   margin-bottom: 1rem;
+  color: var(--ifm-color-primary);
 }
 
 .featureContent {
-  flex: 1; /* Allow content to fill space */
+  flex: 1;
   display: flex;
   flex-direction: column;
 }
@@ -307,7 +432,7 @@
   list-style: none;
   padding: 0;
   margin: 0;
-  margin-top: auto; /* Push list to bottom of card */
+  margin-top: auto;
 }
 
 .featureList li {
@@ -329,8 +454,7 @@
 .codeSection {
   padding: 5rem 0;
   background: white;
-  overflow-x: hidden; /* Prevent section from causing overflow */
-  transition: background 0.3s ease;
+  overflow-x: hidden;
 }
 
 .codeContainer {
@@ -338,7 +462,7 @@
   grid-template-columns: 1fr 1fr;
   gap: 4rem;
   align-items: center;
-  max-width: 100%; /* Ensure container doesn't exceed viewport */
+  max-width: 100%;
 }
 
 .codeExplanation h2 {
@@ -382,8 +506,8 @@
 
 .codeExample {
   position: relative;
-  max-width: 100%; /* Constrain width */
-  overflow-x: hidden; /* Hide overflow */
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 /* macOS Window styles */
@@ -393,10 +517,8 @@
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   overflow: hidden;
   width: 100%;
-  max-width: 100%; /* Ensure it doesn't exceed parent */
-  transition:
-    all 0.3s ease,
-    box-shadow 0.3s ease;
+  max-width: 100%;
+  transition: all 0.3s ease;
 }
 
 .macWindowHeader {
@@ -437,33 +559,31 @@
 .windowTitle {
   color: #cccccc;
   font-size: 14px;
-  font-family:
-    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans',
-    'Helvetica Neue', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 .codeBlock {
   background: #1e1e1e;
   color: #d4d4d4;
-  padding: 16px;
-  border-radius: 0; /* Remove border radius inside window */
-  font-family: 'Fira Code', monospace;
+  padding: 20px;
+  border-radius: 0;
+  font-family: 'Fira Code', 'SF Mono', Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
   font-size: 0.9rem;
-  line-height: 1.5;
-  overflow-x: auto; /* Allow horizontal scrolling within code block */
-  box-shadow: none; /* Remove shadow inside window */
+  line-height: 1.6;
+  overflow-x: auto;
+  box-shadow: none;
   margin: 0;
   width: 100%;
 }
 
 .codeBlock code {
-  font-family: SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  font-family: 'Fira Code', 'SF Mono', Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
   font-size: 14px;
   line-height: 1.6;
   display: block;
   white-space: pre;
-  overflow-x: auto; /* Allow horizontal scrolling */
-  tab-size: 2; /* Smaller tab size to save space */
+  overflow-x: auto;
+  tab-size: 2;
 }
 
 /* Use Cases Section */
@@ -475,7 +595,8 @@
 .useCasesGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.5rem;
+  gap: 2rem;
+  margin-top: 2rem;
 }
 
 .useCaseCard {
@@ -484,21 +605,19 @@
   border-radius: 12px;
   text-align: center;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  transition:
-    all 0.3s ease,
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
+  transition: all 0.3s ease;
   height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
+  border: 2px solid transparent;
 }
 
 .useCaseCard:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-  border-color: var(--ifm-color-primary); /* Using theme primary color */
+  border-color: var(--ifm-color-primary);
 }
 
 .useCaseIcon {
@@ -507,7 +626,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 5rem;
+  height: 4rem;
+  color: var(--ifm-color-primary);
 }
 
 .useCaseCard h4 {
@@ -519,6 +639,71 @@
 .useCaseCard p {
   color: #666;
   line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+.useCaseExamples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-top: auto;
+}
+
+.exampleTag {
+  background: var(--ifm-color-primary-lightest);
+  color: var(--ifm-color-primary-dark);
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+/* Community Section */
+.communitySection {
+  padding: 5rem 0;
+  background: white;
+}
+
+.communityGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.communityCard {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  border: 2px solid #f0f0f0;
+}
+
+.communityCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  border-color: var(--ifm-color-primary);
+}
+
+.communityIcon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  color: var(--ifm-color-primary);
+}
+
+.communityCard h4 {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  color: var(--ifm-color-primary);
+}
+
+.communityCard p {
+  color: #666;
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
 }
 
 /* CTA Section */
@@ -529,7 +714,6 @@
   text-align: center;
   position: relative;
   overflow: hidden;
-  transition: background 0.3s ease;
 }
 
 .ctaSection::before {
@@ -570,10 +754,7 @@
 }
 
 .ctaButtons a {
-  transition:
-    all 0.3s ease,
-    background-color 0.2s ease,
-    transform 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 .ctaButtons a:hover {
@@ -581,24 +762,12 @@
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
-/* Ensure buttons are clickable */
-.buttons a,
-.ctaButtons a,
-.quickLinksCard {
-  position: relative;
-  z-index: 10; /* Ensure links are above other elements */
-}
-
-/* --- REMOVE/CONSOLIDATE PREVIOUS GENERAL BUTTON HOVER EFFECTS --- */
-/* The :hover effects will be handled by more specific rules below or by Infima defaults for other buttons */
-
-/* --- Specific Styling for Hero and CTA Outline Buttons --- */
-/* Targets: <Link className="button button--outline button--lg" ...> */
+/* Button Styling */
 .buttons a.button.button--outline.button--lg,
 .ctaButtons a.button.button--outline.button--lg {
   color: white !important;
   background-color: rgba(255, 255, 255, 0.1) !important;
-  border: 2px solid white !important; /* <<< SOLID WHITE BORDER, ALWAYS >>> */
+  border: 2px solid white !important;
   font-weight: 600;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
   transition: all 0.2s ease-in-out;
@@ -606,113 +775,176 @@
 
 .buttons a.button.button--outline.button--lg:hover,
 .ctaButtons a.button.button--outline.button--lg:hover {
-  color: white !important; /* Ensure text color remains white on hover */
-  background-color: rgba(
-    var(--ifm-color-primary-rgb),
-    0.25
-  ) !important; /* Theme-based background */
-  border-color: white !important; /* Keep border white */
-  box-shadow: 0 0 10px rgba(var(--ifm-color-primary-rgb), 0.4); /* Theme-based glow */
+  color: white !important;
+  background-color: rgba(255, 255, 255, 0.2) !important;
+  border-color: white !important;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
   transform: scale(1.03);
 }
 
-/* Dark Mode HOVER for these specific outline buttons - only if different from above */
-/* The base style (non-hover) already ensures white border/text in dark mode due to !important */
-[data-theme='dark'] .buttons a.button.button--outline.button--lg:hover,
-[data-theme='dark'] .ctaButtons a.button.button--outline.button--lg:hover {
-  background-color: rgba(
-    var(--ifm-color-primary-lighter-rgb),
-    0.2
-  ) !important; /* Themed background on hover */
-  border-color: white !important; /* Still ensure border is white */
-  box-shadow: 0 0 12px rgba(var(--ifm-color-primary-lighter-rgb), 0.5); /* Themed glow */
-  /* color: var(--ifm-color-primary-lighter) !important; */ /* Optional: themed text color on hover */
+/* Dark Mode Adjustments */
+[data-theme='dark'] .quickLinksSection {
+  background: #181818;
 }
 
-/* Standardized Card Styling - Restored Previous Working Version */
-.quickLinksCard,
-.featureCard,
-.useCaseCard {
-  background: white;
-  padding: 2rem;
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  transition: all 0.3s ease;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  border: 2px solid transparent;
+[data-theme='dark'] .quickLinksCard {
+  background: #2d2d30;
+  color: #e3e3e3;
+  border-color: #444;
 }
 
-.quickLinksCard:hover,
-.featureCard:hover,
-.useCaseCard:hover {
-  transform: translateY(-5px); /* Restore the float up effect */
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-  border-color: var(--ifm-color-primary);
+[data-theme='dark'] .quickLinksCard:hover {
+  border-color: var(--ifm-color-primary-lighter);
+  box-shadow: 0 0 20px rgba(var(--ifm-color-primary-lighter-rgb), 0.5);
 }
 
-/* Dark mode card styles */
-[data-theme='dark'] .quickLinksCard,
-[data-theme='dark'] .featureCard,
+[data-theme='dark'] .quickLinksTitle {
+  color: #ffffff;
+}
+
+[data-theme='dark'] .quickLinksDescription {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+[data-theme='dark'] .featuresSection {
+  background: #1b1b1d;
+}
+
+[data-theme='dark'] .featureCard {
+  background: #2d2d30;
+  color: #e3e3e3;
+}
+
+[data-theme='dark'] .featureCard:hover {
+  border-color: var(--ifm-color-primary-lighter);
+}
+
+[data-theme='dark'] .featureContent p {
+  color: #b3b3b3;
+}
+
+[data-theme='dark'] .featureList li {
+  color: #d4d4d4;
+}
+
+[data-theme='dark'] .codeSection {
+  background: #181818;
+}
+
+[data-theme='dark'] .useCasesSection {
+  background: #1b1b1d;
+}
+
 [data-theme='dark'] .useCaseCard {
   background: #2d2d30;
   color: #e3e3e3;
-  border: 2px solid transparent;
 }
 
-[data-theme='dark'] .quickLinksCard:hover,
-[data-theme='dark'] .featureCard:hover,
 [data-theme='dark'] .useCaseCard:hover {
   border-color: var(--ifm-color-primary-lighter);
-  box-shadow: 0 0 20px rgba(var(--ifm-color-primary-lighter-rgb), 0.5);
+}
+
+[data-theme='dark'] .useCaseCard p {
+  color: #b3b3b3;
+}
+
+[data-theme='dark'] .communitySection {
+  background: #181818;
+}
+
+[data-theme='dark'] .communityCard {
+  background: #2d2d30;
+  color: #e3e3e3;
+  border-color: #444;
+}
+
+[data-theme='dark'] .communityCard:hover {
+  border-color: var(--ifm-color-primary-lighter);
+}
+
+[data-theme='dark'] .communityCard p {
+  color: #b3b3b3;
+}
+
+[data-theme='dark'] .socialPost {
+  background: #2d2d30;
+  color: #e3e3e3;
+}
+
+[data-theme='dark'] .postContent p {
+  color: #ffffff;
+}
+
+[data-theme='dark'] .username {
+  color: #ffffff;
+}
+
+[data-theme='dark'] .timestamp {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+[data-theme='dark'] .sherryWidget {
+  background: #1b1b1d;
+  border-color: #444;
+}
+
+[data-theme='dark'] .nftPreview {
+  background: #2d2d30;
+  border-color: #444;
+}
+
+[data-theme='dark'] .inputGroup input,
+[data-theme='dark'] .inputGroup select {
+  background: #2d2d30;
+  border-color: #444;
+  color: #e3e3e3;
+}
+
+[data-theme='dark'] .inputGroup label {
+  color: #b3b3b3;
 }
 
 /* Responsive Design */
 @media screen and (max-width: 996px) {
   .heroBanner {
-    padding: 4rem 1rem; /* Add horizontal padding */
+    padding: 4rem 1rem;
     text-align: center;
   }
 
   .heroContent {
     grid-template-columns: 1fr;
     gap: 2rem;
-    padding: 0; /* Remove padding as the parent has it */
-    width: 100%;
-    max-width: 600px; /* Constrain width for better readability */
+    max-width: 600px;
   }
 
   .heroText {
-    width: 100%;
-    align-items: center; /* Center-align text content */
+    align-items: center;
   }
 
   .hero__title {
-    font-size: 2rem !important; /* Override any other styles */
-    word-break: break-word;
-    width: 100%;
+    font-size: 2rem !important;
   }
 
   .heroSubtitle {
     font-size: 1.5rem;
-    width: 100%;
-    word-break: break-word;
   }
 
   .heroDescription {
-    width: 100%;
     font-size: 1rem;
+  }
+
+  .statsRow {
+    justify-content: center;
+    gap: 1.5rem;
   }
 
   .buttons {
     justify-content: center;
-    width: 100%;
-    flex-wrap: wrap; /* Allow buttons to wrap if needed */
+    flex-wrap: wrap;
   }
 
   .buttons a {
-    min-width: 140px; /* Ensure buttons have sufficient width */
+    min-width: 140px;
     text-align: center;
   }
 
@@ -724,20 +956,6 @@
   .codeExample {
     order: -1;
     margin-bottom: 2rem;
-  }
-
-  .macWindow {
-    max-width: 100%;
-    overflow-x: hidden;
-  }
-
-  .codeBlock {
-    padding: 12px;
-    font-size: 0.8rem;
-  }
-
-  .codeBlock code {
-    font-size: 12px;
   }
 
   .codeExplanation {
@@ -754,67 +972,34 @@
     grid-template-columns: 1fr;
   }
 
+  .quickLinksGrid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+
   .useCasesGrid {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   }
 
-  .quickLinksSection,
-  .featuresSection,
-  .codeSection,
-  .useCasesSection,
-  .ctaSection {
-    padding: 4rem 0;
+  .communityGrid {
+    grid-template-columns: 1fr;
   }
 
-  .featuresGrid,
-  .useCasesGrid {
-    gap: 1.5rem;
+  .mockupContainer {
+    transform: none;
   }
 
-  .featureIcon,
-  .useCaseIcon {
-    font-size: 2rem;
+  .mockupContainer:hover {
+    transform: none;
   }
 
-  .ctaContent h2 {
-    font-size: 2rem;
-  }
-
-  .ctaContent p {
-    font-size: 1.1rem;
-  }
-
-  .codeSection {
-    padding: 3rem 0; /* Reduce padding */
-  }
-
-  .codeContainer {
-    gap: 1.5rem; /* Reduce gap */
-  }
-
-  .codeExample {
-    margin-bottom: 1.5rem;
-  }
-
-  .codeBlock {
-    padding: 12px 8px; /* Reduce padding */
-    font-size: 0.8rem;
-    border-radius: 0;
+  .socialPost {
+    max-width: 100%;
   }
 }
 
 @media screen and (max-width: 768px) {
   .heroBanner {
     padding: 2rem 1rem;
-  }
-
-  .heroContent {
-    max-width: 100%; /* Use full width on very small screens */
-    padding: 0 0.5rem;
-  }
-
-  .heroText {
-    gap: 1rem; /* Reduce gap between elements */
   }
 
   .hero__title {
@@ -829,54 +1014,34 @@
     font-size: 0.95rem;
   }
 
+  .statsRow {
+    gap: 1rem;
+  }
+
+  .stat {
+    min-width: 80px;
+  }
+
+  .statNumber {
+    font-size: 1.5rem;
+  }
+
+  .statLabel {
+    font-size: 0.8rem;
+  }
+
   .buttons {
-    gap: 0.7rem; /* Reduce gap between buttons */
-    margin-top: 0.5rem;
+    flex-direction: column;
+    width: 100%;
   }
 
   .buttons a {
-    min-width: 120px;
-    padding: 0.5rem 1rem !important;
-    font-size: 0.9rem !important;
-  }
-
-  .socialPost {
-    max-width: 100%;
-  }
-
-  .mockupContainer {
-    transform: none;
-  }
-
-  .mockupContainer:hover {
-    transform: none;
-  }
-
-  .macWindowHeader {
-    padding: 6px 12px;
-  }
-
-  .windowButtons {
-    gap: 6px;
-  }
-
-  .closeButton,
-  .minimizeButton,
-  .maximizeButton {
-    width: 10px;
-    height: 10px;
-  }
-
-  .windowTitle {
-    font-size: 12px;
+    width: 100%;
+    margin: 0;
   }
 
   .codeExplanation h2 {
     font-size: 1.8rem;
-  }
-
-  .step {
-    font-size: 0.9rem;
   }
 
   .sectionHeader h2 {
@@ -888,32 +1053,31 @@
   }
 
   .featureCard,
-  .useCaseCard {
+  .useCaseCard,
+  .communityCard {
     padding: 1.5rem;
   }
 
-  .quickLinksSection,
-  .featuresSection,
-  .codeSection,
-  .useCasesSection,
-  .ctaSection {
-    padding: 3rem 0;
+  .ctaContent h2 {
+    font-size: 1.8rem;
   }
 
-  .macWindow {
-    border-radius: 6px;
+  .ctaContent p {
+    font-size: 1rem;
   }
 
-  .codeBlock {
-    padding: 10px 6px; /* Further reduce padding */
+  .ctaButtons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .ctaButtons a {
+    width: 100%;
+    max-width: 300px;
   }
 }
 
 @media screen and (max-width: 480px) {
-  .heroBanner {
-    padding: 2rem 0.75rem;
-  }
-
   .hero__title {
     font-size: 1.6rem !important;
   }
@@ -926,258 +1090,35 @@
     font-size: 0.9rem;
   }
 
-  .buttons {
-    flex-direction: column; /* Stack buttons vertically on very small screens */
-    width: 80%; /* Constrain width for better appearance */
-  }
-
-  .buttons a {
-    width: 100%;
-    margin: 0;
-  }
-
-  .codeBlock {
-    border-radius: 8px;
-    padding: 8px 4px; /* Minimal padding on very small screens */
-    font-size: 0.7rem; /* Smaller font */
-  }
-
-  .codeBlock code {
-    font-size: 10px; /* Smaller code font */
-  }
-
-  .stepNumber {
-    width: 1.5rem;
-    height: 1.5rem;
-    font-size: 0.8rem;
-  }
-
-  .step {
+  .statsRow {
+    flex-direction: column;
     gap: 0.5rem;
-    font-size: 0.85rem;
+  }
+
+  .stat {
+    flex-direction: row;
+    gap: 0.5rem;
+    justify-content: center;
+  }
+
+  .statNumber {
+    font-size: 1.2rem;
+  }
+
+  .quickLinksGrid,
+  .useCasesGrid {
+    grid-template-columns: 1fr;
   }
 
   .quickLinksSection,
   .featuresSection,
   .codeSection,
-  .useCasesSection {
-    padding: 2rem 0;
+  .useCasesSection,
+  .communitySection {
+    padding: 3rem 0;
   }
 
   .ctaSection {
     padding: 2.5rem 0;
   }
-
-  .ctaContent h2 {
-    font-size: 1.6rem;
-  }
-
-  .ctaContent p {
-    font-size: 1rem;
-    margin-bottom: 1.5rem;
-  }
 }
-
-/* Enhanced dark mode transitions */
-[data-theme='dark'] .quickLinksSection,
-[data-theme='dark'] .featuresSection,
-[data-theme='dark'] .codeSection,
-[data-theme='dark'] .useCasesSection,
-[data-theme='dark'] .ctaSection,
-[data-theme='dark'] .heroBanner,
-[data-theme='dark'] .socialPost,
-[data-theme='dark'] .sherryWidget,
-[data-theme='dark'] .featureCard,
-[data-theme='dark'] .useCaseCard,
-[data-theme='dark'] .macWindow,
-[data-theme='dark'] .inputGroup input,
-[data-theme='dark'] .inputGroup select {
-  transition:
-    all 0.3s ease,
-    background 0.3s ease,
-    box-shadow 0.3s ease,
-    color 0.3s ease;
-}
-
-/* Dark mode adjustments */
-[data-theme='dark'] .quickLinksSection {
-  background: #181818;
-}
-
-[data-theme='dark'] .quickLinksCard {
-  background: #2d2d30;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Consistent base shadow for dark cards */
-}
-
-[data-theme='dark'] .quickLinksCard:hover {
-  border-color: transparent;
-  box-shadow:
-    0 0 15px rgba(var(--ifm-color-primary-lighter-rgb), 0.6),
-    0 0 30px rgba(var(--ifm-color-primary-lighter-rgb), 0.3),
-    0 8px 25px rgba(0, 0, 0, 0.15);
-}
-
-[data-theme='dark'] .quickLinksTitle {
-  color: #ffffff;
-}
-
-[data-theme='dark'] .quickLinksDescription {
-  color: rgba(255, 255, 255, 0.8);
-}
-
-[data-theme='dark'] .heroBanner {
-  background: linear-gradient(135deg, var(--ifm-color-primary-darker) 0%, #1a1c29 100%);
-  color: #ffffff;
-}
-
-[data-theme='dark'] .heroSubtitle {
-  color: rgba(255, 255, 255, 0.9);
-}
-
-[data-theme='dark'] .heroDescription {
-  color: rgba(255, 255, 255, 0.8);
-}
-
-[data-theme='dark'] .buttons .button--secondary {
-  background-color: #ffffff;
-  color: var(--ifm-color-primary-darker);
-  border-color: #ffffff; /* Ensure secondary button border is also visible if needed */
-}
-
-/* 
-  IMPORTANT: The following general dark mode rules for .button--outline
-  were likely causing the white border issue. They are removed.
-  The specific rules for .button--lg.button--outline above will handle those buttons.
-  If you have other .button--outline instances that are NOT .button--lg and need
-  different dark mode styling, you'd add those rules carefully here.
-*/
-/*
-[data-theme='dark'] .buttons .button--outline,
-[data-theme='dark'] .ctaButtons .button--outline {
-  // These rules would make the border semi-transparent, conflicting with the solid white requirement
-  // background-color: rgba(255, 255, 255, 0.05);
-  // border: 2px solid rgba(255, 255, 255, 0.4); 
-  // color: #ffffff;
-}
-
-[data-theme='dark'] .buttons .button--outline:hover,
-[data-theme='dark'] .ctaButtons .button--outline:hover {
-  // background-color: rgba(255, 255, 255, 0.15);
-  // border-color: white;
-}
-*/
-
-[data-theme='dark'] .featuresSection {
-  background: #1b1b1d;
-}
-
-[data-theme='dark'] .featureCard {
-  background: #2d2d30;
-  color: #e3e3e3;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-}
-[data-theme='dark'] .featureCard:hover {
-  border-color: transparent;
-  box-shadow:
-    0 0 15px rgba(var(--ifm-color-primary-lighter-rgb), 0.6),
-    0 0 30px rgba(var(--ifm-color-primary-lighter-rgb), 0.3),
-    0 8px 25px rgba(0, 0, 0, 0.15);
-}
-
-[data-theme='dark'] .featureContent p {
-  color: #b3b3b3;
-}
-
-[data-theme='dark'] .featureList li {
-  color: #d4d4d4;
-}
-
-[data-theme='dark'] .codeSection {
-  background: #181818;
-}
-
-[data-theme='dark'] .codeExplanation h2 {
-  color: var(--ifm-color-primary-lighter);
-}
-
-[data-theme='dark'] .codeExplanation p {
-  color: rgba(255, 255, 255, 0.8);
-}
-
-[data-theme='dark'] .step {
-  color: rgba(255, 255, 255, 0.8);
-}
-
-[data-theme='dark'] .useCasesSection {
-  background: #1b1b1d;
-}
-
-[data-theme='dark'] .useCaseCard {
-  background: #2d2d30;
-  color: #e3e3e3;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-}
-[data-theme='dark'] .useCaseCard:hover {
-  border-color: transparent;
-  box-shadow:
-    0 0 15px rgba(var(--ifm-color-primary-lighter-rgb), 0.6),
-    0 0 30px rgba(var(--ifm-color-primary-lighter-rgb), 0.3),
-    0 8px 25px rgba(0, 0, 0, 0.15);
-}
-
-[data-theme='dark'] .useCaseCard p {
-  color: #b3b3b3;
-}
-
-[data-theme='dark'] .socialPost {
-  background: #2d2d30;
-  color: #e3e3e3;
-}
-
-[data-theme='dark'] .postContent p {
-  color: #ffffff;
-  margin: 0 0 1rem 0;
-}
-
-[data-theme='dark'] .username {
-  color: #ffffff;
-}
-
-[data-theme='dark'] .timestamp {
-  color: rgba(255, 255, 255, 0.7);
-}
-
-[data-theme='dark'] .sherryWidget {
-  background: #1b1b1d;
-  border-color: #444;
-}
-
-[data-theme='dark'] .inputGroup input,
-[data-theme='dark'] .inputGroup select {
-  background: #2d2d30;
-  border-color: #444;
-  color: #e3e3e3;
-}
-
-[data-theme='dark'] .inputGroup label {
-  color: #b3b3b3;
-}
-
-[data-theme='dark'] .ctaSection {
-  background: linear-gradient(135deg, var(--ifm-color-primary-darker) 0%, #1a1c29 100%);
-}
-
-[data-theme='dark'] .ctaContent h2,
-[data-theme='dark'] .ctaContent p {
-  color: #ffffff;
-}
-
-/* Card hover effects for dark mode (already defined above, ensure consistency) */
-/*
-[data-theme='dark'] .quickLinksCard:hover,
-[data-theme='dark'] .featureCard:hover,
-[data-theme='dark'] .useCaseCard:hover {
-  border-color: var(--ifm-color-primary-lighter); // This was for solid border, now using glow
-  box-shadow: 0 0 20px rgba(var(--ifm-color-primary-lighter-rgb), 0.5); // This is a simpler glow
-}
-*/
