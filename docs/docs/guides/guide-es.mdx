@@ -30,6 +30,7 @@ Esta guía completa te enseñará paso a paso cómo crear mini apps potentes usa
 
 ## 📋 Tabla de Contenidos
 
+- [Cómo Funciona Sherry - Entendiendo el Flujo](#cómo-funciona-sherry---entendiendo-el-flujo)
 - [Requisitos Previos](#requisitos-previos)
 - [Configuración Inicial](#configuración-inicial)
 - [Creando el Endpoint GET - Metadata](#creando-el-endpoint-get---metadata)
@@ -39,57 +40,62 @@ Esta guía completa te enseñará paso a paso cómo crear mini apps potentes usa
 - [Probando tu Mini App](#probando-tu-mini-app)
 - [Resolución de Problemas](#resolución-de-problemas)
 
+## 🔄 Cómo Funciona Sherry - Entendiendo el Flujo
+
+Antes de empezar a construir, es importante entender cómo Sherry Links conecta usuarios, plataformas y tu backend de mini app. El siguiente diagrama ilustra el flujo completo:
+
+<div style={{ textAlign: 'center', margin: '2rem 0' }}>
+  <img 
+    src="/img/sherry-flow.png" 
+    alt="Diagrama de Flujo de Sherry Links - Cómo los usuarios interactúan con mini apps a través de la plataforma" 
+    style={{ 
+      maxWidth: '100%', 
+      height: 'auto',
+      border: '1px solid var(--ifm-color-emphasis-300)',
+      borderRadius: '8px',
+      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+    }} 
+  />
+</div>
+
+### Flujo Paso a Paso
+
+1. **Sherry hace petición GET y recibe metadata**
+   - La plataforma descubre tu mini app y solicita su configuración
+   - Tu backend responde con metadata que define la UI y funcionalidad
+
+2. **Back-End retorna metadata**
+   - La metadata incluye campos de formulario, botones de acción, descripciones y endpoints
+   - Esto le dice a Sherry cómo renderizar la interfaz de tu mini app
+
+3. **Sherry renderiza mini-app**
+   - La plataforma crea un formulario amigable basado en tu metadata
+   - Los usuarios pueden ver campos de entrada, descripciones y botones de acción
+
+4. **Usuario ejecuta mini-app**
+   - El usuario llena el formulario con sus parámetros deseados
+   - El usuario hace clic en el botón de acción para enviar su solicitud
+
+5. **Sherry hace petición POST y recibe transacción serializada desde Back-End**
+   - La plataforma envía la entrada del usuario a tu backend para procesamiento
+   - Tu backend aplica lógica personalizada y retorna una transacción blockchain lista para firmar
+
+6. **Usuario confirma transacción**
+   - El usuario revisa los detalles de la transacción en su wallet
+   - El usuario firma y envía la transacción a la blockchain
+
+<Admonition type="tip" title="Concepto Clave">
+  Tu mini app actúa como una **fábrica inteligente de transacciones** - toma la entrada del usuario, aplica tu lógica de negocio única, y produce transacciones blockchain listas para firmar. Esto es lo que hace poderoso a Sherry Links: combinar gran UX con funcionalidad blockchain personalizada.
+</Admonition>
+
 ## 🛠️ Requisitos Previos
 
-<div
-  style={{
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-    gap: '1rem',
-    margin: '1rem 0',
-  }}
->
-  <div
-    style={{
-      padding: '1rem',
-      border: '1px solid var(--ifm-color-emphasis-300)',
-      borderRadius: '8px',
-    }}
-  >
-    <h4>Node.js</h4>
-    <p>Versión 18.x o superior</p>
-  </div>
-  <div
-    style={{
-      padding: '1rem',
-      border: '1px solid var(--ifm-color-emphasis-300)',
-      borderRadius: '8px',
-    }}
-  >
-    <h4>Gestor de Paquetes</h4>
-    <p>npm, yarn, o pnpm</p>
-  </div>
-  <div
-    style={{
-      padding: '1rem',
-      border: '1px solid var(--ifm-color-emphasis-300)',
-      borderRadius: '8px',
-    }}
-  >
-    <h4>Conocimiento del Framework</h4>
-    <p>Next.js básico y TypeScript</p>
-  </div>
-  <div
-    style={{
-      padding: '1rem',
-      border: '1px solid var(--ifm-color-emphasis-300)',
-      borderRadius: '8px',
-    }}
-  >
-    <h4>Conceptos Básicos de Blockchain</h4>
-    <p>Contratos inteligentes y comprensión de ABI</p>
-  </div>
-</div>
+Antes de comenzar, asegúrate de tener lo siguiente instalado y configurado:
+
+- **Node.js**: Versión 18.x o superior
+- **Gestor de Paquetes**: npm, yarn, o pnpm
+- **Conocimiento del Framework**: Conceptos básicos de Next.js y TypeScript
+- **Conceptos Básicos de Blockchain**: Entendimiento de contratos inteligentes y ABI
 
 ## 🏗️ Configuración Inicial
 
