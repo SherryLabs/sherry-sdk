@@ -2,15 +2,15 @@ import { Metadata } from '../interface/metadata';
 
 /**
  * Result of metadata validation process.
- * 
+ *
  * Provides comprehensive information about the validation outcome,
  * including whether the metadata is valid, what type it represents,
  * the validated data, and any errors encountered during validation.
- * 
+ *
  * @interface MetadataValidationResult
  * @version 1.0.0
  * @since 1.0.0
- * 
+ *
  * @example
  * ```typescript
  * // Successful validation
@@ -20,7 +20,7 @@ import { Metadata } from '../interface/metadata';
  *   data: validatedMetadataObject,
  *   errors: []
  * };
- * 
+ *
  * // Failed validation
  * const result: MetadataValidationResult = {
  *   isValid: false,
@@ -33,10 +33,10 @@ import { Metadata } from '../interface/metadata';
 export interface MetadataValidationResult {
     /**
      * Indicates whether the metadata passed all validation checks.
-     * 
+     *
      * @type {boolean}
      * @required
-     * 
+     *
      * @example
      * ```typescript
      * isValid: true  // All validations passed
@@ -47,15 +47,15 @@ export interface MetadataValidationResult {
 
     /**
      * Type classification of the validated metadata.
-     * 
+     *
      * Determines what kind of metadata object this represents:
      * - 'Metadata': Raw metadata that needs processing
      * - 'ValidatedMetadata': Metadata with processed actions (has blockchainActionType)
      * - 'Error': Validation failed, object is invalid
-     * 
+     *
      * @type {'Metadata' | 'ValidatedMetadata' | 'Error'}
      * @required
-     * 
+     *
      * @example
      * ```typescript
      * type: 'Metadata'          // Raw metadata
@@ -67,13 +67,13 @@ export interface MetadataValidationResult {
 
     /**
      * The validated metadata object if validation succeeded.
-     * 
+     *
      * Only present when isValid is true. Contains the metadata object
      * that passed all validation checks.
-     * 
+     *
      * @type {Metadata}
      * @optional
-     * 
+     *
      * @example
      * ```typescript
      * data: {
@@ -89,13 +89,13 @@ export interface MetadataValidationResult {
 
     /**
      * Array of validation error messages.
-     * 
+     *
      * Contains detailed error messages for each validation failure.
      * Empty array when validation succeeds.
-     * 
+     *
      * @type {string[]}
      * @required
-     * 
+     *
      * @example
      * ```typescript
      * errors: [
@@ -109,13 +109,13 @@ export interface MetadataValidationResult {
 
     /**
      * Concatenated error message for convenience.
-     * 
+     *
      * Contains all error messages joined with semicolons.
      * Only present when there are validation errors.
-     * 
+     *
      * @type {string}
      * @optional
-     * 
+     *
      * @example
      * ```typescript
      * error: 'URL is required; Action 0: Address is required'
@@ -126,17 +126,17 @@ export interface MetadataValidationResult {
 
 /**
  * Validates if an object complies with the required structure for Metadata.
- * 
+ *
  * Performs comprehensive validation of metadata objects including:
  * - Required field presence validation
  * - Action structure validation
  * - ABI format validation
  * - Chain configuration validation
  * - Type classification (Metadata vs ValidatedMetadata)
- * 
+ *
  * @param {any} metadata - Object to validate
  * @returns {MetadataValidationResult} Validation result with validity indicator and errors found
- * 
+ *
  * @example
  * ```typescript
  * const metadata = {
@@ -146,7 +146,7 @@ export interface MetadataValidationResult {
  *   description: 'Description',
  *   actions: [...]
  * };
- * 
+ *
  * const result = validateMetadata(metadata);
  * if (result.isValid) {
  *   console.log(`Valid ${result.type}:`, result.data);
@@ -154,9 +154,9 @@ export interface MetadataValidationResult {
  *   console.error('Validation errors:', result.errors);
  * }
  * ```
- * 
+ *
  * @throws {never} This function never throws, always returns a result object
- * 
+ *
  * @since 1.0.0
  * @version 1.0.0
  */

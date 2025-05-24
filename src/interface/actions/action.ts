@@ -7,20 +7,20 @@ import { ChainContext } from '../chains';
 
 /**
  * Union type for any type of action that can be included in metadata.
- * 
+ *
  * This represents raw, unprocessed actions that come from external sources
  * and need to be validated before execution. Each action type serves different purposes:
- * 
+ *
  * - **BlockchainActionMetadata**: Raw blockchain interactions that need processing
  * - **TransferAction**: Token transfer operations (already validated)
  * - **HttpAction**: HTTP requests and form submissions
  * - **ActionFlow**: Complex workflows with multiple nested actions
  * - **DynamicAction**: Actions that are generated or modified at runtime
- * 
+ *
  * @type {Action}
  * @version 1.0.0
  * @since 1.0.0
- * 
+ *
  * @example
  * ```typescript
  * // BlockchainActionMetadata (raw)
@@ -32,7 +32,7 @@ import { ChainContext } from '../chains';
  *   functionName: 'approve',
  *   chains: { source: 'ethereum' }
  * };
- * 
+ *
  * // TransferAction
  * const transferAction: Action = {
  *   type: 'transfer',
@@ -42,7 +42,7 @@ import { ChainContext } from '../chains';
  *   recipient: '0x...',
  *   chains: { source: 'polygon' }
  * };
- * 
+ *
  * // HttpAction
  * const httpAction: Action = {
  *   type: 'http',
@@ -62,20 +62,20 @@ export type Action =
 
 /**
  * Union type for any type of validated action ready for execution.
- * 
+ *
  * This represents actions that have been processed, validated, and enriched
  * with additional metadata required for safe execution. Key differences from raw actions:
- * 
+ *
  * - **BlockchainAction**: Processed from BlockchainActionMetadata with gas estimates, security checks
  * - **TransferAction**: Same as in Action (already validated)
  * - **HttpAction**: Same as in Action but may include validation metadata
  * - **ActionFlow**: Validated flow with dependency resolution
  * - **DynamicAction**: Same as in Action but with runtime validation
- * 
+ *
  * @type {ValidatedAction}
  * @version 1.0.0
  * @since 1.0.0
- * 
+ *
  * @example
  * ```typescript
  * // BlockchainAction (processed from metadata)
@@ -91,7 +91,7 @@ export type Action =
  *   estimatedGas: '45000',
  *   securityLevel: 'medium'
  * };
- * 
+ *
  * // TransferAction (unchanged)
  * const validatedTransfer: ValidatedAction = {
  *   type: 'transfer',
@@ -112,14 +112,14 @@ export type ValidatedAction =
 
 /**
  * Base interface with common properties for all actions.
- * 
+ *
  * This interface defines the fundamental structure that all action types must implement.
  * It provides a consistent foundation for action identification, labeling, and chain context.
- * 
+ *
  * @interface BaseAction
  * @version 1.0.0
  * @since 1.0.0
- * 
+ *
  * @example
  * ```typescript
  * // Custom action extending BaseAction
@@ -127,7 +127,7 @@ export type ValidatedAction =
  *   type: 'custom';
  *   customProperty: string;
  * }
- * 
+ *
  * const customAction: CustomAction = {
  *   type: 'custom',
  *   label: 'Custom Operation',
@@ -142,15 +142,15 @@ export type ValidatedAction =
 export interface BaseAction {
     /**
      * Descriptive label to display in the user interface.
-     * 
+     *
      * This should be a human-readable string that clearly describes what the action does.
      * It will be displayed to users in buttons, menus, or action lists.
      * Keep it concise but descriptive.
-     * 
+     *
      * @type {string}
      * @required
      * @maxLength 50
-     * 
+     *
      * @example
      * ```typescript
      * label: "Swap Tokens"
@@ -163,20 +163,20 @@ export interface BaseAction {
 
     /**
      * Configuration of source and destination chains for the action.
-     * 
+     *
      * Defines the blockchain context where this action will be executed.
      * Can specify source chain only, or both source and destination for cross-chain operations.
-     * 
+     *
      * @type {ChainContext}
      * @required
-     * 
+     *
      * @example
      * ```typescript
      * // Single chain operation
      * chains: {
      *   source: 'avalanche'
      * }
-     * 
+     *
      * // Cross-chain operation
      * chains: {
      *   source: 'avalanche',
@@ -188,23 +188,23 @@ export interface BaseAction {
 
     /**
      * Discriminator property to identify the action type.
-     * 
+     *
      * This property is used for TypeScript type discrimination and runtime type checking.
      * Each interface that extends BaseAction must define its own type literal.
      * Common values include: 'blockchain', 'transfer', 'http', 'flow', 'dynamic'.
-     * 
+     *
      * @type {string}
      * @required
      * @discriminator
-     * 
+     *
      * @example
      * ```typescript
      * // In BlockchainAction
      * type: 'blockchain'
-     * 
-     * // In TransferAction  
+     *
+     * // In TransferAction
      * type: 'transfer'
-     * 
+     *
      * // In HttpAction
      * type: 'http'
      * ```
