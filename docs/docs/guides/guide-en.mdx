@@ -1,0 +1,1276 @@
+---
+title: Creating Mini Apps with Next.js and Sherry SDK
+description: Complete step-by-step guide to build dynamic mini apps using Next.js and the Sherry Links SDK
+sidebar_position: 1
+tags: [nextjs, sdk, mini-apps, blockchain, tutorial]
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import CodeBlock from '@theme/CodeBlock';
+import Admonition from '@theme/Admonition';
+
+# 🚀 Creating Mini Apps with Next.js and Sherry SDK
+
+This comprehensive guide will teach you step by step how to create powerful mini apps using **Next.js** and the **Sherry Links SDK**. Mini apps are dynamic applications that can be integrated into different platforms and allow users to interact with smart contracts seamlessly.
+
+<Admonition type="info" title="Minithon Information">
+  This tutorial contains specific notes for **Minithon hackathon participants**. If the Minithon has already concluded, please ignore these references - all the technical content and examples remain fully applicable for learning and testing dynamic actions in production.
+</Admonition>
+
+<Admonition type="warning" title="Important for Minithon Participants">
+  This tutorial progresses from a **basic example** (simple transfer) to a **complex example** (smart contract interaction). For minithon submissions, you'll need to implement the complex version that interacts with smart contracts, as simple transfers can already be handled by our built-in TransferAction.
+</Admonition>
+
+## 📋 Table of Contents
+
+- [Prerequisites](#prerequisites)
+- [Initial Setup](#initial-setup)
+- [Creating the GET Endpoint - Metadata](#creating-the-get-endpoint---metadata)
+- [Example 1: Simple Transfer (Learning Only)](#example-1-simple-transfer-learning-only)
+- [Example 2: Smart Contract Interaction (Minithon Ready)](#example-2-smart-contract-interaction-minithon-ready)
+- [CORS Handling](#cors-handling)
+- [Testing Your Mini App](#testing-your-mini-app)
+- [Troubleshooting](#troubleshooting)
+
+## 🛠️ Prerequisites
+
+<div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem', margin: '1rem 0'}}>
+  <div style={{padding: '1rem', border: '1px solid var(--ifm-color-emphasis-300)', borderRadius: '8px'}}>
+    <h4>Node.js</h4>
+    <p>Version 18.x or higher</p>
+  </div>
+  <div style={{padding: '1rem', border: '1px solid var(--ifm-color-emphasis-300)', borderRadius: '8px'}}>
+    <h4>Package Manager</h4>
+    <p>npm, yarn, or pnpm</p>
+  </div>
+  <div style={{padding: '1rem', border: '1px solid var(--ifm-color-emphasis-300)', borderRadius: '8px'}}>
+    <h4>Framework Knowledge</h4>
+    <p>Basic Next.js and TypeScript</p>
+  </div>
+  <div style={{padding: '1rem', border: '1px solid var(--ifm-color-emphasis-300)', borderRadius: '8px'}}>
+    <h4>Blockchain Basics</h4>
+    <p>Smart contracts and ABI understanding</p>
+  </div>
+</div>
+
+## 🏗️ Initial Setup
+
+### 1. Create Next.js Project
+
+<Tabs>
+<TabItem value="npm" label="npm" default>
+
+```bash
+npx create-next-app@latest my-sherry-app --typescript --eslint --tailwind --src-dir --app --import-alias "@/*"
+cd my-sherry-app
+```
+
+</TabItem>
+<TabItem value="yarn" label="yarn">
+
+```bash
+yarn create next-app my-sherry-app --typescript --eslint --tailwind --src-dir --app --import-alias "@/*"
+cd my-sherry-app
+```
+
+</TabItem>
+<TabItem value="pnpm" label="pnpm">
+
+```bash
+pnpm create next-app my-sherry-app --typescript --eslint --tailwind --src-dir --app --import-alias "@/*"
+cd my-sherry-app
+```
+
+</TabItem>
+</Tabs>
+
+### 2. Install Dependencies
+
+<Tabs>
+<TabItem value="npm" label="npm" default>
+
+```bash
+npm install @sherrylinks/sdk viem wagmi
+```
+
+</TabItem>
+<TabItem value="yarn" label="yarn">
+
+```bash
+yarn add @sherrylinks/sdk viem wagmi
+```
+
+</TabItem>
+<TabItem value="pnpm" label="pnpm">
+
+```bash
+pnpm add @sherrylinks/sdk viem wagmi
+```
+
+</TabItem>
+</Tabs>
+
+### 3. Configure Next.js (Optional)
+
+<Admonition type="tip" title="Build Optimization">
+  To avoid build errors with ESLint, you can disable it in `next.config.js`:
+</Admonition>
+
+```javascript title="next.config.js"
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+};
+
+module.exports = nextConfig;
+```
+
+## 🎯 Creating the GET Endpoint - Metadata
+
+The GET endpoint is the **heart** of your mini app. Here you define all the information and structure that platforms need to render your application.
+
+<Admonition type="note" title="Understanding Metadata">
+  Metadata tells platforms **how** to render your mini app, **what** inputs to show users, and **where** to send the data when users interact with it.
+</Admonition>
+
+### 1. Create the Route File
+
+Create the file `app/api/my-app/route.ts`:
+
+```typescript title="app/api/my-app/route.ts"
+import { NextRequest, NextResponse } from "next/server";
+import { createMetadata, Metadata, ValidatedMetadata } from "@sherrylinks/sdk";
+```
+
+### 2. Set Up the Basic GET Handler Structure
+
+```typescript
+export async function GET(req: NextRequest) {
+  try {
+    // Get server URL information
+    const host = req.headers.get('host') || 'localhost:3000';
+    const protocol = req.headers.get('x-forwarded-proto') || 'http';
+    
+    // Construct the base URL
+    const serverUrl = `${protocol}://${host}`;
+
+    // We'll build the metadata object step by step below
+    
+  } catch (error) {
+    console.error("Error creating metadata:", error);
+    return NextResponse.json(
+      { error: "Failed to create metadata" },
+      { status: 500 }
+    );
+  }
+}
+```
+
+<Admonition type="info" title="Why serverUrl?">
+  This automatically detects whether you're running locally (`http://localhost:3000`) or in production (`https://yourdomain.com`) and constructs the correct base URL for your mini app.
+</Admonition>
+
+### 3. Define Basic App Information
+
+```typescript
+export async function GET(req: NextRequest) {
+  try {
+    const host = req.headers.get('host') || 'localhost:3000';
+    const protocol = req.headers.get('x-forwarded-proto') || 'http';
+    const serverUrl = `${protocol}://${host}`;
+
+    const metadata: Metadata = {
+      url: "https://sherry.social",
+      icon: "https://avatars.githubusercontent.com/u/117962315",
+      title: "Timestamped Message",
+      baseUrl: serverUrl,
+      description: "Store a message with an optimized timestamp calculated by our algorithm",
+      // Actions will be added in the next step
+    };
+
+  } catch (error) {
+    // Error handling...
+  }
+}
+```
+
+<details>
+<summary><strong>Understanding Each Field</strong></summary>
+
+| Field | Description | Example |
+|-------|-------------|---------|
+| **url** | Main website URL for your project | `"https://sherry.social"` |
+| **icon** | Publicly accessible image URL (200x200px recommended) | `"https://example.com/icon.png"` |
+| **title** | Short, descriptive name for your mini app | `"Timestamped Message"` |
+| **baseUrl** | Server URL where your mini app is hosted (auto-detected) | `"https://yourdomain.com"` |
+| **description** | Clear explanation of what your mini app does | `"Store messages with optimized timestamps"` |
+
+</details>
+
+### 4. Add Actions Array
+
+<Admonition type="caution" title="Actions Define Functionality">
+  Actions define **what users can do** with your mini app. Each action represents a button with specific functionality.
+</Admonition>
+
+```typescript
+const metadata: Metadata = {
+  url: "https://sherry.social",
+  icon: "https://avatars.githubusercontent.com/u/117962315",
+  title: "Timestamped Message",
+  baseUrl: serverUrl,
+  description: "Store a message with an optimized timestamp calculated by our algorithm",
+  actions: [
+    {
+      type: "dynamic",
+      label: "Store Message",
+      description: "Store your message with a custom timestamp calculated for optimal storage",
+      chains: { source: "fuji" },
+      path: `/api/my-app`,
+      // Parameters will be added in the next step
+    },
+  ],
+};
+```
+
+<details>
+<summary><strong>Understanding Action Properties</strong></summary>
+
+- **type**: Always use `"dynamic"` for complex mini apps that need custom logic
+- **label**: The text that will appear on the action button
+- **description**: Explanation of what this specific action does
+- **chains.source**: The blockchain where the transaction will execute
+  - `"fuji"` = Avalanche Fuji Testnet
+  - `"avalanche"` = Avalanche Mainnet
+- **path**: The API endpoint that will handle the POST request
+
+</details>
+
+### 5. Configure User Input Parameters
+
+```typescript
+const metadata: Metadata = {
+  url: "https://sherry.social",
+  icon: "https://avatars.githubusercontent.com/u/117962315",
+  title: "Timestamped Message",
+  baseUrl: serverUrl,
+  description: "Store a message with an optimized timestamp calculated by our algorithm",
+  actions: [
+    {
+      type: "dynamic",
+      label: "Store Message",
+      description: "Store your message with a custom timestamp calculated for optimal storage",
+      chains: { source: "fuji" },
+      path: `/api/my-app`,
+      params: [
+        {
+          name: "message",
+          label: "Your Message Hermano!",
+          type: "text",
+          required: true,
+          description: "Enter the message you want to store on the blockchain",
+        },
+      ],
+    },
+  ],
+};
+```
+
+<Admonition type="info" title="Parameter Types Available">
+  - `"text"`: Single-line text input
+  - `"textarea"`: Multi-line text input  
+  - `"number"`: Numeric input with validation
+  - `"email"`: Email input with validation
+  - `"url"`: URL input with validation
+</Admonition>
+
+### 6. Validate and Return the Metadata
+
+```typescript
+export async function GET(req: NextRequest) {
+  try {
+    const host = req.headers.get('host') || 'localhost:3000';
+    const protocol = req.headers.get('x-forwarded-proto') || 'http';
+    const serverUrl = `${protocol}://${host}`;
+
+    const metadata: Metadata = {
+      url: "https://sherry.social",
+      icon: "https://avatars.githubusercontent.com/u/117962315",
+      title: "Timestamped Message",
+      baseUrl: serverUrl,
+      description: "Store a message with an optimized timestamp calculated by our algorithm",
+      actions: [
+        {
+          type: "dynamic",
+          label: "Store Message",
+          description: "Store your message with a custom timestamp calculated for optimal storage",
+          chains: { source: "fuji" },
+          path: `/api/my-app`,
+          params: [
+            {
+              name: "message",
+              label: "Your Message Hermano!",
+              type: "text",
+              required: true,
+              description: "Enter the message you want to store on the blockchain",
+            },
+          ],
+        },
+      ],
+    };
+
+    // Validate metadata using the SDK
+    const validated: ValidatedMetadata = createMetadata(metadata);
+
+    // Return with CORS headers for cross-origin access
+    return NextResponse.json(validated, {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+      },
+    });
+
+  } catch (error) {
+    console.error("Error creating metadata:", error);
+    return NextResponse.json(
+      { error: "Failed to create metadata" },
+      { status: 500 }
+    );
+  }
+}
+```
+
+<Admonition type="success" title="Validation Benefits">
+  The `createMetadata()` function validates your metadata structure and ensures it meets the Sherry SDK requirements before returning it to the platform.
+</Admonition>
+
+## 📚 Example 1: Simple Transfer (Learning Only)
+
+<Admonition type="danger" title="Important Note">
+  This example is for **learning the basic concepts only**. Simple transfers like this are already supported by our built-in TransferAction and will **NOT be accepted** in minithon submissions. Use this to understand the flow, then move to Example 2 for minithon-ready functionality.
+</Admonition>
+
+### Understanding the POST Request Flow
+
+When a user fills out your mini app form and clicks the action button, the platform will send a **POST request** to your endpoint with the user's input as URL parameters.
+
+### 1. Set Up the POST Handler Structure
+
+Add these imports at the top of your file:
+
+```typescript title="app/api/my-app/route.ts"
+import { NextRequest, NextResponse } from "next/server";
+import { avalancheFuji } from "viem/chains";
+import { createMetadata, Metadata, ValidatedMetadata, ExecutionResponse } from "@sherrylinks/sdk";
+import { serialize } from 'wagmi';
+```
+
+Now let's build the POST handler:
+
+<Tabs>
+<TabItem value="basic" label="Basic Structure" default>
+
+```typescript
+export async function POST(req: NextRequest) {
+  try {
+    // Step 1: Extract parameters from the URL
+    const { searchParams } = new URL(req.url);
+    const message = searchParams.get("message");
+    
+    // We'll add validation and transaction creation below
+    
+  } catch (error) {
+    console.error("Error in POST request:", error);
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
+  }
+}
+```
+
+</TabItem>
+<TabItem value="validation" label="With Validation">
+
+```typescript
+export async function POST(req: NextRequest) {
+  try {
+    // Extract parameters
+    const { searchParams } = new URL(req.url);
+    const message = searchParams.get("message");
+    
+    // Validate required parameters
+    if (!message) {
+      return NextResponse.json(
+        { error: "Message parameter is required" },
+        {
+          status: 400,
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type, Authorization",
+          },
+        }
+      );
+    }
+
+    // Transaction creation will be added next
+    
+  } catch (error) {
+    // Error handling...
+  }
+}
+```
+
+</TabItem>
+</Tabs>
+
+### 2. Create the Transaction Object
+
+```typescript
+// Create a simple transfer transaction
+const tx = {
+  to: '0x5ee75a1B1648C023e885E58bD3735Ae273f2cc52',
+  value: BigInt(1000000), // 1000000 wei = 0.000001 AVAX
+  chainId: avalancheFuji.id,
+};
+```
+
+<details>
+<summary><strong>Understanding Transaction Properties</strong></summary>
+
+- **to**: The destination address that will receive the transfer
+- **value**: The amount to transfer in wei (smallest unit). Use `BigInt()` for large numbers
+- **chainId**: The numeric ID of the blockchain (avalancheFuji.id = 43113)
+
+</details>
+
+### 3. Complete Simple Transfer Example
+
+```typescript title="Complete POST Handler - Simple Transfer"
+export async function POST(req: NextRequest) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const message = searchParams.get("message");
+    
+    if (!message) {
+      return NextResponse.json(
+        { error: "Message parameter is required" },
+        {
+          status: 400,
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type, Authorization",
+          },
+        }
+      );
+    }
+
+    const tx = {
+      to: '0x5ee75a1B1648C023e885E58bD3735Ae273f2cc52',
+      value: BigInt(1000000),
+      chainId: avalancheFuji.id,
+    };
+
+    // Serialize the transaction for the blockchain
+    const serialized = serialize(tx);
+
+    // Create the response object that Sherry expects
+    const resp: ExecutionResponse = {
+      serializedTransaction: serialized,
+      chainId: avalancheFuji.name, // Use the chain name, not ID
+    };
+
+    // Return the response with CORS headers
+    return NextResponse.json(resp, {
+      status: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+      },
+    });
+
+  } catch (error) {
+    console.error("Error in POST request:", error);
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
+  }
+}
+```
+
+<Admonition type="warning" title="Why This Isn't Minithon-Ready">
+  This example only performs a simple token transfer. Since our platform already provides **TransferAction** for this exact functionality, minithon submissions need to demonstrate more complex, value-added functionality.
+</Admonition>
+
+## 🎯 Example 2: Smart Contract Interaction (Minithon Ready)
+
+<Admonition type="success" title="Minithon Suitable">
+  This example demonstrates **smart contract interaction** with custom business logic, which is what we're looking for in minithon submissions.
+</Admonition>
+
+### 1. Understanding the Smart Contract
+
+First, let's understand what our smart contract does:
+
+```solidity title="TimestampedMessage Contract"
+contract TimestampedMessage {
+    event MessageStored(address indexed sender, string message, uint256 timestamp, uint256 optimizedTimestamp);
+    
+    struct MessageData {
+        address sender;
+        string message;
+        uint256 timestamp;
+        uint256 optimizedTimestamp;
+    }
+    
+    // Array to store all messages
+    MessageData[] public messages;
+    
+    // Mapping from address to their message count
+    mapping(address => uint256) public userMessageCount;
+    
+    function storeMessage(string memory message, uint256 optimizedTimestamp) public {
+        // Store message with current block timestamp and optimized timestamp
+        // Increment user message count
+        // Emit MessageStored event
+    }
+    
+    function getMessageCount() public view returns (uint256) {
+        // Returns total number of stored messages
+    }
+    
+    function getMessage(uint256 index) public view returns (...) {
+        // Retrieves a specific message by index
+    }
+    
+    function getMessagesBySender(address sender) public view returns (...) {
+        // Gets all messages from a specific user
+    }
+}
+```
+
+<Admonition type="info" title="Why This is Minithon-Ready">
+  - Custom business logic (optimized timestamp calculation)
+  - Smart contract state management
+  - Event emission for tracking
+  - Complex data structures
+  - Goes beyond simple transfers
+</Admonition>
+
+### 2. Set Up Smart Contract Integration
+
+Create the file `blockchain/abi.ts` with your contract's ABI:
+
+```typescript title="blockchain/abi.ts"
+export const abi = [
+  {
+    "inputs": [
+      {"internalType": "string", "name": "message", "type": "string"},
+      {"internalType": "uint256", "name": "optimizedTimestamp", "type": "uint256"}
+    ],
+    "name": "storeMessage",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  // ... other functions like getMessageCount, getMessage, getMessagesBySender
+  // ... events and additional contract interface items
+] as const;
+```
+
+### 3. Update Your Route File Imports
+
+```typescript title="app/api/my-app/route.ts"
+import { NextRequest, NextResponse } from "next/server";
+import { avalancheFuji } from "viem/chains";
+import { createMetadata, Metadata, ValidatedMetadata, ExecutionResponse } from "@sherrylinks/sdk";
+import { serialize } from 'wagmi';
+import { abi } from "@/blockchain/abi";
+
+// Contract address on Avalanche Fuji Testnet
+const CONTRACT_ADDRESS = "0x75dd8326F5293ff1f1f4E013c8Fda20db126f3e3";
+```
+
+### 4. Build the Smart Contract POST Handler
+
+<Tabs>
+<TabItem value="step1" label="Step 1: Validation" default>
+
+```typescript
+export async function POST(req: NextRequest) {
+  try {
+    // Extract user input
+    const { searchParams } = new URL(req.url);
+    const message = searchParams.get("message");
+    
+    // Validate required parameters
+    if (!message) {
+      return NextResponse.json(
+        { error: "Message parameter is required" },
+        {
+          status: 400,
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type, Authorization",
+          },
+        }
+      );
+    }
+
+    // Custom logic and transaction creation will be added below
+    
+  } catch (error) {
+    console.error("Error in POST request:", error);
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
+  }
+}
+```
+
+</TabItem>
+<TabItem value="step2" label="Step 2: Custom Logic">
+
+```typescript
+export async function POST(req: NextRequest) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const message = searchParams.get("message");
+    
+    if (!message) {
+      // Validation error...
+    }
+
+    // CUSTOM BUSINESS LOGIC: Calculate optimized timestamp
+    // This is what makes your mini app unique and valuable
+    const optimizedTimestamp = calculateOptimizedTimestamp(message);
+    
+    console.log(`Processing message: "${message}"`);
+    console.log(`Optimized timestamp: ${optimizedTimestamp}`);
+
+    // Transaction creation will be added next
+
+  } catch (error) {
+    // Error handling...
+  }
+}
+```
+
+</TabItem>
+<TabItem value="step3" label="Step 3: Contract Transaction">
+
+```typescript
+export async function POST(req: NextRequest) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const message = searchParams.get("message");
+    
+    if (!message) {
+      // Validation...
+    }
+
+    const optimizedTimestamp = calculateOptimizedTimestamp(message);
+
+    // Create smart contract interaction transaction
+    const tx = {
+      address: CONTRACT_ADDRESS,
+      abi: abi,
+      functionName: "storeMessage",
+      args: [message, optimizedTimestamp],
+    };
+
+    // Serialization and response will be added next
+
+  } catch (error) {
+    // Error handling...
+  }
+}
+```
+
+</TabItem>
+</Tabs>
+
+<details>
+<summary><strong>Understanding Smart Contract Transaction Properties</strong></summary>
+
+- **address**: The deployed contract address on the blockchain
+- **abi**: The contract's ABI (Application Binary Interface)
+- **functionName**: The exact name of the contract function to call
+- **args**: Array of arguments to pass to the function, in the correct order
+
+</details>
+
+### 5. Complete Smart Contract Handler
+
+```typescript title="Complete POST Handler - Smart Contract Interaction"
+export async function POST(req: NextRequest) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const message = searchParams.get("message");
+    
+    if (!message) {
+      return NextResponse.json(
+        { error: "Message parameter is required" },
+        {
+          status: 400,
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type, Authorization",
+          },
+        }
+      );
+    }
+
+    // Calculate optimized timestamp using custom algorithm
+    const optimizedTimestamp = calculateOptimizedTimestamp(message);
+
+    // Create smart contract transaction
+    const tx = {
+      address: CONTRACT_ADDRESS,
+      abi: abi,
+      functionName: "storeMessage",
+      args: [message, optimizedTimestamp],
+    };
+
+    // Serialize transaction
+    const serialized = serialize(tx);
+
+    // Create response
+    const resp: ExecutionResponse = {
+      serializedTransaction: serialized,
+      chainId: avalancheFuji.name,
+    };
+
+    // Return successful response
+    return NextResponse.json(resp, {
+      status: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+      },
+    });
+
+  } catch (error) {
+    console.error("Error in POST request:", error);
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
+  }
+}
+```
+
+### 6. Implement the Custom Algorithm
+
+<Admonition type="tip" title="Algorithm Innovation">
+  This is where you add **unique value** to your mini app. The more sophisticated your algorithm, the more impressive your minithon submission will be!
+</Admonition>
+
+```typescript title="Custom Algorithm Function"
+// Custom algorithm to calculate optimized timestamp based on message content
+function calculateOptimizedTimestamp(message: string): number {
+  // Get the current timestamp as a starting point
+  const currentTimestamp = Math.floor(Date.now() / 1000);
+  
+  // Custom algorithm: Add character codes to create a unique offset
+  // This is your unique business logic - you can make this as complex as needed
+  let offset = 0;
+  
+  for (let i = 0; i < message.length; i++) {
+    // Sum character codes and use position as a multiplier
+    offset += message.charCodeAt(i) * (i + 1);
+  }
+  
+  // Ensure offset is reasonable (1 hour max)
+  const maxOffset = 3600;
+  offset = offset % maxOffset;
+  
+  // Calculate final optimized timestamp
+  return currentTimestamp + offset;
+}
+```
+
+<Admonition type="success" title="Why This Algorithm is Valuable">
+  - Creates deterministic but unique timestamps based on message content
+  - Adds meaningful business logic beyond simple transfers
+  - Can be expanded with more sophisticated algorithms
+  - Provides real utility for timestamp optimization
+</Admonition>
+
+## 🌐 CORS Handling
+
+To allow your mini app to be used from different domains and platforms, you need to handle CORS preflight requests:
+
+```typescript title="CORS OPTIONS Handler"
+export async function OPTIONS(request: NextRequest) {
+  return new NextResponse(null, {
+    status: 204, // No Content
+    headers: {
+      "Access-Control-Allow-Origin": "*", 
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type, Authorization, X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Date, X-Api-Version",
+    },
+  });
+}
+```
+
+<Admonition type="info" title="Why OPTIONS is Needed">
+  When platforms try to use your mini app from a different domain, browsers first send an **OPTIONS request** to check if cross-origin requests are allowed. This handler tells the browser that your API accepts requests from any domain.
+</Admonition>
+
+## 🧪 Testing Your Mini App
+
+### Option 1: Sherry Social App
+
+<div style={{padding: '1rem', backgroundColor: 'var(--ifm-color-info-contrast-background)', borderLeft: '4px solid var(--ifm-color-info)', borderRadius: '4px', margin: '1rem 0'}}>
+  <strong>Production Testing</strong>
+  <ol>
+    <li>Go to <a href="https://app.sherry.social/home" target="_blank">https://app.sherry.social/home</a></li>
+    <li>In the address field, enter your GET endpoint URL</li>
+    <li>Example: <code>http://localhost:3000/api/my-app</code> (for local development)</li>
+    <li>The platform will automatically render your mini app</li>
+  </ol>
+</div>
+
+### Option 2: Sherry Debugger (Recommended for Development)
+
+<Admonition type="tip" title="Debugger Benefits">
+  The debugger is specifically designed for **testing and debugging** mini apps during development with multiple input methods.
+</Admonition>
+
+<Admonition type="warning" title="Important: Localhost URLs Won't Work in Debugger">
+  When using the debugger, **localhost URLs will NOT work** because the debugger runs on a different domain and cannot access your local development server. Instead, you should **copy your metadata object** and paste it directly into the debugger's JSON or TypeScript input fields.
+</Admonition>
+
+<Tabs>
+<TabItem value="json" label="JSON Testing (Recommended)" default>
+
+1. Go to [https://app.sherry.social/debugger](https://app.sherry.social/debugger)
+2. Visit your GET endpoint directly in browser: `http://localhost:3000/api/my-app`
+3. Copy the entire JSON response from your browser
+4. Paste it into the debugger's **JSON input** field
+5. This is the most reliable way to test your metadata structure
+
+</TabItem>
+<TabItem value="typescript" label="TypeScript Testing">
+
+1. Copy your metadata object directly from your TypeScript code
+2. Paste it into the debugger's **TypeScript input** field
+3. Good for rapid iteration on metadata structure without running a server
+4. Make sure to copy just the metadata object, not the entire function
+
+</TabItem>
+<TabItem value="production" label="Production URL Testing">
+
+1. Only use this method if your mini app is deployed to a **public URL**
+2. Paste your production GET endpoint URL into the debugger
+3. Example: `https://yourdomain.com/api/my-app`
+4. This will work for deployed applications, not localhost
+
+</TabItem>
+</Tabs>
+
+### Step-by-Step Testing Process
+
+<div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem', margin: '1rem 0'}}>
+  <div style={{padding: '1rem', border: '1px solid var(--ifm-color-emphasis-300)', borderRadius: '8px'}}>
+    <h4>1. Start Development Server</h4>
+    <code>npm run dev</code>
+  </div>
+  <div style={{padding: '1rem', border: '1px solid var(--ifm-color-emphasis-300)', borderRadius: '8px'}}>
+    <h4>2. Test GET Endpoint</h4>
+    <p>Open <code>localhost:3000/api/my-app</code></p>
+  </div>
+  <div style={{padding: '1rem', border: '1px solid var(--ifm-color-emphasis-300)', borderRadius: '8px'}}>
+    <h4>3. Copy Metadata to Debugger</h4>
+    <p>Copy JSON response and paste in debugger</p>
+  </div>
+  <div style={{padding: '1rem', border: '1px solid var(--ifm-color-emphasis-300)', borderRadius: '8px'}}>
+    <h4>4. Test Submission</h4>
+    <p>Fill form and test POST endpoint</p>
+  </div>
+</div>
+
+## 🏆 Minithon Guidelines
+
+### What Makes a Winning Minithon Submission
+
+<Tabs>
+<TabItem value="technical" label="Technical Requirements" default>
+
+<div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem'}}>
+  <div style={{padding: '1rem', border: '2px solid #10b981', borderRadius: '8px'}}>
+    <h4>Smart Contract Interaction</h4>
+    <p>Meaningful functionality beyond simple transfers</p>
+  </div>
+  <div style={{padding: '1rem', border: '2px solid #10b981', borderRadius: '8px'}}>
+    <h4>Custom Business Logic</h4>
+    <p>Unique algorithms that add real value</p>
+  </div>
+  <div style={{padding: '1rem', border: '2px solid #10b981', borderRadius: '8px'}}>
+    <h4>Multiple Parameters</h4>
+    <p>Sophisticated data handling</p>
+  </div>
+  <div style={{padding: '1rem', border: '2px solid #10b981', borderRadius: '8px'}}>
+    <h4>Error Handling</h4>
+    <p>User-friendly error messages</p>
+  </div>
+</div>
+
+</TabItem>
+<TabItem value="creativity" label="Creativity Factors">
+
+<div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem'}}>
+  <div style={{padding: '1rem', border: '2px solid #3b82f6', borderRadius: '8px'}}>
+    <h4>Unique Use Cases</h4>
+    <p>Solve real problems that users face</p>
+  </div>
+  <div style={{padding: '1rem', border: '2px solid #3b82f6', borderRadius: '8px'}}>
+    <h4>Innovative Algorithms</h4>
+    <p>Complex data processing and calculations</p>
+  </div>
+  <div style={{padding: '1rem', border: '2px solid #3b82f6', borderRadius: '8px'}}>
+    <h4>Parameter Combinations</h4>
+    <p>Creative input combinations and validations</p>
+  </div>
+  <div style={{padding: '1rem', border: '2px solid #3b82f6', borderRadius: '8px'}}>
+    <h4>Practical Applications</h4>
+    <p>Real utility for blockchain users</p>
+  </div>
+</div>
+
+</TabItem>
+<TabItem value="examples" label="Good Ideas">
+
+<div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem'}}>
+  <div style={{padding: '1rem', border: '2px solid #8b5cf6', borderRadius: '8px'}}>
+    <h4>DeFi Tools</h4>
+    <p>Custom yield calculators, portfolio rebalancing, automated strategies</p>
+  </div>
+  <div style={{padding: '1rem', border: '2px solid #8b5cf6', borderRadius: '8px'}}>
+    <h4>Gaming</h4>
+    <p>On-chain game mechanics, NFT interactions, scoring systems</p>
+  </div>
+  <div style={{padding: '1rem', border: '2px solid #8b5cf6', borderRadius: '8px'}}>
+    <h4>Social</h4>
+    <p>Decentralized messaging, reputation systems, community tools</p>
+  </div>
+  <div style={{padding: '1rem', border: '2px solid #8b5cf6', borderRadius: '8px'}}>
+    <h4>Productivity</h4>
+    <p>Task management with token rewards, collaborative tools</p>
+  </div>
+</div>
+
+</TabItem>
+</Tabs>
+
+### What Won't Be Accepted in Minithon
+
+<div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem', margin: '1rem 0'}}>
+  <div style={{padding: '1rem', border: '2px solid #dc2626', borderRadius: '8px'}}>
+    <h4>Simple Token Transfers</h4>
+    <p>Use our TransferAction instead</p>
+  </div>
+  <div style={{padding: '1rem', border: '2px solid #dc2626', borderRadius: '8px'}}>
+    <h4>Copy-Paste Examples</h4>
+    <p>Without meaningful modifications</p>
+  </div>
+  <div style={{padding: '1rem', border: '2px solid #dc2626', borderRadius: '8px'}}>
+    <h4>No Smart Contracts</h4>
+    <p>Mini apps must interact with contracts</p>
+  </div>
+  <div style={{padding: '1rem', border: '2px solid #dc2626', borderRadius: '8px'}}>
+    <h4>Broken Implementations</h4>
+    <p>Must work end-to-end</p>
+  </div>
+</div>
+
+## 🔧 Troubleshooting
+
+<Tabs>
+<TabItem value="get-errors" label="GET Endpoint Issues" default>
+
+### Error: "Metadata validation failed"
+**Symptoms**: Mini app doesn't load in debugger
+
+<Admonition type="danger" title="Solutions">
+- Check that all required fields are present in metadata
+- Verify data types match expected format
+- Use `createMetadata()` to validate structure
+- Check console for specific validation errors
+</Admonition>
+
+```typescript title="Debug Metadata"
+try {
+  const validated = createMetadata(metadata);
+  console.log("Metadata validation successful:", validated);
+} catch (error) {
+  console.error("Metadata validation failed:", error);
+}
+```
+
+### Error: "CORS policy blocks request"
+**Symptoms**: "Access to fetch has been blocked by CORS policy"
+
+```typescript title="Correct CORS Headers"
+headers: {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+}
+```
+
+</TabItem>
+<TabItem value="post-errors" label="POST Endpoint Issues">
+
+### Error: "Parameter required"
+**Symptoms**: Error about missing parameters
+
+```typescript title="Debug Parameters"
+console.log("All parameters:", Object.fromEntries(searchParams.entries()));
+console.log("Message parameter:", searchParams.get("message"));
+```
+
+### Error: "Transaction serialization failed"
+**Symptoms**: Error during serialize() call
+
+<Admonition type="caution" title="Common Fixes">
+- Use `BigInt(1000000)` not `1000000` for large numbers
+- Verify chainId is correct for target network
+- Ensure all required transaction fields are present
+- For contract calls, verify ABI matches deployed contract
+</Admonition>
+
+</TabItem>
+<TabItem value="contract-errors" label="Smart Contract Issues">
+
+### Error: "ABI function not found"
+**Symptoms**: Error about missing or incorrect function
+
+<Admonition type="info" title="Verification Steps">
+- Verify function name exactly matches contract (case-sensitive)
+- Check that function is public in smart contract
+- Ensure ABI is complete and includes the function
+- Verify parameter types match contract function signature
+</Admonition>
+
+### Error: "Invalid contract address"
+**Symptoms**: Transaction fails with address-related errors
+
+- Verify contract is deployed to correct network (Fuji testnet)
+- Check address is properly formatted (starts with 0x)
+- Ensure correct contract address for your network
+- Verify contract is verified on blockchain explorer
+
+</TabItem>
+</Tabs>
+
+## 🚀 Complete Code Example
+
+Here's a complete, **minithon-ready** route file that demonstrates all concepts:
+
+```typescript title="app/api/my-app/route.ts - Complete Example"
+import { NextRequest, NextResponse } from "next/server";
+import { avalancheFuji } from "viem/chains";
+import { createMetadata, Metadata, ValidatedMetadata, ExecutionResponse } from "@sherrylinks/sdk";
+import { serialize } from 'wagmi';
+import { abi } from "@/blockchain/abi";
+
+const CONTRACT_ADDRESS = "0x75dd8326F5293ff1f1f4E013c8Fda20db126f3e3";
+
+export async function GET(req: NextRequest) {
+  try {
+    const host = req.headers.get('host') || 'localhost:3000';
+    const protocol = req.headers.get('x-forwarded-proto') || 'http';
+    const serverUrl = `${protocol}://${host}`;
+
+    const metadata: Metadata = {
+      url: "https://sherry.social",
+      icon: "https://avatars.githubusercontent.com/u/117962315",
+      title: "Timestamped Message",
+      baseUrl: serverUrl,
+      description: "Store a message with an optimized timestamp calculated by our algorithm",
+      actions: [
+        {
+          type: "dynamic",
+          label: "Store Message",
+          description: "Store your message with a custom timestamp calculated for optimal storage",
+          chains: { source: "fuji" },
+          path: `/api/my-app`,
+          params: [
+            {
+              name: "message",
+              label: "Your Message Hermano!",
+              type: "text",
+              required: true,
+              description: "Enter the message you want to store on the blockchain",
+            },
+          ],
+        },
+      ],
+    };
+
+    const validated: ValidatedMetadata = createMetadata(metadata);
+
+    return NextResponse.json(validated, {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+      },
+    });
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Failed to create metadata" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function POST(req: NextRequest) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const message = searchParams.get("message");
+    
+    if (!message) {
+      return NextResponse.json(
+        { error: "Message parameter is required" },
+        {
+          status: 400,
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type, Authorization",
+          },
+        }
+      );
+    }
+
+    // Custom business logic
+    const optimizedTimestamp = calculateOptimizedTimestamp(message);
+
+    // Smart contract interaction
+    const tx = {
+      address: CONTRACT_ADDRESS,
+      abi: abi,
+      functionName: "storeMessage",
+      args: [message, optimizedTimestamp],
+    };
+
+    const serialized = serialize(tx);
+
+    const resp: ExecutionResponse = {
+      serializedTransaction: serialized,
+      chainId: avalancheFuji.name,
+    };
+
+    return NextResponse.json(resp, {
+      status: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+      },
+    });
+
+  } catch (error) {
+    console.error("Error in POST request:", error);
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function OPTIONS(request: NextRequest) {
+  return new NextResponse(null, {
+    status: 204,
+    headers: {
+      "Access-Control-Allow-Origin": "*", 
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type, Authorization, X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Date, X-Api-Version",
+    },
+  });
+}
+
+// Custom algorithm - this is where you add your unique value
+function calculateOptimizedTimestamp(message: string): number {
+  const currentTimestamp = Math.floor(Date.now() / 1000);
+  
+  let offset = 0;
+  
+  for (let i = 0; i < message.length; i++) {
+    offset += message.charCodeAt(i) * (i + 1);
+  }
+  
+  const maxOffset = 3600;
+  offset = offset % maxOffset;
+  
+  return currentTimestamp + offset;
+}
+```
+
+## 📚 Example Repository
+
+<Admonition type="info" title="Complete Examples Available">
+  You can find complete working examples in our repository: [SherryLabs/sherry-example](https://github.com/SherryLabs/sherry-example)
+</Admonition>
+
+This repository contains:
+- Both simple transfer and smart contract examples
+- Complete smart contract code with Solidity source
+- Deployment scripts and configuration
+- ABI files and setup instructions
+- Multiple parameter examples
+- Advanced testing utilities
+- Comprehensive documentation
+
+## 🎯 Next Steps
+
+<Tabs>
+<TabItem value="learning" label="For Learning" default>
+
+1. **Start with the simple transfer** example to understand the flow
+2. **Move to the smart contract** example once comfortable
+3. **Experiment with different** parameter types and validations
+4. **Test thoroughly** using the debugger
+
+</TabItem>
+<TabItem value="minithon" label="For Minithon Participants">
+
+1. **Skip the simple transfer** - go directly to smart contract interaction
+2. **Design your unique algorithm** - what problem will you solve?
+3. **Plan your smart contract** - what functions and data do you need?
+4. **Create multiple parameters** - make it sophisticated and useful
+5. **Test extensively** - ensure everything works perfectly
+6. **Document your innovation** - explain why your solution is unique
+
+</TabItem>
+<TabItem value="deployment" label="Deployment Considerations">
+
+- **Local Development**: Use `http://localhost:3000` for testing
+- **Production**: Deploy to Vercel, Netlify, or your preferred platform
+- **Custom Domains**: Update your metadata URLs to match your domain
+- **Environment Variables**: Store sensitive data like private keys securely
+- **Testing Networks**: Start with Fuji testnet, then move to mainnet
+
+</TabItem>
+</Tabs>
+
+---
+
+<div style={{textAlign: 'center', padding: '2rem', backgroundColor: 'var(--ifm-color-primary-contrast-background)', borderRadius: '8px', margin: '2rem 0'}}>
+  <h2>🚀 Ready to Build Something Amazing?</h2>
+  <p>Remember, the key to a successful minithon submission is not just making it work, but making it <strong>useful</strong>, <strong>innovative</strong>, and <strong>technically impressive</strong>. Focus on solving real problems with creative solutions that demonstrate the power of blockchain technology combined with great user experience.</p>
+  <p><strong>Good luck with your mini app development and minithon submission! 🏆</strong></p>
+</div>

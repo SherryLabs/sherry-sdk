@@ -154,8 +154,8 @@ const metadata: Metadata = {
 - **number**: Solo números
 - **email**: Validación de email
 - **url**: Validación de URL
-- **password**: Campo de contraseña
 - **textarea**: Texto largo
+- **and more**
 
 ### 5. Validar y Retornar la Metadata
 
