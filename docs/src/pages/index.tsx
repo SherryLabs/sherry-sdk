@@ -277,7 +277,7 @@ console.log('✅ Ready to deploy!');`;
                             Create your first interactive Web3 mini-app with just a few lines of
                             TypeScript. See how easy it is to define rich blockchain interactions:
                         </p>
-                        
+
                         <div className={styles.stepsList}>
                             <div className={styles.step}>
                                 <span className={styles.stepNumber}>1</span>
@@ -285,7 +285,9 @@ console.log('✅ Ready to deploy!');`;
                             </div>
                             <div className={styles.step}>
                                 <span className={styles.stepNumber}>2</span>
-                                <span>Configure blockchain actions with smart contract details</span>
+                                <span>
+                                    Configure blockchain actions with smart contract details
+                                </span>
                             </div>
                             <div className={styles.step}>
                                 <span className={styles.stepNumber}>3</span>
@@ -296,7 +298,7 @@ console.log('✅ Ready to deploy!');`;
                                 <span>Validate, deploy, and embed anywhere</span>
                             </div>
                         </div>
-                        
+
                         <div className={styles.codeActions}>
                             <Link
                                 className="button button--primary button--lg"
@@ -312,7 +314,7 @@ console.log('✅ Ready to deploy!');`;
                             </Link>
                         </div>
                     </div>
-                    
+
                     <div className={styles.codeExample}>
                         <div className={styles.macWindow}>
                             <div className={styles.macWindowHeader}>

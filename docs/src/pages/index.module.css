@@ -826,6 +826,7 @@
   background: #1e1e1e !important;
   font-size: 0.85rem !important;
   line-height: 1.6 !important;
+  border-radius: 0 !important; /* Remove border radius to fix intersection */
 }
 
 .enhancedCodeBlock code {
@@ -1267,26 +1268,48 @@
 [data-theme='dark'] .useCaseCard,
 [data-theme='dark'] .communityCard {
   background: #2d2d30;
-  color: #e3e3e3;
+  color: #d1d5db; /* Unified light gray text */
   border-color: #444;
+}
+
+[data-theme='dark'] .quickLinksTitle,
+[data-theme='dark'] .featureCard h3,
+[data-theme='dark'] .useCaseCard h4,
+[data-theme='dark'] .communityCard h4 {
+  color: #f3f4f6 !important; /* Very light gray for headings */
+}
+
+[data-theme='dark'] .quickLinksDescription,
+[data-theme='dark'] .featureCard p,
+[data-theme='dark'] .useCaseCard p,
+[data-theme='dark'] .communityCard p {
+  color: #d1d5db !important; /* Light gray for descriptions */
+}
+
+[data-theme='dark'] .featureList li {
+  color: #d1d5db !important; /* Light gray for list items */
+}
+
+[data-theme='dark'] .step {
+  color: #d1d5db !important; /* Light gray for step text */
 }
 
 [data-theme='dark'] .socialPost {
   background: #2d2d30;
-  color: #e3e3e3;
+  color: #d1d5db;
   border-color: #444;
 }
 
 [data-theme='dark'] .username {
-  color: #ffffff;
+  color: #f3f4f6; /* Very light gray for username */
 }
 
 [data-theme='dark'] .postContent p {
-  color: #e3e3e3;
+  color: #d1d5db;
 }
 
 [data-theme='dark'] .nftName {
-  color: #ffffff;
+  color: #f3f4f6; /* Very light gray for NFT name */
 }
 
 [data-theme='dark'] .sherryWidget {
@@ -1313,6 +1336,7 @@
   background: #f8f9fa !important;
   color: #24292f !important;
   border: 1px solid #d0d7de !important;
+  border-radius: 0 !important; /* Remove border radius to fix intersection */
 }
 
 [data-theme='light'] .enhancedCodeBlock code {
