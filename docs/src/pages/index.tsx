@@ -4,6 +4,7 @@ import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import Heading from '@theme/Heading';
+import CodeBlock from '@theme/CodeBlock';
 import styles from './index.module.css';
 import { useColorMode } from '@docusaurus/theme-common';
 import {
@@ -18,6 +19,8 @@ import {
     FaRocket,
     FaUsers,
     FaLightbulb,
+    FaCopy,
+    FaPlay,
 } from 'react-icons/fa';
 import {
     MdOutlineRocketLaunch,
@@ -223,54 +226,7 @@ function KeyFeaturesSection(): ReactNode {
 
 // Code Example Section with Live Preview
 function CodeExampleSection(): ReactNode {
-    return (
-        <section className={styles.codeSection}>
-            <div className="container">
-                <div className={styles.codeContainer}>
-                    <div className={styles.codeExplanation}>
-                        <Heading as="h2">Build in Minutes, Not Hours</Heading>
-                        <p>
-                            Create your first interactive Web3 mini-app with just a few lines of
-                            TypeScript:
-                        </p>
-                        <div className={styles.stepsList}>
-                            <div className={styles.step}>
-                                <span className={styles.stepNumber}>1</span>
-                                <span>Define your mini-app metadata</span>
-                            </div>
-                            <div className={styles.step}>
-                                <span className={styles.stepNumber}>2</span>
-                                <span>Add blockchain actions</span>
-                            </div>
-                            <div className={styles.step}>
-                                <span className={styles.stepNumber}>3</span>
-                                <span>Validate with built-in tools</span>
-                            </div>
-                            <div className={styles.step}>
-                                <span className={styles.stepNumber}>4</span>
-                                <span>Deploy and embed anywhere</span>
-                            </div>
-                        </div>
-                        <Link
-                            className="button button--primary button--lg"
-                            to="/docs/getting-started/creatingminiapp"
-                        >
-                            <FaRocket style={{ marginRight: '8px' }} />
-                            Start Building →
-                        </Link>
-                    </div>
-                    <div className={styles.codeExample}>
-                        <div className={styles.macWindow}>
-                            <div className={styles.macWindowHeader}>
-                                <div className={styles.windowButtons}>
-                                    <span className={styles.closeButton}></span>
-                                    <span className={styles.minimizeButton}></span>
-                                    <span className={styles.maximizeButton}></span>
-                                </div>
-                                <div className={styles.windowTitle}>nft-mint.ts</div>
-                            </div>
-                            <pre className={styles.codeBlock}>
-                                <code className="language-typescript">{`import { createMetadata, Metadata } from '@sherrylinks/sdk';
+    const codeExample = `import { createMetadata, Metadata } from '@sherrylinks/sdk';
 
 const metadata: Metadata = {
   url: 'https://my-nft-app.com',
@@ -309,8 +265,72 @@ const metadata: Metadata = {
 
 // Validate and deploy
 const validated = createMetadata(metadata);
-console.log('✅ Ready to deploy!');`}</code>
-                            </pre>
+console.log('✅ Ready to deploy!');`;
+
+    return (
+        <section className={styles.codeSection}>
+            <div className="container">
+                <div className={styles.codeContainer}>
+                    <div className={styles.codeExplanation}>
+                        <Heading as="h2">Build in Minutes, Not Hours</Heading>
+                        <p>
+                            Create your first interactive Web3 mini-app with just a few lines of
+                            TypeScript. See how easy it is to define rich blockchain interactions:
+                        </p>
+                        
+                        <div className={styles.stepsList}>
+                            <div className={styles.step}>
+                                <span className={styles.stepNumber}>1</span>
+                                <span>Define your mini-app metadata and branding</span>
+                            </div>
+                            <div className={styles.step}>
+                                <span className={styles.stepNumber}>2</span>
+                                <span>Configure blockchain actions with smart contract details</span>
+                            </div>
+                            <div className={styles.step}>
+                                <span className={styles.stepNumber}>3</span>
+                                <span>Set up user parameters and validation rules</span>
+                            </div>
+                            <div className={styles.step}>
+                                <span className={styles.stepNumber}>4</span>
+                                <span>Validate, deploy, and embed anywhere</span>
+                            </div>
+                        </div>
+                        
+                        <div className={styles.codeActions}>
+                            <Link
+                                className="button button--primary button--lg"
+                                to="/docs/getting-started/creatingminiapp"
+                            >
+                                Start Building
+                            </Link>
+                            <Link
+                                className="button button--outline button--lg"
+                                to="/docs/getting-started/examples"
+                            >
+                                More Examples
+                            </Link>
+                        </div>
+                    </div>
+                    
+                    <div className={styles.codeExample}>
+                        <div className={styles.macWindow}>
+                            <div className={styles.macWindowHeader}>
+                                <div className={styles.windowButtons}>
+                                    <span className={styles.closeButton}></span>
+                                    <span className={styles.minimizeButton}></span>
+                                    <span className={styles.maximizeButton}></span>
+                                </div>
+                                <div className={styles.windowTitle}>nft-mint-action.ts</div>
+                            </div>
+                            <div className={styles.codeContent}>
+                                <CodeBlock
+                                    language="typescript"
+                                    className={styles.enhancedCodeBlock}
+                                >
+                                    {codeExample}
+                                </CodeBlock>
+                            </div>
                         </div>
                     </div>
                 </div>

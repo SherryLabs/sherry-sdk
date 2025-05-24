@@ -509,10 +509,6 @@
   transition: transform 0.3s ease;
 }
 
-.quickLinksCard:hover .quickLinksIcon {
-  transform: scale(1.1);
-}
-
 .quickLinksBadge {
   background: linear-gradient(
     135deg,
@@ -552,10 +548,6 @@
   font-weight: 600;
   font-size: 0.9rem;
   transition: all 0.2s ease;
-}
-
-.quickLinksCard:hover .learnMore {
-  transform: translateX(4px);
 }
 
 /* Enhanced Features Section */
@@ -615,10 +607,6 @@
   transition: transform 0.3s ease;
 }
 
-.featureCard:hover .featureIcon {
-  transform: scale(1.1);
-}
-
 .featureContent {
   flex: 1;
   display: flex;
@@ -674,7 +662,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--sherry-spacing-4xl);
-  align-items: center;
+  align-items: flex-start;
   max-width: 100%;
 }
 
@@ -731,14 +719,29 @@
   font-weight: 700;
   font-size: 0.9rem;
   box-shadow: var(--sherry-shadow-sm);
-  transition: transform 0.2s ease;
 }
 
-.step:hover .stepNumber {
-  transform: scale(1.1);
+.codeActions {
+  display: flex;
+  gap: var(--sherry-spacing-md);
+  margin-top: var(--sherry-spacing-lg);
 }
 
-/* Enhanced macOS Window */
+.codeActions .button--outline {
+  background: white !important;
+  color: var(--ifm-color-primary) !important;
+  border: 2px solid var(--ifm-color-primary) !important;
+  font-weight: 600 !important;
+}
+
+.codeActions .button--outline:hover {
+  background: var(--ifm-color-primary) !important;
+  color: white !important;
+  transform: translateY(-2px);
+  box-shadow: var(--sherry-shadow-md);
+}
+
+/* Mac Window - Restored original styling */
 .macWindow {
   background-color: #1e1e1e;
   border-radius: var(--sherry-border-radius-lg);
@@ -751,7 +754,7 @@
 }
 
 .macWindow:hover {
-  transform: scale(1.02);
+  transform: translateY(-4px);
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
 }
 
@@ -760,13 +763,13 @@
   padding: var(--sherry-spacing-md) var(--sherry-spacing-lg);
   display: flex;
   align-items: center;
+  justify-content: space-between;
   border-bottom: 1px solid #333;
 }
 
 .windowButtons {
   display: flex;
   gap: var(--sherry-spacing-sm);
-  margin-right: var(--sherry-spacing-lg);
 }
 
 .closeButton,
@@ -802,20 +805,74 @@
   font-size: 14px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   font-weight: 500;
+  flex: 1;
+  text-align: center;
+  margin: 0 var(--sherry-spacing-lg);
 }
 
-.codeBlock {
-  background: #1e1e1e;
-  color: #d4d4d4;
-  padding: var(--sherry-spacing-xl);
-  border-radius: 0;
-  font-family: 'SF Mono', 'Fira Code', Monaco, Consolas, monospace;
-  font-size: 0.875rem;
-  line-height: 1.7;
-  overflow-x: auto;
-  box-shadow: none;
-  margin: 0;
-  width: 100%;
+.codeContent {
+  position: relative;
+  overflow: hidden;
+}
+
+.enhancedCodeBlock {
+  margin: 0 !important;
+  background: transparent !important;
+}
+
+.enhancedCodeBlock pre {
+  margin: 0 !important;
+  padding: var(--sherry-spacing-xl) !important;
+  background: #1e1e1e !important;
+  font-size: 0.85rem !important;
+  line-height: 1.6 !important;
+}
+
+.enhancedCodeBlock code {
+  background: transparent !important;
+  color: #d4d4d4 !important;
+}
+
+/* Remove unwanted Code Window styles */
+.codeWindow,
+.codeWindowHeader,
+.windowActions,
+.copyButton,
+.runButton,
+.codeFeatures,
+.featureHighlight,
+.highlightIcon {
+  display: none;
+}
+
+/* Remove hover animations for icons */
+.quickLinksCard:hover .quickLinksIcon,
+.featureCard:hover .featureIcon,
+.useCaseCard:hover .useCaseIcon,
+.communityCard:hover .communityIcon {
+  transform: none;
+}
+
+/* Remove step number hover animation */
+.step:hover .stepNumber {
+  transform: none;
+}
+
+/* Remove unwanted icon movement animations */
+.featureHighlight:hover {
+  transform: none;
+  box-shadow: var(--sherry-shadow-sm);
+}
+
+.quickLinksCard:hover .learnMore {
+  transform: none;
+}
+
+/* Remove icons from hero buttons */
+.buttons a svg,
+.codeActions a svg,
+.ctaButtons a svg {
+  display: none;
 }
 
 /* Enhanced Use Cases Section */
@@ -1249,4 +1306,74 @@
 [data-theme='dark'] .statsContainer {
   background: rgba(255, 255, 255, 0.05);
   border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Light mode code styling for better contrast */
+[data-theme='light'] .enhancedCodeBlock pre {
+  background: #f8f9fa !important;
+  color: #24292f !important;
+  border: 1px solid #d0d7de !important;
+}
+
+[data-theme='light'] .enhancedCodeBlock code {
+  color: #24292f !important;
+}
+
+/* Light mode Mac window styling */
+[data-theme='light'] .macWindow {
+  border-color: #d0d7de;
+}
+
+[data-theme='light'] .macWindowHeader {
+  background: linear-gradient(135deg, #f6f8fa 0%, #ffffff 100%);
+  border-bottom: 1px solid #d0d7de;
+}
+
+[data-theme='light'] .windowTitle {
+  color: #24292f;
+}
+
+/* Syntax highlighting improvements for light mode */
+[data-theme='light'] .enhancedCodeBlock .token.comment {
+  color: #6a737d !important;
+}
+
+[data-theme='light'] .enhancedCodeBlock .token.string {
+  color: #032f62 !important;
+}
+
+[data-theme='light'] .enhancedCodeBlock .token.keyword {
+  color: #d73a49 !important;
+}
+
+[data-theme='light'] .enhancedCodeBlock .token.function {
+  color: #6f42c1 !important;
+}
+
+[data-theme='light'] .enhancedCodeBlock .token.property {
+  color: #005cc5 !important;
+}
+
+[data-theme='light'] .enhancedCodeBlock .token.number {
+  color: #005cc5 !important;
+}
+
+[data-theme='light'] .enhancedCodeBlock .token.operator {
+  color: #d73a49 !important;
+}
+
+[data-theme='light'] .enhancedCodeBlock .token.punctuation {
+  color: #24292f !important;
+}
+
+[data-theme='light'] .enhancedCodeBlock .token.class-name {
+  color: #6f42c1 !important;
+}
+
+[data-theme='light'] .enhancedCodeBlock .token.boolean {
+  color: #005cc5 !important;
+}
+
+[data-theme='light'] .enhancedCodeBlock .token.constant {
+  color: #005cc5 !important;
 }
