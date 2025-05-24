@@ -45,38 +45,43 @@ Esta guía completa te enseñará paso a paso cómo crear mini apps potentes usa
 Antes de empezar a construir, es importante entender cómo Sherry Links conecta usuarios, plataformas y tu backend de mini app. El siguiente diagrama ilustra el flujo completo:
 
 <div style={{ textAlign: 'center', margin: '2rem 0' }}>
-  <img 
-    src="/img/sherry-flow.png" 
-    alt="Diagrama de Flujo de Sherry Links - Cómo los usuarios interactúan con mini apps a través de la plataforma" 
-    style={{ 
-      maxWidth: '100%', 
+  <img
+    src="/img/sherry-flow.png"
+    alt="Diagrama de Flujo de Sherry Links - Cómo los usuarios interactúan con mini apps a través de la plataforma"
+    style={{
+      maxWidth: '100%',
       height: 'auto',
       border: '1px solid var(--ifm-color-emphasis-300)',
       borderRadius: '8px',
-      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
-    }} 
+      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+    }}
   />
 </div>
 
 ### Flujo Paso a Paso
 
 1. **Sherry hace petición GET y recibe metadata**
+
    - La plataforma descubre tu mini app y solicita su configuración
    - Tu backend responde con metadata que define la UI y funcionalidad
 
 2. **Back-End retorna metadata**
+
    - La metadata incluye campos de formulario, botones de acción, descripciones y endpoints
    - Esto le dice a Sherry cómo renderizar la interfaz de tu mini app
 
 3. **Sherry renderiza mini-app**
+
    - La plataforma crea un formulario amigable basado en tu metadata
    - Los usuarios pueden ver campos de entrada, descripciones y botones de acción
 
 4. **Usuario ejecuta mini-app**
+
    - El usuario llena el formulario con sus parámetros deseados
    - El usuario hace clic en el botón de acción para enviar su solicitud
 
 5. **Sherry hace petición POST y recibe transacción serializada desde Back-End**
+
    - La plataforma envía la entrada del usuario a tu backend para procesamiento
    - Tu backend aplica lógica personalizada y retorna una transacción blockchain lista para firmar
 
@@ -85,7 +90,9 @@ Antes de empezar a construir, es importante entender cómo Sherry Links conecta 
    - El usuario firma y envía la transacción a la blockchain
 
 <Admonition type="tip" title="Concepto Clave">
-  Tu mini app actúa como una **fábrica inteligente de transacciones** - toma la entrada del usuario, aplica tu lógica de negocio única, y produce transacciones blockchain listas para firmar. Esto es lo que hace poderoso a Sherry Links: combinar gran UX con funcionalidad blockchain personalizada.
+  Tu mini app actúa como una **fábrica inteligente de transacciones** - toma la entrada del usuario,
+  aplica tu lógica de negocio única, y produce transacciones blockchain listas para firmar. Esto es
+  lo que hace poderoso a Sherry Links: combinar gran UX con funcionalidad blockchain personalizada.
 </Admonition>
 
 ## 🛠️ Requisitos Previos
