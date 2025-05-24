@@ -1,5 +1,4 @@
 ---
-title: Creating Mini Apps with Next.js and Sherry SDK
 description: Complete step-by-step guide to build dynamic mini apps using Next.js and the Sherry Links SDK
 sidebar_position: 1
 tags: [nextjs, sdk, mini-apps, blockchain, tutorial]
@@ -10,7 +9,9 @@ import TabItem from '@theme/TabItem';
 import CodeBlock from '@theme/CodeBlock';
 import Admonition from '@theme/Admonition';
 
-# 🚀 Creating Mini Apps with Next.js and Sherry SDK
+# Guide - MiniApp with NextJS
+
+## Creating Mini Apps with Next.js and Sherry SDK
 
 This comprehensive guide will teach you step by step how to create powerful mini apps using **Next.js** and the **Sherry Links SDK**. Mini apps are dynamic applications that can be integrated into different platforms and allow users to interact with smart contracts seamlessly.
 
@@ -545,6 +546,9 @@ export async function POST(req: NextRequest) {
 First, let's understand what our smart contract does:
 
 ```solidity title="TimestampedMessage Contract"
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.17;
+
 contract TimestampedMessage {
     event MessageStored(address indexed sender, string message, uint256 timestamp, uint256 optimizedTimestamp);
 
