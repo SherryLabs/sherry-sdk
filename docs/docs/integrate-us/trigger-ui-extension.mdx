@@ -1,0 +1,441 @@
+# TriggerKit Extension
+
+# TriggerKit Browser Extension Integration Guide
+
+This guide will help you integrate TriggerKit into browser extensions to automatically detect and enhance links with interactive MiniApps on platforms like Twitter/X, YouTube, and Twitch.
+
+> **⚠️ Beta Notice**: TriggerKit is currently in active development. Some APIs and configurations may change in future releases as we refine the extension integration experience.
+
+## Installation
+
+```bash
+npm install @sherrylabs/trigger-kit @sherrylabs/trigger-nucleo
+```
+
+```bash
+yarn add @sherrylabs/trigger-kit @sherrylabs/trigger-nucleo
+```
+
+```bash
+pnpm add @sherrylabs/trigger-kit @sherrylabs/trigger-nucleo
+```
+
+## Extension Architecture
+
+A typical TriggerKit extension consists of:
+
+1. **Background Script**: Handles wallet communication and transactions
+2. **Content Script**: Observes DOM and injects MiniApps
+3. **Popup**: Interface for configuring wallets and preferences
+4. **Manifest**: Configuration for permissions and scripts
+
+## File Structure
+
+```
+extension/
+├── manifest.json
+├── src/
+│   ├── background.ts
+│   ├── content.ts
+│   └── popup/
+│       ├── index.html
+│       ├── index.tsx
+│       └── components/
+├── public/
+│   └── img/
+└── dist/
+```
+
+## Manifest Configuration
+
+```json
+{
+  "manifest_version": 3,
+  "name": "TriggerKit Extension",
+  "version": "1.0.0",
+  "description": "Enhance web links with interactive blockchain MiniApps",
+  
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting"
+  ],
+  
+  "host_permissions": [
+    "https://twitter.com/*",
+    "https://x.com/*",
+    "https://pro.x.com/*",
+    "https://www.youtube.com/*",
+    "https://*.twitch.tv/*"
+  ],
+  
+  "background": {
+    "service_worker": "src/background.ts",
+    "type": "module"
+  },
+  
+  "content_scripts": [
+    {
+      "matches": [
+        "https://twitter.com/*",
+        "https://x.com/*",
+        "https://pro.x.com/*",
+        "https://www.youtube.com/*",
+        "https://*.twitch.tv/*"
+      ],
+      "js": ["src/content.ts"],
+      "run_at": "document_idle"
+    }
+  ],
+  
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "img/logo-16.png",
+      "32": "img/logo-32.png",
+      "48": "img/logo-48.png",
+      "128": "img/logo-128.png"
+    }
+  },
+  
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "img/logo-16.png",
+        "img/logo-32.png",
+        "img/logo-48.png",
+        "img/logo-128.png",
+        "img/logo-metamask.png",
+        "img/logo-core.svg"
+      ],
+      "matches": [
+        "https://twitter.com/*",
+        "https://x.com/*",
+        "https://pro.x.com/*",
+        "https://www.youtube.com/*",
+        "https://*.twitch.tv/*"
+      ]
+    }
+  ]
+}
+```
+
+## Background Script
+
+```typescript
+// src/background.ts
+import { encodeFunctionData, createPublicClient, http } from 'viem';
+import {
+  avalanche,
+  avalancheFuji,
+  monadTestnet,
+  celo,
+  celoAlfajores,
+} from 'viem/chains';
+import { call as callAction } from 'viem/actions';
+
+const chainMap: Record<number, any> = {
+  43114: avalanche,
+  43113: avalancheFuji,
+  10143: monadTestnet,
+  42220: celo,
+  44787: celoAlfajores,
+};
+
+async function handleWalletCommunication(
+  type: string,
+  wallet: string,
+  tabId: number,
+  payload: any,
+): Promise<any> {
+  console.log(`[Sherry EVM] 🧠 Handling ${type} with wallet: ${wallet}`);
+
+  if (wallet !== 'metamask') {
+    throw new Error('Unsupported wallet: ' + wallet);
+  }
+
+  switch (type) {
+    case 'connect':
+      return await connectWallet(tabId);
+    
+    case 'get_accounts':
+      return await getAccounts(tabId);
+    
+    case 'write_contract':
+      return await writeContract(tabId, payload);
+    
+    case 'send_transaction':
+      return await sendTransaction(tabId, payload);
+    
+    case 'switch_chain':
+      return await switchChain(tabId, payload);
+    
+    case 'read_contract':
+      return await readContract(tabId, payload);
+    
+    case 'simulate_contract':
+      return await simulateContract(tabId, payload);
+    
+    case 'estimate_gas':
+      return await estimateGas(tabId, payload);
+    
+    default:
+      throw new Error(`Unsupported message type: ${type}`);
+  }
+}
+
+async function connectWallet(tabId: number) {
+  const res = await chrome.scripting.executeScript({
+    target: { tabId },
+    world: 'MAIN',
+    func: async () => {
+      if (!window.ethereum) {
+        return { error: 'MetaMask not found' };
+      }
+      try {
+        const accounts = await window.ethereum.request({
+          method: 'eth_requestAccounts',
+        });
+        return { address: accounts?.[0] ?? null };
+      } catch (e: any) {
+        return { error: e.message ?? 'Unknown connect error' };
+      }
+    },
+  });
+
+  return res?.[0]?.result ?? { error: 'No result from connect' };
+}
+
+async function writeContract(tabId: number, payload: any) {
+  const {
+    address,
+    abi,
+    functionName,
+    args,
+    value,
+    data: providedData,
+  } = payload;
+
+  try {
+    // Encode function data if not provided
+    const encodedData =
+      providedData ??
+      encodeFunctionData({
+        abi: typeof abi === 'string' ? JSON.parse(abi) : abi,
+        functionName,
+        args,
+      });
+
+    // Convert value to hex
+    const hexValue =
+      typeof value === 'bigint'
+        ? '0x' + value.toString(16)
+        : value
+          ? '0x' + BigInt(value).toString(16)
+          : '0x0';
+
+    // Execute in MAIN world
+    const [res] = await chrome.scripting.executeScript({
+      target: { tabId },
+      world: 'MAIN',
+      func: async (to: string, data: string, value: string) => {
+        if (!window.ethereum) return { error: 'MetaMask not found' };
+
+        try {
+          const accounts = await window.ethereum.request({
+            method: 'eth_requestAccounts',
+          });
+
+          const from = accounts?.[0];
+          if (!from) return { error: 'No account available' };
+
+          const txHash = await window.ethereum.request({
+            method: 'eth_sendTransaction',
+            params: [
+              {
+                from,
+                to,
+                data,
+                value,
+              },
+            ],
+          });
+
+          return { txHash };
+        } catch (e: any) {
+          return { error: e?.message ?? 'Transaction failed' };
+        }
+      },
+      args: [address, encodedData, hexValue],
+    });
+
+    return res?.result ?? { error: 'No result from write_contract' };
+  } catch (err: any) {
+    return { error: err?.message ?? 'Unexpected error in write_contract' };
+  }
+}
+
+// Message listener
+chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+  console.log('[BG] onMessage:', msg, sender);
+
+  const tabId = sender.tab?.id;
+  if (!tabId) {
+    console.warn('[BG] no tabId → ignoring');
+    return;
+  }
+
+  // Get selected wallet
+  if (msg.type === 'getSelectedWallet') {
+    chrome.storage.local.get(['selectedWallet']).then((storage) => {
+      sendResponse(storage.selectedWallet);
+    });
+    return true;
+  }
+
+  if (!msg.wallet) return false;
+
+  // Handle wallet communication
+  handleWalletCommunication(msg.type, msg.wallet, tabId, msg.payload)
+    .then((res) => sendResponse(res))
+    .catch((err) => console.error('[BG] error handling message', err));
+
+  return true; // Keep sendResponse alive
+});
+```
+
+## Content Script
+
+```typescript
+// src/content.ts
+import '@sherrylabs/slinks/index.css';
+import {
+  SherryExtensionAdapter,
+  setupSlinksObserverEVM,
+} from '@sherrylabs/slinks/ext';
+import { setClientKey, MiniAppDirectory } from '@sherrylabs/slinks-core';
+
+// Initialize the observer
+export async function initSlinksObserver() {
+  const clientKey = import.meta.env.VITE_SHERRY_CLIENT_KEY;
+  setClientKey(clientKey);
+
+  const directory = MiniAppDirectory.getInstance();
+  try {
+    await directory.init({ refreshInterval: 60 * 60 * 1000 });
+    console.log('[Sherry Ext] MiniApp Directory Initialized.');
+  } catch (e) {
+    console.error('[Sherry Ext] Failed to initialize MiniApp Directory:', e);
+    return;
+  }
+
+  // Get selected wallet
+  const wallet: string | null = await new Promise((resolve) => {
+    chrome.runtime.sendMessage({ type: 'getSelectedWallet' }, (res) => {
+      resolve(res ?? null);
+    });
+  });
+
+  console.log('👛 Active wallet:', wallet);
+
+  if (!wallet) {
+    console.warn('[Sherry] ❌ No wallet selected. Nothing to initialize.');
+    return;
+  }
+
+  const adapter = new SherryExtensionAdapter();
+  console.log('[trigger-kit] 🧠 Starting setupSlinksObserverEVM...');
+  
+  // Auto-detects platform (Twitter, YouTube, Twitch) and sets up appropriate observer
+  setupSlinksObserverEVM(adapter);
+}
+
+initSlinksObserver();
+```
+
+## Extension Adapter
+
+The `SherryExtensionAdapter` handles communication between the extension and wallets:
+
+```typescript
+// Example usage (already included in the library)
+import { SherryExtensionAdapter } from '@sherrylabs/slinks/ext';
+
+const adapter = new SherryExtensionAdapter();
+
+// Connect wallet
+const address = await adapter.connect();
+
+// Send transaction
+const result = await adapter.writeContract({
+  address: '0x...',
+  abi: [...],
+  functionName: 'myFunction',
+  args: [...],
+  value: BigInt(0)
+});
+
+// Read from contract
+const data = await adapter.readContract({
+  address: '0x...',
+  abi: [...],
+  functionName: 'myView',
+  args: [...],
+  chainId: 43113
+});
+```
+
+## Platform-Specific Observers
+
+TriggerKit includes platform-specific observers for different websites:
+
+### Automatic Configuration
+
+```typescript
+import { setupSlinksObserverEVM } from '@sherrylabs/slinks/ext';
+
+// Auto-detects platform and sets up appropriate observer
+setupSlinksObserverEVM(adapter);
+
+// Or configure specific observers
+setupSlinksObserverEVM(adapter, {
+  twitter: true,
+  youtube: true,
+  twitch: true
+});
+```
+
+### Twitter/X Observer
+
+```typescript
+import { setupTwitterObserverEVM } from '@sherrylabs/slinks/ext';
+
+// Observes link cards in tweets
+setupTwitterObserverEVM(adapter);
+```
+
+### YouTube Observer
+
+```typescript
+import { setupYoutubeObserverEVM } from '@sherrylabs/slinks/ext';
+
+// Observes links in video descriptions
+setupYoutubeObserverEVM(adapter);
+```
+
+### Twitch Observer
+
+```typescript
+import { setupTwitchObserverEVM } from '@sherrylabs/slinks/ext';
+
+// Observes pinned messages in chat
+setupTwitchObserverEVM(adapter);
+```
+
+## Popup Configuration
+
+```html
+<!-- popup.html -->
+<!doctype html>
+<html lang="en">
+  <head>
