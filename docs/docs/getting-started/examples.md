@@ -99,8 +99,6 @@ export default createMetadata(creatorTipApp);
 - Interactive amount selection
 - User-friendly option labeling
 
-**🔗 [Live Demo](https://sherry.social/examples/creator-tip)** | **📄 [Full Source](https://github.com/SherryLabs/examples/tree/main/creator-tip)**
-
 ---
 
 ### 2. **Charity Donation Selector**
@@ -160,8 +158,6 @@ const charityApp: Metadata = {
 - Both recipient and amount selection
 - Dropdown vs radio button UX
 - Meaningful option descriptions
-
-**🔗 [Live Demo](https://sherry.social/examples/charity)** | **📄 [Full Source](https://github.com/SherryLabs/examples/tree/main/charity)**
 
 ---
 
@@ -227,8 +223,6 @@ const simpleNFTApp: Metadata = {
 - Working with contract ABIs
 - Fixed vs user-input parameters
 - Payable function handling
-
-**🔗 [Live Demo](https://sherry.social/examples/nft-mint)** | **📄 [Full Source](https://github.com/SherryLabs/examples/tree/main/nft-mint)**
 
 ---
 
@@ -299,8 +293,6 @@ const newsletterApp: Metadata = {
 - Form parameter types
 - Email validation
 - Radio vs select options
-
-**🔗 [Live Demo](https://sherry.social/examples/newsletter)** | **📄 [Full Source](https://github.com/SherryLabs/examples/tree/main/newsletter)**
 
 ---
 
@@ -434,8 +426,6 @@ const tokenSwapFlow: ActionFlow = {
 - Parameter passing between actions
 - Error handling in flows
 
-**🔗 [Live Demo](https://sherry.social/examples/token-swap-flow)** | **📄 [Full Source](https://github.com/SherryLabs/examples/tree/main/token-swap-flow)**
-
 ---
 
 ### 6. **DAO Voting with Proposals**
@@ -513,8 +503,6 @@ const daoVotingApp: Metadata = {
 - Real-world DAO integration
 - Meaningful vote descriptions
 
-**🔗 [Live Demo](https://sherry.social/examples/dao-voting)** | **📄 [Full Source](https://github.com/SherryLabs/examples/tree/main/dao-voting)**
-
 ---
 
 ### 7. **Cross-Chain Asset Bridge**
@@ -591,8 +579,6 @@ const bridgeApp: Metadata = {
 - Token selection with descriptions
 - Address validation across chains
 - Fixed vs dynamic parameters
-
-**🔗 [Live Demo](https://sherry.social/examples/bridge)** | **📄 [Full Source](https://github.com/SherryLabs/examples/tree/main/bridge)**
 
 ---
 
@@ -728,8 +714,6 @@ const onboardingFlow: ActionFlow = {
 - Decision trees and branching
 - Data passing between steps
 - Multiple completion states
-
-**🔗 [Live Demo](https://sherry.social/examples/onboarding)** | **📄 [Full Source](https://github.com/SherryLabs/examples/tree/main/onboarding)**
 
 ---
 
@@ -901,8 +885,6 @@ async function calculateOptimalAllocation(config: any) {
 - Real-time data processing
 - Advanced parameter handling
 
-**🔗 [Live Demo](https://sherry.social/examples/yield-optimizer)** | **📄 [Full Source](https://github.com/SherryLabs/examples/tree/main/yield-optimizer)**
-
 ---
 
 ### 10. **Dynamic NFT Pricing Engine**
@@ -1066,8 +1048,6 @@ async function detectWhaleActivity() {
 - Bulk discount calculations
 - Market sentiment integration
 
-**🔗 [Live Demo](https://sherry.social/examples/dynamic-nft)** | **📄 [Full Source](https://github.com/SherryLabs/examples/tree/main/dynamic-nft)**
-
 ---
 
 ### 11. **Advanced Arbitrage Bot**
@@ -1229,8 +1209,6 @@ async function scanDEXPrices(tokenPair: string) {
 - Optimal trade sizing
 - Gas cost optimization
 - Real-time opportunity detection
-
-**🔗 [Live Demo](https://sherry.social/examples/arbitrage)** | **📄 [Full Source](https://github.com/SherryLabs/examples/tree/main/arbitrage)**
 
 ---
 
@@ -1481,8 +1459,6 @@ export async function POST(req: NextRequest) {
 - Automated rebalancing strategies
 - Emergency exit mechanisms
 - Batch transaction optimization
-
-**🔗 [Live Demo](https://sherry.social/examples/portfolio-manager)** | **📄 [Full Source](https://github.com/SherryLabs/examples/tree/main/portfolio-manager)**
 
 ---
 
@@ -1740,8 +1716,6 @@ const socialTradingFlow: ActionFlow = {
 - Risk management integration
 - Automated portfolio mirroring
 - Smart contract deployment flows
-
-**🔗 [Live Demo](https://sherry.social/examples/social-trading)** | **📄 [Full Source](https://github.com/SherryLabs/examples/tree/main/social-trading)**
 
 ---
 
@@ -2140,8 +2114,6 @@ async function assessProtocolRisk(protocolAddress: string) {
 - Liquidity provision mechanics
 - Governance voting systems
 - Premium calculation models
-
-**🔗 [Live Demo](https://sherry.social/examples/defi-insurance)** | **📄 [Full Source](https://github.com/SherryLabs/examples/tree/main/defi-insurance)**
 
 ---
 
