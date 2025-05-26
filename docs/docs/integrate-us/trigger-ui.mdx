@@ -54,11 +54,7 @@ import { injected, metaMask, coinbaseWallet } from 'wagmi/connectors';
 // Create Wagmi configuration
 const config = createConfig({
   chains: [avalanche, avalancheFuji, celo, celoAlfajores],
-  connectors: [
-    injected(),
-    metaMask(),
-    coinbaseWallet({ appName: 'My dApp' })
-  ],
+  connectors: [injected(), metaMask(), coinbaseWallet({ appName: 'My dApp' })],
   transports: {
     [avalanche.id]: http(),
     [avalancheFuji.id]: http(),
@@ -73,9 +69,7 @@ const queryClient = new QueryClient();
 function App() {
   return (
     <WagmiProvider config={config}>
-      <QueryClientProvider client={queryClient}>
-        {/* Your app here */}
-      </QueryClientProvider>
+      <QueryClientProvider client={queryClient}>{/* Your app here */}</QueryClientProvider>
     </WagmiProvider>
   );
 }
@@ -244,6 +238,7 @@ export default AdvancedMiniAppComponent;
 The component accepts two configuration types:
 
 **Option A: With URL (automatic fetch)**
+
 ```tsx
 <MiniAppComponent
   url="https://app.sherry.social/action/swap"
@@ -253,12 +248,9 @@ The component accepts two configuration types:
 ```
 
 **Option B: With pre-loaded metadata**
+
 ```tsx
-<MiniAppComponent
-  metadata={validatedMetadata}
-  securityState="trusted"
-  adapter={adapter}
-/>
+<MiniAppComponent metadata={validatedMetadata} securityState="trusted" adapter={adapter} />
 ```
 
 ## Theme Configuration
@@ -275,6 +267,7 @@ TriggerKit includes support for light and dark themes:
 ```
 
 Themes are automatically detected based on:
+
 1. `data-x-theme` attribute on parent elements
 2. HTML `color-scheme`
 3. System preference (`prefers-color-scheme`)
@@ -292,17 +285,19 @@ function MiniAppWithErrorHandling() {
   return (
     <div>
       {error && (
-        <div style={{ 
-          color: 'red', 
-          padding: '10px', 
-          border: '1px solid red', 
-          borderRadius: '4px',
-          marginBottom: '10px'
-        }}>
+        <div
+          style={{
+            color: 'red',
+            padding: '10px',
+            border: '1px solid red',
+            borderRadius: '4px',
+            marginBottom: '10px',
+          }}
+        >
           Error: {error}
         </div>
       )}
-      
+
       <MiniAppComponent
         url="https://app.sherry.social/action/swap"
         adapter={adapter}
@@ -326,7 +321,7 @@ import { MiniAppComponent, useWagmiAdapter } from '@sherrylabs/slinks/next';
 
 export default function MiniAppWrapper({ url }: { url: string }) {
   const adapter = useWagmiAdapter();
-  
+
   return (
     <MiniAppComponent
       url={url}
@@ -381,10 +376,10 @@ export default function App({ Component, pageProps }: AppProps) {
 ```tsx
 import React, { lazy, Suspense } from 'react';
 
-const MiniAppComponent = lazy(() => 
-  import('@sherrylabs/slinks/next').then(module => ({ 
-    default: module.MiniAppComponent 
-  }))
+const MiniAppComponent = lazy(() =>
+  import('@sherrylabs/slinks/next').then(module => ({
+    default: module.MiniAppComponent,
+  })),
 );
 
 function LazyMiniApp() {
@@ -408,7 +403,7 @@ import { MiniAppComponent, useWagmiAdapter } from '@sherrylabs/slinks/next';
 
 const MemoizedMiniApp = memo(function MiniApp({ url }: { url: string }) {
   const adapter = useWagmiAdapter();
-  
+
   return (
     <MiniAppComponent
       url={url}
@@ -461,16 +456,18 @@ const config = createConfig({
 ### Common Issues
 
 1. **Error: "MiniApp Directory not initialized"**
+
    ```tsx
    // Make sure to initialize the directory before using MiniApps
    import { MiniAppDirectory } from '@sherrylabs/slinks-core';
-   
+
    useEffect(() => {
      MiniAppDirectory.getInstance().init({});
    }, []);
    ```
 
 2. **CORS Issues**
+
    ```tsx
    // Use bypassProxy: true for beta (beware of CORS) or configure CORS on your server
    <MiniAppComponent
@@ -481,6 +478,7 @@ const config = createConfig({
    ```
 
 3. **Styles not applying**
+
    ```tsx
    // Make sure to import the CSS
    import '@sherrylabs/slinks/index.css';
@@ -507,16 +505,16 @@ import { MiniAppComponent, useWagmiAdapter } from '@sherrylabs/slinks/next';
 
 function DebugMiniApp() {
   const adapter = useWagmiAdapter();
-  
+
   // Debugging logs
   console.log('Adapter:', adapter);
-  
+
   return (
     <MiniAppComponent
       url="https://app.sherry.social/action/swap"
       adapter={adapter}
       bypassProxy={true} // ⚠️ Beta only
-      onError={(error) => {
+      onError={error => {
         console.error('MiniApp Error:', error);
       }}
     />
@@ -531,7 +529,7 @@ function DebugMiniApp() {
 ```tsx
 function TokenSwapMiniApp() {
   const adapter = useWagmiAdapter();
-  
+
   return (
     <MiniAppComponent
       url="https://app.sherry.social/action/swap?fromToken=AVAX&toToken=USDT"
@@ -547,7 +545,7 @@ function TokenSwapMiniApp() {
 ```tsx
 function CrossChainTransfer() {
   const adapter = useWagmiAdapter();
-  
+
   return (
     <MiniAppComponent
       url="https://app.sherry.social/action/transfer?from=avalanche&to=celo"
@@ -563,7 +561,7 @@ function CrossChainTransfer() {
 ```tsx
 function CaptureFlagGame() {
   const adapter = useWagmiAdapter();
-  
+
   return (
     <MiniAppComponent
       url="https://app.sherry.social/action/capture-flag"
@@ -579,33 +577,36 @@ function CaptureFlagGame() {
 If you're migrating from a previous version of TriggerKit:
 
 1. Update imports:
+
    ```tsx
    // Before
    import { MiniApp } from '@sherrylabs/slinks';
-   
+
    // Now
    import { MiniAppComponent } from '@sherrylabs/slinks/next';
    ```
 
 2. Update adapter configuration:
+
    ```tsx
    // Before
    const adapter = createWagmiAdapter(wagmiConfig);
-   
+
    // Now
    const adapter = useWagmiAdapter();
    ```
 
 3. Update component props:
+
    ```tsx
    // Before
    <MiniApp metadata={metadata} walletAdapter={adapter} />
-   
+
    // Now
-   <MiniAppComponent 
-     metadata={metadata} 
-     adapter={adapter} 
-     securityState="trusted" 
+   <MiniAppComponent
+     metadata={metadata}
+     adapter={adapter}
+     securityState="trusted"
    />
    ```
 

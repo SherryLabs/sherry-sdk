@@ -54,13 +54,9 @@ extension/
   "name": "TriggerKit Extension",
   "version": "1.0.0",
   "description": "Enhance web links with interactive blockchain MiniApps",
-  
-  "permissions": [
-    "storage",
-    "activeTab",
-    "scripting"
-  ],
-  
+
+  "permissions": ["storage", "activeTab", "scripting"],
+
   "host_permissions": [
     "https://twitter.com/*",
     "https://x.com/*",
@@ -68,12 +64,12 @@ extension/
     "https://www.youtube.com/*",
     "https://*.twitch.tv/*"
   ],
-  
+
   "background": {
     "service_worker": "src/background.ts",
     "type": "module"
   },
-  
+
   "content_scripts": [
     {
       "matches": [
@@ -87,7 +83,7 @@ extension/
       "run_at": "document_idle"
     }
   ],
-  
+
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
@@ -97,7 +93,7 @@ extension/
       "128": "img/logo-128.png"
     }
   },
-  
+
   "web_accessible_resources": [
     {
       "resources": [
@@ -125,13 +121,7 @@ extension/
 ```typescript
 // src/background.ts
 import { encodeFunctionData, createPublicClient, http } from 'viem';
-import {
-  avalanche,
-  avalancheFuji,
-  monadTestnet,
-  celo,
-  celoAlfajores,
-} from 'viem/chains';
+import { avalanche, avalancheFuji, monadTestnet, celo, celoAlfajores } from 'viem/chains';
 import { call as callAction } from 'viem/actions';
 
 const chainMap: Record<number, any> = {
@@ -157,28 +147,28 @@ async function handleWalletCommunication(
   switch (type) {
     case 'connect':
       return await connectWallet(tabId);
-    
+
     case 'get_accounts':
       return await getAccounts(tabId);
-    
+
     case 'write_contract':
       return await writeContract(tabId, payload);
-    
+
     case 'send_transaction':
       return await sendTransaction(tabId, payload);
-    
+
     case 'switch_chain':
       return await switchChain(tabId, payload);
-    
+
     case 'read_contract':
       return await readContract(tabId, payload);
-    
+
     case 'simulate_contract':
       return await simulateContract(tabId, payload);
-    
+
     case 'estimate_gas':
       return await estimateGas(tabId, payload);
-    
+
     default:
       throw new Error(`Unsupported message type: ${type}`);
   }
@@ -207,14 +197,7 @@ async function connectWallet(tabId: number) {
 }
 
 async function writeContract(tabId: number, payload: any) {
-  const {
-    address,
-    abi,
-    functionName,
-    args,
-    value,
-    data: providedData,
-  } = payload;
+  const { address, abi, functionName, args, value, data: providedData } = payload;
 
   try {
     // Encode function data if not provided
@@ -287,7 +270,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
 
   // Get selected wallet
   if (msg.type === 'getSelectedWallet') {
-    chrome.storage.local.get(['selectedWallet']).then((storage) => {
+    chrome.storage.local.get(['selectedWallet']).then(storage => {
       sendResponse(storage.selectedWallet);
     });
     return true;
@@ -297,8 +280,8 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
 
   // Handle wallet communication
   handleWalletCommunication(msg.type, msg.wallet, tabId, msg.payload)
-    .then((res) => sendResponse(res))
-    .catch((err) => console.error('[BG] error handling message', err));
+    .then(res => sendResponse(res))
+    .catch(err => console.error('[BG] error handling message', err));
 
   return true; // Keep sendResponse alive
 });
@@ -309,10 +292,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
 ```typescript
 // src/content.ts
 import '@sherrylabs/slinks/index.css';
-import {
-  SherryExtensionAdapter,
-  setupSlinksObserverEVM,
-} from '@sherrylabs/slinks/ext';
+import { SherryExtensionAdapter, setupSlinksObserverEVM } from '@sherrylabs/slinks/ext';
 import { setClientKey, MiniAppDirectory } from '@sherrylabs/slinks-core';
 
 // Initialize the observer
@@ -330,8 +310,8 @@ export async function initSlinksObserver() {
   }
 
   // Get selected wallet
-  const wallet: string | null = await new Promise((resolve) => {
-    chrome.runtime.sendMessage({ type: 'getSelectedWallet' }, (res) => {
+  const wallet: string | null = await new Promise(resolve => {
+    chrome.runtime.sendMessage({ type: 'getSelectedWallet' }, res => {
       resolve(res ?? null);
     });
   });
@@ -345,7 +325,7 @@ export async function initSlinksObserver() {
 
   const adapter = new SherryExtensionAdapter();
   console.log('[trigger-kit] 🧠 Starting setupSlinksObserverEVM...');
-  
+
   // Auto-detects platform (Twitter, YouTube, Twitch) and sets up appropriate observer
   setupSlinksObserverEVM(adapter);
 }
@@ -401,7 +381,7 @@ setupSlinksObserverEVM(adapter);
 setupSlinksObserverEVM(adapter, {
   twitter: true,
   youtube: true,
-  twitch: true
+  twitch: true,
 });
 ```
 
@@ -438,4 +418,6 @@ setupTwitchObserverEVM(adapter);
 <!-- popup.html -->
 <!doctype html>
 <html lang="en">
-  <head>
+  <head></head>
+</html>
+```
