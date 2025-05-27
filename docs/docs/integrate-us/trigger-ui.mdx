@@ -174,7 +174,7 @@ export function BasicMiniApp() {
   return (
     <div className="max-w-md mx-auto p-4">
       <h2 className="text-xl font-bold mb-4">🔄 Token Swap</h2>
-      
+
       <MiniAppComponent
         url="https://app.sherry.social/action/swap"
         adapter={adapter}
@@ -271,7 +271,7 @@ export function AdvancedMiniApp() {
         <h2 className="text-xl font-bold">⚡ Advanced Token Swap</h2>
         <p className="text-gray-600 text-sm">With pre-validated metadata</p>
       </div>
-      
+
       <MiniAppComponent
         metadata={metadata!}
         adapter={adapter}
@@ -289,14 +289,14 @@ export function AdvancedMiniApp() {
 
 ### 🧩 MiniAppComponent
 
-| Prop | Type | Required | Description |
-|------|------|:--------:|-------------|
-| `adapter` | `SherryAdapter` | ✅ | Wallet adapter instance |
-| `url` | `string` | ⚠️ | URL to fetch metadata (either this or `metadata`) |
-| `metadata` | `ValidatedMetadata` | ⚠️ | Pre-validated metadata (either this or `url`) |
-| `securityState` | `'trusted' \| 'unknown' \| 'malicious'` | ❌ | Security status indicator |
-| `stylePreset` | `'default' \| 'x-dark' \| 'x-light' \| 'custom'` | ❌ | Visual theme |
-| `bypassProxy` | `boolean` | ❌ | Direct fetch (Beta only) |
+| Prop            | Type                                             | Required | Description                                       |
+| --------------- | ------------------------------------------------ | :------: | ------------------------------------------------- |
+| `adapter`       | `SherryAdapter`                                  |    ✅    | Wallet adapter instance                           |
+| `url`           | `string`                                         |    ⚠️    | URL to fetch metadata (either this or `metadata`) |
+| `metadata`      | `ValidatedMetadata`                              |    ⚠️    | Pre-validated metadata (either this or `url`)     |
+| `securityState` | `'trusted' \| 'unknown' \| 'malicious'`          |    ❌    | Security status indicator                         |
+| `stylePreset`   | `'default' \| 'x-dark' \| 'x-light' \| 'custom'` |    ❌    | Visual theme                                      |
+| `bypassProxy`   | `boolean`                                        |    ❌    | Direct fetch (Beta only)                          |
 
 :::info 💡 Configuration Types
 You must provide either `url` **OR** `metadata`, but not both.
@@ -363,13 +363,8 @@ export default function MiniAppWrapper({ url, title }: MiniAppWrapperProps) {
   return (
     <div className="bg-white rounded-lg shadow-sm border p-6">
       {title && <h3 className="text-lg font-semibold mb-4">{title}</h3>}
-      
-      <MiniAppComponent
-        url={url}
-        adapter={adapter}
-        bypassProxy={true}
-        stylePreset="default"
-      />
+
+      <MiniAppComponent url={url} adapter={adapter} bypassProxy={true} stylePreset="default" />
     </div>
   );
 }
@@ -424,11 +419,7 @@ export function LazyMiniApp({ url }: { url: string }) {
 
   return (
     <Suspense fallback={<LoadingSpinner />}>
-      <LazyMiniAppComponent
-        url={url}
-        adapter={adapter}
-        bypassProxy={true}
-      />
+      <LazyMiniAppComponent url={url} adapter={adapter} bypassProxy={true} />
     </Suspense>
   );
 }
@@ -445,22 +436,23 @@ interface OptimizedMiniAppProps {
   securityState?: 'trusted' | 'unknown' | 'malicious';
 }
 
-export const OptimizedMiniApp = memo(function OptimizedMiniApp({ 
-  url, 
-  securityState = 'unknown' 
+export const OptimizedMiniApp = memo(function OptimizedMiniApp({
+  url,
+  securityState = 'unknown',
 }: OptimizedMiniAppProps) {
   const adapter = useWagmiAdapter();
 
-  const memoizedProps = useMemo(() => ({
-    url,
-    adapter,
-    securityState,
-    stylePreset: 'default',
-  }), [url, adapter, securityState]);
-
-  return (
-    <MiniAppComponent {...memoizedProps} />
+  const memoizedProps = useMemo(
+    () => ({
+      url,
+      adapter,
+      securityState,
+      stylePreset: 'default',
+    }),
+    [url, adapter, securityState],
   );
+
+  return <MiniAppComponent {...memoizedProps} />;
 });
 ```
 
@@ -477,10 +469,7 @@ interface ErrorBoundaryState {
   error: Error | null;
 }
 
-class MiniAppErrorBoundary extends Component<
-  { children: ReactNode },
-  ErrorBoundaryState
-> {
+class MiniAppErrorBoundary extends Component<{ children: ReactNode }, ErrorBoundaryState> {
   constructor(props: { children: ReactNode }) {
     super(props);
     this.state = { hasError: false, error: null };
@@ -521,12 +510,7 @@ export function MiniAppWithErrorBoundary({ url }: { url: string }) {
 
   return (
     <MiniAppErrorBoundary>
-      <MiniAppComponent
-        url={url}
-        adapter={adapter}
-        bypassProxy={true}
-        stylePreset="default"
-      />
+      <MiniAppComponent url={url} adapter={adapter} bypassProxy={true} stylePreset="default" />
     </MiniAppErrorBoundary>
   );
 }
@@ -667,7 +651,7 @@ const adapter = useWagmiAdapter();
     <h3 className="font-semibold mb-2">📚 Documentation</h3>
     <p className="text-sm text-gray-600">Complete API reference and guides</p>
   </div>
-  
+
   <div className="border rounded-lg p-4">
     <h3 className="font-semibold mb-2">💬 Community</h3>
     <p className="text-sm text-gray-600">
@@ -676,16 +660,19 @@ const adapter = useWagmiAdapter();
       </a>
     </p>
   </div>
-  
+
   <div className="border rounded-lg p-4">
     <h3 className="font-semibold mb-2">🐛 Issues</h3>
     <p className="text-sm text-gray-600">
-      <a href="https://github.com/orgs/SherryLabs/repositories" className="text-blue-600 hover:underline">
+      <a
+        href="https://github.com/orgs/SherryLabs/repositories"
+        className="text-blue-600 hover:underline"
+      >
         Report on GitHub
       </a>
     </p>
   </div>
-  
+
   <div className="border rounded-lg p-4">
     <h3 className="font-semibold mb-2">📖 Examples</h3>
     <p className="text-sm text-gray-600">Complete working examples and demos</p>

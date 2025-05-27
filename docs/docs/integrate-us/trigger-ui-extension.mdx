@@ -62,12 +62,12 @@ graph TB
 
 ### 🧩 Core Components
 
-| Component | Purpose | Responsibilities |
-|-----------|---------|------------------|
-| **🔧 Background Script** | Service worker | Wallet communication, transaction handling |
-| **📄 Content Script** | Page injection | DOM observation, MiniApp injection |
-| **⚙️ Popup Interface** | User settings | Wallet configuration, preferences |
-| **📋 Manifest** | Extension config | Permissions, script registration |
+| Component                | Purpose          | Responsibilities                           |
+| ------------------------ | ---------------- | ------------------------------------------ |
+| **🔧 Background Script** | Service worker   | Wallet communication, transaction handling |
+| **📄 Content Script**    | Page injection   | DOM observation, MiniApp injection         |
+| **⚙️ Popup Interface**   | User settings    | Wallet configuration, preferences          |
+| **📋 Manifest**          | Extension config | Permissions, script registration           |
 
 ---
 
@@ -111,11 +111,7 @@ my-triggerkit-extension/
   "version": "1.0.0",
   "description": "Enhance web links with interactive blockchain MiniApps",
 
-  "permissions": [
-    "storage",
-    "activeTab",
-    "scripting"
-  ],
+  "permissions": ["storage", "activeTab", "scripting"],
 
   "host_permissions": [
     "https://twitter.com/*",
@@ -248,7 +244,7 @@ async function connectWallet(tabId: number) {
       if (!window.ethereum) {
         return { error: 'MetaMask not found' };
       }
-      
+
       try {
         const accounts = await window.ethereum.request({
           method: 'eth_requestAccounts',
@@ -271,11 +267,13 @@ async function writeContract(tabId: number, payload: any) {
 
   try {
     // Encode function data if not provided
-    const encodedData = providedData ?? encodeFunctionData({
-      abi: typeof abi === 'string' ? JSON.parse(abi) : abi,
-      functionName,
-      args,
-    });
+    const encodedData =
+      providedData ??
+      encodeFunctionData({
+        abi: typeof abi === 'string' ? JSON.parse(abi) : abi,
+        functionName,
+        args,
+      });
 
     // ...existing code...
   } catch (error: any) {
@@ -306,10 +304,10 @@ export async function initializeTriggerKit() {
   // Initialize MiniApp directory
   const directory = MiniAppDirectory.getInstance();
   try {
-    await directory.init({ 
+    await directory.init({
       refreshInterval: 60 * 60 * 1000, // 1 hour
       retryAttempts: 3,
-      retryDelay: 5000
+      retryDelay: 5000,
     });
     console.log('[TriggerKit] ✅ MiniApp Directory initialized');
   } catch (error) {
@@ -321,13 +319,13 @@ export async function initializeTriggerKit() {
 
   // Create adapter and start observing
   const adapter = new SherryExtensionAdapter();
-  
+
   // Auto-detect platform and setup appropriate observer
   setupSlinksObserverEVM(adapter, {
     enableTwitter: true,
     enableYouTube: true,
     enableTwitch: true,
-    debugMode: process.env.NODE_ENV === 'development'
+    debugMode: process.env.NODE_ENV === 'development',
   });
 
   console.log('[TriggerKit] 🔍 Observers started successfully');
@@ -352,8 +350,8 @@ setupSlinksObserverEVM(adapter, {
   observerOptions: {
     debounceMs: 500,
     maxRetries: 3,
-    enableDeepObservation: true
-  }
+    enableDeepObservation: true,
+  },
 });
 ```
 
@@ -368,7 +366,7 @@ setupTwitterObserverEVM(adapter, {
   observeNewTweets: true,
   observeReplies: true,
   observeQuoteTweets: true,
-  debounceMs: 300
+  debounceMs: 300,
 });
 ```
 
@@ -382,7 +380,7 @@ import { setupYoutubeObserverEVM } from '@sherrylabs/slinks/ext';
 setupYoutubeObserverEVM(adapter, {
   observeDescriptions: true,
   observeComments: false, // Optional: observe comments
-  observePinnedComments: true
+  observePinnedComments: true,
 });
 ```
 
@@ -396,7 +394,7 @@ import { setupTwitchObserverEVM } from '@sherrylabs/slinks/ext';
 setupTwitchObserverEVM(adapter, {
   observePinnedMessages: true,
   observeChatCommands: true,
-  observeChannelInfo: true
+  observeChannelInfo: true,
 });
 ```
 
@@ -451,23 +449,23 @@ try {
 ```html title="src/popup/index.html"
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TriggerKit Settings</title>
-  <style>
-    body {
-      width: 320px;
-      min-height: 400px;
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    }
-  </style>
-</head>
-<body>
-  <div id="popup-root"></div>
-  <script src="popup.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TriggerKit Settings</title>
+    <style>
+      body {
+        width: 320px;
+        min-height: 400px;
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="popup-root"></div>
+    <script src="popup.js"></script>
+  </body>
 </html>
 ```
 
@@ -503,7 +501,7 @@ export function PopupApp() {
         {[
           { id: 'wallet', label: '👛 Wallet', title: 'Wallet' },
           { id: 'settings', label: '⚙️ Settings', title: 'Settings' },
-          { id: 'about', label: 'ℹ️ About', title: 'About' }
+          { id: 'about', label: 'ℹ️ About', title: 'About' },
         ].map(tab => (
           <button
             key={tab.id}
@@ -521,9 +519,7 @@ export function PopupApp() {
       </div>
 
       {/* 📋 Tab Content */}
-      <div className="p-4">
-        {/* ...existing code... */}
-      </div>
+      <div className="p-4">{/* ...existing code... */}</div>
     </div>
   );
 }
@@ -548,15 +544,15 @@ const wallets: WalletOption[] = [
     name: 'MetaMask',
     icon: '/icons/metamask.png',
     description: '🦊 Connect using MetaMask wallet',
-    available: true
+    available: true,
   },
   {
     id: 'core',
     name: 'Core Wallet',
     icon: '/icons/core.svg',
     description: '🔥 Connect using Core wallet',
-    available: false // Coming soon
-  }
+    available: false, // Coming soon
+  },
 ];
 
 interface WalletSelectorProps {
@@ -568,16 +564,18 @@ export function WalletSelector({ selectedWallet, onWalletSelect }: WalletSelecto
   return (
     <div>
       <h3 className="text-lg font-semibold mb-4">👛 Select Wallet</h3>
-      
-      <div className="space-y-3">
-        {/* ...existing code... */}
-      </div>
+
+      <div className="space-y-3">{/* ...existing code... */}</div>
 
       {selectedWallet && (
         <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
           <div className="flex items-center space-x-2">
             <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              <path
+                fillRule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                clipRule="evenodd"
+              />
             </svg>
             <span className="text-green-800 font-medium">✅ Wallet Connected</span>
           </div>
@@ -606,12 +604,12 @@ module.exports = {
   entry: {
     background: './src/background/background.ts',
     content: './src/content/content.ts',
-    popup: './src/popup/index.tsx'
+    popup: './src/popup/index.tsx',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].js',
-    clean: true
+    clean: true,
   },
   // ...existing code...
 };
@@ -629,7 +627,7 @@ module.exports = {
     "clean": "rimraf dist",
     "lint": "eslint src --ext .ts,.tsx",
     "test": "jest"
-  },
+  }
   // ...existing code...
 }
 ```
@@ -685,11 +683,11 @@ npm run dev
 
 ### 🌐 Testing on Different Platforms
 
-| Platform | Test URLs | Key Features |
-|----------|-----------|--------------|
-| **🐦 Twitter/X** | `https://twitter.com`, `https://x.com` | Tweet link cards, replies |
-| **📺 YouTube** | `https://youtube.com` | Video descriptions, comments |
-| **🎮 Twitch** | `https://twitch.tv` | Chat pinned messages |
+| Platform         | Test URLs                              | Key Features                 |
+| ---------------- | -------------------------------------- | ---------------------------- |
+| **🐦 Twitter/X** | `https://twitter.com`, `https://x.com` | Tweet link cards, replies    |
+| **📺 YouTube**   | `https://youtube.com`                  | Video descriptions, comments |
+| **🎮 Twitch**    | `https://twitch.tv`                    | Chat pinned messages         |
 
 ---
 
@@ -712,7 +710,9 @@ npm run dev
 chrome.scripting.executeScript({
   target: { tabId },
   world: 'MAIN',
-  func: () => { /* safe code */ }
+  func: () => {
+    /* safe code */
+  },
 });
 
 // ❌ Unsafe: Direct DOM injection
@@ -794,7 +794,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
 console.log('[TriggerKit] 👁️ Observers active:', {
   twitter: !!window.twitterObserver,
   youtube: !!window.youtubeObserver,
-  twitch: !!window.twitchObserver
+  twitch: !!window.twitchObserver,
 });
 ```
 
@@ -808,16 +808,19 @@ console.log('[TriggerKit] 👁️ Observers active:', {
 
 ```typescript
 // Use IntersectionObserver for performance
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      // Only process visible elements
-      processLinkForMiniApps(entry.target);
-    }
-  });
-}, {
-  rootMargin: '100px' // Pre-load slightly outside viewport
-});
+const observer = new IntersectionObserver(
+  entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        // Only process visible elements
+        processLinkForMiniApps(entry.target);
+      }
+    });
+  },
+  {
+    rootMargin: '100px', // Pre-load slightly outside viewport
+  },
+);
 
 // Debounce rapid changes
 const debouncedProcessing = debounce(processNewLinks, 300);
@@ -843,6 +846,7 @@ const elementMetadata = new WeakMap();
 ### 🏪 Chrome Web Store
 
 1. **🎨 Prepare Assets**
+
    - Extension icons (16, 32, 48, 128px)
    - Screenshots for store listing
    - Privacy policy and terms
@@ -865,17 +869,20 @@ const elementMetadata = new WeakMap();
   <div className="border rounded-lg p-4">
     <h3 className="font-semibold mb-2">🛠 Extension APIs</h3>
     <p className="text-sm text-gray-600">
-      <a href="https://developer.chrome.com/docs/extensions/" className="text-blue-600 hover:underline">
+      <a
+        href="https://developer.chrome.com/docs/extensions/"
+        className="text-blue-600 hover:underline"
+      >
         Chrome Extension Documentation
       </a>
     </p>
   </div>
-  
+
   <div className="border rounded-lg p-4">
     <h3 className="font-semibold mb-2">📚 TriggerKit Docs</h3>
     <p className="text-sm text-gray-600">Complete SDK reference and guides</p>
   </div>
-  
+
   <div className="border rounded-lg p-4">
     <h3 className="font-semibold mb-2">💬 Developer Community</h3>
     <p className="text-sm text-gray-600">
@@ -884,11 +891,14 @@ const elementMetadata = new WeakMap();
       </a>
     </p>
   </div>
-  
+
   <div className="border rounded-lg p-4">
     <h3 className="font-semibold mb-2">🐛 Bug Reports</h3>
     <p className="text-sm text-gray-600">
-      <a href="https://github.com/orgs/SherryLabs/repositories" className="text-blue-600 hover:underline">
+      <a
+        href="https://github.com/orgs/SherryLabs/repositories"
+        className="text-blue-600 hover:underline"
+      >
         GitHub Issues
       </a>
     </p>
