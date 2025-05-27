@@ -173,7 +173,7 @@ if (result.isValid) {
 ### Chain Validation
 
 ```typescript
-✅ Supported chains: 'fuji', 'avalanche', 'alfajores', 'celo'
+✅ Supported chains: 'fuji', 'avalanche', 'alfajores', 'celo', 'ethereum', 'sepolia'
 ✅ Source chain: always required
 ✅ Destination chain: optional, valid if provided
 ✅ Cross-chain logic: proper source/destination combination

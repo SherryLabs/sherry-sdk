@@ -23,7 +23,8 @@ export const VALID_CHAINS = [
   'avalanche', // Avalanche C-Chain Mainnet
   'alfajores', // Celo Alfajores Testnet
   'celo', // Celo Mainnet
-  // 'ethereum' - Could be added if supported
+  'ethereum', // Ethereum Mainnet
+  'sepolia', // Ethereum Sepolia Testnet
 ] as const;
 ```
 
@@ -34,10 +35,12 @@ export const VALID_CHAINS = [
 
 The chains currently defined in `VALID_CHAINS` are officially supported by the SDK for validation and potentially for execution (depending on the environment).
 
-- `fuji`
-- `avalanche`
-- `alfajores`
-- `celo`
+- `fuji` - Avalanche Fuji Testnet
+- `avalanche` - Avalanche C-Chain Mainnet
+- `alfajores` - Celo Alfajores Testnet
+- `celo` - Celo Mainnet
+- `ethereum` - Ethereum Mainnet
+- `sepolia` - Ethereum Sepolia Testnet
 
 ## Examples
 
@@ -53,6 +56,22 @@ const approveAction: BlockchainActionMetadata = {
 const simpleTransfer: TransferAction = {
   // ...
   chains: { source: 'fuji' }, // Transfer within Fuji
+  // ...
+};
+```
+
+### Single-Chain Action (Ethereum)
+
+```typescript
+const ethereumAction: BlockchainActionMetadata = {
+  // ... other properties ...
+  chains: { source: 'ethereum' }, // Action happens only on Ethereum Mainnet
+  // ...
+};
+
+const sepoliaTransfer: TransferAction = {
+  // ...
+  chains: { source: 'sepolia' }, // Transfer within Sepolia testnet
   // ...
 };
 ```
@@ -73,9 +92,9 @@ const bridgeAction: BlockchainActionMetadata = {
 };
 
 const crossChainTransfer: TransferAction = {
-  label: 'Send from Celo to Fuji',
-  // Transfer starts on Celo and goes to Fuji
-  chains: { source: 'celo', destination: 'fuji' },
+  label: 'Send from Ethereum to Avalanche',
+  // Transfer starts on Ethereum and goes to Avalanche
+  chains: { source: 'ethereum', destination: 'avalanche' },
   // ... to, amount, etc.
 };
 ```
