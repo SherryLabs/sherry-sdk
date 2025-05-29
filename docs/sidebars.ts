@@ -47,6 +47,7 @@ const sidebars: SidebarsConfig = {
                 'core-concepts/actions', // Actions overview
                 'core-concepts/metadata', // Metadata Structure
                 'core-concepts/chains', // Chain Logic
+                'core-concepts/cross-chain', // Cross-Chain Logic
             ],
         },
 

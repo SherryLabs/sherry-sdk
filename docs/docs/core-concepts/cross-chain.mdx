@@ -42,14 +42,16 @@ function quoteCrossChainCost(
 ```
 
 **Parameters:**
+
 - `_targetChain`: The chain ID of the destination chain in Wormhole format (e.g., 14 for Celo).
 - `_receiverValue`: The amount in wei to be transferred to the recipient in the destination chain. This amount will be the amount the user will receive. If no native tokens are transferred, 0 will be set.
 - `_gasLimit`: An estimated gas limit for the transaction on the target chain.
 
 :::info
+
 - For a **TransferAction** corresponding to a transfer of native tokens from a blockchain to a source blockchain we send a `gas_limit` of 100,000.
 - For **Blockchain Actions**, depending on the state of the network we send a maximum of 800,000.
-:::
+  :::
 
 This function interacts with the Wormhole Relayer to quote the cost of the cross-chain message delivery, helping you understand the exact fee before initiating the transfer. This is crucial for budgeting gas costs accurately in cross-chain operations facilitated by the Wormhole protocol.
 
@@ -65,18 +67,19 @@ This type of action allows interaction with a smart contract on the target block
 
 ```typescript
 const actionMetadata: BlockchainActionMetadata = {
-  label: "Cross-Chain Action",
-  address: "0x1234567890abcdef1234567890abcdef12345678",
+  label: 'Cross-Chain Action',
+  address: '0x1234567890abcdef1234567890abcdef12345678',
   abi: exampleAbi,
-  functionName: "mint",
-  chains: { source: "avalanche", destination : "celo" },
-  amount: 0.01 // Optional: amount of native cryptocurrency to send
+  functionName: 'mint',
+  chains: { source: 'avalanche', destination: 'celo' },
+  amount: 0.01, // Optional: amount of native cryptocurrency to send
 };
 ```
 
 As you can see, celo has been defined as destination, this will be interpreted as cross-chain by Sherry (from Avalanche to Celo).
 
 **Parameters:**
+
 - `label`: Text displayed on the Sherry Link button.
 - `address`: The smart contract's address on the target blockchain.
 - `abi`: The ABI of the contract required to interact with its functions.
@@ -93,14 +96,14 @@ This type of action is designed for transferring native cryptocurrency between a
 ```typescript
 const actions: TransferAction[] = [
   {
-    label: "0.01 CELO",
-    to: "0x5b1869D9A4C187F2EAa108f3062412ecf0526b24",
+    label: '0.01 CELO',
+    to: '0x5b1869D9A4C187F2EAa108f3062412ecf0526b24',
     amount: 0.01,
-    chains: { source: "avalanche", destination : "celo" },
+    chains: { source: 'avalanche', destination: 'celo' },
   },
   {
-    label: "Manual Transfer",
-    chains: { source: "avalanche", destination : "celo" },
+    label: 'Manual Transfer',
+    chains: { source: 'avalanche', destination: 'celo' },
   },
 ];
 ```
@@ -123,7 +126,7 @@ function sendMessage(
     uint256 _receiverValue
 ) external payable {
     require(_gasLimit <= GAS_LIMIT, "Gas limit exceeds the maximum limit");
-    
+
     bytes memory encodedData = encodeMessage(
         _contractToBeCalled,
         _encodedFunctionCall
@@ -214,21 +217,7 @@ function receiveWormholeMessages(
 ## Important Considerations
 
 :::warning
+
 - The `msg.sender` during cross-chain operations will always refer to the Sherry Receiver contract on the target blockchain. This is critical for ensuring that permissions and function calls are handled correctly.
 - Any functions utilizing `msg.sender` will operate under the assumption that it refers to the Sherry Receiver, thus impacting access controls and function logic.
-:::
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  :::
