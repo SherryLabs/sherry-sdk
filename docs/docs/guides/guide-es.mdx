@@ -757,9 +757,9 @@ export async function POST(req: NextRequest) {
     const optimizedTimestamp = calculateOptimizedTimestamp(message);
 
     // Codificar los datos de la función del contrato
-    const data = encodeFunctionData({ 
+    const data = encodeFunctionData({
       abi: abi,
-      functionName: "storeMessage",
+      functionName: 'storeMessage',
       args: [message, BigInt(optimizedTimestamp)],
     });
 
@@ -817,9 +817,9 @@ export async function POST(req: NextRequest) {
     const optimizedTimestamp = calculateOptimizedTimestamp(message);
 
     // Codificar los datos de la función del contrato
-    const data = encodeFunctionData({ 
+    const data = encodeFunctionData({
       abi: abi,
-      functionName: "storeMessage",
+      functionName: 'storeMessage',
       args: [message, BigInt(optimizedTimestamp)],
     });
 
@@ -943,9 +943,10 @@ export async function OPTIONS(request: NextRequest) {
 </Admonition>
 
 <Admonition type="warning" title="Importante: Despliega Primero en Producción">
-  Para probar tu mini app en el debugger, **primero debes desplegarla** en un proveedor de hosting como Vercel, Netlify, Railway, etc. El debugger necesita una **URL pública accesible** para poder cargar tu mini app. 
-  
-  Si quieres probar localmente, usa el método **JSON** copiando la respuesta de tu endpoint GET local y pegándola en el debugger.
+  Para probar tu mini app en el debugger, **primero debes desplegarla** en un proveedor de hosting
+  como Vercel, Netlify, Railway, etc. El debugger necesita una **URL pública accesible** para poder
+  cargar tu mini app. Si quieres probar localmente, usa el método **JSON** copiando la respuesta de
+  tu endpoint GET local y pegándola en el debugger.
 </Admonition>
 
 <Tabs>
@@ -983,14 +984,17 @@ export async function OPTIONS(request: NextRequest) {
 ### Proceso de Pruebas Paso a Paso
 
 1. **Desarrollar Localmente**
+
    - Ejecutar `npm run dev`
    - Probar en `localhost:3000/api/mi-app`
 
 2. **Desplegar en Producción**
+
    - Usar Vercel, Netlify, etc.
    - Obtener URL pública
 
 3. **Probar en Debugger**
+
    - Usar URL pública del despliegue
    - Verificar renderizado completo
 
@@ -1303,9 +1307,9 @@ export async function POST(req: NextRequest) {
     const optimizedTimestamp = calculateOptimizedTimestamp(message);
 
     // Interacción con contrato inteligente
-    const data = encodeFunctionData({ 
+    const data = encodeFunctionData({
       abi: abi,
-      functionName: "storeMessage",
+      functionName: 'storeMessage',
       args: [message, BigInt(optimizedTimestamp)],
     });
 
