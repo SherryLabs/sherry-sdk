@@ -574,20 +574,20 @@ pragma solidity ^0.8.17;
  */
 contract TimestampedMessage {
     event MessageStored(address indexed sender, string message, uint256 timestamp, uint256 optimizedTimestamp);
-    
+
     struct MessageData {
         address sender;
         string message;
         uint256 timestamp;
         uint256 optimizedTimestamp;
     }
-    
+
     // Array to store all messages
     MessageData[] public messages;
-    
+
     // Mapping from address to their message count
     mapping(address => uint256) public userMessageCount;
-    
+
     /**
      * @dev Store a message with an optimized timestamp
      * @param message The message to store
@@ -601,21 +601,21 @@ contract TimestampedMessage {
             timestamp: block.timestamp,
             optimizedTimestamp: optimizedTimestamp
         }));
-        
+
         // Increment message count for the sender
         userMessageCount[msg.sender]++;
-        
+
         // Emit event
         emit MessageStored(msg.sender, message, block.timestamp, optimizedTimestamp);
     }
-    
+
     /**
      * @dev Get the count of all messages
      */
     function getMessageCount() public view returns (uint256) {
         return messages.length;
     }
-    
+
     /**
      * @dev Get a message by index
      */
@@ -629,7 +629,7 @@ contract TimestampedMessage {
         MessageData memory data = messages[index];
         return (data.sender, data.message, data.timestamp, data.optimizedTimestamp);
     }
-    
+
     /**
      * @dev Get all messages from a specific sender
      */
@@ -639,13 +639,13 @@ contract TimestampedMessage {
         uint256[] memory optimizedTimestamps
     ) {
         uint256 count = userMessageCount[sender];
-        
+
         messageTexts = new string[](count);
         timestamps = new uint256[](count);
         optimizedTimestamps = new uint256[](count);
-        
+
         uint256 currentIndex = 0;
-        
+
         for (uint256 i = 0; i < messages.length; i++) {
             if (messages[i].sender == sender) {
                 messageTexts[currentIndex] = messages[i].message;
@@ -654,7 +654,7 @@ contract TimestampedMessage {
                 currentIndex++;
             }
         }
-        
+
         return (messageTexts, timestamps, optimizedTimestamps);
     }
 }
