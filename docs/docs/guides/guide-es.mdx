@@ -666,51 +666,20 @@ contract TimestampedMessage {
   más allá de transferencias simples
 </Admonition>
 
-### 2. Configurar Integración de Contrato Inteligente
-
-Crea el archivo `blockchain/abi.ts` con el ABI de tu contrato:
-
-```typescript title="blockchain/abi.ts"
-export const abi = [
-  {
-    inputs: [
-      { internalType: 'string', name: 'message', type: 'string' },
-      { internalType: 'uint256', name: 'optimizedTimestamp', type: 'uint256' },
-    ],
-    name: 'storeMessage',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  // ... otras funciones del contrato ...
-  {
-    anonymous: false,
-    inputs: [
-      { indexed: true, internalType: 'address', name: 'sender', type: 'address' },
-      { indexed: false, internalType: 'string', name: 'message', type: 'string' },
-      { indexed: false, internalType: 'uint256', name: 'timestamp', type: 'uint256' },
-      { indexed: false, internalType: 'uint256', name: 'optimizedTimestamp', type: 'uint256' },
-    ],
-    name: 'MessageStored',
-    type: 'event',
-  },
-] as const;
-```
-
-### 3. Actualizar las Importaciones de tu Archivo de Ruta
+### 2. Actualizar las Importaciones de tu Archivo de Ruta
 
 ```typescript title="app/api/mi-app/route.ts"
 import { NextRequest, NextResponse } from 'next/server';
 import { avalancheFuji } from 'viem/chains';
 import { createMetadata, Metadata, ValidatedMetadata, ExecutionResponse } from '@sherrylinks/sdk';
-import { serialize } from 'wagmi';
+import { serialize, TransactionSerializable, encodeFunctionData } from 'wagmi';
 import { abi } from '@/blockchain/abi';
 
 // Dirección del contrato en Avalanche Fuji Testnet
-const CONTRACT_ADDRESS = '0x75dd8326F5293ff1f1f4E013c8Fda20db126f3e3';
+const CONTRACT_ADDRESS = '0xTuContratoInteligenteDirecciónAquí';
 ```
 
-### 4. Construir el Handler POST del Contrato Inteligente
+### 3. Construir el Handler POST del Contrato Inteligente
 
 <Tabs>
 <TabItem value="step1" label="Paso 1: Validación" default>
@@ -720,12 +689,12 @@ export async function POST(req: NextRequest) {
   try {
     // Extraer entrada del usuario
     const { searchParams } = new URL(req.url);
-    const mensaje = searchParams.get('mensaje');
+    const message = searchParams.get('mensaje');
 
     // Validar parámetros requeridos
-    if (!mensaje) {
+    if (!message) {
       return NextResponse.json(
-        { error: 'El parámetro mensaje es requerido' },
+        { error: 'Message parameter is required' },
         {
           status: 400,
           headers: {
@@ -740,7 +709,7 @@ export async function POST(req: NextRequest) {
     // La lógica personalizada y creación de transacción se agregarán abajo
   } catch (error) {
     console.error('Error en petición POST:', error);
-    return NextResponse.json({ error: 'Error Interno del Servidor' }, { status: 500 });
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
 ```
@@ -752,17 +721,17 @@ export async function POST(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
-    const mensaje = searchParams.get('mensaje');
+    const message = searchParams.get('mensaje');
 
-    if (!mensaje) {
+    if (!message) {
       // Error de validación...
     }
 
     // LÓGICA DE NEGOCIO PERSONALIZADA: Calcular timestamp optimizado
     // Esto es lo que hace tu mini app única y valiosa
-    const optimizedTimestamp = calculateOptimizedTimestamp(mensaje);
+    const optimizedTimestamp = calculateOptimizedTimestamp(message);
 
-    console.log(`Procesando mensaje: "${mensaje}"`);
+    console.log(`Procesando mensaje: "${message}"`);
     console.log(`Timestamp optimizado: ${optimizedTimestamp}`);
 
     // La creación de transacción se agregará después
@@ -779,20 +748,27 @@ export async function POST(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
-    const mensaje = searchParams.get('mensaje');
+    const message = searchParams.get('mensaje');
 
-    if (!mensaje) {
+    if (!message) {
       // Validación...
     }
 
-    const optimizedTimestamp = calculateOptimizedTimestamp(mensaje);
+    const optimizedTimestamp = calculateOptimizedTimestamp(message);
+
+    // Codificar los datos de la función del contrato
+    const data = encodeFunctionData({ 
+      abi: abi,
+      functionName: "storeMessage",
+      args: [message, BigInt(optimizedTimestamp)],
+    });
 
     // Crear transacción de interacción con contrato inteligente
-    const tx = {
-      address: CONTRACT_ADDRESS,
-      abi: abi,
-      functionName: 'storeMessage',
-      args: [mensaje, optimizedTimestamp],
+    const tx: TransactionSerializable = {
+      to: CONTRACT_ADDRESS,
+      data: data,
+      chainId: avalancheFuji.id,
+      type: 'legacy',
     };
 
     // La serialización y respuesta se agregarán después
@@ -808,24 +784,24 @@ export async function POST(req: NextRequest) {
 <details>
 <summary><strong>Entendiendo las Propiedades de Transacción de Contrato Inteligente</strong></summary>
 
-- **address**: La dirección del contrato desplegado en la blockchain
-- **abi**: El ABI del contrato (Application Binary Interface)
-- **functionName**: El nombre exacto de la función del contrato a llamar
-- **args**: Array de argumentos a pasar a la función, en el orden correcto
+- **to**: La dirección del contrato desplegado en la blockchain
+- **data**: Los datos codificados de la función usando `encodeFunctionData`
+- **chainId**: El ID numérico de la blockchain (avalancheFuji.id = 43113)
+- **type**: El tipo de transacción ('legacy' para compatibilidad amplia)
 
 </details>
 
-### 5. Handler Completo de Contrato Inteligente
+### 4. Handler Completo de Contrato Inteligente
 
 ```typescript title="Handler POST Completo - Interacción con Contrato Inteligente"
 export async function POST(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
-    const mensaje = searchParams.get('mensaje');
+    const message = searchParams.get('mensaje');
 
-    if (!mensaje) {
+    if (!message) {
       return NextResponse.json(
-        { error: 'El parámetro mensaje es requerido' },
+        { error: 'Message parameter is required' },
         {
           status: 400,
           headers: {
@@ -838,14 +814,21 @@ export async function POST(req: NextRequest) {
     }
 
     // Calcular timestamp optimizado usando algoritmo personalizado
-    const optimizedTimestamp = calculateOptimizedTimestamp(mensaje);
+    const optimizedTimestamp = calculateOptimizedTimestamp(message);
+
+    // Codificar los datos de la función del contrato
+    const data = encodeFunctionData({ 
+      abi: abi,
+      functionName: "storeMessage",
+      args: [message, BigInt(optimizedTimestamp)],
+    });
 
     // Crear transacción de contrato inteligente
-    const tx = {
-      address: CONTRACT_ADDRESS,
-      abi: abi,
-      functionName: 'storeMessage',
-      args: [mensaje, optimizedTimestamp],
+    const tx: TransactionSerializable = {
+      to: CONTRACT_ADDRESS,
+      data: data,
+      chainId: avalancheFuji.id,
+      type: 'legacy',
     };
 
     // Serializar transacción
@@ -868,21 +851,16 @@ export async function POST(req: NextRequest) {
     });
   } catch (error) {
     console.error('Error en petición POST:', error);
-    return NextResponse.json({ error: 'Error Interno del Servidor' }, { status: 500 });
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
 ```
 
-### 6. Implementar el Algoritmo Personalizado
+### 5. Implementar el Algoritmo Personalizado
 
-<Admonition type="tip" title="Innovación del Algoritmo">
-  Aquí es donde agregas **valor único** a tu mini app. ¡Mientras más sofisticado sea tu algoritmo,
-  más impresionante será tu envío al minithon!
-</Admonition>
-
-```typescript title="Función de Algoritmo Personalizado"
+```typescript title="Algoritmo Personalizado para Timestamp"
 // Algoritmo personalizado para calcular timestamp optimizado basado en el contenido del mensaje
-function calculateOptimizedTimestamp(mensaje: string): number {
+function calculateOptimizedTimestamp(message: string): number {
   // Obtener el timestamp actual como punto de partida
   const currentTimestamp = Math.floor(Date.now() / 1000);
 
@@ -890,9 +868,9 @@ function calculateOptimizedTimestamp(mensaje: string): number {
   // Esta es tu lógica de negocio única - puedes hacer esto tan complejo como necesites
   let offset = 0;
 
-  for (let i = 0; i < mensaje.length; i++) {
+  for (let i = 0; i < message.length; i++) {
     // Sumar códigos de caracteres y usar posición como multiplicador
-    offset += mensaje.charCodeAt(i) * (i + 1);
+    offset += message.charCodeAt(i) * (i + 1);
   }
 
   // Asegurar que el offset sea razonable (máximo 1 hora)
@@ -903,12 +881,6 @@ function calculateOptimizedTimestamp(mensaje: string): number {
   return currentTimestamp + offset;
 }
 ```
-
-<Admonition type="success" title="Por Qué Este Algoritmo Es Valioso">
-  - Crea timestamps determinísticos pero únicos basados en el contenido del mensaje - Agrega lógica
-  de negocio significativa más allá de transferencias simples - Puede expandirse con algoritmos más
-  sofisticados - Proporciona utilidad real para optimización de timestamps
-</Admonition>
 
 ## 🌐 Manejo de CORS
 
@@ -970,29 +942,33 @@ export async function OPTIONS(request: NextRequest) {
   desarrollo con múltiples métodos de entrada.
 </Admonition>
 
-<Admonition type="warning" title="Importante para Debugging Local">
-  Para probar con localhost, **NO uses la opción URL** en el debugger, ya que no funcionará. En su
-  lugar, ve directamente a tu endpoint GET (`http://localhost:3000/api/mi-app`) en tu navegador,
-  copia todo el JSON de respuesta, y pégalo en el campo **JSON** del debugger.
+<Admonition type="warning" title="Importante: Despliega Primero en Producción">
+  Para probar tu mini app en el debugger, **primero debes desplegarla** en un proveedor de hosting como Vercel, Netlify, Railway, etc. El debugger necesita una **URL pública accesible** para poder cargar tu mini app. 
+  
+  Si quieres probar localmente, usa el método **JSON** copiando la respuesta de tu endpoint GET local y pegándola en el debugger.
 </Admonition>
 
 <Tabs>
-<TabItem value="json" label="Prueba JSON (Recomendado para Local)" default>
+<TabItem value="url" label="Prueba URL (Recomendado)" default>
 
-1. Ve a [https://app.sherry.social/debugger](https://app.sherry.social/debugger)
-2. **Prueba JSON**:
-   - Visita tu endpoint GET directamente en el navegador
-   - Copia toda la respuesta JSON
-   - Pégala en la entrada JSON del debugger
-   - Esto es útil para probar metadata sin ejecutar un servidor
+1. **Despliega tu mini app** en un proveedor de hosting:
+   - Vercel: `vercel --prod`
+   - Netlify: Conecta tu repositorio
+   - Railway, Render, etc.
+2. **Prueba URL**:
+   - Pega la URL de tu endpoint GET desplegado
+   - Ejemplo: `https://mi-sherry-app.vercel.app/api/mi-app`
+   - Haz clic en "Cargar" para renderizar tu mini app
 
 </TabItem>
-<TabItem value="url" label="Prueba URL (Solo Producción)">
+<TabItem value="json" label="Prueba JSON (Para Testing Local)">
 
-1. **Prueba URL**:
-   - Pega la URL de tu endpoint GET (solo funciona para URLs públicas)
-   - Ejemplo: `https://tudominio.com/api/mi-app`
-   - Haz clic en "Cargar" para renderizar tu mini app
+1. Ve a [https://app.sherry.social/debugger](https://app.sherry.social/debugger)
+2. **Para testing local únicamente**:
+   - Visita tu endpoint GET directamente: `http://localhost:3000/api/mi-app`
+   - Copia toda la respuesta JSON
+   - Pégala en la entrada JSON del debugger
+   - Esto es útil para probar metadata durante desarrollo
 
 </TabItem>
 <TabItem value="typescript" label="Prueba TypeScript">
@@ -1006,57 +982,21 @@ export async function OPTIONS(request: NextRequest) {
 
 ### Proceso de Pruebas Paso a Paso
 
-<div
-  style={{
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-    gap: '1rem',
-    margin: '1rem 0',
-  }}
->
-  <div
-    style={{
-      padding: '1rem',
-      border: '1px solid var(--ifm-color-emphasis-300)',
-      borderRadius: '8px',
-    }}
-  >
-    <h4>1. Iniciar Servidor de Desarrollo</h4>
-    <code>npm run dev</code>
-  </div>
-  <div
-    style={{
-      padding: '1rem',
-      border: '1px solid var(--ifm-color-emphasis-300)',
-      borderRadius: '8px',
-    }}
-  >
-    <h4>2. Probar Endpoint GET</h4>
-    <p>
-      Abrir <code>localhost:3000/api/mi-app</code>
-    </p>
-  </div>
-  <div
-    style={{
-      padding: '1rem',
-      border: '1px solid var(--ifm-color-emphasis-300)',
-      borderRadius: '8px',
-    }}
-  >
-    <h4>3. Probar en Debugger</h4>
-    <p>Verificar renderizado y campos de formulario</p>
-  </div>
-  <div
-    style={{
-      padding: '1rem',
-      border: '1px solid var(--ifm-color-emphasis-300)',
-      borderRadius: '8px',
-    }}
-  >
-    <h4>4. Probar Envío</h4>
-    <p>Completar formulario y probar endpoint POST</p>
-  </div>
-</div>
+1. **Desarrollar Localmente**
+   - Ejecutar `npm run dev`
+   - Probar en `localhost:3000/api/mi-app`
+
+2. **Desplegar en Producción**
+   - Usar Vercel, Netlify, etc.
+   - Obtener URL pública
+
+3. **Probar en Debugger**
+   - Usar URL pública del despliegue
+   - Verificar renderizado completo
+
+4. **Probar Funcionalidad**
+   - Completar formulario y probar POST
+   - Verificar transacción generada
 
 ## 🏆 Guías del Minithon
 
@@ -1288,10 +1228,10 @@ Aquí tienes un archivo de ruta completo, **listo para minithon** que demuestra 
 import { NextRequest, NextResponse } from 'next/server';
 import { avalancheFuji } from 'viem/chains';
 import { createMetadata, Metadata, ValidatedMetadata, ExecutionResponse } from '@sherrylinks/sdk';
-import { serialize } from 'wagmi';
+import { serialize, TransactionSerializable, encodeFunctionData } from 'wagmi';
 import { abi } from '@/blockchain/abi';
 
-const CONTRACT_ADDRESS = '0x75dd8326F5293ff1f1f4E013c8Fda20db126f3e3';
+const CONTRACT_ADDRESS = '0xTuContratoInteligenteEnFuji';
 
 export async function GET(req: NextRequest) {
   try {
@@ -1343,11 +1283,11 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
-    const mensaje = searchParams.get('mensaje');
+    const message = searchParams.get('mensaje');
 
-    if (!mensaje) {
+    if (!message) {
       return NextResponse.json(
-        { error: 'El parámetro mensaje es requerido' },
+        { error: 'Message parameter is required' },
         {
           status: 400,
           headers: {
@@ -1360,14 +1300,20 @@ export async function POST(req: NextRequest) {
     }
 
     // Lógica de negocio personalizada
-    const optimizedTimestamp = calculateOptimizedTimestamp(mensaje);
+    const optimizedTimestamp = calculateOptimizedTimestamp(message);
 
     // Interacción con contrato inteligente
-    const tx = {
-      address: CONTRACT_ADDRESS,
+    const data = encodeFunctionData({ 
       abi: abi,
-      functionName: 'storeMessage',
-      args: [mensaje, optimizedTimestamp],
+      functionName: "storeMessage",
+      args: [message, BigInt(optimizedTimestamp)],
+    });
+
+    const tx: TransactionSerializable = {
+      to: CONTRACT_ADDRESS,
+      data: data,
+      chainId: avalancheFuji.id,
+      type: 'legacy',
     };
 
     const serialized = serialize(tx);
@@ -1387,7 +1333,7 @@ export async function POST(req: NextRequest) {
     });
   } catch (error) {
     console.error('Error en petición POST:', error);
-    return NextResponse.json({ error: 'Error Interno del Servidor' }, { status: 500 });
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
 
@@ -1404,13 +1350,13 @@ export async function OPTIONS(request: NextRequest) {
 }
 
 // Algoritmo personalizado - aquí es donde agregas tu valor único
-function calculateOptimizedTimestamp(mensaje: string): number {
+function calculateOptimizedTimestamp(message: string): number {
   const currentTimestamp = Math.floor(Date.now() / 1000);
 
   let offset = 0;
 
-  for (let i = 0; i < mensaje.length; i++) {
-    offset += mensaje.charCodeAt(i) * (i + 1);
+  for (let i = 0; i < message.length; i++) {
+    offset += message.charCodeAt(i) * (i + 1);
   }
 
   const maxOffset = 3600;
