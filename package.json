@@ -1,6 +1,6 @@
 {
   "name": "@sherrylinks/sdk",
-  "version": "2.20.16-beta.1",
+  "version": "2.20.17-beta.1",
   "description": "SDK for Sherry Links",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
