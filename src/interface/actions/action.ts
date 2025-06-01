@@ -209,5 +209,5 @@ export interface BaseAction {
      * type: 'http'
      * ```
      */
-    type: string; // El tipo base es string, las implementaciones usarán literales
+    type: string; 
 }
