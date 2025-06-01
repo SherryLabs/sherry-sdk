@@ -1,4 +1,4 @@
-import { HTMLAction } from "../interface/actions/htmlAction";
+import { HTMLAction } from '../interface/actions/htmlAction';
 
 export class HTMLActionValidator {
     static isHTMLAction(action: any): action is HTMLAction {

@@ -209,5 +209,5 @@ export interface BaseAction {
      * type: 'http'
      * ```
      */
-    type: string; 
+    type: string;
 }
