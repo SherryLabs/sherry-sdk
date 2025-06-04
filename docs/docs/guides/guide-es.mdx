@@ -677,7 +677,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { avalancheFuji } from 'viem/chains';
 import { createMetadata, Metadata, ValidatedMetadata, ExecutionResponse } from '@sherrylinks/sdk';
 import { serialize } from 'wagmi';
-import {encodeFunctionData, TransactionSerializable } from "viem";
+import { encodeFunctionData, TransactionSerializable } from 'viem';
 import { abi } from '@/blockchain/abi';
 
 // Dirección del contrato en Avalanche Fuji Testnet
@@ -960,9 +960,9 @@ headers: {
 
 <Admonition type="warning" title="Importante: Despliega Primero en Producción">
   Para probar tu mini app en el debugger, **primero debes desplegarla** en un proveedor de hosting
-  como Vercel. El debugger necesita una **URL pública accesible** para poder
-  cargar tu mini app. Si quieres probar localmente, usa el método **JSON** copiando la respuesta de
-  tu endpoint GET local y pegándola en el debugger.
+  como Vercel. El debugger necesita una **URL pública accesible** para poder cargar tu mini app. Si
+  quieres probar localmente, usa el método **JSON** copiando la respuesta de tu endpoint GET local y
+  pegándola en el debugger.
 </Admonition>
 
 <Tabs>
@@ -998,14 +998,17 @@ headers: {
 ### Proceso de Pruebas Paso a Paso
 
 1. **Desarrollar Localmente**
+
    - Ejecutar `npm run dev`
    - Probar en `localhost:3000/api/mi-app`
 
 2. **Desplegar en Vercel**
+
    - `vercel --prod`
    - Obtener URL pública
 
 3. **Probar en Debugger**
+
    - Usar URL pública del despliegue
    - Verificar renderizado completo
 
@@ -1244,7 +1247,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { avalancheFuji } from 'viem/chains';
 import { createMetadata, Metadata, ValidatedMetadata, ExecutionResponse } from '@sherrylinks/sdk';
 import { serialize } from 'wagmi';
-import {encodeFunctionData, TransactionSerializable } from "viem";
+import { encodeFunctionData, TransactionSerializable } from 'viem';
 import { abi } from '@/blockchain/abi';
 
 const CONTRACT_ADDRESS = '0xTuContratoInteligenteEnFuji';
