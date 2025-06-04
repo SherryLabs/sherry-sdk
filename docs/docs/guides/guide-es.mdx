@@ -30,15 +30,19 @@ Esta guía completa te enseñará paso a paso cómo crear mini apps potentes usa
 
 ## 📋 Tabla de Contenidos
 
-- [Cómo Funciona Sherry - Entendiendo el Flujo](#cómo-funciona-sherry---entendiendo-el-flujo)
-- [Requisitos Previos](#requisitos-previos)
-- [Configuración Inicial](#configuración-inicial)
-- [Creando el Endpoint GET - Metadata](#creando-el-endpoint-get---metadata)
-- [Ejemplo 1: Transferencia Simple (Solo Aprendizaje)](#ejemplo-1-transferencia-simple-solo-aprendizaje)
-- [Ejemplo 2: Interacción con Contratos Inteligentes (Listo para Minithon)](#ejemplo-2-interacción-con-contratos-inteligentes-listo-para-minithon)
-- [Manejo de CORS](#manejo-de-cors)
-- [Probando tu Mini App](#probando-tu-mini-app)
-- [Resolución de Problemas](#resolución-de-problemas)
+- [Cómo Funciona Sherry - Entendiendo el Flujo](#🔄-cómo-funciona-sherry---entendiendo-el-flujo)
+- [Requisitos Previos](#🛠️-requisitos-previos)
+- [Configuración Inicial](#🏗️-configuración-inicial)
+- [Creando el Endpoint GET - Metadata](#🎯-creando-el-endpoint-get---metadata)
+- [Ejemplo 1: Transferencia Simple (Solo Aprendizaje)](#📚-ejemplo-1-transferencia-simple-solo-aprendizaje)
+- [Ejemplo 2: Interacción con Contratos Inteligentes (Listo para Minithon)](#🎯-ejemplo-2-interacción-con-contratos-inteligentes-listo-para-minithon)
+- [Manejo de CORS](#🌐-manejo-de-cors)
+- [Probando tu Mini App](#🧪-probando-tu-mini-app)
+- [Guías del Minithon](#🏆-guías-del-minithon)
+- [Resolución de Problemas](#🔧-resolución-de-problemas)
+- [Ejemplo de Código Completo](#🚀-ejemplo-de-código-completo)
+- [Repositorio de Ejemplos](#📚-repositorio-de-ejemplos)
+- [Próximos Pasos](#🎯-próximos-pasos)
 
 ## 🔄 Cómo Funciona Sherry - Entendiendo el Flujo
 
@@ -672,7 +676,8 @@ contract TimestampedMessage {
 import { NextRequest, NextResponse } from 'next/server';
 import { avalancheFuji } from 'viem/chains';
 import { createMetadata, Metadata, ValidatedMetadata, ExecutionResponse } from '@sherrylinks/sdk';
-import { serialize, TransactionSerializable, encodeFunctionData } from 'wagmi';
+import { serialize } from 'wagmi';
+import {encodeFunctionData, TransactionSerializable } from "viem";
 import { abi } from '@/blockchain/abi';
 
 // Dirección del contrato en Avalanche Fuji Testnet
@@ -840,7 +845,6 @@ export async function POST(req: NextRequest) {
       chainId: avalancheFuji.name,
     };
 
-    // Retornar respuesta exitosa
     return NextResponse.json(resp, {
       status: 200,
       headers: {
@@ -861,28 +865,28 @@ export async function POST(req: NextRequest) {
 ```typescript title="Algoritmo Personalizado para Timestamp"
 // Algoritmo personalizado para calcular timestamp optimizado basado en el contenido del mensaje
 function calculateOptimizedTimestamp(message: string): number {
-  // Obtener el timestamp actual como punto de partida
   const currentTimestamp = Math.floor(Date.now() / 1000);
 
-  // Algoritmo personalizado: Agregar códigos de caracteres para crear un offset único
-  // Esta es tu lógica de negocio única - puedes hacer esto tan complejo como necesites
   let offset = 0;
 
   for (let i = 0; i < message.length; i++) {
-    // Sumar códigos de caracteres y usar posición como multiplicador
     offset += message.charCodeAt(i) * (i + 1);
   }
 
-  // Asegurar que el offset sea razonable (máximo 1 hora)
   const maxOffset = 3600;
   offset = offset % maxOffset;
 
-  // Calcular timestamp optimizado final
   return currentTimestamp + offset;
 }
 ```
 
 ## 🌐 Manejo de CORS
+
+<Admonition type="warning" title="Configuración Esencial">
+  **Es fundamental configurar CORS antes de probar o desplegar tu mini app**. Sin la configuración
+  CORS correcta, tu mini app no funcionará cuando sea accedida desde plataformas externas como el
+  debugger de Sherry o aplicaciones de terceros.
+</Admonition>
 
 Para permitir que tu mini app sea usada desde diferentes dominios y plataformas, necesitas manejar peticiones preflight de CORS:
 
@@ -905,6 +909,18 @@ export async function OPTIONS(request: NextRequest) {
   primero envían una **petición OPTIONS** para verificar si se permiten peticiones cross-origin.
   Este handler le dice al navegador que tu API acepta peticiones de cualquier dominio.
 </Admonition>
+
+### Headers CORS en Todas las Respuestas
+
+Asegúrate de incluir los headers CORS en **todas** las respuestas de tu API:
+
+```typescript title="Headers CORS Estándar"
+headers: {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+}
+```
 
 ## 🧪 Probando tu Mini App
 
@@ -944,7 +960,7 @@ export async function OPTIONS(request: NextRequest) {
 
 <Admonition type="warning" title="Importante: Despliega Primero en Producción">
   Para probar tu mini app en el debugger, **primero debes desplegarla** en un proveedor de hosting
-  como Vercel, Netlify, Railway, etc. El debugger necesita una **URL pública accesible** para poder
+  como Vercel. El debugger necesita una **URL pública accesible** para poder
   cargar tu mini app. Si quieres probar localmente, usa el método **JSON** copiando la respuesta de
   tu endpoint GET local y pegándola en el debugger.
 </Admonition>
@@ -952,10 +968,8 @@ export async function OPTIONS(request: NextRequest) {
 <Tabs>
 <TabItem value="url" label="Prueba URL (Recomendado)" default>
 
-1. **Despliega tu mini app** en un proveedor de hosting:
-   - Vercel: `vercel --prod`
-   - Netlify: Conecta tu repositorio
-   - Railway, Render, etc.
+1. **Despliega tu mini app en Vercel**:
+   - `vercel --prod`
 2. **Prueba URL**:
    - Pega la URL de tu endpoint GET desplegado
    - Ejemplo: `https://mi-sherry-app.vercel.app/api/mi-app`
@@ -984,17 +998,14 @@ export async function OPTIONS(request: NextRequest) {
 ### Proceso de Pruebas Paso a Paso
 
 1. **Desarrollar Localmente**
-
    - Ejecutar `npm run dev`
    - Probar en `localhost:3000/api/mi-app`
 
-2. **Desplegar en Producción**
-
-   - Usar Vercel, Netlify, etc.
+2. **Desplegar en Vercel**
+   - `vercel --prod`
    - Obtener URL pública
 
 3. **Probar en Debugger**
-
    - Usar URL pública del despliegue
    - Verificar renderizado completo
 
@@ -1232,7 +1243,8 @@ Aquí tienes un archivo de ruta completo, **listo para minithon** que demuestra 
 import { NextRequest, NextResponse } from 'next/server';
 import { avalancheFuji } from 'viem/chains';
 import { createMetadata, Metadata, ValidatedMetadata, ExecutionResponse } from '@sherrylinks/sdk';
-import { serialize, TransactionSerializable, encodeFunctionData } from 'wagmi';
+import { serialize } from 'wagmi';
+import {encodeFunctionData, TransactionSerializable } from "viem";
 import { abi } from '@/blockchain/abi';
 
 const CONTRACT_ADDRESS = '0xTuContratoInteligenteEnFuji';
@@ -1411,7 +1423,7 @@ Este repositorio contiene:
 <TabItem value="deployment" label="Consideraciones de Despliegue">
 
 - **Desarrollo Local**: Usa `http://localhost:3000` para pruebas
-- **Producción**: Despliega en Vercel, Netlify, o tu plataforma preferida
+- **Producción**: Despliega en Vercel con `vercel --prod`
 - **Dominios Personalizados**: Actualiza las URLs de tu metadata para coincidir con tu dominio
 - **Variables de Entorno**: Almacena datos sensibles como claves privadas de forma segura
 - **Redes de Prueba**: Comienza con Fuji testnet, luego pasa a mainnet
