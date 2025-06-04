@@ -30,15 +30,19 @@ This comprehensive guide will teach you step by step how to create powerful mini
 
 ## 📋 Table of Contents
 
-- [How Sherry Works - Understanding the Flow](#how-sherry-works---understanding-the-flow)
-- [Prerequisites](#prerequisites)
-- [Initial Setup](#initial-setup)
-- [Creating the GET Endpoint - Metadata](#creating-the-get-endpoint---metadata)
-- [Example 1: Simple Transfer (Learning Only)](#example-1-simple-transfer-learning-only)
-- [Example 2: Smart Contract Interaction (Minithon Ready)](#example-2-smart-contract-interaction-minithon-ready)
-- [CORS Handling](#cors-handling)
-- [Testing Your Mini App](#testing-your-mini-app)
-- [Troubleshooting](#troubleshooting)
+- [How Sherry Works - Understanding the Flow](#🔄-how-sherry-works---understanding-the-flow)
+- [Prerequisites](#🛠️-prerequisites)
+- [Initial Setup](#🏗️-initial-setup)
+- [Creating the GET Endpoint - Metadata](#🎯-creating-the-get-endpoint---metadata)
+- [Example 1: Simple Transfer (Learning Only)](#📚-example-1-simple-transfer-learning-only)
+- [Example 2: Smart Contract Interaction (Minithon Ready)](#🎯-example-2-smart-contract-interaction-minithon-ready)
+- [CORS Handling](#🌐-cors-handling)
+- [Testing Your Mini App](#🧪-testing-your-mini-app)
+- [Minithon Guidelines](#🏆-minithon-guidelines)
+- [Troubleshooting](#🔧-troubleshooting)
+- [Complete Code Example](#🚀-complete-code-example)
+- [Example Repository](#📚-example-repository)
+- [Next Steps](#🎯-next-steps)
 
 ## 🔄 How Sherry Works - Understanding the Flow
 
@@ -657,20 +661,222 @@ contract TimestampedMessage {
   Event emission for tracking - Complex data structures - Goes beyond simple transfers
 </Admonition>
 
-### 2. Update Your Route File Imports
+### 2. Configure the Contract ABI
+
+<Admonition type="warning" title="Crucial Step">
+  The **ABI (Application Binary Interface)** is essential for interacting with smart contracts. It
+  defines the available functions, their parameters, and return types. Without the correct ABI, you
+  won't be able to encode contract function calls.
+</Admonition>
+
+Create the file `blockchain/abi.ts` in your project:
+
+```typescript title="blockchain/abi.ts"
+export const abi = [
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "sender",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "string",
+                "name": "message",
+                "type": "string"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "timestamp",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "optimizedTimestamp",
+                "type": "uint256"
+            }
+        ],
+        "name": "MessageStored",
+        "type": "event"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "string",
+                "name": "message",
+                "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "optimizedTimestamp",
+                "type": "uint256"
+            }
+        ],
+        "name": "storeMessage",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "index",
+                "type": "uint256"
+            }
+        ],
+        "name": "getMessage",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "sender",
+                "type": "address"
+            },
+            {
+                "internalType": "string",
+                "name": "message",
+                "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "timestamp",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "optimizedTimestamp",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getMessageCount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "sender",
+                "type": "address"
+            }
+        ],
+        "name": "getMessagesBySender",
+        "outputs": [
+            {
+                "internalType": "string[]",
+                "name": "messageTexts",
+                "type": "string[]"
+            },
+            {
+                "internalType": "uint256[]",
+                "name": "timestamps",
+                "type": "uint256[]"
+            },
+            {
+                "internalType": "uint256[]",
+                "name": "optimizedTimestamps",
+                "type": "uint256[]"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "messages",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "sender",
+                "type": "address"
+            },
+            {
+                "internalType": "string",
+                "name": "message",
+                "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "timestamp",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "optimizedTimestamp",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "name": "userMessageCount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    }
+] as const;
+```
+
+<Admonition type="tip" title="How to Get the ABI">
+  - **Remix**: After compiling, go to the `solidity compiler` tab and look for the `ABI` ath the
+    bottom of the page
+  - **Hardhat**: Automatically generated in `artifacts/contracts/`
+  - **Foundry**: Use `forge inspect <ContractName> abi`
+  - **Blockchain Explorer**: If the contract is verified, you can copy the ABI
+</Admonition>
+
+### 3. Update Your Route File Imports
 
 ```typescript title="app/api/my-app/route.ts"
 import { NextRequest, NextResponse } from 'next/server';
 import { avalancheFuji } from 'viem/chains';
 import { createMetadata, Metadata, ValidatedMetadata, ExecutionResponse } from '@sherrylinks/sdk';
-import { serialize, TransactionSerializable, encodeFunctionData } from 'wagmi';
+import { serialize } from 'wagmi';
+import { encodeFunctionData, TransactionSerializable } from 'viem';
 import { abi } from '@/blockchain/abi';
 
 // Contract address on Avalanche Fuji Testnet
 const CONTRACT_ADDRESS = '0xYourSmartContractAddressHere';
 ```
 
-### 3. Build the Smart Contract POST Handler
+### 4. Build the Smart Contract POST Handler
 
 <Tabs>
 <TabItem value="step1" label="Step 1: Validation" default>
@@ -885,6 +1091,12 @@ function calculateOptimizedTimestamp(message: string): number {
 
 ## 🌐 CORS Handling
 
+<Admonition type="warning" title="Essential Configuration">
+  **It's crucial to configure CORS before testing or deploying your mini app**. Without proper CORS
+  configuration, your mini app won't work when accessed from external platforms like the Sherry
+  debugger or third-party applications.
+</Admonition>
+
 To allow your mini app to be used from different domains and platforms, you need to handle CORS preflight requests:
 
 ```typescript title="CORS OPTIONS Handler"
@@ -906,6 +1118,18 @@ export async function OPTIONS(request: NextRequest) {
   request** to check if cross-origin requests are allowed. This handler tells the browser that your
   API accepts requests from any domain.
 </Admonition>
+
+### CORS Headers in All Responses
+
+Make sure to include CORS headers in **all** your API responses:
+
+```typescript title="Standard CORS Headers"
+headers: {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+}
+```
 
 ## 🧪 Testing Your Mini App
 
@@ -943,93 +1167,60 @@ export async function OPTIONS(request: NextRequest) {
   with multiple input methods.
 </Admonition>
 
-<Admonition type="warning" title="Important: Localhost URLs Won't Work in Debugger">
-  When using the debugger, **localhost URLs will NOT work** because the debugger runs on a different
-  domain and cannot access your local development server. Instead, you should **copy your metadata
-  object** and paste it directly into the debugger's JSON or TypeScript input fields.
+<Admonition type="warning" title="Important: Deploy to Production First">
+  To test your mini app in the debugger, you **must first deploy it** to a hosting provider like
+  Vercel. The debugger needs a **publicly accessible URL** to be able to load your mini app. If you
+  want to test locally, use the **JSON** method by copying the response from your local GET endpoint
+  and pasting it into the debugger.
 </Admonition>
 
 <Tabs>
-<TabItem value="json" label="JSON Testing (Recommended)" default>
+<TabItem value="url" label="URL Testing (Recommended)" default>
+
+1. **Deploy your mini app to Vercel**:
+   - `vercel --prod`
+2. **URL Testing**:
+   - Paste your deployed GET endpoint URL
+   - Example: `https://my-sherry-app.vercel.app/api/my-app`
+   - Click "Load" to render your mini app
+
+</TabItem>
+<TabItem value="json" label="JSON Testing (For Local Testing)">
 
 1. Go to [https://app.sherry.social/debugger](https://app.sherry.social/debugger)
-2. Visit your GET endpoint directly in browser: `http://localhost:3000/api/my-app`
-3. Copy the entire JSON response from your browser
-4. Paste it into the debugger's **JSON input** field
-5. This is the most reliable way to test your metadata structure
+2. **For local testing only**:
+   - Visit your GET endpoint directly: `http://localhost:3000/api/my-app`
+   - Copy the entire JSON response
+   - Paste it into the debugger's JSON input
+   - This is useful for testing metadata during development
 
 </TabItem>
 <TabItem value="typescript" label="TypeScript Testing">
 
-1. Copy your metadata object directly from your TypeScript code
-2. Paste it into the debugger's **TypeScript input** field
-3. Good for rapid iteration on metadata structure without running a server
-4. Make sure to copy just the metadata object, not the entire function
-
-</TabItem>
-<TabItem value="production" label="Production URL Testing">
-
-1. Only use this method if your mini app is deployed to a **public URL**
-2. Paste your production GET endpoint URL into the debugger
-3. Example: `https://yourdomain.com/api/my-app`
-4. This will work for deployed applications, not localhost
+1. Copy your metadata object from your TypeScript code
+2. Paste it directly into the debugger
+3. Good for rapid iteration on metadata structure
 
 </TabItem>
 </Tabs>
 
 ### Step-by-Step Testing Process
 
-<div
-  style={{
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-    gap: '1rem',
-    margin: '1rem 0',
-  }}
->
-  <div
-    style={{
-      padding: '1rem',
-      border: '1px solid var(--ifm-color-emphasis-300)',
-      borderRadius: '8px',
-    }}
-  >
-    <h4>1. Start Development Server</h4>
-    <code>npm run dev</code>
-  </div>
-  <div
-    style={{
-      padding: '1rem',
-      border: '1px solid var(--ifm-color-emphasis-300)',
-      borderRadius: '8px',
-    }}
-  >
-    <h4>2. Test GET Endpoint</h4>
-    <p>
-      Open <code>localhost:3000/api/my-app</code>
-    </p>
-  </div>
-  <div
-    style={{
-      padding: '1rem',
-      border: '1px solid var(--ifm-color-emphasis-300)',
-      borderRadius: '8px',
-    }}
-  >
-    <h4>3. Copy Metadata to Debugger</h4>
-    <p>Copy JSON response and paste in debugger</p>
-  </div>
-  <div
-    style={{
-      padding: '1rem',
-      border: '1px solid var(--ifm-color-emphasis-300)',
-      borderRadius: '8px',
-    }}
-  >
-    <h4>4. Test Submission</h4>
-    <p>Fill form and test POST endpoint</p>
-  </div>
-</div>
+1. **Develop Locally**
+   - Run `npm run dev`
+   - Test at `localhost:3000/api/my-app`
+
+2. **Deploy to Vercel**
+   - `vercel --prod`
+   - Get public URL
+
+3. **Test in Debugger**
+   - Use public deployment URL
+   - Verify complete rendering
+
+4. **Test Functionality**
+   - Fill out form and test POST
+   - Verify generated transaction
 
 ## 🏆 Minithon Guidelines
 
@@ -1240,7 +1431,8 @@ Here's a complete, **minithon-ready** route file that demonstrates all concepts:
 import { NextRequest, NextResponse } from 'next/server';
 import { avalancheFuji } from 'viem/chains';
 import { createMetadata, Metadata, ValidatedMetadata, ExecutionResponse } from '@sherrylinks/sdk';
-import { serialize, TransactionSerializable, encodeFunctionData } from 'wagmi';
+import { serialize } from 'wagmi';
+import { encodeFunctionData, TransactionSerializable } from 'viem';
 import { abi } from '@/blockchain/abi';
 
 const CONTRACT_ADDRESS = '0xYourSmartContractOnFuji';

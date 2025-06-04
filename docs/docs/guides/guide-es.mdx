@@ -670,7 +670,207 @@ contract TimestampedMessage {
   más allá de transferencias simples
 </Admonition>
 
-### 2. Actualizar las Importaciones de tu Archivo de Ruta
+### 2. Configurar el ABI del Contrato
+
+<Admonition type="warning" title="Paso Crucial">
+  El **ABI (Application Binary Interface)** es esencial para interactuar con contratos inteligentes.
+  Define las funciones disponibles, sus parámetros y tipos de retorno. Sin el ABI correcto, no
+  podrás codificar las llamadas a funciones del contrato.
+</Admonition>
+
+Crea el archivo `blockchain/abi.ts` en tu proyecto:
+
+```typescript title="blockchain/abi.ts"
+export const abi = [
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "sender",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "string",
+                "name": "message",
+                "type": "string"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "timestamp",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "optimizedTimestamp",
+                "type": "uint256"
+            }
+        ],
+        "name": "MessageStored",
+        "type": "event"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "string",
+                "name": "message",
+                "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "optimizedTimestamp",
+                "type": "uint256"
+            }
+        ],
+        "name": "storeMessage",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "index",
+                "type": "uint256"
+            }
+        ],
+        "name": "getMessage",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "sender",
+                "type": "address"
+            },
+            {
+                "internalType": "string",
+                "name": "message",
+                "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "timestamp",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "optimizedTimestamp",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getMessageCount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "sender",
+                "type": "address"
+            }
+        ],
+        "name": "getMessagesBySender",
+        "outputs": [
+            {
+                "internalType": "string[]",
+                "name": "messageTexts",
+                "type": "string[]"
+            },
+            {
+                "internalType": "uint256[]",
+                "name": "timestamps",
+                "type": "uint256[]"
+            },
+            {
+                "internalType": "uint256[]",
+                "name": "optimizedTimestamps",
+                "type": "uint256[]"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "messages",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "sender",
+                "type": "address"
+            },
+            {
+                "internalType": "string",
+                "name": "message",
+                "type": "string"
+            },
+            {
+                "internalType": "uint256",
+                "name": "timestamp",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "optimizedTimestamp",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "name": "userMessageCount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    }
+] as const;
+```
+
+<Admonition type="tip" title="Cómo Obtener el ABI">
+  - **Remix**: Después de compilar, ve a la pestaña `solidity compiler`y busca el texto `ABI` al final.
+  - **Hardhat**: Se genera automáticamente en `artifacts/contracts/`
+  - **Foundry**: Usa `forge inspect <ContractName> abi`
+  - **Explorador de Blockchain**: Si el contrato está verificado, puedes copiar el ABI
+</Admonition>
+
+### 3. Actualizar las Importaciones de tu Archivo de Ruta
 
 ```typescript title="app/api/mi-app/route.ts"
 import { NextRequest, NextResponse } from 'next/server';
@@ -684,7 +884,7 @@ import { abi } from '@/blockchain/abi';
 const CONTRACT_ADDRESS = '0xTuContratoInteligenteDirecciónAquí';
 ```
 
-### 3. Construir el Handler POST del Contrato Inteligente
+### 4. Construir el Handler POST del Contrato Inteligente
 
 <Tabs>
 <TabItem value="step1" label="Paso 1: Validación" default>
@@ -796,7 +996,7 @@ export async function POST(req: NextRequest) {
 
 </details>
 
-### 4. Handler Completo de Contrato Inteligente
+### 5. Handler Completo de Contrato Inteligente
 
 ```typescript title="Handler POST Completo - Interacción con Contrato Inteligente"
 export async function POST(req: NextRequest) {
@@ -860,7 +1060,7 @@ export async function POST(req: NextRequest) {
 }
 ```
 
-### 5. Implementar el Algoritmo Personalizado
+### 6. Implementar el Algoritmo Personalizado
 
 ```typescript title="Algoritmo Personalizado para Timestamp"
 // Algoritmo personalizado para calcular timestamp optimizado basado en el contenido del mensaje
