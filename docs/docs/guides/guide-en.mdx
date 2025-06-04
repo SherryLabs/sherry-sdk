@@ -657,41 +657,20 @@ contract TimestampedMessage {
   Event emission for tracking - Complex data structures - Goes beyond simple transfers
 </Admonition>
 
-### 2. Set Up Smart Contract Integration
-
-Create the file `blockchain/abi.ts` with your contract's ABI:
-
-```typescript title="blockchain/abi.ts"
-export const abi = [
-  {
-    inputs: [
-      { internalType: 'string', name: 'message', type: 'string' },
-      { internalType: 'uint256', name: 'optimizedTimestamp', type: 'uint256' },
-    ],
-    name: 'storeMessage',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  // ... other functions like getMessageCount, getMessage, getMessagesBySender
-  // ... events and additional contract interface items
-] as const;
-```
-
-### 3. Update Your Route File Imports
+### 2. Update Your Route File Imports
 
 ```typescript title="app/api/my-app/route.ts"
 import { NextRequest, NextResponse } from 'next/server';
 import { avalancheFuji } from 'viem/chains';
 import { createMetadata, Metadata, ValidatedMetadata, ExecutionResponse } from '@sherrylinks/sdk';
-import { serialize } from 'wagmi';
+import { serialize, TransactionSerializable, encodeFunctionData } from 'wagmi';
 import { abi } from '@/blockchain/abi';
 
 // Contract address on Avalanche Fuji Testnet
-const CONTRACT_ADDRESS = '0x75dd8326F5293ff1f1f4E013c8Fda20db126f3e3';
+const CONTRACT_ADDRESS = '0xYourSmartContractAddressHere';
 ```
 
-### 4. Build the Smart Contract POST Handler
+### 3. Build the Smart Contract POST Handler
 
 <Tabs>
 <TabItem value="step1" label="Step 1: Validation" default>
@@ -768,12 +747,19 @@ export async function POST(req: NextRequest) {
 
     const optimizedTimestamp = calculateOptimizedTimestamp(message);
 
-    // Create smart contract interaction transaction
-    const tx = {
-      address: CONTRACT_ADDRESS,
+    // Encode the contract function data
+    const data = encodeFunctionData({
       abi: abi,
       functionName: 'storeMessage',
-      args: [message, optimizedTimestamp],
+      args: [message, BigInt(optimizedTimestamp)],
+    });
+
+    // Create smart contract interaction transaction
+    const tx: TransactionSerializable = {
+      to: CONTRACT_ADDRESS,
+      data: data,
+      chainId: avalancheFuji.id,
+      type: 'legacy',
     };
 
     // Serialization and response will be added next
@@ -789,10 +775,10 @@ export async function POST(req: NextRequest) {
 <details>
 <summary><strong>Understanding Smart Contract Transaction Properties</strong></summary>
 
-- **address**: The deployed contract address on the blockchain
-- **abi**: The contract's ABI (Application Binary Interface)
-- **functionName**: The exact name of the contract function to call
-- **args**: Array of arguments to pass to the function, in the correct order
+- **to**: The deployed contract address on the blockchain
+- **data**: The encoded function data using `encodeFunctionData`
+- **chainId**: The numeric ID of the blockchain (avalancheFuji.id = 43113)
+- **type**: The transaction type ('legacy' for broad compatibility)
 
 </details>
 
@@ -821,12 +807,19 @@ export async function POST(req: NextRequest) {
     // Calculate optimized timestamp using custom algorithm
     const optimizedTimestamp = calculateOptimizedTimestamp(message);
 
-    // Create smart contract transaction
-    const tx = {
-      address: CONTRACT_ADDRESS,
+    // Encode the contract function data
+    const data = encodeFunctionData({
       abi: abi,
       functionName: 'storeMessage',
-      args: [message, optimizedTimestamp],
+      args: [message, BigInt(optimizedTimestamp)],
+    });
+
+    // Create smart contract transaction
+    const tx: TransactionSerializable = {
+      to: CONTRACT_ADDRESS,
+      data: data,
+      chainId: avalancheFuji.id,
+      type: 'legacy',
     };
 
     // Serialize transaction
@@ -1247,10 +1240,10 @@ Here's a complete, **minithon-ready** route file that demonstrates all concepts:
 import { NextRequest, NextResponse } from 'next/server';
 import { avalancheFuji } from 'viem/chains';
 import { createMetadata, Metadata, ValidatedMetadata, ExecutionResponse } from '@sherrylinks/sdk';
-import { serialize } from 'wagmi';
+import { serialize, TransactionSerializable, encodeFunctionData } from 'wagmi';
 import { abi } from '@/blockchain/abi';
 
-const CONTRACT_ADDRESS = '0x75dd8326F5293ff1f1f4E013c8Fda20db126f3e3';
+const CONTRACT_ADDRESS = '0xYourSmartContractOnFuji';
 
 export async function GET(req: NextRequest) {
   try {
@@ -1320,11 +1313,17 @@ export async function POST(req: NextRequest) {
     const optimizedTimestamp = calculateOptimizedTimestamp(message);
 
     // Smart contract interaction
-    const tx = {
-      address: CONTRACT_ADDRESS,
+    const data = encodeFunctionData({
       abi: abi,
       functionName: 'storeMessage',
-      args: [message, optimizedTimestamp],
+      args: [message, BigInt(optimizedTimestamp)],
+    });
+
+    const tx: TransactionSerializable = {
+      to: CONTRACT_ADDRESS,
+      data: data,
+      chainId: avalancheFuji.id,
+      type: 'legacy',
     };
 
     const serialized = serialize(tx);
