@@ -5,7 +5,7 @@ export { FlowValidator } from './flowValidator';
 export { DynamicActionValidator } from './dynamicActionValidator';
 export { MetadataValidator } from './metadataValidator';
 export { validateFileParameter, validateImageDimensions } from './fileValidator';
-export { 
+export {
     ParameterValidator,
     isFileParameter,
     isImageParameter,
@@ -14,5 +14,5 @@ export {
     isTextBasedParameter,
     isNumberBasedParameter,
     isAddressParameter,
-    isBooleanParameter
+    isBooleanParameter,
 } from './parameterValidator';

@@ -96,4 +96,9 @@ export type UIInputType =
 
 export type BaseInputType = AbiType | UIInputType | SelectionInputType | FileInputType;
 
-export type Parameter = StandardParameter | SelectParameter | RadioParameter | FileParameter | ImageParameter;
+export type Parameter =
+    | StandardParameter
+    | SelectParameter
+    | RadioParameter
+    | FileParameter
+    | ImageParameter;

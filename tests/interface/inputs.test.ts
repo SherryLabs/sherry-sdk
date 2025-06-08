@@ -1,10 +1,10 @@
 import { describe, expect, it } from '@jest/globals';
-import { 
-    FileParameter, 
-    ImageParameter, 
+import {
+    FileParameter,
+    ImageParameter,
     Parameter,
     FileInputType,
-    BaseInputType 
+    BaseInputType,
 } from '../../src/interface/inputs';
 
 describe('Input Interfaces', () => {

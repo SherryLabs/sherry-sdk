@@ -1,12 +1,12 @@
 import { describe, expect, it } from '@jest/globals';
 import { ParameterValidator } from '../../src/validators/parameterValidator';
-import { 
-    FileParameter, 
+import {
+    FileParameter,
     ImageParameter,
     TextBasedParameter,
     NumberBasedParameter,
     SelectParameter,
-    RadioParameter 
+    RadioParameter,
 } from '../../src/interface/inputs';
 import { SherryValidationError } from '../../src/errors/customErrors';
 
@@ -55,7 +55,9 @@ describe('ParameterValidator', () => {
                 accept: '.pdf',
             };
 
-            expect(() => ParameterValidator.validateParameter(fileParam)).toThrow(SherryValidationError);
+            expect(() => ParameterValidator.validateParameter(fileParam)).toThrow(
+                SherryValidationError,
+            );
         });
 
         it('should reject image parameter with invalid dimensions', () => {
@@ -68,7 +70,9 @@ describe('ParameterValidator', () => {
                 maxHeight: 768,
             };
 
-            expect(() => ParameterValidator.validateParameter(imageParam)).toThrow(SherryValidationError);
+            expect(() => ParameterValidator.validateParameter(imageParam)).toThrow(
+                SherryValidationError,
+            );
         });
 
         it('should reject file parameter without name', () => {
@@ -78,7 +82,9 @@ describe('ParameterValidator', () => {
                 required: true,
             } as FileParameter;
 
-            expect(() => ParameterValidator.validateParameter(fileParam)).toThrow(SherryValidationError);
+            expect(() => ParameterValidator.validateParameter(fileParam)).toThrow(
+                SherryValidationError,
+            );
             expect(() => ParameterValidator.validateParameter(fileParam)).toThrow('name');
         });
 
@@ -89,7 +95,9 @@ describe('ParameterValidator', () => {
                 required: true,
             } as ImageParameter;
 
-            expect(() => ParameterValidator.validateParameter(imageParam)).toThrow(SherryValidationError);
+            expect(() => ParameterValidator.validateParameter(imageParam)).toThrow(
+                SherryValidationError,
+            );
             expect(() => ParameterValidator.validateParameter(imageParam)).toThrow('label');
         });
 

@@ -57,20 +57,32 @@ describe('FileValidator', () => {
         });
 
         it('should validate valid file within size limit', () => {
-            const file = new MockFile('document.pdf', 1024 * 1024, 'application/pdf') as unknown as File;
+            const file = new MockFile(
+                'document.pdf',
+                1024 * 1024,
+                'application/pdf',
+            ) as unknown as File;
             const result = validateFileParameter(file, fileParam);
             expect(result).toBeNull();
         });
 
         it('should reject file exceeding size limit', () => {
-            const file = new MockFile('large-document.pdf', 10 * 1024 * 1024, 'application/pdf') as unknown as File;
+            const file = new MockFile(
+                'large-document.pdf',
+                10 * 1024 * 1024,
+                'application/pdf',
+            ) as unknown as File;
             const result = validateFileParameter(file, fileParam);
             expect(result).toContain('File size must be less than');
             expect(result).toContain('MB');
         });
 
         it('should validate file with accepted extension', () => {
-            const file = new MockFile('document.docx', 1024 * 1024, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') as unknown as File;
+            const file = new MockFile(
+                'document.docx',
+                1024 * 1024,
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            ) as unknown as File;
             const result = validateFileParameter(file, fileParam);
             expect(result).toBeNull();
         });
@@ -97,28 +109,45 @@ describe('FileValidator', () => {
 
         it('should handle file without extension', () => {
             // Use MIME types in accept parameter for better validation
-            fileParam.accept = 'application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-            const file = new MockFile('document', 1024 * 1024, 'application/pdf') as unknown as File;
+            fileParam.accept =
+                'application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+            const file = new MockFile(
+                'document',
+                1024 * 1024,
+                'application/pdf',
+            ) as unknown as File;
             const result = validateFileParameter(file, fileParam);
             expect(result).toBeNull(); // Should pass based on mime type
         });
 
         it('should handle parameter without accept restriction', () => {
             delete fileParam.accept;
-            const file = new MockFile('any-file.xyz', 1024 * 1024, 'application/unknown') as unknown as File;
+            const file = new MockFile(
+                'any-file.xyz',
+                1024 * 1024,
+                'application/unknown',
+            ) as unknown as File;
             const result = validateFileParameter(file, fileParam);
             expect(result).toBeNull();
         });
 
         it('should handle parameter without size restriction', () => {
             delete fileParam.maxSize;
-            const file = new MockFile('huge-file.pdf', 100 * 1024 * 1024, 'application/pdf') as unknown as File;
+            const file = new MockFile(
+                'huge-file.pdf',
+                100 * 1024 * 1024,
+                'application/pdf',
+            ) as unknown as File;
             const result = validateFileParameter(file, fileParam);
             expect(result).toBeNull();
         });
 
         it('should validate case insensitive file extensions', () => {
-            const file = new MockFile('DOCUMENT.PDF', 1024 * 1024, 'application/pdf') as unknown as File;
+            const file = new MockFile(
+                'DOCUMENT.PDF',
+                1024 * 1024,
+                'application/pdf',
+            ) as unknown as File;
             const result = validateFileParameter(file, fileParam);
             expect(result).toBeNull();
         });
