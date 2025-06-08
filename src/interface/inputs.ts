@@ -13,8 +13,8 @@ export interface BaseParameter {
     label: string;
     required?: boolean;
     description?: string;
-    fixed?: boolean; // Si el valor es fijo, no editable
-    value?: any; // Valor por defecto, si no se envía, se renderizará un input vacío
+    fixed?: boolean; // If the value is fixed, not editable
+    value?: any; // Default value, if not sent, an empty input will be rendered
 }
 
 export interface TextBasedParameter extends BaseParameter {
@@ -28,19 +28,19 @@ export interface TextBasedParameter extends BaseParameter {
         | Extract<AbiType, 'string' | 'bytes' | `bytes${number}`>;
     minLength?: number;
     maxLength?: number;
-    pattern?: string; // Para validaciones con regex
+    pattern?: string; // For regex validations
 }
 
 export interface NumberBasedParameter extends BaseParameter {
     type: 'number' | 'datetime' | Extract<AbiType, `uint${string}` | `int${string}`>;
-    min?: number; // Para inputs numéricos y datetime
-    max?: number; // Para inputs numéricos y datetime
-    pattern?: string; // Para validaciones con regex
+    min?: number; // For numeric and datetime inputs
+    max?: number; // For numeric and datetime inputs
+    pattern?: string; // For regex validations
 }
 
 export interface AddressParameter extends BaseParameter {
     type: 'address' | Extract<AbiType, 'address'>;
-    pattern?: string; // Para validaciones con regex
+    pattern?: string; // For regex validations
 }
 
 export interface BooleanParameter extends BaseParameter {
@@ -57,6 +57,24 @@ export interface RadioParameter extends BaseParameter {
     options: SelectOption[];
 }
 
+export interface FileParameter extends BaseParameter {
+    type: 'file';
+    accept?: string; // Accepted file types (prefer MIME types: "application/pdf,image/jpeg" or wildcards: "image/*")
+    maxSize?: number; // Maximum size in bytes
+    multiple?: boolean; // Allow multiple files
+}
+
+// New interface for images (file specialization)
+export interface ImageParameter extends BaseParameter {
+    type: 'image';
+    accept?: string; // Accepted image types (e.g.: "image/jpeg,image/png" or "image/*")
+    maxSize?: number; // Maximum size in bytes
+    multiple?: boolean; // Allow multiple images
+    maxWidth?: number; // Maximum allowed width in pixels
+    maxHeight?: number; // Maximum allowed height in pixels
+    aspectRatio?: string; // Desired aspect ratio (e.g.: "16:9", "1:1")
+}
+
 export type StandardParameter =
     | TextBasedParameter
     | NumberBasedParameter
@@ -65,15 +83,17 @@ export type StandardParameter =
 
 export type SelectionInputType = 'select' | 'radio';
 
+export type FileInputType = 'file' | 'image';
+
 export type UIInputType =
-    | 'text' // Especialización de string con validación
-    | 'number' // Especialización de number, uint o int funcionan para number tambien
-    | 'email' // Especialización de string para email
-    | 'url' // Especialización de string para url
-    | 'datetime' // Especialización de string para fecha
-    | 'textarea' // Especialización de string para texto largo
+    | 'text' // String specialization with validation
+    | 'number' // Number specialization, uint or int also work for number
+    | 'email' // String specialization for email
+    | 'url' // String specialization for url
+    | 'datetime' // String specialization for date
+    | 'textarea' // String specialization for long text
     | 'boolean';
 
-export type BaseInputType = AbiType | UIInputType | SelectionInputType;
+export type BaseInputType = AbiType | UIInputType | SelectionInputType | FileInputType;
 
-export type Parameter = StandardParameter | SelectParameter | RadioParameter;
+export type Parameter = StandardParameter | SelectParameter | RadioParameter | FileParameter | ImageParameter;
