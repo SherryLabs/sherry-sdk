@@ -1,6 +1,17 @@
 # Creating Mini Apps with Next.js and Sherry SDK
 
-This guide will teach you step by step how to create a mini app using Next.js and the Sherry Links SDK. Mini apps are dynamic applications that can be integrated into different platforms and allow users to interact with smart contracts in a simple way.
+<iframe
+  style={{ width: '100%', aspectRatio: '16 / 9', border: 'none' }}
+  src="https://www.youtube.com/embed/Aq6gqxjEoxo"
+  title="YouTube video player"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+  allowfullscreen
+></iframe>
+
+This guide will teach you step by step how to create a mini app using Next.js
+and the Sherry Links SDK. Mini apps are dynamic applications that can be
+integrated into different platforms and allow users to interact with smart
+contracts in a simple way.
 
 ## Table of Contents
 
@@ -51,7 +62,8 @@ module.exports = nextConfig;
 
 ## Creating the GET Endpoint - Metadata
 
-The GET endpoint is the heart of your mini app. Here you define all the information and structure that platforms need to render your application.
+The GET endpoint is the heart of your mini app. Here you define all the
+information and structure that platforms need to render your application.
 
 ### 1. Create the Route File
 
@@ -89,7 +101,8 @@ export async function GET(req: NextRequest) {
 #### General Fields Explanation:
 
 - **url**: URL of your main website or documentation
-- **icon**: Image that will represent your mini app (must be publicly accessible)
+- **icon**: Image that will represent your mini app (must be publicly
+  accessible)
 - **title**: Short and descriptive name of your application
 - **baseUrl**: URL where your application is running (automatically constructed)
 - **description**: Clear explanation of what your mini app does
@@ -126,7 +139,8 @@ const metadata: Metadata = {
 
 ### 4. Configure Parameters
 
-Parameters are the data that the user must provide. If they don't have a default value, an input will be rendered:
+Parameters are the data that the user must provide. If they don't have a default
+value, an input will be rendered:
 
 ```typescript
 const metadata: Metadata = {
@@ -183,14 +197,20 @@ export async function GET(req: NextRequest) {
     });
   } catch (error) {
     console.error('Error creating metadata:', error);
-    return NextResponse.json({ error: 'Failed to create metadata' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Failed to create metadata' },
+      {
+        status: 500,
+      },
+    );
   }
 }
 ```
 
 ## Creating the POST Endpoint - Execution
 
-The POST endpoint handles the actual execution of your mini app. It receives user parameters and returns a serialized transaction.
+The POST endpoint handles the actual execution of your mini app. It receives
+user parameters and returns a serialized transaction.
 
 ### 1. Set Up POST Handler
 
@@ -271,7 +291,8 @@ const tx = {
 
 ## CORS Handling
 
-To allow your mini app to be used from different domains, you need to handle OPTIONS requests:
+To allow your mini app to be used from different domains, you need to handle
+OPTIONS requests:
 
 ```typescript
 export async function OPTIONS(request: NextRequest) {
@@ -289,7 +310,8 @@ export async function OPTIONS(request: NextRequest) {
 
 ## Testing Your Mini App
 
-Once you've created your GET endpoint, you have several options to test your mini app:
+Once you've created your GET endpoint, you have several options to test your
+mini app:
 
 ### Option 1: Sherry Social App
 
@@ -302,13 +324,15 @@ Once you've created your GET endpoint, you have several options to test your min
 
 The debugger allows you to test your mini app in multiple ways:
 
-1. Go to [https://app.sherry.social/debugger](https://app.sherry.social/debugger)
+1. Go to
+   [https://app.sherry.social/debugger](https://app.sherry.social/debugger)
 
 2. **Option A - URL**: Paste your GET endpoint URL
 3. **Option B - JSON**: Copy and paste your endpoint's JSON response
 4. **Option C - TypeScript**: Paste your TypeScript code directly
 
-**Note**: The debugger is in development and may have bugs. You can report issues directly from the debugger interface.
+**Note**: The debugger is in development and may have bugs. You can report
+issues directly from the debugger interface.
 
 ### Testing Steps:
 
@@ -371,8 +395,11 @@ The debugger allows you to test your mini app in multiple ways:
 You can find a complete example of this tutorial in the following repository:
 [https://github.com/SherryLabs/sherry-example](https://github.com/SherryLabs/sherry-example)
 
-This repository contains all the code needed to implement a functional mini app using Next.js and Sherry SDK.
+This repository contains all the code needed to implement a functional mini app
+using Next.js and Sherry SDK.
 
 ---
 
-Congratulations! You now have your first mini app working with Sherry SDK. You can expand functionality by adding more parameters, custom validations, or integrating with more complex smart contracts.
+Congratulations! You now have your first mini app working with Sherry SDK. You
+can expand functionality by adding more parameters, custom validations, or
+integrating with more complex smart contracts.

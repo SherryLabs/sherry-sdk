@@ -1,6 +1,17 @@
 # Creando Mini Apps con Next.js y Sherry SDK
 
-Esta guía te enseñará paso a paso cómo crear una mini app utilizando Next.js y el SDK de Sherry Links. Las mini apps son aplicaciones dinámicas que pueden ser integradas en diferentes plataformas y permiten a los usuarios interactuar con contratos inteligentes de manera sencilla.
+<iframe
+  style={{ width: '100%', aspectRatio: '16 / 9', border: 'none' }}
+  src="https://www.youtube.com/embed/oHmoJUOgLBA"
+  title="YouTube video player"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+  allowfullscreen
+></iframe>
+
+Esta guía te enseñará paso a paso cómo crear una mini app utilizando Next.js y
+el SDK de Sherry Links. Las mini apps son aplicaciones dinámicas que pueden ser
+integradas en diferentes plataformas y permiten a los usuarios interactuar con
+contratos inteligentes de manera sencilla.
 
 ## Tabla de Contenidos
 
@@ -36,7 +47,8 @@ npm install @sherrylinks/sdk viem wagmi
 
 ### 3. Configurar Next.js (Opcional)
 
-Para evitar errores de build con ESLint, puedes deshabilitarlo en `next.config.js`:
+Para evitar errores de build con ESLint, puedes deshabilitarlo en
+`next.config.js`:
 
 ```javascript
 /** @type {import('next').NextConfig} */
@@ -51,7 +63,8 @@ module.exports = nextConfig;
 
 ## Creando el Endpoint GET - Metadata
 
-El endpoint GET es el corazón de tu mini app. Aquí defines toda la información y estructura que las plataformas necesitan para renderizar tu aplicación.
+El endpoint GET es el corazón de tu mini app. Aquí defines toda la información y
+estructura que las plataformas necesitan para renderizar tu aplicación.
 
 ### 1. Crear el Archivo de Ruta
 
@@ -89,9 +102,11 @@ export async function GET(req: NextRequest) {
 #### Explicación de Campos Generales:
 
 - **url**: URL de tu sitio web o documentación principal
-- **icon**: Imagen que representará tu mini app (debe ser accesible públicamente)
+- **icon**: Imagen que representará tu mini app (debe ser accesible
+  públicamente)
 - **title**: Nombre corto y descriptivo de tu aplicación
-- **baseUrl**: URL donde está corriendo tu aplicación (se construye automáticamente)
+- **baseUrl**: URL donde está corriendo tu aplicación (se construye
+  automáticamente)
 - **description**: Explicación clara de qué hace tu mini app
 
 ### 3. Definir las Acciones
@@ -126,7 +141,8 @@ const metadata: Metadata = {
 
 ### 4. Configurar Parámetros
 
-Los parámetros son los datos que el usuario debe proporcionar. Si no tienen un valor predeterminado, se renderizará un input:
+Los parámetros son los datos que el usuario debe proporcionar. Si no tienen un
+valor predeterminado, se renderizará un input:
 
 ```typescript
 const metadata: Metadata = {
@@ -183,14 +199,20 @@ export async function GET(req: NextRequest) {
     });
   } catch (error) {
     console.error('Error creando metadata:', error);
-    return NextResponse.json({ error: 'Error al crear metadata' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Error al crear metadata' },
+      {
+        status: 500,
+      },
+    );
   }
 }
 ```
 
 ## Creando el Endpoint POST - Ejecución
 
-El endpoint POST maneja la ejecución real de tu mini app. Recibe los parámetros del usuario y devuelve una transacción serializada.
+El endpoint POST maneja la ejecución real de tu mini app. Recibe los parámetros
+del usuario y devuelve una transacción serializada.
 
 ### 1. Configurar el Handler POST
 
@@ -271,7 +293,8 @@ const tx = {
 
 ## Manejo de CORS
 
-Para permitir que tu mini app sea utilizada desde diferentes dominios, necesitas manejar las peticiones OPTIONS:
+Para permitir que tu mini app sea utilizada desde diferentes dominios, necesitas
+manejar las peticiones OPTIONS:
 
 ```typescript
 export async function OPTIONS(request: NextRequest) {
@@ -289,7 +312,8 @@ export async function OPTIONS(request: NextRequest) {
 
 ## Probando tu Mini App
 
-Una vez que hayas creado tu endpoint GET, tienes varias opciones para probar tu mini app:
+Una vez que hayas creado tu endpoint GET, tienes varias opciones para probar tu
+mini app:
 
 ### Opción 1: Sherry Social App
 
@@ -308,7 +332,8 @@ El debugger te permite probar tu mini app de múltiples maneras:
 3. **Opción B - JSON**: Copia y pega la respuesta JSON de tu endpoint
 4. **Opción C - TypeScript**: Pega directamente tu código TypeScript
 
-**Nota**: El debugger está en desarrollo y puede tener bugs. Puedes reportar problemas directamente desde la interfaz del debugger.
+**Nota**: El debugger está en desarrollo y puede tener bugs. Puedes reportar
+problemas directamente desde la interfaz del debugger.
 
 ### Pasos para Probar:
 
@@ -349,8 +374,10 @@ El debugger te permite probar tu mini app de múltiples maneras:
 
 ### Error: "Parameter required"
 
-- Asegúrate de que los parámetros requeridos estén marcados como `required: true`
-- Verifica que los nombres de los parámetros coincidan entre la metadata y el POST
+- Asegúrate de que los parámetros requeridos estén marcados como
+  `required: true`
+- Verifica que los nombres de los parámetros coincidan entre la metadata y el
+  POST
 
 ### La mini app no se renderiza correctamente
 
@@ -360,7 +387,8 @@ El debugger te permite probar tu mini app de múltiples maneras:
 
 ### Errores de serialización de transacciones
 
-- Verifica que los valores estén en el formato correcto (BigInt para valores de wei)
+- Verifica que los valores estén en el formato correcto (BigInt para valores de
+  wei)
 - Asegúrate de que el chainId sea válido
 - Revisa que la dirección 'to' sea una dirección Ethereum válida
 
@@ -368,11 +396,15 @@ El debugger te permite probar tu mini app de múltiples maneras:
 
 ### Español
 
-Puedes encontrar un ejemplo completo de este tutorial en el siguiente repositorio:
+Puedes encontrar un ejemplo completo de este tutorial en el siguiente
+repositorio:
 [https://github.com/SherryLabs/sherry-example](https://github.com/SherryLabs/sherry-example)
 
-Este repositorio contiene todo el código necesario para implementar una mini app funcional usando Next.js y Sherry SDK.
+Este repositorio contiene todo el código necesario para implementar una mini app
+funcional usando Next.js y Sherry SDK.
 
 ---
 
-¡Felicidades! Ya tienes tu primera mini app funcionando con Sherry SDK. Puedes expandir la funcionalidad agregando más parámetros, validaciones personalizadas, o integrando con contratos inteligentes más complejos.
+¡Felicidades! Ya tienes tu primera mini app funcionando con Sherry SDK. Puedes
+expandir la funcionalidad agregando más parámetros, validaciones personalizadas,
+o integrando con contratos inteligentes más complejos.
