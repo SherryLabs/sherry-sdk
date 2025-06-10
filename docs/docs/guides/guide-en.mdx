@@ -70,8 +70,8 @@ information and structure that platforms need to render your application.
 Create the file `app/api/my-app/route.ts`:
 
 ```typescript
-import { NextRequest, NextResponse } from "next/server";
-import { createMetadata, Metadata, ValidatedMetadata } from "@sherrylinks/sdk";
+import { NextRequest, NextResponse } from 'next/server';
+import { createMetadata, Metadata, ValidatedMetadata } from '@sherrylinks/sdk';
 ```
 
 ### 2. Configure General Information
@@ -116,11 +116,11 @@ const metadata: Metadata = {
   // ... previous general information ...
   actions: [
     {
-      type: "dynamic", // Action type (always "dynamic" for mini apps)
-      label: "Execute Action", // Text that will appear on the button
-      description: "Description of what this specific action does",
+      type: 'dynamic', // Action type (always "dynamic" for mini apps)
+      label: 'Execute Action', // Text that will appear on the button
+      description: 'Description of what this specific action does',
       chains: {
-        source: "fuji", // Blockchain where it will execute (fuji = Avalanche Fuji Testnet)
+        source: 'fuji', // Blockchain where it will execute (fuji = Avalanche Fuji Testnet)
       },
       path: `/api/my-app`, // Path of the POST endpoint that will handle execution
       // Parameters will be defined in the next step
@@ -150,18 +150,18 @@ const metadata: Metadata = {
       // ... previous configuration ...
       params: [
         {
-          name: "message", // Parameter name (will be used as query param)
-          label: "Your Message", // Label that the user will see
-          type: "text", // Input type (text, number, email, etc.)
+          name: 'message', // Parameter name (will be used as query param)
+          label: 'Your Message', // Label that the user will see
+          type: 'text', // Input type (text, number, email, etc.)
           required: true, // Whether it's mandatory or not
-          description: "Enter the message you want to store on the blockchain",
+          description: 'Enter the message you want to store on the blockchain',
         },
         {
-          name: "amount",
-          label: "Amount (ETH)",
-          type: "number",
+          name: 'amount',
+          label: 'Amount (ETH)',
+          type: 'number',
           required: false,
-          description: "Amount in ETH (optional)",
+          description: 'Amount in ETH (optional)',
         },
       ],
     },
@@ -191,15 +191,18 @@ export async function GET(req: NextRequest) {
     // Return with CORS headers
     return NextResponse.json(validated, {
       headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
       },
     });
   } catch (error) {
-    console.error("Error creating metadata:", error);
-    return NextResponse.json({ error: "Failed to create metadata" }, {
-      status: 500,
-    });
+    console.error('Error creating metadata:', error);
+    return NextResponse.json(
+      { error: 'Failed to create metadata' },
+      {
+        status: 500,
+      },
+    );
   }
 }
 ```
@@ -243,12 +246,12 @@ export async function POST(req: NextRequest) {
 
 ```typescript
 // Process data (you can add your business logic here)
-console.log("Message received:", message);
-console.log("Amount received:", amount);
+console.log('Message received:', message);
+console.log('Amount received:', amount);
 
 // Create transaction
 const tx = {
-  to: "0x5ee75a1B1648C023e885E58bD3735Ae273f2cc52", // Destination address
+  to: '0x5ee75a1B1648C023e885E58bD3735Ae273f2cc52', // Destination address
   value: BigInt(amount ? parseFloat(amount) * 1e18 : 1000000), // Value in wei
   chainId: avalancheFuji.id, // Blockchain ID
   // data: "0x..." // You can add contract data here
@@ -296,10 +299,10 @@ export async function OPTIONS(request: NextRequest) {
   return new NextResponse(null, {
     status: 204,
     headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-      "Access-Control-Allow-Headers":
-        "Content-Type, Authorization, X-CSRF-Token, X-Requested-With, Accept",
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+      'Access-Control-Allow-Headers':
+        'Content-Type, Authorization, X-CSRF-Token, X-Requested-With, Accept',
     },
   });
 }

@@ -71,8 +71,8 @@ estructura que las plataformas necesitan para renderizar tu aplicación.
 Crea el archivo `app/api/mi-app/route.ts`:
 
 ```typescript
-import { NextRequest, NextResponse } from "next/server";
-import { createMetadata, Metadata, ValidatedMetadata } from "@sherrylinks/sdk";
+import { NextRequest, NextResponse } from 'next/server';
+import { createMetadata, Metadata, ValidatedMetadata } from '@sherrylinks/sdk';
 ```
 
 ### 2. Configurar la Información General
@@ -118,11 +118,11 @@ const metadata: Metadata = {
   // ... información general anterior ...
   actions: [
     {
-      type: "dynamic", // Tipo de acción (siempre "dynamic" para mini apps)
-      label: "Ejecutar Acción", // Texto que aparecerá en el botón
-      description: "Descripción de lo que hace esta acción específica",
+      type: 'dynamic', // Tipo de acción (siempre "dynamic" para mini apps)
+      label: 'Ejecutar Acción', // Texto que aparecerá en el botón
+      description: 'Descripción de lo que hace esta acción específica',
       chains: {
-        source: "fuji", // Blockchain donde se ejecutará (fuji = Avalanche Fuji Testnet)
+        source: 'fuji', // Blockchain donde se ejecutará (fuji = Avalanche Fuji Testnet)
       },
       path: `/api/mi-app`, // Ruta del endpoint POST que manejará la ejecución
       // Los parámetros los definiremos en el siguiente paso
@@ -152,19 +152,18 @@ const metadata: Metadata = {
       // ... configuración anterior ...
       params: [
         {
-          name: "mensaje", // Nombre del parámetro (se usará como query param)
-          label: "Tu Mensaje", // Etiqueta que verá el usuario
-          type: "text", // Tipo de input (text, number, email, etc.)
+          name: 'mensaje', // Nombre del parámetro (se usará como query param)
+          label: 'Tu Mensaje', // Etiqueta que verá el usuario
+          type: 'text', // Tipo de input (text, number, email, etc.)
           required: true, // Si es obligatorio o no
-          description:
-            "Ingresa el mensaje que quieres guardar en la blockchain",
+          description: 'Ingresa el mensaje que quieres guardar en la blockchain',
         },
         {
-          name: "cantidad",
-          label: "Cantidad (ETH)",
-          type: "number",
+          name: 'cantidad',
+          label: 'Cantidad (ETH)',
+          type: 'number',
           required: false,
-          description: "Cantidad en ETH (opcional)",
+          description: 'Cantidad en ETH (opcional)',
         },
       ],
     },
@@ -194,15 +193,18 @@ export async function GET(req: NextRequest) {
     // Retornar con headers CORS
     return NextResponse.json(validated, {
       headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
       },
     });
   } catch (error) {
-    console.error("Error creando metadata:", error);
-    return NextResponse.json({ error: "Error al crear metadata" }, {
-      status: 500,
-    });
+    console.error('Error creando metadata:', error);
+    return NextResponse.json(
+      { error: 'Error al crear metadata' },
+      {
+        status: 500,
+      },
+    );
   }
 }
 ```
@@ -246,12 +248,12 @@ export async function POST(req: NextRequest) {
 
 ```typescript
 // Procesar los datos (aquí puedes agregar tu lógica de negocio)
-console.log("Mensaje recibido:", mensaje);
-console.log("Cantidad recibida:", cantidad);
+console.log('Mensaje recibido:', mensaje);
+console.log('Cantidad recibida:', cantidad);
 
 // Crear la transacción
 const tx = {
-  to: "0x5ee75a1B1648C023e885E58bD3735Ae273f2cc52", // Dirección destino
+  to: '0x5ee75a1B1648C023e885E58bD3735Ae273f2cc52', // Dirección destino
   value: BigInt(cantidad ? parseFloat(cantidad) * 1e18 : 1000000), // Valor en wei
   chainId: avalancheFuji.id, // ID de la blockchain
   // data: "0x..." // Puedes agregar datos de contrato aquí
@@ -299,10 +301,10 @@ export async function OPTIONS(request: NextRequest) {
   return new NextResponse(null, {
     status: 204,
     headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-      "Access-Control-Allow-Headers":
-        "Content-Type, Authorization, X-CSRF-Token, X-Requested-With, Accept",
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+      'Access-Control-Allow-Headers':
+        'Content-Type, Authorization, X-CSRF-Token, X-Requested-With, Accept',
     },
   });
 }

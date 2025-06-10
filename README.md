@@ -57,21 +57,21 @@ yarn add @sherrylinks/sdk
 ### Basic Mini-App
 
 ```typescript
-import { createMetadata, Metadata } from "@sherrylinks/sdk";
+import { createMetadata, Metadata } from '@sherrylinks/sdk';
 
 // Create a simple token transfer metadata
 const metadata: Metadata = {
-  url: "https://myapp.example",
-  icon: "https://example.com/icon.png",
-  title: "Send AVAX",
-  description: "Quick AVAX transfer",
+  url: 'https://myapp.example',
+  icon: 'https://example.com/icon.png',
+  title: 'Send AVAX',
+  description: 'Quick AVAX transfer',
   actions: [
     {
-      label: "Send 0.1 AVAX",
-      description: "Transfer 0.1 AVAX to recipient",
-      to: "0x1234567890123456789012345678901234567890",
+      label: 'Send 0.1 AVAX',
+      description: 'Transfer 0.1 AVAX to recipient',
+      to: '0x1234567890123456789012345678901234567890',
       amount: 0.1,
-      chains: { source: "avalanche" },
+      chains: { source: 'avalanche' },
     },
   ],
 };
@@ -83,98 +83,102 @@ const validatedMetadata = createMetadata(metadata);
 ### Nested Action Flow
 
 ```typescript
-import { ActionFlow, createMetadata, Metadata } from "@sherrylinks/sdk";
+import { ActionFlow, createMetadata, Metadata } from '@sherrylinks/sdk';
 
 // Create a flow with multiple steps and decision points
 const swapFlow: ActionFlow = {
-  type: "flow",
-  label: "Token Swap",
-  initialActionId: "select-tokens",
+  type: 'flow',
+  label: 'Token Swap',
+  initialActionId: 'select-tokens',
   actions: [
     // Step 1: Select tokens and amount
     {
-      id: "select-tokens",
-      type: "http",
-      label: "Select Tokens",
-      path: "https://api.example.com/quote",
+      id: 'select-tokens',
+      type: 'http',
+      label: 'Select Tokens',
+      path: 'https://api.example.com/quote',
       params: [
         // Token selection parameters...
       ],
-      nextActions: [{ actionId: "review-quote" }],
+      nextActions: [{ actionId: 'review-quote' }],
     },
 
     // Step 2: Review and decide
     {
-      id: "review-quote",
-      type: "decision",
-      label: "Review Quote",
-      title: "Review Your Swap",
+      id: 'review-quote',
+      type: 'decision',
+      label: 'Review Quote',
+      title: 'Review Your Swap',
       options: [
-        { label: "Confirm", value: "confirm", nextActionId: "execute-swap" },
-        { label: "Cancel", value: "cancel", nextActionId: "cancelled" },
+        { label: 'Confirm', value: 'confirm', nextActionId: 'execute-swap' },
+        { label: 'Cancel', value: 'cancel', nextActionId: 'cancelled' },
       ],
     },
 
     // Step 3: Execute swap
     {
-      id: "execute-swap",
-      type: "blockchain",
-      label: "Swap Tokens",
-      address: "0xRouterAddress",
+      id: 'execute-swap',
+      type: 'blockchain',
+      label: 'Swap Tokens',
+      address: '0xRouterAddress',
       // ... other blockchain action properties
       nextActions: [
         {
-          actionId: "success",
-          conditions: [{
-            field: "lastResult.status",
-            operator: "eq",
-            value: "success",
-          }],
+          actionId: 'success',
+          conditions: [
+            {
+              field: 'lastResult.status',
+              operator: 'eq',
+              value: 'success',
+            },
+          ],
         },
         {
-          actionId: "failed",
-          conditions: [{
-            field: "lastResult.status",
-            operator: "eq",
-            value: "error",
-          }],
+          actionId: 'failed',
+          conditions: [
+            {
+              field: 'lastResult.status',
+              operator: 'eq',
+              value: 'error',
+            },
+          ],
         },
       ],
     },
 
     // Completion states
     {
-      id: "success",
-      type: "completion",
-      label: "Swap Complete",
-      message: "Your swap was successful!",
-      status: "success",
+      id: 'success',
+      type: 'completion',
+      label: 'Swap Complete',
+      message: 'Your swap was successful!',
+      status: 'success',
     },
 
     {
-      id: "failed",
-      type: "completion",
-      label: "Swap Failed",
-      message: "Your swap failed. Please try again.",
-      status: "error",
+      id: 'failed',
+      type: 'completion',
+      label: 'Swap Failed',
+      message: 'Your swap failed. Please try again.',
+      status: 'error',
     },
 
     {
-      id: "cancelled",
-      type: "completion",
-      label: "Swap Cancelled",
-      message: "You cancelled the swap.",
-      status: "info",
+      id: 'cancelled',
+      type: 'completion',
+      label: 'Swap Cancelled',
+      message: 'You cancelled the swap.',
+      status: 'info',
     },
   ],
 };
 
 // Add to metadata
 const flowMetadata: Metadata = {
-  url: "https://swap.example",
-  icon: "https://example.com/swap-icon.png",
-  title: "Advanced Token Swap",
-  description: "Swap tokens with our guided flow",
+  url: 'https://swap.example',
+  icon: 'https://example.com/swap-icon.png',
+  title: 'Advanced Token Swap',
+  description: 'Swap tokens with our guided flow',
   actions: [swapFlow],
 };
 
@@ -404,23 +408,23 @@ Create interactive, multi-step experiences with conditional paths:
 The SDK provides template helpers for common parameter types:
 
 ```typescript
-import { createParameter, PARAM_TEMPLATES } from "@sherrylinks/sdk";
+import { createParameter, PARAM_TEMPLATES } from '@sherrylinks/sdk';
 
 // Create a parameter using a template
 const emailParam = createParameter(PARAM_TEMPLATES.EMAIL, {
-  name: "email",
-  label: "Your Email",
+  name: 'email',
+  label: 'Your Email',
   required: true,
 });
 
 // Create a select parameter with custom options
 const tokenParam = createParameter(PARAM_TEMPLATES.TOKEN_SELECT, {
-  name: "token",
-  label: "Select Token",
+  name: 'token',
+  label: 'Select Token',
   // Override default options
   options: [
-    { label: "USDC", value: "usdc" },
-    { label: "DAI", value: "dai" },
+    { label: 'USDC', value: 'usdc' },
+    { label: 'DAI', value: 'dai' },
   ],
 });
 ```
@@ -458,17 +462,17 @@ Check the `src/examples` directory for complete implementations.
 The SDK provides extensive validation to ensure your mini-apps work correctly:
 
 ```typescript
-import { validateMetadata } from "@sherrylinks/sdk";
+import { validateMetadata } from '@sherrylinks/sdk';
 
 // Validate metadata
 const validationResult = validateMetadata(myMetadata);
 
 if (validationResult.isValid) {
   // Ready to use!
-  console.log("Metadata is valid:", validationResult.type);
+  console.log('Metadata is valid:', validationResult.type);
 } else {
   // Handle validation errors
-  console.error("Validation errors:", validationResult.errors);
+  console.error('Validation errors:', validationResult.errors);
 }
 ```
 
@@ -523,11 +527,31 @@ cd docs && yarn install && yarn start
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+1. **Fork the repository.**
+
+2. **Clone your fork and create a new branch from `develop`:**
+
+   ```bash
+   git clone https://github.com/YOUR_USERNAME/sherry-sdk.git
+   cd sherry-sdk
+   git switch -c feature/amazing-feature develop
+   ```
+
+3. **Commit your changes:**
+
+   ```bash
+   # ...do your work...
+   git add .
+   git commit -m "feat: Add amazing feature"
+   ```
+
+4. **Push to your branch:**
+
+   ```bash
+   git push origin feature/amazing-feature
+   ```
+
+5. **Open a Pull Request** to the `develop` branch.
 
 ## 📄 License
 
