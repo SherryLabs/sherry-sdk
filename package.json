@@ -1,6 +1,6 @@
 {
   "name": "@sherrylinks/sdk",
-  "version": "2.20.13-beta.1",
+  "version": "2.21.19-beta.1",
   "description": "SDK for Sherry Links",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
@@ -14,6 +14,16 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.esm.js",
       "require": "./dist/index.js"
+    },
+    "./headers": {
+      "import": "./dist/headers/index.js",
+      "require": "./dist/headers/index.cjs",
+      "types": "./dist/headers/index.d.ts"
+    },
+    "./executors": {
+      "import": "./dist/executors/index.js",
+      "require": "./dist/executors/index.cjs",
+      "types": "./dist/executors/index.d.ts"
     }
   },
   "files": [

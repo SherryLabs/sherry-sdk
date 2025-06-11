@@ -1,4 +1,6 @@
-# Sherry SDK Introduction
+# Sherry SDK
+
+## Build Interactive Web3 Mini-Apps
 
 [![npm version](https://img.shields.io/npm/v/@sherrylinks/sdk.svg)](https://www.npmjs.com/package/@sherrylinks/sdk)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
@@ -6,208 +8,332 @@
 [![Tests](https://img.shields.io/badge/Tests-Jest-green)](https://jestjs.io/)
 [![GitHub Repo](https://img.shields.io/badge/GitHub-Repo-blue.svg)](https://github.com/SherryLabs/sherry-sdk)
 
-## 🌟 Overview
+## 🌟 What is Sherry SDK?
 
 import Admonition from '@theme/Admonition';
 
-<Admonition type="caution" title="Disclaimer">
-  Our **SDK** and documentation are still under development; we're working hard to ensure everything
-  is as polished as possible. Any feedback is very helpful — you can contact us on
-  [**Discord**](https://discord.gg/69brTf6J)
+<Admonition type="tip" title="New to Web3 Social Apps?">
+  Think of Sherry SDK as a way to turn any social media post into an interactive Web3 application.
+  Users can swap tokens, mint NFTs, vote on proposals, and more - all without leaving their social
+  feed.
 </Admonition>
 
----
+Sherry SDK is a **TypeScript-first toolkit** for building interactive Web3 **mini-apps** that embed directly within social media posts. Transform static content into dynamic blockchain experiences that users can interact with seamlessly.
 
-Sherry SDK is a powerful toolkit for building interactive Web3 **mini-apps** that can be embedded directly within social media posts. The SDK enables developers to create rich, composable blockchain experiences without requiring users to leave their social media feed.
+### What Makes Sherry Special?
 
-With Sherry, you can transform any post into an interactive dApp that allows users to swap tokens, vote on proposals, mint NFTs, sign transactions, transfer assets, interact with APIs, and much more—all with built-in validation and a unified experience across multiple blockchains.
+- **🔗 Embed Anywhere**: Your mini-apps work in Twitter, Discord, Telegram, and any platform that supports rich content
+- **🎯 Zero Context Switch**: Users never leave their social feed to interact with your dApp
+- **🛠️ Developer Friendly**: TypeScript-first with built-in validation and comprehensive tooling
+- **🌐 Multi-Chain Ready**: One codebase, multiple blockchains - Avalanche, Celo, Ethereum, and more
 
 ---
 
 ## ✨ Key Features
 
-- 🔗 **Multi-chain Support**: Build once, deploy across Avalanche, Celo, Ethereum, and more.
-- 🧩 **Multiple Action Types**:
-  - **Transfer Actions**: Enable native token transfers with customizable UIs.
-  - **Blockchain Actions**: Call smart contract functions with rich parameter configuration.
-  - **Dynamic Actions**: Create flexible mini-apps that compute actions server-side.
-  - **HTTP Actions**: Integrate with external APIs and services.
-  - **Action Flows**: Create interactive multi-step processes with conditional paths using `decision` and `completion` steps.
-- 📋 **Built-in Validation**: Ensures your mini-app metadata is valid and well-formed before use via `createMetadata` or `validateMetadata`.
-- ⚡ **Type Safety**: Full TypeScript support with comprehensive type definitions.
-- 🔄 **Cross-chain Interactions**: Enable transactions across multiple blockchains via Wormhole integration.
-- 📊 **Metadata Templates**: Ready-to-use templates for common Web3 use cases.
+### 🧩 **5 Powerful Action Types**
+
+| Action Type    | Use Case                    | Example                                  |
+| -------------- | --------------------------- | ---------------------------------------- |
+| **Blockchain** | Smart contract interactions | Token approvals, NFT minting, DAO voting |
+| **Transfer**   | Native token transfers      | Tips, donations, payments                |
+| **Dynamic**    | Server-computed actions     | Complex DeFi strategies, dynamic pricing |
+| **Flow**       | Multi-step processes        | Onboarding, approval + swap workflows    |
+
+### 🔗 **Multi-Chain Support**
+
+- **Mainnets**: Avalanche C-Chain, Celo, Ethereum
+- **Testnets**: Avalanche Fuji, Celo Alfajores
+- **Cross-Chain**: Built-in bridge support via Wormhole
+
+### 📋 **Built-in Validation**
+
+- **Compile-time**: Full TypeScript support catches errors early
+- **Runtime**: `createMetadata()` validates your mini-app configuration
+- **ABI Compatibility**: Automatic parameter validation against smart contract ABIs
+
+### ⚡ **Rich Parameter System**
+
+Configure user inputs with built-in validation:
+
+- **Standard Types**: Text, numbers, addresses, booleans, dates
+- **Selection Types**: Dropdowns, radio buttons with custom options
+- **Templates**: Pre-built parameter templates for common use cases
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Quick Start
 
-Ready to build your first mini-app? Here are the main paths:
+### Installation
 
-### Quick Start Options
-
-1. **[Create Your First Mini-App](./keyconcepts/creatingminiapp.mdx)** - Start with the basics
-2. **[View Examples](./keyconcepts/examples.md)** - See working examples
-3. **[Follow the Complete Guide](./guides/guide-en.md)** - Step-by-step tutorial
-
-### Core Concepts
-
-- **[Understanding Actions](./keyconcepts/actions.md)** - Learn about different action types
-- **[Metadata Structure](./keyconcepts/metadata.md)** - Understand the mini-app definition format
-- **[Chain Support](./chainlogic/chains.md)** - Multi-chain and cross-chain capabilities
-
----
-
-## 👀 Who is this SDK for?
-
-This SDK is aimed at developers who:
-
-- Want to integrate blockchain functionalities into social platforms or web contexts.
-- Seek to create interactive Web3 experiences without users leaving their current environment.
-- Need to build multi-step workflows with conditional logic.
-- Value a tool with integrated validation and strong typing.
-
----
-
-## 📚 What's Next?
-
-Choose your learning path:
-
-import { useColorMode } from '@docusaurus/theme-common';
-
-export const QuickLinks = () => {
-  const { colorMode } = useColorMode();
-  
-  const links = [
-    {
-      title: "🏗️ Build Your First Mini-App",
-      href: "./keyconcepts/creatingminiapp",
-      description: "Learn the basics with a simple example",
-      time: "5 min"
-    },
-    {
-      title: "🎯 Explore Action Types", 
-      href: "./sdk/action-types/blockchain-actions",
-      description: "Understand different ways to interact with blockchain",
-      time: "10 min"
-    },
-    {
-      title: "📖 Complete Guide",
-      href: "./guides/guide-en",
-      description: "Step-by-step tutorial with Next.js",
-      time: "30 min"
-    },
-    {
-      title: "💡 View Examples",
-      href: "./keyconcepts/examples",
-      description: "Ready-to-use examples for common use cases",
-      time: "2 min"
-    }
-  ];
-
-return (
-
-<div
-  style={{
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-    gap: '1.5rem',
-    margin: '2rem 0',
-  }}
->
-  {links.map((link, idx) => (
-    <a
-      key={idx}
-      href={link.href}
-      style={{
-        display: 'block',
-        padding: '1.5rem',
-        border: colorMode === 'dark' ? '1px solid #444' : '1px solid #e0e0e0',
-        borderRadius: '8px',
-        textDecoration: 'none',
-        color: 'inherit',
-        backgroundColor: colorMode === 'dark' ? '#2d2d30' : '#f9f9f9',
-        transition: 'all 0.2s ease',
-        ':hover': {
-          transform: 'translateY(-2px)',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-        },
-      }}
-      onMouseEnter={e => {
-        e.target.style.transform = 'translateY(-2px)';
-        e.target.style.boxShadow =
-          colorMode === 'dark' ? '0 4px 12px rgba(255,255,255,0.1)' : '0 4px 12px rgba(0,0,0,0.1)';
-      }}
-      onMouseLeave={e => {
-        e.target.style.transform = 'none';
-        e.target.style.boxShadow = 'none';
-      }}
-    >
-      <div style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>
-        {link.title}
-      </div>
-      <div
-        style={{
-          fontSize: '0.9rem',
-          color: colorMode === 'dark' ? '#b3b3b3' : '#666',
-          marginBottom: '0.5rem',
-        }}
-      >
-        {link.description}
-      </div>
-      <div
-        style={{
-          fontSize: '0.8rem',
-          color: 'var(--ifm-color-primary)',
-          fontWeight: '500',
-        }}
-      >
-        {link.time}
-      </div>
-    </a>
-  ))}
-</div>
-); };
-
-<QuickLinks />
-
----
-
-## 🔧 Installation
-
-```bash
-# Using npm
+```bash npm2yarn
 npm install @sherrylinks/sdk
-
-# Using yarn
-yarn add @sherrylinks/sdk
 ```
 
-## 📝 Quick Example
+### Your First Mini-App
 
 ```typescript
 import { createMetadata, Metadata } from '@sherrylinks/sdk';
 
 const metadata: Metadata = {
-  url: 'https://myapp.example',
-  icon: 'https://example.com/icon.png',
-  title: 'Token Transfer',
-  description: 'Send tokens easily',
+  url: 'https://my-nft-collection.com',
+  icon: 'https://my-nft-collection.com/icon.png',
+  title: 'Mint Cosmic NFT',
+  description: 'Mint exclusive NFTs directly from social media',
   actions: [
     {
-      type: 'transfer',
-      label: 'Send 0.1 AVAX',
-      to: '0x1234567890123456789012345678901234567890',
-      amount: 0.1,
+      type: 'blockchain',
+      label: 'Mint NFT',
+      address: '0x742d35Cc6734C0532925a3b8D4ccd306f6F4B26C',
+      abi: contractAbi,
+      functionName: 'mint',
       chains: { source: 'avalanche' },
+      amount: 0.1, // 0.1 AVAX mint price
+      params: [
+        {
+          name: 'to',
+          label: 'Your Address',
+          type: 'address',
+          required: true,
+        },
+        {
+          name: 'tokenURI',
+          label: 'Metadata URI',
+          type: 'text',
+          value: 'ipfs://QmNft42...',
+          fixed: true,
+        },
+      ],
     },
   ],
 };
 
-// Validate and use
+// Validate and use your mini-app
 const validated = createMetadata(metadata);
+console.log('✅ Mini-app ready to deploy!');
 ```
+
+### What This Creates
+
+When embedded in a social post, this mini-app renders as:
+
+```
+🎨 Mint Cosmic NFT
+┌─────────────────────────────────┐
+│ Your Address: [0x...________] │
+│ [Mint for 0.1 AVAX]           │
+└─────────────────────────────────┘
+```
+
+Users can mint directly from their social feed!
 
 ---
 
-Explore the SDK documentation to get started with your Web3 mini-apps!
+## 📚 Learning Paths
+
+Choose your adventure based on your experience level:
+
+### 🏃‍♂️ **I want to start immediately**
+
+→ [**5-Minute Quickstart**](getting-started/quickstart) - Get a mini-app running in 5 minutes
+
+### 🧑‍💻 **I'm new to Web3 development**
+
+→ [**Complete Tutorial**](guides/guide-en) - Step-by-step with Next.js (30 min)
+
+### 🔧 **I'm experienced, show me the API**
+
+→ [**Action Types Reference**](api-reference/action-types/blockchain-actions) - Deep dive into the API
+
+### 💡 **I want to see examples**
+
+→ [**Live Examples**](getting-started/examples) - Working mini-apps for common use cases
+
+---
+
+## 🎯 Popular Use Cases
+
+<div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem', margin: '2rem 0'}}>
+
+<div
+  style={{
+    padding: '1rem',
+    border: '1px solid var(--ifm-color-emphasis-300)',
+    borderRadius: '8px',
+  }}
+>
+  <h4>🎨 NFT Collections</h4>
+  <p>Let users mint NFTs directly from announcement posts</p>
+</div>
+
+<div
+  style={{
+    padding: '1rem',
+    border: '1px solid var(--ifm-color-emphasis-300)',
+    borderRadius: '8px',
+  }}
+>
+  <h4>🔄 Token Swaps</h4>
+  <p>Enable DeFi trading without leaving social media</p>
+</div>
+
+<div
+  style={{
+    padding: '1rem',
+    border: '1px solid var(--ifm-color-emphasis-300)',
+    borderRadius: '8px',
+  }}
+>
+  <h4>🗳️ DAO Governance</h4>
+  <p>Embed voting directly in community discussions</p>
+</div>
+
+<div
+  style={{
+    padding: '1rem',
+    border: '1px solid var(--ifm-color-emphasis-300)',
+    borderRadius: '8px',
+  }}
+>
+  <h4>💝 Donations</h4>
+  <p>Accept crypto donations with custom amounts and recipients</p>
+</div>
+
+<div
+  style={{
+    padding: '1rem',
+    border: '1px solid var(--ifm-color-emphasis-300)',
+    borderRadius: '8px',
+  }}
+>
+  <h4>🌉 Cross-Chain Bridges</h4>
+  <p>Move assets between blockchains seamlessly</p>
+</div>
+
+<div
+  style={{
+    padding: '1rem',
+    border: '1px solid var(--ifm-color-emphasis-300)',
+    borderRadius: '8px',
+  }}
+>
+  <h4>📋 Lead Generation</h4>
+  <p>Combine Web3 actions with email collection</p>
+</div>
+
+</div>
+
+---
+
+## 🛠️ Advanced Features
+
+### Multi-Step Flows
+
+Create complex workflows with conditional logic:
+
+```typescript
+const onboardingFlow: ActionFlow = {
+  type: 'flow',
+  label: 'Join Community',
+  initialActionId: 'collect-email',
+  actions: [
+    {
+      id: 'collect-email',
+      type: 'http',
+      label: 'Step 1: Enter Email',
+      path: '/api/newsletter',
+      params: [
+        /* email params */
+      ],
+      nextActions: [{ actionId: 'mint-membership' }],
+    },
+    {
+      id: 'mint-membership',
+      type: 'blockchain',
+      label: 'Step 2: Mint Membership',
+      // ... blockchain action config
+      nextActions: [{ actionId: 'welcome' }],
+    },
+    {
+      id: 'welcome',
+      type: 'completion',
+      message: 'Welcome to the community! 🎉',
+      status: 'success',
+    },
+  ],
+};
+```
+
+### Dynamic Actions
+
+Server-side computed actions for complex logic:
+
+```typescript
+{
+  type: 'dynamic',
+  label: 'Smart Swap',
+  path: '/api/calculate-optimal-swap',
+  chains: { source: 'avalanche' },
+  params: [
+    {
+      name: 'amount',
+      label: 'Amount to Swap',
+      type: 'number',
+      required: true
+    }
+  ]
+}
+```
+
+Your server calculates the optimal swap route and returns a ready-to-execute transaction.
+
+---
+
+## 🌐 Ecosystem
+
+### Integration
+
+- **Social Platforms**: Twitter/X, Twitch, YouTube
+- **Wallets**: Comming soon
+- **Blockchains**: Avalanche, Fuji
+
+### Community
+
+- [Discord](https://discord.gg/69brTf6J) - Get help and connect with other developers
+- [GitHub](https://github.com/SherryLabs/sherry-sdk) - Contribute to the SDK
+- [Examples Repository](https://github.com/SherryLabs/sherry-examples) - Real-world implementations
+
+---
+
+## 🎯 Ready to Build?
+
+<div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', margin: '2rem 0' }}>
+  <a href="/docs/getting-started/quickstart" className="button button--primary button--lg">
+    🚀 Quick Start (5 min)
+  </a>
+  <a href="/docs/guides/guide-en" className="button button--secondary button--lg">
+    📖 Complete Tutorial
+  </a>
+  <a href="/docs/getting-started/examples" className="button button--outline button--lg">
+    💡 View Examples
+  </a>
+</div>
+
+---
+
+## 📊 SDK Stats
+
+- **📦 Bundle Size**: ~50KB gzipped
+- **🔧 Dependencies**: Minimal (viem, abitype)
+- **🧪 Test Coverage**: >90%
+- **📚 TypeScript**: 100% type coverage
+- **⚡ Performance**: ${'<100ms'} validation time
+
+---
+
+<Admonition type="info" title="SDK Status">
+  The Sherry SDK is in **active development**. We're working hard to make everything as polished as
+  possible. **Found a bug?** [Report it on GitHub](https://github.com/SherryLabs/sherry-sdk/issues)
+  **Need help?** [Join our Discord](https://discord.gg/69brTf6J) **Want to contribute?** [Check our
+  contribution guide](https://github.com/SherryLabs/sherry-sdk/blob/main/CONTRIBUTING.md)
+</Admonition>

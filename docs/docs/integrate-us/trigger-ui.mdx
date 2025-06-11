@@ -1,0 +1,680 @@
+---
+title: TriggerKit - UI Integration Guide
+description: Complete guide for integrating TriggerKit into React and Next.js applications
+sidebar_position: 1
+---
+
+# 🚀 TriggerKit Frontend Integration Guide
+
+Transform your React and Next.js applications with interactive blockchain-based MiniApps.
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import CodeBlock from '@theme/CodeBlock';
+
+:::warning ⚠️ Beta Notice
+TriggerKit is currently in active development. Some properties and APIs may change in future releases. The bypass proxy feature is temporary while we fine-tune our infrastructure.
+:::
+
+## ⚡ Quick Start
+
+<Tabs>
+<TabItem value="npm" label="📦 npm">
+
+```bash
+npm install @sherrylabs/trigger-kit @sherrylabs/trigger-nucleo
+```
+
+</TabItem>
+<TabItem value="yarn" label="🧶 Yarn">
+
+```bash
+yarn add @sherrylabs/trigger-kit @sherrylabs/trigger-nucleo
+```
+
+</TabItem>
+<TabItem value="pnpm" label="🏃 pnpm">
+
+```bash
+pnpm add @sherrylabs/trigger-kit @sherrylabs/trigger-nucleo
+```
+
+</TabItem>
+</Tabs>
+
+---
+
+## 📋 Prerequisites
+
+Ensure these peer dependencies are installed:
+
+```json title="Required Dependencies"
+{
+  "@sherrylabs/slinks-core": "^1.0.0",
+  "@tanstack/react-query": "^4.0.0",
+  "wagmi": "^2.0.0",
+  "viem": "^2.0.0",
+  "react": "^18.0.0",
+  "react-dom": "^18.0.0",
+  "framer-motion": "^10.0.0"
+}
+```
+
+---
+
+## 🛠 Setup Guide
+
+### 🎨 Step 1: Import Styles
+
+Import the required CSS styles in your application entry point:
+
+<Tabs>
+<TabItem value="react" label="⚛️ React (main.tsx)">
+
+```tsx title="src/main.tsx"
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
+// ...existing code...
+import '@sherrylabs/slinks/index.css';
+
+ReactDOM.createRoot(document.getElementById('root')!).render(<App />);
+```
+
+</TabItem>
+<TabItem value="nextjs" label="▲ Next.js (_app.tsx)">
+
+```tsx title="pages/_app.tsx"
+import type { AppProps } from 'next/app';
+// ...existing code...
+import '@sherrylabs/slinks/index.css';
+
+export default function App({ Component, pageProps }: AppProps) {
+  return <Component {...pageProps} />;
+}
+```
+
+</TabItem>
+</Tabs>
+
+### ⚙️ Step 2: Configure Providers
+
+Set up Wagmi and React Query providers:
+
+```tsx title="src/providers/Web3Provider.tsx"
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { WagmiProvider, createConfig, http } from 'wagmi';
+import { avalanche, avalancheFuji, celo, celoAlfajores } from 'wagmi/chains';
+import { injected, metaMask, coinbaseWallet } from 'wagmi/connectors';
+
+// Create Wagmi configuration
+const config = createConfig({
+  chains: [avalanche, avalancheFuji, celo, celoAlfajores],
+  connectors: [injected(), metaMask(), coinbaseWallet({ appName: 'My dApp' })],
+  transports: {
+    [avalanche.id]: http(),
+    [avalancheFuji.id]: http(),
+    [celo.id]: http(),
+    [celoAlfajores.id]: http(),
+  },
+});
+
+// Create React Query client
+const queryClient = new QueryClient();
+
+function App() {
+  return (
+    <WagmiProvider config={config}>
+      <QueryClientProvider client={queryClient}>{/* Your app here */}</QueryClientProvider>
+    </WagmiProvider>
+  );
+}
+```
+
+### 🔧 Step 3: Initialize MiniApp Directory
+
+```tsx title="src/lib/sherry-init.ts"
+import { MiniAppDirectory, setClientKey } from '@sherrylabs/slinks-core';
+
+export async function initializeSherrySDK() {
+  // Optional: Set client key if your website has one
+  const websiteClientKey = process.env.REACT_APP_SHERRY_CLIENT_KEY;
+  if (websiteClientKey) {
+    setClientKey(websiteClientKey);
+  }
+
+  // Initialize Directory
+  const directory = MiniAppDirectory.getInstance();
+  try {
+    await directory.init({
+      refreshInterval: 60 * 60 * 1000, // 1 hour
+    });
+    console.log('✅ MiniApp Directory initialized');
+    return true;
+  } catch (error) {
+    console.error('❌ Failed to initialize MiniApp Directory:', error);
+    return false;
+  }
+}
+```
+
+---
+
+## 💡 Usage Examples
+
+### 🔰 Basic MiniApp with URL
+
+```tsx title="src/components/BasicMiniApp.tsx"
+import React from 'react';
+import { MiniAppComponent, useWagmiAdapter } from '@sherrylabs/slinks/next';
+
+export function BasicMiniApp() {
+  const adapter = useWagmiAdapter();
+
+  return (
+    <div className="max-w-md mx-auto p-4">
+      <h2 className="text-xl font-bold mb-4">🔄 Token Swap</h2>
+
+      <MiniAppComponent
+        url="https://app.sherry.social/action/swap"
+        adapter={adapter}
+        bypassProxy={true} // ⚠️ Beta only
+        stylePreset="default"
+      />
+    </div>
+  );
+}
+```
+
+### 🚀 Advanced MiniApp with Custom Metadata
+
+```tsx title="src/components/AdvancedMiniApp.tsx"
+import React, { useState, useEffect } from 'react';
+import { MiniAppComponent, useWagmiAdapter } from '@sherrylabs/slinks/next';
+import { createMetadata, type ValidatedMetadata } from '@sherrylabs/sdk';
+
+const swapMetadata = {
+  url: 'https://swap.sherry.social',
+  icon: 'https://example.com/icon.png',
+  title: 'AVAX to USDT Swap',
+  description: 'Swap AVAX for USDT on Trader Joe V2.2',
+  baseUrl: 'https://api.sherry.social',
+  actions: [
+    {
+      label: 'Dynamic SWAP',
+      type: 'dynamic',
+      description: 'Dynamic Swap',
+      path: '/v1/gtm/swap',
+      chains: {
+        source: 'fuji',
+      },
+      params: [
+        {
+          type: 'address',
+          name: 'fromToken',
+          label: 'From Token',
+          description: 'Token to send',
+          required: true,
+        },
+        {
+          type: 'address',
+          name: 'toToken',
+          label: 'To Token',
+          description: 'Token to receive',
+          required: true,
+        },
+      ],
+    },
+  ],
+};
+
+export function AdvancedMiniApp() {
+  const adapter = useWagmiAdapter();
+  const [metadata, setMetadata] = useState<ValidatedMetadata | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    try {
+      const validated = createMetadata(swapMetadata);
+      setMetadata(validated);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Error validating metadata');
+      console.error('Error validating metadata:', err);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="max-w-md mx-auto p-4">
+        <div className="animate-pulse bg-gray-200 h-64 rounded-lg"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="max-w-md mx-auto p-4">
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+          <h3 className="text-red-800 font-medium">❌ Error</h3>
+          <p className="text-red-600 text-sm mt-1">{error}</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="max-w-md mx-auto p-4">
+      <div className="mb-4">
+        <h2 className="text-xl font-bold">⚡ Advanced Token Swap</h2>
+        <p className="text-gray-600 text-sm">With pre-validated metadata</p>
+      </div>
+
+      <MiniAppComponent
+        metadata={metadata!}
+        adapter={adapter}
+        securityState="trusted"
+        stylePreset="default"
+      />
+    </div>
+  );
+}
+```
+
+---
+
+## 📖 Component Props Reference
+
+### 🧩 MiniAppComponent
+
+| Prop            | Type                                             | Required | Description                                       |
+| --------------- | ------------------------------------------------ | :------: | ------------------------------------------------- |
+| `adapter`       | `SherryAdapter`                                  |    ✅    | Wallet adapter instance                           |
+| `url`           | `string`                                         |    ⚠️    | URL to fetch metadata (either this or `metadata`) |
+| `metadata`      | `ValidatedMetadata`                              |    ⚠️    | Pre-validated metadata (either this or `url`)     |
+| `securityState` | `'trusted' \| 'unknown' \| 'malicious'`          |    ❌    | Security status indicator                         |
+| `stylePreset`   | `'default' \| 'x-dark' \| 'x-light' \| 'custom'` |    ❌    | Visual theme                                      |
+| `bypassProxy`   | `boolean`                                        |    ❌    | Direct fetch (Beta only)                          |
+
+:::info 💡 Configuration Types
+You must provide either `url` **OR** `metadata`, but not both.
+:::
+
+### 🎨 Style Presets
+
+<Tabs>
+<TabItem value="default" label="🌟 Default">
+
+```tsx
+<MiniAppComponent
+  url="https://app.sherry.social/action/swap"
+  adapter={adapter}
+  stylePreset="default"
+/>
+```
+
+</TabItem>
+<TabItem value="dark" label="🌙 Dark Theme">
+
+```tsx
+<MiniAppComponent
+  url="https://app.sherry.social/action/swap"
+  adapter={adapter}
+  stylePreset="x-dark"
+/>
+```
+
+</TabItem>
+<TabItem value="light" label="☀️ Light Theme">
+
+```tsx
+<MiniAppComponent
+  url="https://app.sherry.social/action/swap"
+  adapter={adapter}
+  stylePreset="x-light"
+/>
+```
+
+</TabItem>
+</Tabs>
+
+---
+
+## 🔧 Framework Integration
+
+<Tabs>
+<TabItem value="nextjs-app" label="▲ Next.js App Router">
+
+```tsx title="app/components/MiniAppWrapper.tsx"
+'use client';
+
+import { MiniAppComponent, useWagmiAdapter } from '@sherrylabs/slinks/next';
+
+interface MiniAppWrapperProps {
+  url: string;
+  title?: string;
+}
+
+export default function MiniAppWrapper({ url, title }: MiniAppWrapperProps) {
+  const adapter = useWagmiAdapter();
+
+  return (
+    <div className="bg-white rounded-lg shadow-sm border p-6">
+      {title && <h3 className="text-lg font-semibold mb-4">{title}</h3>}
+
+      <MiniAppComponent url={url} adapter={adapter} bypassProxy={true} stylePreset="default" />
+    </div>
+  );
+}
+```
+
+</TabItem>
+<TabItem value="nextjs-pages" label="📄 Next.js Pages Router">
+
+```tsx title="pages/_app.tsx"
+import type { AppProps } from 'next/app';
+import { Web3Provider } from '../src/providers/Web3Provider';
+import '@sherrylabs/slinks/index.css';
+
+export default function App({ Component, pageProps }: AppProps) {
+  return (
+    <Web3Provider>
+      <Component {...pageProps} />
+    </Web3Provider>
+  );
+}
+```
+
+</TabItem>
+</Tabs>
+
+---
+
+## ⚡ Performance Optimization
+
+### 🦥 Lazy Loading
+
+```tsx title="src/components/LazyMiniApp.tsx"
+import React, { lazy, Suspense } from 'react';
+import { MiniAppComponent, useWagmiAdapter } from '@sherrylabs/slinks/next';
+
+const LazyMiniAppComponent = lazy(() =>
+  import('@sherrylabs/slinks/next').then(module => ({
+    default: module.MiniAppComponent,
+  })),
+);
+
+function LoadingSpinner() {
+  return (
+    <div className="flex items-center justify-center h-64">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+    </div>
+  );
+}
+
+export function LazyMiniApp({ url }: { url: string }) {
+  const adapter = useWagmiAdapter();
+
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <LazyMiniAppComponent url={url} adapter={adapter} bypassProxy={true} />
+    </Suspense>
+  );
+}
+```
+
+### 📝 Memoization
+
+```tsx title="src/components/OptimizedMiniApp.tsx"
+import React, { memo, useMemo } from 'react';
+import { MiniAppComponent, useWagmiAdapter } from '@sherrylabs/slinks/next';
+
+interface OptimizedMiniAppProps {
+  url: string;
+  securityState?: 'trusted' | 'unknown' | 'malicious';
+}
+
+export const OptimizedMiniApp = memo(function OptimizedMiniApp({
+  url,
+  securityState = 'unknown',
+}: OptimizedMiniAppProps) {
+  const adapter = useWagmiAdapter();
+
+  const memoizedProps = useMemo(
+    () => ({
+      url,
+      adapter,
+      securityState,
+      stylePreset: 'default',
+    }),
+    [url, adapter, securityState],
+  );
+
+  return <MiniAppComponent {...memoizedProps} />;
+});
+```
+
+---
+
+## 🛡️ Error Handling
+
+```tsx title="src/components/MiniAppWithErrorBoundary.tsx"
+import React, { Component, ReactNode } from 'react';
+import { MiniAppComponent, useWagmiAdapter } from '@sherrylabs/slinks/next';
+
+interface ErrorBoundaryState {
+  hasError: boolean;
+  error: Error | null;
+}
+
+class MiniAppErrorBoundary extends Component<{ children: ReactNode }, ErrorBoundaryState> {
+  constructor(props: { children: ReactNode }) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error: Error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+    console.error('Error caught in MiniAppErrorBoundary:', error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+          <h3 className="text-red-800 font-medium">❌ MiniApp Error</h3>
+          <p className="text-red-600 text-sm mt-1">
+            {this.state.error?.message || 'Something went wrong'}
+          </p>
+          <button
+            className="mt-2 text-sm text-red-600 underline"
+            onClick={() => this.setState({ hasError: false })}
+          >
+            🔄 Try again
+          </button>
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}
+
+export function MiniAppWithErrorBoundary({ url }: { url: string }) {
+  const adapter = useWagmiAdapter();
+
+  return (
+    <MiniAppErrorBoundary>
+      <MiniAppComponent url={url} adapter={adapter} bypassProxy={true} stylePreset="default" />
+    </MiniAppErrorBoundary>
+  );
+}
+```
+
+---
+
+## 🌍 Environment Configuration
+
+```bash title=".env.local"
+# 🔑 Sherry SDK Configuration
+REACT_APP_SHERRY_CLIENT_KEY=your_client_key_here
+REACT_APP_SHERRY_API_BASE_URL=https://api.sherry.social
+
+# 🔧 Development settings
+REACT_APP_BYPASS_PROXY=true
+REACT_APP_DEBUG_MODE=true
+```
+
+---
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+<details>
+<summary><strong>❌ "MiniApp Directory not initialized"</strong></summary>
+
+Make sure to initialize the directory before using MiniApps:
+
+```tsx
+import { MiniAppDirectory } from '@sherrylabs/slinks-core';
+
+useEffect(() => {
+  MiniAppDirectory.getInstance().init({});
+}, []);
+```
+
+</details>
+
+<details>
+<summary><strong>🚫 CORS Issues</strong></summary>
+
+Use `bypassProxy: true` for beta testing, but be aware this may cause CORS issues:
+
+```tsx
+<MiniAppComponent
+  url="https://app.sherry.social/action/swap"
+  adapter={adapter}
+  bypassProxy={true} // ⚠️ May cause CORS issues
+/>
+```
+
+</details>
+
+<details>
+<summary><strong>🎨 Styles not applying</strong></summary>
+
+Ensure you've imported the CSS file:
+
+```tsx
+import '@sherrylabs/slinks/index.css';
+```
+
+</details>
+
+<details>
+<summary><strong>🔌 useWagmiAdapter hook error</strong></summary>
+
+Verify your component is wrapped in providers:
+
+```tsx
+function App() {
+  return (
+    <WagmiProvider config={config}>
+      <QueryClientProvider client={queryClient}>
+        <MyComponent /> {/* ✅ useWagmiAdapter() works here */}
+      </QueryClientProvider>
+    </WagmiProvider>
+  );
+}
+```
+
+</details>
+
+---
+
+## 🔄 Migration Guide
+
+### From Previous Versions
+
+<Tabs>
+<TabItem value="imports" label="📥 Update Imports">
+
+```tsx
+// ❌ Before
+import { MiniApp } from '@sherrylabs/slinks';
+
+// ✅ After
+import { MiniAppComponent } from '@sherrylabs/slinks/next';
+```
+
+</TabItem>
+<TabItem value="adapter" label="🔌 Update Adapter">
+
+```tsx
+// ❌ Before
+const adapter = createWagmiAdapter(wagmiConfig);
+
+// ✅ After
+const adapter = useWagmiAdapter();
+```
+
+</TabItem>
+<TabItem value="props" label="⚙️ Update Props">
+
+```tsx
+// ❌ Before
+<MiniApp metadata={metadata} walletAdapter={adapter} />
+
+// ✅ After
+<MiniAppComponent
+  metadata={metadata}
+  adapter={adapter}
+  securityState="trusted"
+/>
+```
+
+</TabItem>
+</Tabs>
+
+---
+
+## 🤝 Support & Resources
+
+<div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+  <div className="border rounded-lg p-4">
+    <h3 className="font-semibold mb-2">📚 Documentation</h3>
+    <p className="text-sm text-gray-600">Complete API reference and guides</p>
+  </div>
+
+<div className="border rounded-lg p-4">
+  <h3 className="font-semibold mb-2">💬 Community</h3>
+  <p className="text-sm text-gray-600">
+    <a href="https://discord.com/invite/sherry" className="text-blue-600 hover:underline">
+      Join our Discord
+    </a>
+  </p>
+</div>
+
+<div className="border rounded-lg p-4">
+  <h3 className="font-semibold mb-2">🐛 Issues</h3>
+  <p className="text-sm text-gray-600">
+    <a
+      href="https://github.com/orgs/SherryLabs/repositories"
+      className="text-blue-600 hover:underline"
+    >
+      Report on GitHub
+    </a>
+  </p>
+</div>
+
+  <div className="border rounded-lg p-4">
+    <h3 className="font-semibold mb-2">📖 Examples</h3>
+    <p className="text-sm text-gray-600">Complete working examples and demos</p>
+  </div>
+</div>

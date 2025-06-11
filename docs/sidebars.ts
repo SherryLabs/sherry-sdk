@@ -17,7 +17,7 @@ const sidebars: SidebarsConfig = {
         {
             type: 'category',
             label: 'Getting Started',
-            collapsed: false,
+            collapsed: true,
             link: {
                 type: 'generated-index',
                 title: 'Getting Started with Sherry SDK',
@@ -28,7 +28,7 @@ const sidebars: SidebarsConfig = {
                 'intro', // Introduction to the SDK
                 'getting-started/quickstart', // Quick Start Guide
                 'getting-started/creatingminiapp', // Creating Your First Mini-App
-                'sdk/examples', // Examples
+                'getting-started/examples', // Examples
             ],
         },
 
@@ -36,7 +36,7 @@ const sidebars: SidebarsConfig = {
         {
             type: 'category',
             label: 'Core Concepts',
-            collapsed: false,
+            collapsed: true,
             link: {
                 type: 'generated-index',
                 title: 'Core Concepts',
@@ -44,9 +44,10 @@ const sidebars: SidebarsConfig = {
                 slug: '/core-concepts',
             },
             items: [
-                'getting-started/actions', // Actions overview
-                'getting-started/metadata', // Metadata Structure
-                'api-reference/chainlogic/chains', // Chain Logic
+                'core-concepts/actions', // Actions overview
+                'core-concepts/metadata', // Metadata Structure
+                'core-concepts/chains', // Chain Logic
+                'core-concepts/cross-chain', // Cross-Chain Logic
             ],
         },
 
@@ -54,7 +55,7 @@ const sidebars: SidebarsConfig = {
         {
             type: 'category',
             label: 'API Reference',
-            collapsed: false,
+            collapsed: true,
             link: {
                 type: 'generated-index',
                 title: 'API Reference',
@@ -69,24 +70,42 @@ const sidebars: SidebarsConfig = {
                         type: 'generated-index',
                         title: 'SDK Action Types',
                         description: 'Explore the different actions you can define.',
-                        slug: '/sdk/action-types',
+                        slug: '/api/action-types',
                     },
                     items: [
-                        'api-reference/action-types/blockchain-actions',
                         'api-reference/action-types/transfer-actions',
-                        'api-reference/action-types/http-actions',
+                        'api-reference/action-types/blockchain-actions',
+                        'api-reference/action-types/dynamic-actions',
                         'api-reference/action-types/nested-action-flows',
                     ],
                 },
                 'api-reference/parameters/parameters',
             ],
         },
-
-        // 4. Guides Section
+        // 4. Integrate Us Section
+        {
+            type: 'category',
+            label: 'Integrate Sherry',
+            collapsed: true,
+            link: {
+                type: 'generated-index',
+                title: 'Integrate Sherry TriggertKit',
+                description: 'Detailed reference for the Sherry SDK components.',
+                slug: '/integrate-us',
+            },
+            items: [
+                'integrate-us/trigger-ui',
+                'integrate-us/trigger-ui-extension', // Overview of the SDK
+                //'integrate-us/sdk-setup', // Setting up the SDK
+                //'integrate-us/sdk-integration', // Integrating the SDK into your project
+                //'integrate-us/sdk-configuration', // Configuring the SDK
+            ],
+        },
+        // 5. Guides Section
         {
             type: 'category',
             label: 'Guides',
-            collapsed: false,
+            collapsed: true,
             link: {
                 type: 'generated-index',
                 title: 'Guides & Tutorials',
@@ -100,7 +119,7 @@ const sidebars: SidebarsConfig = {
             ],
         },
 
-        // 5. Cross-Chain Section
+        // 6. Cross-Chain Section
         {
             type: 'category',
             label: 'Cross-Chain',
