@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ---
 description: Complete step-by-step guide to build dynamic mini apps using Next.js and the Sherry Links SDK
 sidebar_position: 1
@@ -113,11 +114,50 @@ Before we start building, it's important to understand how Sherry Links connects
 <Tabs>
 <TabItem value="npm" label="npm" default>
 
+=======
+# Creating Mini Apps with Next.js and Sherry SDK
+
+<iframe
+  style={{ width: '100%', aspectRatio: '16 / 9', border: 'none' }}
+  src="https://www.youtube.com/embed/Aq6gqxjEoxo"
+  title="YouTube video player"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+  allowfullscreen
+></iframe>
+
+This guide will teach you step by step how to create a mini app using Next.js
+and the Sherry Links SDK. Mini apps are dynamic applications that can be
+integrated into different platforms and allow users to interact with smart
+contracts in a simple way.
+
+## Table of Contents
+
+1. [Prerequisites](#prerequisites)
+2. [Initial Setup](#initial-setup)
+3. [Creating the GET Endpoint - Metadata](#creating-the-get-endpoint---metadata)
+4. [Creating the POST Endpoint - Execution](#creating-the-post-endpoint---execution)
+5. [CORS Handling](#cors-handling)
+6. [Testing Your Mini App](#testing-your-mini-app)
+7. [Troubleshooting](#troubleshooting)
+
+## Prerequisites
+
+- Node.js (version 18.x or higher)
+- npm, yarn, or pnpm
+- Basic knowledge of Next.js and TypeScript
+- Blockchain platform account (for testing)
+
+## Initial Setup
+
+### 1. Create Next.js Project
+
+>>>>>>> develop
 ```bash
 npx create-next-app@latest my-sherry-app --typescript --eslint --tailwind --src-dir --app --import-alias "@/*"
 cd my-sherry-app
 ```
 
+<<<<<<< HEAD
 </TabItem>
 <TabItem value="yarn" label="yarn">
 
@@ -142,10 +182,15 @@ cd my-sherry-app
 <Tabs>
 <TabItem value="npm" label="npm" default>
 
+=======
+### 2. Install Dependencies
+
+>>>>>>> develop
 ```bash
 npm install @sherrylinks/sdk viem wagmi
 ```
 
+<<<<<<< HEAD
 </TabItem>
 <TabItem value="yarn" label="yarn">
 
@@ -170,6 +215,13 @@ pnpm add @sherrylinks/sdk viem wagmi
 </Admonition>
 
 ```javascript title="next.config.js"
+=======
+### 3. Configure Next.js (Optional)
+
+To avoid build errors with ESLint, you can disable it in `next.config.js`:
+
+```javascript
+>>>>>>> develop
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   eslint: {
@@ -180,6 +232,7 @@ const nextConfig = {
 module.exports = nextConfig;
 ```
 
+<<<<<<< HEAD
 ## 🎯 Creating the GET Endpoint - Metadata
 
 The GET endpoint is the **heart** of your mini app. Here you define all the information and structure that platforms need to render your application.
@@ -188,16 +241,27 @@ The GET endpoint is the **heart** of your mini app. Here you define all the info
   Metadata tells platforms **how** to render your mini app, **what** inputs to show users, and
   **where** to send the data when users interact with it.
 </Admonition>
+=======
+## Creating the GET Endpoint - Metadata
+
+The GET endpoint is the heart of your mini app. Here you define all the
+information and structure that platforms need to render your application.
+>>>>>>> develop
 
 ### 1. Create the Route File
 
 Create the file `app/api/my-app/route.ts`:
 
+<<<<<<< HEAD
 ```typescript title="app/api/my-app/route.ts"
+=======
+```typescript
+>>>>>>> develop
 import { NextRequest, NextResponse } from 'next/server';
 import { createMetadata, Metadata, ValidatedMetadata } from '@sherrylinks/sdk';
 ```
 
+<<<<<<< HEAD
 ### 2. Set Up the Basic GET Handler Structure
 
 ```typescript
@@ -281,11 +345,64 @@ const metadata: Metadata = {
       chains: { source: 'fuji' },
       path: `/api/my-app`,
       // Parameters will be added in the next step
+=======
+### 2. Configure General Information
+
+Let's start by defining the basic information of your mini app:
+
+```typescript
+export async function GET(req: NextRequest) {
+    try {
+        // Get server base URL
+        const host = req.headers.get('host') || 'localhost:3000';
+        const protocol = req.headers.get('x-forwarded-proto') || 'http';
+        const serverUrl = `${protocol}://${host}`;
+
+        const metadata: Metadata = {
+            url: "https://your-website.com", // Your main website URL
+            icon: "https://your-website.com/icon.png", // Your app icon URL
+            title: "My Mini App", // Title that will appear on platforms
+            baseUrl: serverUrl, // Base URL where your app is hosted
+            description: "Detailed description of what your mini app does",
+            // Actions will be defined in the next step
+        };
+    }
+}
+```
+
+#### General Fields Explanation:
+
+- **url**: URL of your main website or documentation
+- **icon**: Image that will represent your mini app (must be publicly
+  accessible)
+- **title**: Short and descriptive name of your application
+- **baseUrl**: URL where your application is running (automatically constructed)
+- **description**: Clear explanation of what your mini app does
+
+### 3. Define Actions
+
+Now let's add the actions that users can perform:
+
+```typescript
+const metadata: Metadata = {
+  // ... previous general information ...
+  actions: [
+    {
+      type: 'dynamic', // Action type (always "dynamic" for mini apps)
+      label: 'Execute Action', // Text that will appear on the button
+      description: 'Description of what this specific action does',
+      chains: {
+        source: 'fuji', // Blockchain where it will execute (fuji = Avalanche Fuji Testnet)
+      },
+      path: `/api/my-app`, // Path of the POST endpoint that will handle execution
+      // Parameters will be defined in the next step
+>>>>>>> develop
     },
   ],
 };
 ```
 
+<<<<<<< HEAD
 <details>
 <summary><strong>Understanding Action Properties</strong></summary>
 
@@ -323,12 +440,49 @@ const metadata: Metadata = {
           required: true,
           description: 'Enter the message you want to store on the blockchain',
         },
+=======
+#### Action Fields Explanation:
+
+- **type**: Must always be "dynamic" for mini apps
+- **label**: Button text that users will see
+- **description**: Explanation of what this action does
+- **chains.source**: Blockchain name (e.g: "fuji", "ethereum", "polygon")
+- **path**: Path of your POST endpoint that will execute the action
+
+### 4. Configure Parameters
+
+Parameters are the data that the user must provide. If they don't have a default
+value, an input will be rendered:
+
+```typescript
+const metadata: Metadata = {
+  // ... previous information ...
+  actions: [
+    {
+      // ... previous configuration ...
+      params: [
+        {
+          name: 'message', // Parameter name (will be used as query param)
+          label: 'Your Message', // Label that the user will see
+          type: 'text', // Input type (text, number, email, etc.)
+          required: true, // Whether it's mandatory or not
+          description: 'Enter the message you want to store on the blockchain',
+        },
+        {
+          name: 'amount',
+          label: 'Amount (ETH)',
+          type: 'number',
+          required: false,
+          description: 'Amount in ETH (optional)',
+        },
+>>>>>>> develop
       ],
     },
   ],
 };
 ```
 
+<<<<<<< HEAD
 <Admonition type="info" title="Parameter Types Available">
   - `"text"`: Single-line text input - `"textarea"`: Multi-line text input - `"number"`: Numeric
   input with validation - `"email"`: Email input with validation - `"url"`: URL input with
@@ -336,10 +490,23 @@ const metadata: Metadata = {
 </Admonition>
 
 ### 6. Validate and Return the Metadata
+=======
+#### Available Parameter Types:
+
+- **text**: Free text field
+- **number**: Numbers only
+- **email**: Email validation
+- **url**: URL validation
+- **password**: Password field
+- **textarea**: Long text
+
+### 5. Validate and Return Metadata
+>>>>>>> develop
 
 ```typescript
 export async function GET(req: NextRequest) {
   try {
+<<<<<<< HEAD
     const host = req.headers.get('host') || 'localhost:3000';
     const protocol = req.headers.get('x-forwarded-proto') || 'http';
     const serverUrl = `${protocol}://${host}`;
@@ -374,6 +541,14 @@ export async function GET(req: NextRequest) {
     const validated: ValidatedMetadata = createMetadata(metadata);
 
     // Return with CORS headers for cross-origin access
+=======
+    // ... previous metadata construction ...
+
+    // Validate metadata using SDK
+    const validated: ValidatedMetadata = createMetadata(metadata);
+
+    // Return with CORS headers
+>>>>>>> develop
     return NextResponse.json(validated, {
       headers: {
         'Access-Control-Allow-Origin': '*',
@@ -382,11 +557,21 @@ export async function GET(req: NextRequest) {
     });
   } catch (error) {
     console.error('Error creating metadata:', error);
+<<<<<<< HEAD
     return NextResponse.json({ error: 'Failed to create metadata' }, { status: 500 });
+=======
+    return NextResponse.json(
+      { error: 'Failed to create metadata' },
+      {
+        status: 500,
+      },
+    );
+>>>>>>> develop
   }
 }
 ```
 
+<<<<<<< HEAD
 <Admonition type="success" title="Validation Benefits">
   The `createMetadata()` function validates your metadata structure and ensures it meets the Sherry
   SDK requirements before returning it to the platform.
@@ -1542,6 +1727,96 @@ export async function POST(req: NextRequest) {
   }
 }
 
+=======
+## Creating the POST Endpoint - Execution
+
+The POST endpoint handles the actual execution of your mini app. It receives
+user parameters and returns a serialized transaction.
+
+### 1. Set Up POST Handler
+
+```typescript
+import { avalancheFuji } from "viem/chains";
+import { ExecutionResponse } from "@sherrylinks/sdk";
+import { serialize } from 'wagmi';
+
+export async function POST(req: NextRequest) {
+    try {
+        // Get parameters from URL
+        const { searchParams } = new URL(req.url);
+        const message = searchParams.get("message");
+        const amount = searchParams.get("amount");
+
+        // Validate required parameters
+        if (!message) {
+            return NextResponse.json(
+                { error: "The 'message' parameter is required" },
+                {
+                    status: 400,
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
+                        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+                        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+                    },
+                }
+            );
+        }
+```
+
+### 2. Process Data and Create Transaction
+
+```typescript
+// Process data (you can add your business logic here)
+console.log('Message received:', message);
+console.log('Amount received:', amount);
+
+// Create transaction
+const tx = {
+  to: '0x5ee75a1B1648C023e885E58bD3735Ae273f2cc52', // Destination address
+  value: BigInt(amount ? parseFloat(amount) * 1e18 : 1000000), // Value in wei
+  chainId: avalancheFuji.id, // Blockchain ID
+  // data: "0x..." // You can add contract data here
+};
+```
+
+### 3. Serialize and Return Transaction
+
+```typescript
+        // Serialize transaction
+        const serializedTx = serialize(tx);
+
+        // Create response
+        const response: ExecutionResponse = {
+            serializedTransaction: serializedTx,
+            chainId: avalancheFuji.name, // Chain name
+        };
+
+        return NextResponse.json(response, {
+            status: 200,
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+                "Access-Control-Allow-Headers": "Content-Type, Authorization",
+            },
+        });
+
+    } catch (error) {
+        console.error("Error in POST:", error);
+        return NextResponse.json(
+            { error: "Internal server error" },
+            { status: 500 }
+        );
+    }
+}
+```
+
+## CORS Handling
+
+To allow your mini app to be used from different domains, you need to handle
+OPTIONS requests:
+
+```typescript
+>>>>>>> develop
 export async function OPTIONS(request: NextRequest) {
   return new NextResponse(null, {
     status: 204,
@@ -1549,6 +1824,7 @@ export async function OPTIONS(request: NextRequest) {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
       'Access-Control-Allow-Headers':
+<<<<<<< HEAD
         'Content-Type, Authorization, X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Date, X-Api-Version',
     },
   });
@@ -1642,3 +1918,106 @@ This repository contains:
     <strong>Good luck with your mini app development and minithon submission! 🏆</strong>
   </p>
 </div>
+=======
+        'Content-Type, Authorization, X-CSRF-Token, X-Requested-With, Accept',
+    },
+  });
+}
+```
+
+## Testing Your Mini App
+
+Once you've created your GET endpoint, you have several options to test your
+mini app:
+
+### Option 1: Sherry Social App
+
+1. Go to [https://app.sherry.social/home](https://app.sherry.social/home)
+2. In the address field, enter your GET endpoint URL
+3. Example: `http://localhost:3000/api/my-app` (for local development)
+4. The platform will automatically render your mini app
+
+### Option 2: Sherry Debugger (Recommended for Development)
+
+The debugger allows you to test your mini app in multiple ways:
+
+1. Go to
+   [https://app.sherry.social/debugger](https://app.sherry.social/debugger)
+
+2. **Option A - URL**: Paste your GET endpoint URL
+3. **Option B - JSON**: Copy and paste your endpoint's JSON response
+4. **Option C - TypeScript**: Paste your TypeScript code directly
+
+**Note**: The debugger is in development and may have bugs. You can report
+issues directly from the debugger interface.
+
+### Testing Steps:
+
+1. **Start your development server**:
+
+   ```bash
+   npm run dev
+   ```
+
+2. **Verify your GET endpoint**:
+
+   - Go to `http://localhost:3000/api/my-app`
+   - You should see the metadata JSON
+
+3. **Test in debugger**:
+
+   - Use URL: `http://localhost:3000/api/my-app`
+   - Verify that input fields render correctly
+   - Try completing the form and submitting
+
+4. **Verify execution**:
+   - Complete required fields
+   - Click the action button
+   - You should receive a serialized transaction
+
+## Troubleshooting
+
+### Error: "CORS policy"
+
+- Make sure all your endpoints include correct CORS headers
+- Verify that the OPTIONS method is implemented
+
+### Error: "Metadata validation failed"
+
+- Check that all required fields are present
+- Verify that data types are correct
+- Use `createMetadata()` to validate your metadata
+
+### Error: "Parameter required"
+
+- Make sure required parameters are marked as `required: true`
+- Verify that parameter names match between metadata and POST
+
+### Mini app doesn't render correctly
+
+- Verify that your GET endpoint URL is publicly accessible
+- Check browser console for JavaScript errors
+- Make sure the JSON response is valid
+
+### Transaction serialization errors
+
+- Verify that values are in the correct format (BigInt for wei values)
+- Make sure chainId is valid
+- Check that the 'to' address is a valid Ethereum address
+
+## Example Code
+
+### English
+
+You can find a complete example of this tutorial in the following repository:
+[https://github.com/SherryLabs/sherry-example](https://github.com/SherryLabs/sherry-example)
+
+This repository contains all the code needed to implement a functional mini app
+using Next.js and Sherry SDK.
+
+---
+
+Congratulations! You now have your first mini app working with Sherry SDK. You
+can expand functionality by adding more parameters, custom validations, or
+integrating with more complex smart contracts.
+>>>>>>> develop
