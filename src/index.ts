@@ -27,15 +27,11 @@ export {
     validateImageDimensions,
     ParameterValidator,
     isFileParameter,
-    isImageParameter
+    isImageParameter,
 } from './validators';
 
 // Export file parameter types
-export type {
-    FileParameter,
-    ImageParameter,
-    FileInputType
-} from './interface/inputs';
+export type { FileParameter, ImageParameter, FileInputType } from './interface/inputs';
 
 // Export examples for reference
 export { miniApps as exampleMiniApps } from './examples/example-miniapps';
@@ -48,7 +44,10 @@ export {
 
 // New Executors Architecture
 export { BaseExecutor, type ExecutorOptions } from './executors/baseExecutor';
-export { DynamicActionExecutor, type BlockchainContext, createDynamicExecutor, createAnonymousExecutor } from './executors/dynamicExecutor';
+export {
+    DynamicActionExecutor,
+    type BlockchainContext,
+    createDynamicExecutor,
+    createAnonymousExecutor,
+} from './executors/dynamicExecutor';
 export { MiniAppExecutor } from './executors/miniAppExecutor';
-
-

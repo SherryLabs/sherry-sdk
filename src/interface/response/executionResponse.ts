@@ -40,7 +40,7 @@ export interface ExecutionResponse {
      * The serialized transaction ready for blockchain execution.
      * This should be generated using wagmi's serialize function or equivalent
      * and represents a complete, ready-to-sign transaction.
-     * 
+     *
      * @example "0x02f87083aa36a71482520894742d35cc6634c0532925a3b8d4..."
      */
     serializedTransaction: string;
@@ -48,14 +48,14 @@ export interface ExecutionResponse {
     /**
      * The blockchain network identifier where the transaction should be executed.
      * Use the human-readable chain name, not the numeric ID.
-     * 
+     *
      * Supported values include:
      * - "fuji" for Avalanche Fuji Testnet
      * - "avalanche" for Avalanche Mainnet
      * - "ethereum" for Ethereum Mainnet
      * - "polygon" for Polygon Mainnet
      * - "sepolia" for Ethereum Sepolia Testnet
-     * 
+     *
      * @example "fuji"
      */
     chainId: string;
@@ -64,7 +64,7 @@ export interface ExecutionResponse {
      * Optional contract ABI (Application Binary Interface) for transaction verification.
      * Including the ABI allows wallets and tools to verify the transaction
      * and provide better user experience by showing decoded function calls.
-     * 
+     *
      * @optional
      */
     abi?: any[];
@@ -73,14 +73,14 @@ export interface ExecutionResponse {
      * Optional decoded parameters that provide human-readable information
      * about the transaction. This enhances user experience by showing
      * what the transaction will do in clear terms.
-     * 
+     *
      * @optional
      */
     params?: {
         /**
          * The name of the smart contract function being called.
          * This should match the function name in the ABI.
-         * 
+         *
          * @example "transfer", "approve", "stakeTokens"
          */
         functionName: string;
@@ -96,7 +96,7 @@ export interface ExecutionResponse {
     /**
      * Cross-chain operation details (only present for cross-chain dynamic actions).
      * This provides transparency about what will happen on the destination chain.
-     * 
+     *
      * @optional
      */
     crossChain?: CrossChainInfo;
