@@ -2,177 +2,282 @@ import { describe, expect, it, jest, beforeEach, afterEach } from '@jest/globals
 import fetchMock from 'jest-fetch-mock';
 import { DynamicAction } from '../../src/interface/actions/dynamicAction';
 import { ExecutionResponse } from '../../src/interface/response/executionResponse';
-import { DynamicActionExecutor } from '../../src/executors/dynamicExecutor';
+import {
+    DynamicActionExecutor,
+    BlockchainContext,
+    createDynamicExecutor,
+    createAnonymousExecutor,
+} from '../../src/executors/dynamicExecutor';
 import { ActionValidationError } from '../../src/errors/customErrors';
 
 describe('DynamicActionExecutor', () => {
-    // Variables comunes para los tests
+    // Common variables for tests
     let executor: DynamicActionExecutor;
-    const baseUrl = 'https://api.base.com';
+    const clientKey = 'test-client-key';
+    const baseUrl = 'https://miniapp.example.com';
 
-    // Ejemplos de datos para los tests
+    // Sample data for tests
     const sampleInputs = { amount: 0.1, recipient: '0xRecipientAddress' };
-    const sampleContext = { userAddress: '0xUserAddress' };
+    const sampleContext: BlockchainContext & { baseUrl: string } = {
+        userAddress: '0xUserAddress',
+        sourceChain: 'fuji',
+        destinationChain: 'ethereum',
+        baseUrl: baseUrl,
+    };
 
-    // Acciones de ejemplo para tests
+    // Sample actions for tests
     const sampleAction: DynamicAction = {
         type: 'dynamic',
         label: 'Test Action',
-        path: '/api/endpoint',
+        path: '/api/transfer',
         chains: { source: 'fuji' },
         params: [
-            { name: 'amount', type: 'number', label: 'Amount' },
+            { name: 'amount', type: 'number', label: 'Amount', required: true },
+            { name: 'recipient', type: 'string', label: 'Recipient', required: true },
             {
                 name: 'fixedParam',
                 type: 'string',
                 value: 'fixedValue',
                 label: 'Fixed Param',
-                fixed: true,
             },
         ],
     };
 
-    // Respuestas simuladas para tests
+    // Mock responses for tests
     const validResponse: ExecutionResponse = {
         serializedTransaction: '0x1234567890abcdef',
         chainId: 'fuji',
     };
 
-    // Setup y cleanup para cada test
+    const validMetadataResponse = {
+        name: 'Test Mini App',
+        version: '1.0.0',
+        actions: [sampleAction],
+    };
+
+    // Setup and cleanup for each test
     beforeEach(() => {
-        executor = new DynamicActionExecutor(baseUrl);
+        executor = new DynamicActionExecutor(clientKey);
         fetchMock.resetMocks();
     });
 
-    // TEST 1: Verificar que el ejecutor funciona con una respuesta válida
-    it('should execute successfully with valid response', async () => {
-        // Configurar mock
-        fetchMock.mockResponseOnce(JSON.stringify(validResponse));
-
-        // Ejecutar
-        const result = await executor.execute(sampleAction, sampleInputs, sampleContext);
-
-        // Verificar
-        expect(fetchMock).toHaveBeenCalledTimes(1);
-        expect(result).toEqual(validResponse);
-    });
-
-    // TEST 2: Verificar que se genera error si falta baseUrl
-    it('should throw if baseUrl is missing for relative path', async () => {
-        // Crear ejecutor sin baseUrl
-        const localExecutor = new DynamicActionExecutor();
-
-        // Verificar
-        await expect(
-            localExecutor.execute(sampleAction, sampleInputs, sampleContext),
-        ).rejects.toThrow(ActionValidationError);
-
-        // No debería llamar a fetch
-        expect(fetchMock).not.toHaveBeenCalled();
-    });
-
-    // TEST 3: Verificar manejo de errores de red
-    it('should handle network errors properly', async () => {
-        // Mock fetch para lanzar error de red
-        fetchMock.mockRejectOnce(
-            new Error(
-                `Error executing action 'Test Action': Invalid JSON response: invalid json response body at  reason: Unexpected end of JSON input`,
-            ),
-        );
-
-        // Verificar que el error se captura y relanza correctamente
-        await expect(executor.execute(sampleAction, sampleInputs, sampleContext)).rejects.toThrow(
-            ActionValidationError,
-        );
-
-        await expect(executor.execute(sampleAction, sampleInputs, sampleContext)).rejects.toThrow(
-            `Error executing action 'Test Action': Invalid JSON response: invalid json response body at  reason: Unexpected end of JSON input`,
-        );
-    });
-
-    // TEST 4: Verificar manejo de errores HTTP
-    it('should handle HTTP errors properly', async () => {
-        // Mock fetch para retornar respuesta HTTP con error
-        fetchMock.mockResponseOnce(JSON.stringify({ error: 'Database failure' }), {
-            status: 500,
-            statusText: 'Internal Server Error',
+    describe('Constructor and Factory Functions', () => {
+        it('should create executor with client key', () => {
+            const executorWithKey = new DynamicActionExecutor('my-key');
+            expect(executorWithKey).toBeInstanceOf(DynamicActionExecutor);
         });
 
-        // Verificar que el error HTTP se maneja correctamente
-        await expect(executor.execute(sampleAction, sampleInputs, sampleContext)).rejects.toThrow(
-            ActionValidationError,
-        );
+        it('should create executor without client key', () => {
+            const executorWithoutKey = new DynamicActionExecutor();
+            expect(executorWithoutKey).toBeInstanceOf(DynamicActionExecutor);
+        });
 
-        await expect(executor.execute(sampleAction, sampleInputs, sampleContext)).rejects.toThrow(
-            /Error executing action 'Test Action': Invalid JSON response: invalid json response body at  reason: Unexpected end of JSON input/,
-        );
+        it('should create executor using factory function', () => {
+            const factoryExecutor = createDynamicExecutor('factory-key');
+            expect(factoryExecutor).toBeInstanceOf(DynamicActionExecutor);
+        });
+
+        it('should create anonymous executor', () => {
+            const anonymousExecutor = createAnonymousExecutor();
+            expect(anonymousExecutor).toBeInstanceOf(DynamicActionExecutor);
+        });
     });
 
-    // TEST 5: Verificar adaptación de respuesta
-    it('should adapt response correctly', async () => {
-        // Respuesta en formato alternativo
-        const alternativeResponse = {
-            tx: '0x1234567890abcdef',
-            network: 'fuji',
-            functionName: 'transfer',
-            params: { amount: 100, recipient: '0xAddress' },
-        };
+    describe('getMetadata', () => {
+        it('should get metadata successfully', async () => {
+            fetchMock.mockResponseOnce(JSON.stringify(validMetadataResponse));
 
-        // Expected adaptation
-        const expectedAdapted = {
-            serializedTransaction: '0x1234567890abcdef',
-            chainId: 'fuji',
-            params: {
-                functionName: 'transfer',
-                args: { amount: 100, recipient: '0xAddress' },
-            },
-        };
+            const result = await executor.getMetadata(baseUrl);
 
-        // Mock fetch
-        fetchMock.mockResponseOnce(JSON.stringify(alternativeResponse));
+            expect(fetchMock).toHaveBeenCalledTimes(1);
+            expect(result).toEqual(validMetadataResponse);
 
-        // Ejecutar
-        const result = await executor.execute(sampleAction, sampleInputs, sampleContext);
+            // Verify the request was made to proxy
+            const call = fetchMock.mock.calls[0];
+            expect(call[0]).toBe('https://proxy.sherry.social/proxy');
+        });
 
-        // Verificar
-        expect(result.serializedTransaction).toBe(expectedAdapted.serializedTransaction);
-        expect(result.chainId).toBe(expectedAdapted.chainId);
-        expect(result.params).toEqual(expectedAdapted.params);
+        it('should handle custom path in getMetadata', async () => {
+            fetchMock.mockResponseOnce(JSON.stringify(validMetadataResponse));
+
+            await executor.getMetadata(baseUrl, '/custom/metadata');
+
+            expect(fetchMock).toHaveBeenCalledTimes(1);
+        });
+
+        it('should handle custom headers in getMetadata', async () => {
+            fetchMock.mockResponseOnce(JSON.stringify(validMetadataResponse));
+
+            await executor.getMetadata(baseUrl, '/metadata', {
+                customHeaders: { 'X-Custom': 'value' },
+            });
+
+            expect(fetchMock).toHaveBeenCalledTimes(1);
+        });
     });
 
-    // TEST 6: Verificar error si la respuesta no se puede adaptar
-    it('should throw if response cannot be adapted', async () => {
-        // Respuesta completamente inválida
-        const invalidResponse = {
-            something: 'completely wrong',
-            missing: 'required fields',
-        };
+    describe('execute', () => {
+        it('should execute successfully with valid response', async () => {
+            fetchMock.mockResponseOnce(JSON.stringify(validResponse));
 
-        // Mock fetch
-        fetchMock.mockResponseOnce(JSON.stringify(invalidResponse));
+            const result = await executor.execute(sampleAction, sampleInputs, sampleContext);
 
-        // Verificar
-        await expect(executor.execute(sampleAction, sampleInputs, sampleContext)).rejects.toThrow(
-            ActionValidationError,
-        );
+            expect(fetchMock).toHaveBeenCalledTimes(1);
+            expect(result).toEqual(validResponse);
 
-        await expect(executor.execute(sampleAction, sampleInputs, sampleContext)).rejects.toThrow(
-            /Error executing action 'Test Action': Invalid JSON response: invalid json response body at  reason: Unexpected end of JSON input/,
-        );
+            // Verify the request was made to proxy
+            const call = fetchMock.mock.calls[0];
+            expect(call[0]).toBe('https://proxy.sherry.social/proxy');
+            expect(call[1]?.method).toBe('POST');
+        });
+
+        it('should throw error if userAddress is missing', async () => {
+            const invalidContext = { ...sampleContext, userAddress: '' };
+
+            await expect(
+                executor.execute(sampleAction, sampleInputs, invalidContext),
+            ).rejects.toThrow('User address is required');
+
+            expect(fetchMock).not.toHaveBeenCalled();
+        });
+
+        it('should throw error if sourceChain is missing', async () => {
+            const invalidContext = { ...sampleContext, sourceChain: '' };
+
+            await expect(
+                executor.execute(sampleAction, sampleInputs, invalidContext),
+            ).rejects.toThrow('Source chain is required');
+
+            expect(fetchMock).not.toHaveBeenCalled();
+        });
+
+        it('should throw error if baseUrl is missing', async () => {
+            const invalidContext = { ...sampleContext, baseUrl: '' };
+
+            await expect(
+                executor.execute(sampleAction, sampleInputs, invalidContext),
+            ).rejects.toThrow('Base URL is required');
+
+            expect(fetchMock).not.toHaveBeenCalled();
+        });
+
+        it('should throw error for required missing parameters', async () => {
+            const incompleteInputs = { amount: 0.1 }; // missing required 'recipient'
+
+            await expect(
+                executor.execute(sampleAction, incompleteInputs, sampleContext),
+            ).rejects.toThrow("Required parameter 'recipient' is missing");
+
+            expect(fetchMock).not.toHaveBeenCalled();
+        });
+
+        it('should handle network errors correctly', async () => {
+            fetchMock.mockReject(new Error('Network error'));
+
+            await expect(
+                executor.execute(sampleAction, sampleInputs, sampleContext),
+            ).rejects.toThrow("Error executing action 'Test Action': Network error");
+        });
+
+        it('should handle HTTP errors correctly', async () => {
+            fetchMock.mockResponseOnce(JSON.stringify({ error: 'Database failure' }), {
+                status: 500,
+                statusText: 'Internal Server Error',
+                headers: { 'Content-Type': 'application/json' },
+            });
+
+            await expect(
+                executor.execute(sampleAction, sampleInputs, sampleContext),
+            ).rejects.toThrow("Error executing action 'Test Action': HTTP 500:");
+        });
+
+        it('should handle timeout correctly', async () => {
+            fetchMock.mockImplementation(
+                () =>
+                    new Promise((resolve, reject) => {
+                        setTimeout(() => {
+                            const abortError = new Error('The operation was aborted');
+                            abortError.name = 'AbortError';
+                            reject(abortError);
+                        }, 1500);
+                    }),
+            );
+
+            await expect(
+                executor.execute(sampleAction, sampleInputs, sampleContext, { timeout: 1000 }),
+            ).rejects.toThrow('Request timeout after 1000ms');
+        });
+
+        it('should throw error if response cannot be adapted', async () => {
+            const invalidResponse = {
+                something: 'completely wrong',
+                missing: 'required fields',
+            };
+
+            fetchMock.mockResponseOnce(JSON.stringify(invalidResponse));
+
+            await expect(
+                executor.execute(sampleAction, sampleInputs, sampleContext),
+            ).rejects.toThrow('Invalid response format from action endpoint');
+        });
+
+        it('should handle JSON parsing errors', async () => {
+            fetchMock.mockResponseOnce('<!DOCTYPE html><html><body>Not JSON</body></html>');
+
+            await expect(
+                executor.execute(sampleAction, sampleInputs, sampleContext),
+            ).rejects.toThrow(/Error executing action 'Test Action':/);
+        });
+
+        it('should handle empty response', async () => {
+            fetchMock.mockResponseOnce('');
+
+            await expect(
+                executor.execute(sampleAction, sampleInputs, sampleContext),
+            ).rejects.toThrow('Empty response from proxy');
+        });
+
+        it('should handle custom headers and client key from options', async () => {
+            fetchMock.mockResponseOnce(JSON.stringify(validResponse));
+
+            await executor.execute(sampleAction, sampleInputs, sampleContext, {
+                clientKey: 'override-key',
+                customHeaders: { 'X-Custom': 'value' },
+                timeout: 5000,
+            });
+
+            expect(fetchMock).toHaveBeenCalledTimes(1);
+        });
+
+        it('should handle absolute URLs in action path', async () => {
+            const actionWithAbsoluteUrl = {
+                ...sampleAction,
+                path: 'https://external-api.com/endpoint',
+            };
+
+            fetchMock.mockResponseOnce(JSON.stringify(validResponse));
+
+            await executor.execute(actionWithAbsoluteUrl, sampleInputs, sampleContext);
+
+            expect(fetchMock).toHaveBeenCalledTimes(1);
+        });
     });
 
-    // TEST 7: Verificar error si hay un problema al parsear JSON
-    it('should handle JSON parsing errors', async () => {
-        // Mock fetch para simular error de JSON parsing
-        fetchMock.mockResponseOnce('<!DOCTYPE html><html><body>Not JSON</body></html>');
+    describe('Action Validation', () => {
+        it('should throw error for non-dynamic action type', async () => {
+            const invalidAction = { ...sampleAction, type: 'static' as any };
 
-        // Verificar
-        await expect(executor.execute(sampleAction, sampleInputs, sampleContext)).rejects.toThrow(
-            ActionValidationError,
-        );
+            await expect(
+                executor.execute(invalidAction, sampleInputs, sampleContext),
+            ).rejects.toThrow('Action type must be "dynamic"');
+        });
 
-        await expect(executor.execute(sampleAction, sampleInputs, sampleContext)).rejects.toThrow(
-            /Invalid JSON response/,
-        );
+        it('should throw error for missing action path', async () => {
+            const invalidAction = { ...sampleAction, path: '' };
+
+            await expect(
+                executor.execute(invalidAction, sampleInputs, sampleContext),
+            ).rejects.toThrow('Dynamic action must have a path');
+        });
     });
 });

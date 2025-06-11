@@ -1,6 +1,7 @@
 import { SherryValidationError } from '../errors/customErrors';
 import {
-    StandardParameter,
+    FileParameter,
+    ImageParameter,
     SelectParameter,
     RadioParameter,
     TextBasedParameter,
@@ -40,6 +41,14 @@ export function isAddressParameter(param: BaseParameter): param is AddressParame
 
 export function isBooleanParameter(param: BaseParameter): param is BooleanParameter {
     return param.type === 'bool' || param.type === 'boolean';
+}
+
+export function isFileParameter(param: BaseParameter): param is FileParameter {
+    return param.type === 'file';
+}
+
+export function isImageParameter(param: BaseParameter): param is ImageParameter {
+    return param.type === 'image';
 }
 
 /**
@@ -275,6 +284,109 @@ export class ParameterValidator {
     }
 
     /**
+     * Validates file parameters
+     */
+    static validateFileParameter(param: FileParameter): void {
+        this.validateBaseParameter(param);
+
+        // Validate maxSize
+        if (param.maxSize !== undefined) {
+            if (typeof param.maxSize !== 'number' || param.maxSize <= 0) {
+                throw new SherryValidationError(
+                    `Parameter '${param.name}' has invalid maxSize (must be a positive number)`,
+                );
+            }
+        }
+
+        // Validate accept string format
+        if (param.accept !== undefined) {
+            if (typeof param.accept !== 'string' || param.accept.trim() === '') {
+                throw new SherryValidationError(
+                    `Parameter '${param.name}' has invalid accept value (must be a non-empty string)`,
+                );
+            }
+        }
+
+        // Validate multiple
+        if (param.multiple !== undefined && typeof param.multiple !== 'boolean') {
+            throw new SherryValidationError(
+                `Parameter '${param.name}' has invalid multiple value (must be boolean)`,
+            );
+        }
+    }
+
+    /**
+     * Validates image parameters
+     */
+    static validateImageParameter(param: ImageParameter): void {
+        this.validateBaseParameter(param);
+
+        // Validate common file properties
+        if (param.maxSize !== undefined) {
+            if (typeof param.maxSize !== 'number' || param.maxSize <= 0) {
+                throw new SherryValidationError(
+                    `Parameter '${param.name}' has invalid maxSize (must be a positive number)`,
+                );
+            }
+        }
+
+        if (param.accept !== undefined) {
+            if (typeof param.accept !== 'string' || param.accept.trim() === '') {
+                throw new SherryValidationError(
+                    `Parameter '${param.name}' has invalid accept value (must be a non-empty string)`,
+                );
+            }
+        }
+
+        if (param.multiple !== undefined && typeof param.multiple !== 'boolean') {
+            throw new SherryValidationError(
+                `Parameter '${param.name}' has invalid multiple value (must be boolean)`,
+            );
+        }
+
+        // Validate image-specific properties
+        if (param.maxWidth !== undefined) {
+            if (typeof param.maxWidth !== 'number' || param.maxWidth <= 0) {
+                throw new SherryValidationError(
+                    `Parameter '${param.name}' has invalid maxWidth (must be a positive number)`,
+                );
+            }
+        }
+
+        if (param.maxHeight !== undefined) {
+            if (typeof param.maxHeight !== 'number' || param.maxHeight <= 0) {
+                throw new SherryValidationError(
+                    `Parameter '${param.name}' has invalid maxHeight (must be a positive number)`,
+                );
+            }
+        }
+
+        if (param.aspectRatio !== undefined) {
+            if (typeof param.aspectRatio !== 'string') {
+                throw new SherryValidationError(
+                    `Parameter '${param.name}' has invalid aspectRatio (must be a string)`,
+                );
+            }
+
+            // Validate aspect ratio format (e.g., "16:9", "4:3", "1:1")
+            const aspectRatioRegex = /^\d+:\d+$/;
+            if (!aspectRatioRegex.test(param.aspectRatio)) {
+                throw new SherryValidationError(
+                    `Parameter '${param.name}' has invalid aspectRatio format (must be like "16:9", "4:3", etc.)`,
+                );
+            }
+
+            // Validate that both numbers are positive
+            const [width, height] = param.aspectRatio.split(':').map(Number);
+            if (width <= 0 || height <= 0) {
+                throw new SherryValidationError(
+                    `Parameter '${param.name}' has invalid aspectRatio (both width and height must be positive)`,
+                );
+            }
+        }
+    }
+
+    /**
      * Validates any parameter by determining its type
      */
     static validateParameter(param: BaseParameter): void {
@@ -290,6 +402,10 @@ export class ParameterValidator {
             this.validateAddressParameter(param);
         } else if (isBooleanParameter(param)) {
             this.validateBooleanParameter(param);
+        } else if (isFileParameter(param)) {
+            this.validateFileParameter(param);
+        } else if (isImageParameter(param)) {
+            this.validateImageParameter(param);
         } else {
             // Improved error message for unknown parameter types
             throw new SherryValidationError(
