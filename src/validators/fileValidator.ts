@@ -21,7 +21,7 @@ export function validateFileParameter(
             accepted =>
                 accepted === mimeType ||
                 (fileExtension && accepted === fileExtension) ||
-                (accepted.includes('*') && mimeType.startsWith(accepted.replace('*', ''))),
+                (accepted.includes('*') && mimeType.startsWith(accepted.replace(/\*/g, ''))),
         );
 
         if (!isValidType) {
