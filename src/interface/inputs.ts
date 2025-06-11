@@ -1,5 +1,7 @@
 import { AbiType } from 'abitype';
 
+export const DEFAULT_MAX_FILE_SIZE = 3 * 1024 * 1024; // 3 MB
+
 // Option for selects and radios
 export interface SelectOption {
     label: string;

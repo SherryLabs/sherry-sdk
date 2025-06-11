@@ -1,3 +1,13 @@
+import type {
+    Chain as ChainViem,
+    avalanche,
+    avalancheFuji,
+    celo,
+    celoAlfajores,
+    mainnet,
+    sepolia,
+} from 'viem/chains';
+
 export const VALID_CHAINS = [
     'fuji',
     'avalanche',
