@@ -1,8 +1,9 @@
-<<<<<<< HEAD
----
+## <<<<<<< HEAD
+
 description: Guía completa paso a paso para construir mini apps dinámicas usando Next.js y el Sherry Links SDK
 sidebar_position: 1
 tags: [nextjs, sdk, mini-apps, blockchain, tutorial]
+
 ---
 
 import Tabs from '@theme/Tabs';
@@ -151,7 +152,8 @@ contratos inteligentes de manera sencilla.
 ## Configuración Inicial
 
 ### 1. Crear el Proyecto Next.js
->>>>>>> develop
+
+> > > > > > > develop
 
 ```bash
 npx create-next-app@latest mi-sherry-app --typescript --eslint --tailwind --src-dir --app --import-alias "@/*"
@@ -159,6 +161,7 @@ cd mi-sherry-app
 ```
 
 <<<<<<< HEAD
+
 </TabItem>
 <TabItem value="yarn" label="yarn">
 
@@ -184,14 +187,17 @@ cd mi-sherry-app
 <TabItem value="npm" label="npm" default>
 
 =======
+
 ### 2. Instalar Dependencias
 
->>>>>>> develop
+> > > > > > > develop
+
 ```bash
 npm install @sherrylinks/sdk viem wagmi
 ```
 
 <<<<<<< HEAD
+
 </TabItem>
 <TabItem value="yarn" label="yarn">
 
@@ -215,7 +221,7 @@ pnpm add @sherrylinks/sdk viem wagmi
   Para evitar errores de build con ESLint, puedes deshabilitarlo en `next.config.js`:
 </Admonition>
 
-```javascript title="next.config.js"
+````javascript title="next.config.js"
 =======
 ### 3. Configurar Next.js (Opcional)
 
@@ -232,9 +238,10 @@ const nextConfig = {
 };
 
 module.exports = nextConfig;
-```
+````
 
 <<<<<<< HEAD
+
 ## 🎯 Creando el Endpoint GET - Metadata
 
 El endpoint GET es el **corazón** de tu mini app. Aquí defines toda la información y estructura que las plataformas necesitan para renderizar tu aplicación.
@@ -243,27 +250,29 @@ El endpoint GET es el **corazón** de tu mini app. Aquí defines toda la informa
   La metadata le dice a las plataformas **cómo** renderizar tu mini app, **qué** inputs mostrar a
   los usuarios, y **dónde** enviar los datos cuando los usuarios interactúan con ella.
 </Admonition>
-=======
-## Creando el Endpoint GET - Metadata
+======= ## Creando el Endpoint GET - Metadata
 
 El endpoint GET es el corazón de tu mini app. Aquí defines toda la información y
 estructura que las plataformas necesitan para renderizar tu aplicación.
->>>>>>> develop
+
+> > > > > > > develop
 
 ### 1. Crear el Archivo de Ruta
 
 Crea el archivo `app/api/mi-app/route.ts`:
 
 <<<<<<< HEAD
-```typescript title="app/api/mi-app/route.ts"
+
+````typescript title="app/api/mi-app/route.ts"
 =======
 ```typescript
 >>>>>>> develop
 import { NextRequest, NextResponse } from 'next/server';
 import { createMetadata, Metadata, ValidatedMetadata } from '@sherrylinks/sdk';
-```
+````
 
 <<<<<<< HEAD
+
 ### 2. Configurar la Estructura Básica del Handler GET
 
 ```typescript
@@ -333,7 +342,7 @@ export async function GET(req: NextRequest) {
   botón con funcionalidad específica.
 </Admonition>
 
-```typescript
+````typescript
 const metadata: Metadata = {
   url: 'https://sherry.social',
   icon: 'https://avatars.githubusercontent.com/u/117962315',
@@ -372,7 +381,7 @@ export async function GET(req: NextRequest) {
         };
     }
 }
-```
+````
 
 #### Explicación de Campos Generales:
 
@@ -408,6 +417,7 @@ const metadata: Metadata = {
 ```
 
 <<<<<<< HEAD
+
 <details>
 <summary><strong>Entendiendo las Propiedades de Acción</strong></summary>
 
@@ -423,7 +433,7 @@ const metadata: Metadata = {
 
 ### 5. Configurar Parámetros de Entrada del Usuario
 
-```typescript
+````typescript
 const metadata: Metadata = {
   url: 'https://sherry.social',
   icon: 'https://avatars.githubusercontent.com/u/117962315',
@@ -485,9 +495,10 @@ const metadata: Metadata = {
     },
   ],
 };
-```
+````
 
 <<<<<<< HEAD
+
 <Admonition type="info" title="Tipos de Parámetros Disponibles">
   - `"text"`: Entrada de texto de una línea - `"textarea"`: Entrada de texto multilínea -
   `"number"`: Entrada numérica con validación - `"email"`: Entrada de email con validación -
@@ -495,7 +506,9 @@ const metadata: Metadata = {
 </Admonition>
 
 ### 6. Validar y Retornar la Metadata
+
 =======
+
 #### Tipos de Parámetros Disponibles:
 
 - **text**: Campo de texto libre
@@ -506,7 +519,8 @@ const metadata: Metadata = {
 - **textarea**: Texto largo
 
 ### 5. Validar y Retornar la Metadata
->>>>>>> develop
+
+> > > > > > > develop
 
 ```typescript
 export async function GET(req: NextRequest) {
@@ -579,6 +593,7 @@ export async function GET(req: NextRequest) {
 ```
 
 <<<<<<< HEAD
+
 <Admonition type="success" title="Beneficios de la Validación">
   La función `createMetadata()` valida la estructura de tu metadata y asegura que cumple con los
   requisitos del Sherry SDK antes de retornarla a la plataforma.
@@ -1627,7 +1642,7 @@ console.log('Parámetro mensaje:', searchParams.get('mensaje'));
 
 Aquí tienes un archivo de ruta completo, **listo para minithon** que demuestra todos los conceptos:
 
-```typescript title="app/api/mi-app/route.ts - Ejemplo Completo"
+````typescript title="app/api/mi-app/route.ts - Ejemplo Completo"
 import { NextRequest, NextResponse } from 'next/server';
 import { avalancheFuji } from 'viem/chains';
 import { createMetadata, Metadata, ValidatedMetadata, ExecutionResponse } from '@sherrylinks/sdk';
@@ -1775,7 +1790,7 @@ export async function POST(req: NextRequest) {
                 }
             );
         }
-```
+````
 
 ### 2. Procesar los Datos y Crear la Transacción
 
@@ -1932,12 +1947,7 @@ Este repositorio contiene:
     <strong>¡Buena suerte con el desarrollo de tu mini app y el envío al minithon! 🏆</strong>
   </p>
 </div>
-=======
-        'Content-Type, Authorization, X-CSRF-Token, X-Requested-With, Accept',
-    },
-  });
-}
-```
+======= 'Content-Type, Authorization, X-CSRF-Token, X-Requested-With, Accept', }, }); } ```
 
 ## Probando tu Mini App
 
@@ -2037,4 +2047,5 @@ funcional usando Next.js y Sherry SDK.
 ¡Felicidades! Ya tienes tu primera mini app funcionando con Sherry SDK. Puedes
 expandir la funcionalidad agregando más parámetros, validaciones personalizadas,
 o integrando con contratos inteligentes más complejos.
->>>>>>> develop
+
+> > > > > > > develop

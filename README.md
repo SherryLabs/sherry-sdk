@@ -15,7 +15,8 @@ Sherry SDK is a powerful toolkit for building interactive Web3 mini-apps that
 can be embedded within social media posts and platforms. The SDK enables
 developers to create rich, composable blockchain experiences without requiring
 users to leave their social media feed.
->>>>>>> develop
+
+> > > > > > > develop
 
 With Sherry, you can transform any post into an interactive dApp that allows
 users to swap tokens, vote on proposals, mint NFTs, sign transactions, and much
@@ -24,6 +25,7 @@ more - all with built-in validation and a unified experience across chains.
 ## ✨ Features
 
 <<<<<<< HEAD
+
 - 🔗 **Multi-chain Support**: Build once, deploy across Ethereum, Avalanche, Celo, and more
 - 🧩 **Multiple Action Types**:
   - **Transfer Actions**: Native token transfers with customizable UIs
@@ -35,8 +37,7 @@ more - all with built-in validation and a unified experience across chains.
 - 🔄 **Cross-chain Interactions**: Enable transactions across multiple blockchains
 - 📊 **Rich Parameter Types**: Select dropdowns, radio buttons, text inputs, and more
 - 💻 **Developer Tools**: Built-in metadata analysis and debugging utilities
-- 📱 **Responsive Design**: Mini-apps that work across all platforms and screen sizes
-=======
+- # 📱 **Responsive Design**: Mini-apps that work across all platforms and screen sizes
 - 🔗 **Multi-chain Support**: Build once, deploy across Ethereum, Avalanche,
   Celo, and more
 - 🧩 **Multiple Action Types**:
@@ -57,7 +58,7 @@ more - all with built-in validation and a unified experience across chains.
 - 💻 **Developer Tools**: Built-in metadata analysis and debugging utilities
 - 📱 **Responsive Design**: Mini-apps that work across all platforms and screen
   sizes
->>>>>>> develop
+  > > > > > > > develop
 
 ## 📦 Installation
 
@@ -301,8 +302,8 @@ const dynamicApp: Metadata = {
 
 ## 🧩 Action Types
 
-<<<<<<< HEAD
-=======
+# <<<<<<< HEAD
+
 ### Blockchain Actions
 
 Interact directly with smart contracts:
@@ -387,12 +388,14 @@ Test and validate your mini-apps during development:
 }
 ```
 
->>>>>>> develop
+> > > > > > > develop
+
 ### Transfer Actions
 
 Send native tokens with customizable recipient and amount selection:
 
 <<<<<<< HEAD
+
 - Fixed or user-selectable recipients
 - Predefined amounts or custom input
 - Multiple payment options with descriptions
@@ -413,8 +416,7 @@ Server-side processing with HTTP endpoints:
 - Custom business logic
 - External API integrations
 - Real-time data processing
-- Complex calculations and optimizations
-=======
+- # Complex calculations and optimizations
 - **[English Guide](https://docs.sherry.social/docs/guides/guide-en)** -
   Complete Next.js integration tutorial
 - **[Spanish Guide](https://docs.sherry.social/docs/guides/guide-es)** - Guía
@@ -480,7 +482,8 @@ Server-side processing with HTTP endpoints:
   ]
 }
 ````
->>>>>>> develop
+
+> > > > > > > develop
 
 ### Nested Action Flows
 
@@ -623,16 +626,16 @@ cd docs && yarn install && yarn start
 ## 🌍 Community & Support
 
 <<<<<<< HEAD
+
 - **[Documentation](https://docs.sherry.social)** - Complete guides and API reference
 - **[Discord](https://discord.gg/69brTf6J)** - Community support and discussions
-- **[GitHub Issues](https://github.com/SherryLabs/sherry-sdk/issues)** - Bug reports and feature requests
-=======
+- # **[GitHub Issues](https://github.com/SherryLabs/sherry-sdk/issues)** - Bug reports and feature requests
 - **[Documentation](https://docs.sherry.social)** - Complete guides and API
   reference
 - **[Discord](https://discord.gg/69brTf6J)** - Community support and discussions
 - **[GitHub Issues](https://github.com/SherryLabs/sherry-sdk/issues)** - Bug
   reports and feature requests
->>>>>>> develop
+  > > > > > > > develop
 - **[Twitter](https://x.com/sherryprotocol)** - Latest updates and announcements
 
 ## 🤝 Contributing
@@ -673,11 +676,11 @@ details.
 ## 🔗 Links
 
 <<<<<<< HEAD
+
 - **[Sherry Platform](https://sherry.social)** - Live platform and mini-app gallery
 - **[Documentation](https://docs.sherry.social)** - Complete developer documentation
 - **[GitHub Repository](https://github.com/SherryLabs/sherry-sdk)** - Source code and issues
-- **[npm Package](https://www.npmjs.com/package/@sherrylinks/sdk)** - Package registry
-=======
+- # **[npm Package](https://www.npmjs.com/package/@sherrylinks/sdk)** - Package registry
 - **[Sherry Platform](https://sherry.social)** - Live platform and mini-app
   gallery
 - **[Documentation](https://docs.sherry.social)** - Complete developer
@@ -686,4 +689,4 @@ details.
   code and issues
 - **[npm Package](https://www.npmjs.com/package/@sherrylinks/sdk)** - Package
   registry
->>>>>>> develop
+  > > > > > > > develop
