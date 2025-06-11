@@ -261,7 +261,7 @@ const tx = {
 ```
 
 ### 3. Serializar y Retornar la Transacción
-
+**Nota:** `serialize()` convierte tu transacción en un formato raw que puede ser firmado y enviado a la blockchain.
 ```typescript
         // Serializar la transacción
         const serializedTx = serialize(tx);
@@ -384,6 +384,7 @@ problemas directamente desde la interfaz del debugger.
 - Verifica que la URL de tu endpoint GET sea accesible públicamente
 - Revisa la consola del navegador para errores de JavaScript
 - Asegúrate de que el JSON de respuesta sea válido
+- Si tu mini app carga correctamente pero el POST falla, revisa los logs del servidor por errores de parámetros o errores en la blockchain.
 
 ### Errores de serialización de transacciones
 
@@ -391,6 +392,10 @@ problemas directamente desde la interfaz del debugger.
   wei)
 - Asegúrate de que el chainId sea válido
 - Revisa que la dirección 'to' sea una dirección Ethereum válida
+
+### Próximos Pasos
+
+- Ahora puedes explorar agregar interacciones más complejas, integrar contratos inteligentes o desplegar tu mini app a producción.
 
 ## Código de Ejemplo
 
