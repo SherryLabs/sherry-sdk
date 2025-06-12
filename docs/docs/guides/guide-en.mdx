@@ -259,6 +259,7 @@ const tx = {
 ```
 
 ### 3. Serialize and Return Transaction
+**Note**: `serialize()` converts your transaction object into a raw transaction that can be signed and broadcast to the blockchain.
 
 ```typescript
         // Serialize transaction
@@ -381,12 +382,17 @@ issues directly from the debugger interface.
 - Verify that your GET endpoint URL is publicly accessible
 - Check browser console for JavaScript errors
 - Make sure the JSON response is valid
+- If your mini app loads correctly but the POST fails, check your server logs for parameter errors or blockchain errors.
 
 ### Transaction serialization errors
 
 - Verify that values are in the correct format (BigInt for wei values)
 - Make sure chainId is valid
 - Check that the 'to' address is a valid Ethereum address
+
+### Next Steps
+
+- You can now explore adding more complex interactions, integrating smart contracts, or deploying your mini app to production.
 
 ## Example Code
 
