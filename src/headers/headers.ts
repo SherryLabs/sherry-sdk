@@ -38,10 +38,10 @@ export const SHERRY_VALUES = {
 // ====== VALID OPERATIONS ======
 export const VALID_OPERATIONS = {
     EXECUTE: 'execute',
-    FETCH: 'fetch'
+    FETCH: 'fetch',
 } as const;
 
-export type ValidOperation = typeof VALID_OPERATIONS[keyof typeof VALID_OPERATIONS];
+export type ValidOperation = (typeof VALID_OPERATIONS)[keyof typeof VALID_OPERATIONS];
 
 // ====== UTILITIES ======
 
@@ -92,7 +92,6 @@ export function extractSdkHeaders(headers: Headers | Record<string, string>) {
     };
 }
 
-
 export function validateSdkHeaders(headers: Headers | Record<string, string>): {
     isValid: boolean;
     errors: string[];
@@ -107,7 +106,9 @@ export function validateSdkHeaders(headers: Headers | Record<string, string>): {
     if (!extracted.operation) {
         errors.push(`Missing ${SDK_TO_PROXY_HEADERS.OPERATION} header`);
     } else if (!isValidOperation(extracted.operation)) {
-        errors.push(`Invalid operation. Valid operations: ${Object.values(VALID_OPERATIONS).join(', ')}`);
+        errors.push(
+            `Invalid operation. Valid operations: ${Object.values(VALID_OPERATIONS).join(', ')}`,
+        );
     }
 
     try {
@@ -120,7 +121,7 @@ export function validateSdkHeaders(headers: Headers | Record<string, string>): {
 
     return {
         isValid: errors.length === 0,
-        errors
+        errors,
     };
 }
 

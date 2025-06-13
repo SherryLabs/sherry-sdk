@@ -1,5 +1,5 @@
 import { ActionValidationError } from '../errors/customErrors';
-import  { buildSdkHeaders, VALID_OPERATIONS, ValidOperation } from '../headers/headers';
+import { buildSdkHeaders, VALID_OPERATIONS, ValidOperation } from '../headers/headers';
 
 /**
  * Configuration options for executor operations.
@@ -54,7 +54,7 @@ export abstract class BaseExecutor {
     constructor(clientKey?: string) {
         this.clientKey = clientKey;
         this.proxyBaseUrl = process.env.SHERRY_PROXY_URL || 'https://proxy.sherry.social';
-        this.defaultTimeout = 30000; 
+        this.defaultTimeout = 30000;
     }
 
     /**
@@ -88,10 +88,7 @@ export abstract class BaseExecutor {
      * );
      * ```
      */
-    async getMetadata(
-        targetUrl: string,
-        options?: ExecutorOptions,
-    ): Promise<any> {
+    async getMetadata(targetUrl: string, options?: ExecutorOptions): Promise<any> {
         const finalClientKey = options?.clientKey || this.clientKey;
 
         const headers = buildSdkHeaders(targetUrl, VALID_OPERATIONS.FETCH, finalClientKey);
@@ -167,7 +164,7 @@ export abstract class BaseExecutor {
             body?: string | FormData;
         },
     ): Promise<any> {
-        const timeout =  this.defaultTimeout;
+        const timeout = this.defaultTimeout;
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), timeout);
 

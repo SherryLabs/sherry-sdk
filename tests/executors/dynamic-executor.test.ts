@@ -205,7 +205,9 @@ describe('DynamicActionExecutor', () => {
 
             await expect(
                 executor.execute(sampleAction, sampleInputs, sampleContext, { timeout: 30000 }),
-            ).rejects.toThrow("Error executing action 'Test Action': Request timeout after 30000ms");
+            ).rejects.toThrow(
+                "Error executing action 'Test Action': Request timeout after 30000ms",
+            );
         });
 
         it('should throw error if response cannot be adapted', async () => {
