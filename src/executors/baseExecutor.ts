@@ -1,5 +1,5 @@
 import { ActionValidationError } from '../errors/customErrors';
-import { buildSdkHeaders } from '../headers/headers';
+import  { buildSdkHeaders, VALID_OPERATIONS, ValidOperation } from '../headers/headers';
 
 /**
  * Configuration options for executor operations.
@@ -40,11 +40,9 @@ export interface ExecutorOptions {
  * ```
  */
 export abstract class BaseExecutor {
-    /** The Sherry proxy server URL used for all requests */
-    protected proxyUrl: string = 'https://proxy.sherry.social';
-
-    /** Optional client key for authenticated requests */
     protected clientKey?: string;
+    protected proxyBaseUrl: string;
+    protected defaultTimeout: number;
 
     /**
      * Creates a new BaseExecutor instance.
@@ -55,6 +53,8 @@ export abstract class BaseExecutor {
      */
     constructor(clientKey?: string) {
         this.clientKey = clientKey;
+        this.proxyBaseUrl = process.env.SHERRY_PROXY_URL || 'https://proxy.sherry.social';
+        this.defaultTimeout = 30000; 
     }
 
     /**
@@ -89,14 +89,12 @@ export abstract class BaseExecutor {
      * ```
      */
     async getMetadata(
-        baseUrl: string,
-        path: string = '/metadata',
+        targetUrl: string,
         options?: ExecutorOptions,
     ): Promise<any> {
-        const targetUrl = this.buildTargetUrl(baseUrl, path);
         const finalClientKey = options?.clientKey || this.clientKey;
 
-        const headers = buildSdkHeaders(targetUrl, 'metadata', finalClientKey);
+        const headers = buildSdkHeaders(targetUrl, VALID_OPERATIONS.FETCH, finalClientKey);
 
         if (options?.customHeaders) {
             Object.assign(headers, options.customHeaders);
@@ -105,7 +103,6 @@ export abstract class BaseExecutor {
         return this.makeRequest('/proxy', {
             method: 'GET',
             headers,
-            timeout: options?.timeout || 10000,
         });
     }
 
@@ -131,7 +128,7 @@ export abstract class BaseExecutor {
             throw new ActionValidationError('baseUrl and path are required');
         }
 
-        if (path.startsWith('http')) {
+        if (path.startsWith('https')) {
             return path;
         }
 
@@ -168,11 +165,11 @@ export abstract class BaseExecutor {
             method: string;
             headers: Record<string, string>;
             body?: string | FormData;
-            timeout: number;
         },
     ): Promise<any> {
+        const timeout =  this.defaultTimeout;
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), options.timeout);
+        const timeoutId = setTimeout(() => controller.abort(), timeout);
 
         try {
             const finalHeaders = { ...options.headers };
@@ -182,7 +179,7 @@ export abstract class BaseExecutor {
                 finalHeaders['Content-Type'] = 'application/json';
             }
 
-            const response = await fetch(`${this.proxyUrl}${endpoint}`, {
+            const response = await fetch(`${this.proxyBaseUrl}${endpoint}`, {
                 method: options.method,
                 headers: finalHeaders,
                 body: options.body,
@@ -206,7 +203,7 @@ export abstract class BaseExecutor {
             clearTimeout(timeoutId);
 
             if (error instanceof Error && error.name === 'AbortError') {
-                throw new Error(`Request timeout after ${options.timeout}ms`);
+                throw new Error(`Request timeout after ${timeout}ms`);
             }
 
             throw error;

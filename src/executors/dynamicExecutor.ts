@@ -1,7 +1,7 @@
 import { DynamicAction } from '../interface/actions/dynamicAction';
 import { ActionValidationError } from '../errors/customErrors';
 import { ExecutionResponse } from '../interface/response/executionResponse';
-import { buildSdkHeaders } from '../headers/headers';
+import { buildSdkHeaders, VALID_OPERATIONS } from '../headers/headers';
 import { BaseExecutor, ExecutorOptions } from './baseExecutor';
 
 /**
@@ -126,7 +126,7 @@ export class DynamicActionExecutor extends BaseExecutor {
             const fullUrl = this.buildFullUrl(action, inputs, context);
             const finalClientKey = options?.clientKey || this.clientKey;
 
-            const headers = buildSdkHeaders(fullUrl, 'execute', finalClientKey);
+            const headers = buildSdkHeaders(fullUrl, VALID_OPERATIONS.EXECUTE, finalClientKey);
 
             if (options?.customHeaders) {
                 Object.assign(headers, options.customHeaders);
@@ -142,7 +142,6 @@ export class DynamicActionExecutor extends BaseExecutor {
                 method: 'POST',
                 headers,
                 body,
-                timeout: options?.timeout || 30000,
             });
 
             if (!this.isValidTransactionResponse(response)) {

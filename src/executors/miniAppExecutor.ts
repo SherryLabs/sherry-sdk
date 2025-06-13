@@ -1,5 +1,5 @@
 import { BaseExecutor, ExecutorOptions } from './baseExecutor';
-import { buildSdkHeaders } from '../headers/headers';
+import { buildSdkHeaders, ValidOperation, VALID_OPERATIONS } from '../headers/headers';
 
 /**
  * General-purpose executor for interacting with any mini app endpoints.
@@ -97,13 +97,14 @@ export class MiniAppExecutor extends BaseExecutor {
      * });
      * ```
      */
+    /*
     async request(
         baseUrl: string,
         path: string,
         options?: ExecutorOptions & {
-            /** HTTP method to use. Defaults to 'GET' */
+           
             method?: 'GET' | 'POST';
-            /** Request body. Can be any JSON-serializable object or FormData */
+           
             body?: any;
         },
     ): Promise<any> {
@@ -111,12 +112,13 @@ export class MiniAppExecutor extends BaseExecutor {
         const finalClientKey = options?.clientKey || this.clientKey;
         const method = options?.method || 'GET';
 
-        // Use appropriate operation type for headers
-        const headers = buildSdkHeaders(
-            targetUrl,
-            method === 'POST' ? 'execute' : 'metadata',
-            finalClientKey,
-        );
+        
+        const operation: ValidOperation = method === 'POST' 
+        ? VALID_OPERATIONS.EXECUTE 
+        : VALID_OPERATIONS.FETCH;
+        
+        const headers = buildSdkHeaders(targetUrl, operation, finalClientKey);
+
 
         if (options?.customHeaders) {
             Object.assign(headers, options.customHeaders);
@@ -139,7 +141,7 @@ export class MiniAppExecutor extends BaseExecutor {
             method,
             headers,
             body,
-            timeout: options?.timeout || 30000,
         });
     }
+    */
 }
