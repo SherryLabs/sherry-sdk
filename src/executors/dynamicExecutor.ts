@@ -81,7 +81,7 @@ export class DynamicActionExecutor extends BaseExecutor {
      *
      * @param action - The dynamic action definition to execute
      * @param inputs - User-provided parameter values
-     * @param context - Blockchain and execution context
+     * @param context - Blockchain and execution context including baseUrl
      * @param options - Additional execution options
      *
      * @returns Promise resolving to the raw transaction response from the mini app
@@ -97,7 +97,11 @@ export class DynamicActionExecutor extends BaseExecutor {
      * const transferResponse = await executor.executeForTransaction(
      *   transferAction,
      *   { recipient: '0x123...', amount: '1.5' },
-     *   { userAddress: '0x456...', sourceChain: 'avalanche', baseUrl: 'https://app.com' }
+     *   { 
+     *     userAddress: '0x456...', 
+     *     sourceChain: 'avalanche', 
+     *     baseUrl: 'https://app.com' 
+     *   }
      * );
      *
      * // NFT minting with file upload
@@ -108,7 +112,11 @@ export class DynamicActionExecutor extends BaseExecutor {
      *     description: 'Cool NFT',
      *     image: fileInput.files[0] // File object
      *   },
-     *   { userAddress: '0x456...', sourceChain: 'polygon', baseUrl: 'https://nft.com' }
+     *   { 
+     *     userAddress: '0x456...', 
+     *     sourceChain: 'polygon', 
+     *     baseUrl: 'https://nft.com' 
+     *   }
      * );
      * ```
      */
@@ -168,7 +176,7 @@ export class DynamicActionExecutor extends BaseExecutor {
      *
      * @param action - The dynamic action definition to execute
      * @param inputs - User-provided parameter values
-     * @param context - Blockchain and execution context
+     * @param context - Blockchain and execution context including baseUrl
      * @param options - Additional execution options
      *
      * @returns Promise resolving to a validated ExecutionResponse
@@ -180,7 +188,11 @@ export class DynamicActionExecutor extends BaseExecutor {
      * const response: ExecutionResponse = await executor.execute(
      *   action,
      *   inputs,
-     *   context
+     *   {
+     *     userAddress: '0x456...',
+     *     sourceChain: 'avalanche',
+     *     baseUrl: 'https://app.com'
+     *   }
      * );
      *
      * // Guaranteed to have these properties

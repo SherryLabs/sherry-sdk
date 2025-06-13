@@ -43,7 +43,7 @@ export {
 } from './examples/nested-actions';
 
 // New Executors Architecture
-export { BaseExecutor, type ExecutorOptions } from './executors/baseExecutor';
+export { BaseExecutor as Executor, type ExecutorOptions } from './executors/baseExecutor';
 export {
     DynamicActionExecutor,
     type BlockchainContext,
@@ -51,3 +51,4 @@ export {
     createAnonymousExecutor,
 } from './executors/dynamicExecutor';
 export { MiniAppExecutor } from './executors/miniAppExecutor';
+

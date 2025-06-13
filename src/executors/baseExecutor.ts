@@ -64,8 +64,7 @@ export abstract class BaseExecutor {
      * not just those with dynamic actions. It's the recommended way
      * to discover what actions and capabilities a mini app provides.
      *
-     * @param baseUrl - The base URL of the mini app (e.g., 'https://myapp.com')
-     * @param path - The metadata endpoint path. Defaults to '/metadata'
+     * @param targetUrl - The complete URL of the mini app's metadata endpoint
      * @param options - Additional options for the request
      *
      * @returns Promise resolving to the mini app's metadata object
@@ -77,14 +76,13 @@ export abstract class BaseExecutor {
      * ```typescript
      * const executor = new MiniAppExecutor('your-client-key');
      *
-     * // Get metadata from default endpoint
-     * const metadata = await executor.getMetadata('https://myapp.com');
+     * // Get metadata from app
+     * const metadata = await executor.getMetadata('https://myapp.com/metadata');
      *
-     * // Get metadata from custom endpoint
+     * // Get metadata with custom options
      * const customMeta = await executor.getMetadata(
-     *   'https://myapp.com',
-     *   '/api/v1/metadata',
-     *   { timeout: 5000 }
+     *   'https://myapp.com/api/v1/metadata',
+     *   { timeout: 5000, clientKey: 'custom-key' }
      * );
      * ```
      */
