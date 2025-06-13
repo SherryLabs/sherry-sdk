@@ -1,13 +1,10 @@
-/**
- * Simplified headers for the Sherry SDK
- * Optimized version that eliminates unnecessary complexity
- */
+// ====== REFACTORIZACIÓN: headers/headers.ts ======
 
 // ====== SDK TO PROXY HEADERS ======
 export const SDK_TO_PROXY_HEADERS = {
     CLIENT_KEY: 'X-Sherry-Client-Key',
     TARGET_URL: 'X-Sherry-Target-URL',
-    OPERATION: 'X-Sherry-Operation', // 'metadata' | 'execute'
+    OPERATION: 'X-Sherry-Operation',
     CONTENT_TYPE: 'Content-Type',
     USER_AGENT: 'User-Agent',
 } as const;
@@ -35,55 +32,104 @@ export const SHERRY_VALUES = {
     SDK_VERSION: '1.0.0',
     SDK_NAME: 'sherry-sdk',
     CONTENT_TYPE_JSON: 'application/json',
+    USER_AGENT: 'Sherry-SDK/1.0.0',
 } as const;
 
-// ====== CORS FOR DEVELOPERS ======
-export const DEVELOPER_CORS_HEADERS = {
-    'Access-Control-Allow-Origin': 'https://proxy.sherry.social',
-    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-    'Access-Control-Allow-Headers': [
-        'Content-Type',
-        'X-Sherry-Proxy',
-        'X-Sherry-Version',
-        'X-Chain-ID',
-        'X-Destination-Chain',
-        'X-Wallet-Address',
-        'X-Timestamp',
-    ].join(', '),
-    'Access-Control-Max-Age': '86400',
+// ====== VALID OPERATIONS ======
+export const VALID_OPERATIONS = {
+    EXECUTE: 'execute',
+    FETCH: 'fetch',
 } as const;
+
+export type ValidOperation = (typeof VALID_OPERATIONS)[keyof typeof VALID_OPERATIONS];
 
 // ====== UTILITIES ======
 
 /**
- * Headers that the SDK sends to the proxy
+ * ✅ REFACTORIZADO: Headers que el SDK envía al proxy usando constantes
  */
 export function buildSdkHeaders(
     targetUrl: string,
-    operation: 'execute' | 'metadata',
+    operation: ValidOperation,
     clientKey?: string,
 ): Record<string, string> {
     const headers: Record<string, string> = {
-        // SDK headers that the proxy expects
-        'X-Sherry-Target-URL': targetUrl,
-        'X-Sherry-Operation': operation,
-        'Content-Type': 'application/json',
-        'User-Agent': 'Sherry-SDK/1.0.0',
+        // Usando las constantes en lugar de strings hardcodeados
+        [SDK_TO_PROXY_HEADERS.TARGET_URL]: targetUrl,
+        [SDK_TO_PROXY_HEADERS.OPERATION]: operation,
+        [SDK_TO_PROXY_HEADERS.CONTENT_TYPE]: SHERRY_VALUES.CONTENT_TYPE_JSON,
+        [SDK_TO_PROXY_HEADERS.USER_AGENT]: SHERRY_VALUES.USER_AGENT,
     };
 
     // Add client key if provided
     if (clientKey) {
-        headers['X-Sherry-Client-Key'] = clientKey;
+        headers[SDK_TO_PROXY_HEADERS.CLIENT_KEY] = clientKey;
     }
 
     return headers;
 }
 
 /**
- * Headers that the proxy sends to the developer
+ * ✅ NUEVA: Valida que una operación sea válida
+ */
+export function isValidOperation(operation: string): operation is ValidOperation {
+    return Object.values(VALID_OPERATIONS).includes(operation as ValidOperation);
+}
+
+/**
+ * ✅ NUEVA: Extrae headers del SDK de un request
+ */
+export function extractSdkHeaders(headers: Headers | Record<string, string>) {
+    const getHeader = (name: string) =>
+        headers instanceof Headers ? headers.get(name) : headers[name];
+
+    return {
+        targetUrl: getHeader(SDK_TO_PROXY_HEADERS.TARGET_URL),
+        operation: getHeader(SDK_TO_PROXY_HEADERS.OPERATION) as ValidOperation | null,
+        clientKey: getHeader(SDK_TO_PROXY_HEADERS.CLIENT_KEY),
+        contentType: getHeader(SDK_TO_PROXY_HEADERS.CONTENT_TYPE),
+        userAgent: getHeader(SDK_TO_PROXY_HEADERS.USER_AGENT),
+    };
+}
+
+export function validateSdkHeaders(headers: Headers | Record<string, string>): {
+    isValid: boolean;
+    errors: string[];
+} {
+    const extracted = extractSdkHeaders(headers);
+    const errors: string[] = [];
+
+    if (!extracted.targetUrl) {
+        errors.push(`Missing ${SDK_TO_PROXY_HEADERS.TARGET_URL} header`);
+    }
+
+    if (!extracted.operation) {
+        errors.push(`Missing ${SDK_TO_PROXY_HEADERS.OPERATION} header`);
+    } else if (!isValidOperation(extracted.operation)) {
+        errors.push(
+            `Invalid operation. Valid operations: ${Object.values(VALID_OPERATIONS).join(', ')}`,
+        );
+    }
+
+    try {
+        if (extracted.targetUrl) {
+            new URL(extracted.targetUrl);
+        }
+    } catch {
+        errors.push('Invalid target URL format');
+    }
+
+    return {
+        isValid: errors.length === 0,
+        errors,
+    };
+}
+
+/**
+ * Headers que el proxy envía al desarrollador
  */
 export function buildProxyHeaders(options: {
-    operation: 'metadata' | 'execute';
+    operation: ValidOperation;
     chainId?: string;
     destinationChain?: string;
     walletAddress?: string;
@@ -96,7 +142,7 @@ export function buildProxyHeaders(options: {
     };
 
     // Only add blockchain context for execution operations
-    if (options.operation === 'execute') {
+    if (options.operation === VALID_OPERATIONS.EXECUTE) {
         if (options.chainId) {
             headers[PROXY_TO_DEV_HEADERS.CHAIN_ID] = options.chainId;
         }
@@ -112,7 +158,7 @@ export function buildProxyHeaders(options: {
 }
 
 /**
- * Validates that a request comes from the Sherry proxy
+ * Valida que un request viene del proxy Sherry
  */
 export function validateProxyRequest(headers: Headers | Record<string, string>): boolean {
     const getHeader = (name: string) =>
@@ -122,7 +168,7 @@ export function validateProxyRequest(headers: Headers | Record<string, string>):
 }
 
 /**
- * Extracts blockchain context from headers
+ * Extrae contexto blockchain de headers
  */
 export function extractBlockchainContext(headers: Headers | Record<string, string>) {
     const getHeader = (name: string) =>
@@ -133,34 +179,5 @@ export function extractBlockchainContext(headers: Headers | Record<string, strin
         destinationChain: getHeader(PROXY_TO_DEV_HEADERS.DESTINATION_CHAIN) || undefined,
         walletAddress: getHeader(PROXY_TO_DEV_HEADERS.WALLET_ADDRESS) || undefined,
         timestamp: getHeader(PROXY_TO_DEV_HEADERS.TIMESTAMP) || undefined,
-    };
-}
-
-/**
- * Middleware for developers that validates requests from the proxy
- */
-export function createDeveloperMiddleware() {
-    return (req: any, res: any, next: any) => {
-        // Apply CORS
-        Object.entries(DEVELOPER_CORS_HEADERS).forEach(([key, value]) => {
-            res.setHeader(key, value);
-        });
-
-        // Handle OPTIONS
-        if (req.method === 'OPTIONS') {
-            return res.status(200).end();
-        }
-
-        // Validate that it comes from the proxy
-        if (!validateProxyRequest(req.headers)) {
-            return res.status(403).json({
-                error: 'Only Sherry proxy requests allowed',
-            });
-        }
-
-        // Add context to request
-        req.sherryContext = extractBlockchainContext(req.headers);
-
-        next();
     };
 }

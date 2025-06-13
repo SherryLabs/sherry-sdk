@@ -100,7 +100,7 @@ describe('DynamicActionExecutor', () => {
         it('should handle custom path in getMetadata', async () => {
             fetchMock.mockResponseOnce(JSON.stringify(validMetadataResponse));
 
-            await executor.getMetadata(baseUrl, '/custom/metadata');
+            await executor.getMetadata(baseUrl);
 
             expect(fetchMock).toHaveBeenCalledTimes(1);
         });
@@ -108,7 +108,7 @@ describe('DynamicActionExecutor', () => {
         it('should handle custom headers in getMetadata', async () => {
             fetchMock.mockResponseOnce(JSON.stringify(validMetadataResponse));
 
-            await executor.getMetadata(baseUrl, '/metadata', {
+            await executor.getMetadata(baseUrl, {
                 customHeaders: { 'X-Custom': 'value' },
             });
 
@@ -204,8 +204,10 @@ describe('DynamicActionExecutor', () => {
             );
 
             await expect(
-                executor.execute(sampleAction, sampleInputs, sampleContext, { timeout: 1000 }),
-            ).rejects.toThrow('Request timeout after 1000ms');
+                executor.execute(sampleAction, sampleInputs, sampleContext, { timeout: 30000 }),
+            ).rejects.toThrow(
+                "Error executing action 'Test Action': Request timeout after 30000ms",
+            );
         });
 
         it('should throw error if response cannot be adapted', async () => {

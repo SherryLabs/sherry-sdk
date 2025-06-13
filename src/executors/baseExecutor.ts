@@ -1,5 +1,5 @@
 import { ActionValidationError } from '../errors/customErrors';
-import { buildSdkHeaders } from '../headers/headers';
+import { buildSdkHeaders, VALID_OPERATIONS, ValidOperation } from '../headers/headers';
 
 /**
  * Configuration options for executor operations.
@@ -40,11 +40,9 @@ export interface ExecutorOptions {
  * ```
  */
 export abstract class BaseExecutor {
-    /** The Sherry proxy server URL used for all requests */
-    protected proxyUrl: string = 'https://proxy.sherry.social';
-
-    /** Optional client key for authenticated requests */
     protected clientKey?: string;
+    protected proxyBaseUrl: string;
+    protected defaultTimeout: number;
 
     /**
      * Creates a new BaseExecutor instance.
@@ -55,6 +53,8 @@ export abstract class BaseExecutor {
      */
     constructor(clientKey?: string) {
         this.clientKey = clientKey;
+        this.proxyBaseUrl = process.env.SHERRY_PROXY_URL || 'https://proxy.sherry.social';
+        this.defaultTimeout = 30000;
     }
 
     /**
@@ -64,8 +64,7 @@ export abstract class BaseExecutor {
      * not just those with dynamic actions. It's the recommended way
      * to discover what actions and capabilities a mini app provides.
      *
-     * @param baseUrl - The base URL of the mini app (e.g., 'https://myapp.com')
-     * @param path - The metadata endpoint path. Defaults to '/metadata'
+     * @param targetUrl - The complete URL of the mini app's metadata endpoint
      * @param options - Additional options for the request
      *
      * @returns Promise resolving to the mini app's metadata object
@@ -77,26 +76,20 @@ export abstract class BaseExecutor {
      * ```typescript
      * const executor = new MiniAppExecutor('your-client-key');
      *
-     * // Get metadata from default endpoint
-     * const metadata = await executor.getMetadata('https://myapp.com');
+     * // Get metadata from app
+     * const metadata = await executor.getMetadata('https://myapp.com/metadata');
      *
-     * // Get metadata from custom endpoint
+     * // Get metadata with custom options
      * const customMeta = await executor.getMetadata(
-     *   'https://myapp.com',
-     *   '/api/v1/metadata',
-     *   { timeout: 5000 }
+     *   'https://myapp.com/api/v1/metadata',
+     *   { timeout: 5000, clientKey: 'custom-key' }
      * );
      * ```
      */
-    async getMetadata(
-        baseUrl: string,
-        path: string = '/metadata',
-        options?: ExecutorOptions,
-    ): Promise<any> {
-        const targetUrl = this.buildTargetUrl(baseUrl, path);
+    async getMetadata(targetUrl: string, options?: ExecutorOptions): Promise<any> {
         const finalClientKey = options?.clientKey || this.clientKey;
 
-        const headers = buildSdkHeaders(targetUrl, 'metadata', finalClientKey);
+        const headers = buildSdkHeaders(targetUrl, VALID_OPERATIONS.FETCH, finalClientKey);
 
         if (options?.customHeaders) {
             Object.assign(headers, options.customHeaders);
@@ -105,7 +98,6 @@ export abstract class BaseExecutor {
         return this.makeRequest('/proxy', {
             method: 'GET',
             headers,
-            timeout: options?.timeout || 10000,
         });
     }
 
@@ -131,7 +123,7 @@ export abstract class BaseExecutor {
             throw new ActionValidationError('baseUrl and path are required');
         }
 
-        if (path.startsWith('http')) {
+        if (path.startsWith('https')) {
             return path;
         }
 
@@ -168,11 +160,11 @@ export abstract class BaseExecutor {
             method: string;
             headers: Record<string, string>;
             body?: string | FormData;
-            timeout: number;
         },
     ): Promise<any> {
+        const timeout = this.defaultTimeout;
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), options.timeout);
+        const timeoutId = setTimeout(() => controller.abort(), timeout);
 
         try {
             const finalHeaders = { ...options.headers };
@@ -182,7 +174,7 @@ export abstract class BaseExecutor {
                 finalHeaders['Content-Type'] = 'application/json';
             }
 
-            const response = await fetch(`${this.proxyUrl}${endpoint}`, {
+            const response = await fetch(`${this.proxyBaseUrl}${endpoint}`, {
                 method: options.method,
                 headers: finalHeaders,
                 body: options.body,
@@ -206,7 +198,7 @@ export abstract class BaseExecutor {
             clearTimeout(timeoutId);
 
             if (error instanceof Error && error.name === 'AbortError') {
-                throw new Error(`Request timeout after ${options.timeout}ms`);
+                throw new Error(`Request timeout after ${timeout}ms`);
             }
 
             throw error;
