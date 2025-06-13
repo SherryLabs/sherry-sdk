@@ -97,10 +97,10 @@ export class DynamicActionExecutor extends BaseExecutor {
      * const transferResponse = await executor.executeForTransaction(
      *   transferAction,
      *   { recipient: '0x123...', amount: '1.5' },
-     *   { 
-     *     userAddress: '0x456...', 
-     *     sourceChain: 'avalanche', 
-     *     baseUrl: 'https://app.com' 
+     *   {
+     *     userAddress: '0x456...',
+     *     sourceChain: 'avalanche',
+     *     baseUrl: 'https://app.com'
      *   }
      * );
      *
@@ -112,10 +112,10 @@ export class DynamicActionExecutor extends BaseExecutor {
      *     description: 'Cool NFT',
      *     image: fileInput.files[0] // File object
      *   },
-     *   { 
-     *     userAddress: '0x456...', 
-     *     sourceChain: 'polygon', 
-     *     baseUrl: 'https://nft.com' 
+     *   {
+     *     userAddress: '0x456...',
+     *     sourceChain: 'polygon',
+     *     baseUrl: 'https://nft.com'
      *   }
      * );
      * ```
