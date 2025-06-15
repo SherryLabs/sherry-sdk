@@ -11,6 +11,8 @@ export interface ExecutorOptions {
     timeout?: number;
     /** Additional custom headers to include in the request. */
     customHeaders?: Record<string, string>;
+    /** Custom proxy URL for CORS or development environments */
+    proxyUrl?: string;
 }
 
 /**
@@ -43,6 +45,7 @@ export abstract class BaseExecutor {
     protected clientKey?: string;
     protected proxyBaseUrl: string;
     protected defaultTimeout: number;
+    protected isBrowser: boolean;
 
     /**
      * Creates a new BaseExecutor instance.
@@ -50,11 +53,22 @@ export abstract class BaseExecutor {
      * @param clientKey - Optional client key for authentication.
      *                   If not provided, requests will be made anonymously
      *                   with reduced rate limits.
+     * @param proxyUrl - Optional custom proxy URL for CORS or development environments.
+     *                  Defaults to the official Sherry proxy.
      */
-    constructor(clientKey?: string) {
+    constructor(clientKey?: string, proxyUrl?: string) {
         this.clientKey = clientKey;
-        this.proxyBaseUrl = process.env.SHERRY_PROXY_URL || 'https://proxy.sherry.social';
+        this.isBrowser = typeof window !== 'undefined';
+        this.proxyBaseUrl = proxyUrl || process.env.SHERRY_PROXY_URL || 'https://proxy.sherry.social';
         this.defaultTimeout = 30000;
+
+        // Warn about CORS issues in browser environments
+        if (this.isBrowser && this.proxyBaseUrl.includes('proxy.sherry.social')) {
+            console.warn(
+                'Sherry SDK: Running in browser environment. You may encounter CORS issues. ' +
+                'Consider using a CORS proxy or server-side implementation for production.'
+            );
+        }
     }
 
     /**
@@ -88,6 +102,7 @@ export abstract class BaseExecutor {
      */
     async getMetadata(targetUrl: string, options?: ExecutorOptions): Promise<any> {
         const finalClientKey = options?.clientKey || this.clientKey;
+        const finalProxyUrl = options?.proxyUrl || this.proxyBaseUrl;
 
         const headers = buildSdkHeaders(targetUrl, VALID_OPERATIONS.FETCH, finalClientKey);
 
@@ -95,10 +110,16 @@ export abstract class BaseExecutor {
             Object.assign(headers, options.customHeaders);
         }
 
-        return this.makeRequest('/proxy', {
-            method: 'GET',
-            headers,
-        });
+        const requestEndpoint = `/proxy?url=${encodeURIComponent(targetUrl)}`;
+
+        return this.makeRequest(
+            requestEndpoint,
+            {
+                method: 'GET',
+                headers,
+            },
+            finalProxyUrl
+        );
     }
 
     /**
@@ -145,6 +166,7 @@ export abstract class BaseExecutor {
      *
      * @param endpoint - The proxy endpoint to call (usually '/proxy')
      * @param options - Request configuration options
+     * @param customProxyUrl - Optional custom proxy URL for CORS or development environments
      *
      * @returns Promise resolving to the parsed JSON response
      *
@@ -161,10 +183,12 @@ export abstract class BaseExecutor {
             headers: Record<string, string>;
             body?: string | FormData;
         },
+        customProxyUrl?: string,
     ): Promise<any> {
         const timeout = this.defaultTimeout;
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), timeout);
+        const proxyUrl = customProxyUrl || this.proxyBaseUrl;
 
         try {
             const finalHeaders = { ...options.headers };
@@ -174,7 +198,7 @@ export abstract class BaseExecutor {
                 finalHeaders['Content-Type'] = 'application/json';
             }
 
-            const response = await fetch(`${this.proxyBaseUrl}${endpoint}`, {
+            const response = await fetch(`${proxyUrl}${endpoint}`, {
                 method: options.method,
                 headers: finalHeaders,
                 body: options.body,
@@ -199,6 +223,17 @@ export abstract class BaseExecutor {
 
             if (error instanceof Error && error.name === 'AbortError') {
                 throw new Error(`Request timeout after ${timeout}ms`);
+            }
+
+            // Enhanced CORS error messaging
+            if (error instanceof TypeError && error.message.includes('fetch')) {
+                if (this.isBrowser) {
+                    throw new Error(
+                        'CORS error: Cannot access proxy from browser. ' +
+                        'Use a CORS proxy, implement server-side calls, or configure your proxy to allow CORS. ' +
+                        `Original error: ${error.message}`
+                    );
+                }
             }
 
             throw error;

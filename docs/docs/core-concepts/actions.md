@@ -1,12 +1,12 @@
 # Understanding Actions and Parameters
 
-## ⚙️ Actions
+## Actions
 
 In Sherry, **actions** are the core interactive units that define what a mini-app can do. Each action represents a specific task the user can trigger—such as sending tokens, calling a smart contract, or initiating a multi-step flow.
 
 Sherry supports **4 different action types**, each optimized for different complexity levels and use cases:
 
-## 🚀 **Dynamic Actions** (`type: 'dynamic'`) - **Most Powerful**
+## Dynamic Actions (`type: 'dynamic'`) - Most Powerful
 
 The most sophisticated action type for complex Web3 operations. Your server computes the optimal transaction based on user inputs, market conditions, and complex logic.
 
@@ -53,7 +53,7 @@ The most sophisticated action type for complex Web3 operations. Your server comp
 4. Server returns a ready-to-execute transaction
 5. User signs and executes
 
-### 🔧 **Blockchain Actions** (`type: 'blockchain'`) - **Direct Contract Interaction**
+### Blockchain Actions (`type: 'blockchain'`) - Direct Contract Interaction
 
 For direct smart contract interactions where you know exactly which function to call and what parameters to use.
 
@@ -62,10 +62,10 @@ For direct smart contract interactions where you know exactly which function to 
   type: 'blockchain',
   label: 'Mint NFT',
   address: '0x742d35Cc6734C0532925a3b8D4ccd306f6F4B26C',
-  abi: nftAbi,
+  // abi: nftAbi, // Assuming nftAbi is defined elsewhere
   functionName: 'mint',
   chains: { source: 'avalanche' },
-  amount: 0.1, // Fixed mint price
+  amount: 0.1, // Fixed mint price in native currency
   params: [
     {
       name: 'to',
@@ -90,7 +90,7 @@ For direct smart contract interactions where you know exactly which function to 
 - Use Blockchain Actions when the contract call is straightforward
 - Use Dynamic Actions when you need server-side logic to determine what to call
 
-### 💸 **Transfer Actions** (`type: 'transfer'`) - **Simple & Interactive**
+### Transfer Actions (`type: 'transfer'`) - Simple & Interactive
 
 The most user-friendly way to send native tokens (ETH, AVAX, CELO) with customizable UI options.
 
@@ -102,11 +102,12 @@ The most user-friendly way to send native tokens (ETH, AVAX, CELO) with customiz
   to: '0x742d35Cc6734C0532925a3b8D4ccd306f6F4B26C',
   amountConfig: {
     type: 'radio',
-    label: 'Support Amount',
+    label: 'Tip Amount',
+    required: true,
     options: [
-      { label: 'Coffee ☕', value: 0.01, description: '0.01 AVAX' },
-      { label: 'Lunch 🍕', value: 0.05, description: '0.05 AVAX' },
-      { label: 'Dinner 🍽️', value: 0.1, description: '0.1 AVAX' }
+      { label: 'Small Tip', value: 0.01, description: '0.01 AVAX' },
+      { label: 'Medium Tip', value: 0.05, description: '0.05 AVAX' },
+      { label: 'Large Tip', value: 0.1, description: '0.1 AVAX' }
     ]
   }
 }
@@ -122,7 +123,7 @@ The most user-friendly way to send native tokens (ETH, AVAX, CELO) with customiz
 
 **Key advantage:** No ABI knowledge required, built-in UI configurability
 
-### 🔄 **Action Flows** (`type: 'flow'`) - **Multi-Step Workflows**
+### Action Flows (`type: 'flow'`) - Multi-Step Workflows
 
 For complex multi-step processes that combine different action types with conditional logic.
 
@@ -168,7 +169,7 @@ For complex multi-step processes that combine different action types with condit
 
 ---
 
-## 🎯 **Choosing the Right Action Type**
+## Choosing the Right Action Type
 
 ### Decision Tree:
 
@@ -201,9 +202,10 @@ Are you just sending native tokens (ETH/AVAX/CELO)?
 
 ---
 
-## 🔧 Parameters
+## Parameters
 
 Parameters define the inputs users provide when executing actions. They control UI generation and validation.
+For a comprehensive guide on all parameter types and their properties, please refer to the [Action Parameters API Reference](../api-reference/parameters/parameters.md).
 
 ### Parameter Structure
 
@@ -223,21 +225,20 @@ interface BaseParameter {
 
 ### Parameter Types by Action
 
-#### **Dynamic Actions** - Most Flexible
-
-- Can use any parameter type
-- Server processes all inputs
-- Perfect for complex forms
+#### Dynamic Actions - Most Flexible
+- Can use any parameter type.
+- Server processes all inputs.
+- Perfect for complex forms.
+  Refer to [Action Parameters API Reference](../api-reference/parameters/parameters.md) for all available types.
 
 ```typescript
+// Example for Dynamic Action params
 params: [
   {
     name: 'strategy',
     label: 'Investment Strategy',
     type: 'select',
-    options: [
-      /* multiple options */
-    ],
+    options: [ /* options */ ],
   },
   {
     name: 'amount',
@@ -245,28 +246,27 @@ params: [
     type: 'number',
     min: 0.01,
   },
+  // ... other parameter types
 ];
 ```
 
-#### **Blockchain Actions** - ABI-Constrained
-
-- Must match contract function parameters exactly
-- Types must be compatible with ABI
-- Order must match ABI function signature
+#### Blockchain Actions - ABI-Constrained
+- Must match contract function parameters.
+- Types should be compatible with ABI types (e.g., `uint256` can map to `type: 'number'`).
+- Order must match ABI function signature.
 
 ```typescript
 // For contract function: mint(address to, uint256 quantity)
 params: [
-  { name: 'to', type: 'address' }, // First parameter
-  { name: 'quantity', type: 'number' }, // Second parameter
+  { name: 'to', type: 'address', label: 'Recipient' }, // Added label for clarity
+  { name: 'quantity', type: 'uint256', label: 'Quantity' }, // Or type: 'number'
 ];
 ```
 
-#### **Transfer Actions** - Configuration-Based
-
-- Uses `amountConfig` and `recipient` instead of `params`
-- Built-in UI components
-- No ABI knowledge required
+#### Transfer Actions - Configuration-Based
+- Uses `amountConfig` and `recipient` instead of `params`.
+- Built-in UI components.
+- No ABI knowledge required.
 
 ```typescript
 // No params array - uses config objects instead
@@ -302,16 +302,16 @@ const amountParam = createParameter(PARAM_TEMPLATES.AMOUNT, {
 
 ---
 
-## 🎯 Best Practices
+## Best Practices
 
-### 1. **Start Simple, Scale Complex**
+### 1. Start Simple, Scale Complex
 
 ```typescript
 // Start with Blockchain Action for simple contract calls
 // Upgrade to Dynamic Action when you need server-side logic
 ```
 
-### 2. **Use Transfer Actions for Native Tokens**
+### 2. Use Transfer Actions for Native Tokens
 
 ```typescript
 // ✅ Good - Use Transfer Action for AVAX/ETH/CELO
@@ -321,7 +321,7 @@ const amountParam = createParameter(PARAM_TEMPLATES.AMOUNT, {
 { type: 'blockchain', functionName: 'transfer', /* complex setup */ }
 ```
 
-### 3. **Dynamic Actions for Complex Logic**
+### 3. Dynamic Actions for Complex Logic
 
 ```typescript
 // ✅ Perfect use case - Server calculates optimal swap route
@@ -339,7 +339,7 @@ const amountParam = createParameter(PARAM_TEMPLATES.AMOUNT, {
 }
 ```
 
-### 4. **Action Flows for Multi-Step UX**
+### 4. Action Flows for Multi-Step UX
 
 ```typescript
 // ✅ Great for onboarding
@@ -355,9 +355,9 @@ const amountParam = createParameter(PARAM_TEMPLATES.AMOUNT, {
 
 ---
 
-## 🔗 Next Steps
+## Next Steps
 
-- [**Dynamic Actions**](../api-reference/action-types/dynamic-actions) - Master the most powerful action type
-- [**Blockchain Actions**](../api-reference/action-types/blockchain-actions) - Direct contract interactions
-- [**Transfer Actions**](../api-reference/action-types/transfer-actions) - Simple native token transfers
-- [**Action Flows**](../api-reference/action-types/action-flows) - Multi-step workflows
+- [Dynamic Actions](../api-reference/action-types/dynamic-actions) - Master the most powerful action type
+- [Blockchain Actions](../api-reference/action-types/blockchain-actions) - Direct contract interactions
+- [Transfer Actions](../api-reference/action-types/transfer-actions) - Simple native token transfers
+- [Action Flows](../api-reference/action-types/action-flows) - Multi-step workflows

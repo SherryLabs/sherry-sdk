@@ -326,7 +326,7 @@ const metadata: Metadata = {
       params: [
         {
           name: 'message',
-          label: 'Your Message Hermano!',
+          label: 'Your Message',
           type: 'text',
           required: true,
           description: 'Enter the message you want to store on the blockchain',
@@ -337,10 +337,19 @@ const metadata: Metadata = {
 };
 ```
 
-<Admonition type="info" title="Parameter Types Available">
-  - `"text"`: Single-line text input - `"textarea"`: Multi-line text input - `"number"`: Numeric
-  input with validation - `"email"`: Email input with validation - `"url"`: URL input with
-  validation
+<Admonition type="info" title="Available Parameter Types">
+  - `"text"`: Single-line text input
+  - `"textarea"`: Multi-line text input
+  - `"number"`: Numeric input with validation
+  - `"email"`: Email input with validation
+  - `"url"`: URL input with validation
+  - `"select"`: Dropdown selection
+  - `"radio"`: Radio button selection
+  - `"boolean"`: Checkbox input
+  - `"address"`: Blockchain address input
+  - `"file"`: File upload input
+  - `"image"`: Image upload input
+  (Refer to the [Parameters API documentation](../../api-reference/parameters/parameters.md) for full details)
 </Admonition>
 
 ### 6. Validate and Return the Metadata
@@ -368,7 +377,7 @@ export async function GET(req: NextRequest) {
           params: [
             {
               name: 'message',
-              label: 'Your Message Hermano!',
+              label: 'Your Message',
               type: 'text',
               required: true,
               description: 'Enter the message you want to store on the blockchain',
@@ -403,8 +412,8 @@ export async function GET(req: NextRequest) {
 ## 📚 Example 1: Simple Transfer (Learning Only)
 
 <Admonition type="danger" title="Important Note">
-  This example is for **learning the basic concepts only**. Simple transfers like this are already
-  supported by our built-in TransferAction and will **NOT be accepted** in minithon submissions. Use
+  This example is for **learning basic concepts only**. Simple transfers like this are already
+  supported by our built-in `TransferAction` and will **NOT** be accepted in minithon submissions. Use
   this to understand the flow, then move to Example 2 for minithon-ready functionality.
 </Admonition>
 
@@ -1143,30 +1152,10 @@ headers: {
 
 ### Option 1: Sherry Social App
 
-<div
-  style={{
-    padding: '1rem',
-    backgroundColor: 'var(--ifm-color-info-contrast-background)',
-    borderLeft: '4px solid var(--ifm-color-info)',
-    borderRadius: '4px',
-    margin: '1rem 0',
-  }}
->
-  <strong>Production Testing</strong>
-  <ol>
-    <li>
-      Go to{' '}
-      <a href="https://app.sherry.social/home" target="_blank">
-        https://app.sherry.social/home
-      </a>
-    </li>
-    <li>In the address field, enter your GET endpoint URL</li>
-    <li>
-      Example: <code>http://localhost:3000/api/my-app</code> (for local development)
-    </li>
-    <li>The platform will automatically render your mini app</li>
-  </ol>
-</div>
+1. Go to [https://app.sherry.social/home](https://app.sherry.social/home)
+2. In the address field, enter your GET endpoint URL
+3. Example: `http://localhost:3000/api/my-app` (for local development)
+4. The platform will automatically render your mini app
 
 ### Option 2: Sherry Debugger (Recommended for Development)
 
@@ -1238,119 +1227,41 @@ headers: {
 ### What Makes a Winning Minithon Submission
 
 <Tabs>
-<TabItem value="technical" label="Technical Requirements" default>
+<TabItem value="technical" label="Technical Merit">
 
-<div
-  style={{
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-    gap: '1rem',
-  }}
->
-  <div style={{ padding: '1rem', border: '2px solid #10b981', borderRadius: '8px' }}>
-    <h4>Smart Contract Interaction</h4>
-    <p>Meaningful functionality beyond simple transfers</p>
-  </div>
-  <div style={{ padding: '1rem', border: '2px solid #10b981', borderRadius: '8px' }}>
-    <h4>Custom Business Logic</h4>
-    <p>Unique algorithms that add real value</p>
-  </div>
-  <div style={{ padding: '1rem', border: '2px solid #10b981', borderRadius: '8px' }}>
-    <h4>Multiple Parameters</h4>
-    <p>Sophisticated data handling</p>
-  </div>
-  <div style={{ padding: '1rem', border: '2px solid #10b981', borderRadius: '8px' }}>
-    <h4>Error Handling</h4>
-    <p>User-friendly error messages</p>
-  </div>
-</div>
+**Key Technical Aspects:**
+*   **Multiple Parameters:** Sophisticated data handling and creative input combinations.
+*   **Error Handling:** User-friendly error messages and robust validation.
+*   **Innovative Algorithms:** Complex data processing, unique calculations, or on-chain/off-chain logic.
+*   **Parameter Combinations:** Creative input combinations and validations that enhance usability or functionality.
+*   **Practical Applications:** Real utility for blockchain users, solving a genuine problem or offering a novel service.
 
 </TabItem>
-<TabItem value="creativity" label="Creativity Factors">
+<TabItem value="creativity" label="Creativity & Innovation">
 
-<div
-  style={{
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-    gap: '1rem',
-  }}
->
-  <div style={{ padding: '1rem', border: '2px solid #3b82f6', borderRadius: '8px' }}>
-    <h4>Unique Use Cases</h4>
-    <p>Solve real problems that users face</p>
-  </div>
-  <div style={{ padding: '1rem', border: '2px solid #3b82f6', borderRadius: '8px' }}>
-    <h4>Innovative Algorithms</h4>
-    <p>Complex data processing and calculations</p>
-  </div>
-  <div style={{ padding: '1rem', border: '2px solid #3b82f6', borderRadius: '8px' }}>
-    <h4>Parameter Combinations</h4>
-    <p>Creative input combinations and validations</p>
-  </div>
-  <div style={{ padding: '1rem', border: '2px solid #3b82f6', borderRadius: '8px' }}>
-    <h4>Practical Applications</h4>
-    <p>Real utility for blockchain users</p>
-  </div>
-</div>
+**Factors for Creativity:**
+*   **Unique Use Cases:** Solve real problems that users face in a novel way.
+*   **Innovative Algorithms:** Implement complex or unique data processing and calculations.
+*   **Practical Applications:** Demonstrate real utility and value for blockchain users.
 
 </TabItem>
-<TabItem value="examples" label="Good Ideas">
+<TabItem value="examples" label="Good Ideas (Examples)">
 
-<div
-  style={{
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-    gap: '1rem',
-  }}
->
-  <div style={{ padding: '1rem', border: '2px solid #8b5cf6', borderRadius: '8px' }}>
-    <h4>DeFi Tools</h4>
-    <p>Custom yield calculators, portfolio rebalancing, automated strategies</p>
-  </div>
-  <div style={{ padding: '1rem', border: '2px solid #8b5cf6', borderRadius: '8px' }}>
-    <h4>Gaming</h4>
-    <p>On-chain game mechanics, NFT interactions, scoring systems</p>
-  </div>
-  <div style={{ padding: '1rem', border: '2px solid #8b5cf6', borderRadius: '8px' }}>
-    <h4>Social</h4>
-    <p>Decentralized messaging, reputation systems, community tools</p>
-  </div>
-  <div style={{ padding: '1rem', border: '2px solid #8b5cf6', borderRadius: '8px' }}>
-    <h4>Productivity</h4>
-    <p>Task management with token rewards, collaborative tools</p>
-  </div>
-</div>
+**Examples of Good Ideas (but not limited to):**
+*   A tool that analyzes wallet history to suggest DeFi optimizations.
+*   A MiniApp for creating and managing multi-signature Gnosis Safe transactions with a simplified UI.
+*   A dynamic NFT minting MiniApp where traits are determined by off-chain data or user inputs.
+*   A prediction market interface that interacts with a specific smart contract.
 
 </TabItem>
 </Tabs>
 
 ### What Won't Be Accepted in Minithon
 
-<div
-  style={{
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-    gap: '1rem',
-    margin: '1rem 0',
-  }}
->
-  <div style={{ padding: '1rem', border: '2px solid #dc2626', borderRadius: '8px' }}>
-    <h4>Simple Token Transfers</h4>
-    <p>Use our TransferAction instead</p>
-  </div>
-  <div style={{ padding: '1rem', border: '2px solid #dc2626', borderRadius: '8px' }}>
-    <h4>Copy-Paste Examples</h4>
-    <p>Without meaningful modifications</p>
-  </div>
-  <div style={{ padding: '1rem', border: '2px solid #dc2626', borderRadius: '8px' }}>
-    <h4>No Smart Contracts</h4>
-    <p>Mini apps must interact with contracts</p>
-  </div>
-  <div style={{ padding: '1rem', border: '2px solid #dc2626', borderRadius: '8px' }}>
-    <h4>Broken Implementations</h4>
-    <p>Must work end-to-end</p>
-  </div>
-</div>
+- Simple token transfers (use our TransferAction instead)
+- Copy-paste examples without meaningful modifications
+- Mini apps that do not interact with smart contracts
+- Broken implementations that do not work end-to-end
 
 ## 🔧 Troubleshooting
 
@@ -1470,7 +1381,7 @@ export async function GET(req: NextRequest) {
           params: [
             {
               name: 'message',
-              label: 'Your Message Hermano!',
+              label: 'Your Message',
               type: 'text',
               required: true,
               description: 'Enter the message you want to store on the blockchain',

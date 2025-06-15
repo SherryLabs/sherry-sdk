@@ -4,356 +4,381 @@ sidebar_position: 5
 
 # Action Parameters
 
-Parameters define the inputs a user provides when executing actions. They control UI generation and validation for each required field.
+Action parameters define the inputs users provide when executing actions. They control UI generation and data validation. All parameter objects share a common set of base properties and can include additional properties specific to their type.
 
-## Parameter Types
+## Base Parameter Properties
 
-All parameters extend from `BaseParameter`:
+All parameter types extend from a base structure and include the following properties:
 
 ```typescript
 interface BaseParameter {
-  name: string; // Parameter identifier (must match ABI/API field)
-  label: string; // Label displayed to user
-  type: string; // Input type
-  required?: boolean; // Is this field mandatory?
-  description?: string; // Help text for the user
-  fixed?: boolean; // Is the value fixed (non-editable)?
-  value?: any; // Default or fixed value
+  name: string;        // Unique identifier for the parameter.
+  label: string;       // User-friendly label displayed in the UI.
+  type: string;        // Specifies the input type (e.g., 'text', 'number', 'select').
+  required?: boolean;  // Whether the parameter is mandatory (default: false).
+  description?: string;// Additional help text or guidance for the user.
+  fixed?: boolean;     // If true, the parameter's value is pre-set and not editable by the user.
+  value?: any;         // Default or fixed value for the parameter.
 }
 ```
 
-### StandardParameter
+| Property      | Type      | Required | Description                                       |
+|---------------|-----------|----------|---------------------------------------------------|
+| `name`        | `string`  | ✅        | Unique parameter name/identifier.                 |
+| `label`       | `string`  | ✅        | User-friendly label for the UI.                   |
+| `type`        | `string`  | ✅        | The specific type of the parameter.               |
+| `required`    | `boolean` | ❌        | Whether the field is mandatory.                   |
+| `description` | `string`  | ❌        | Additional help text displayed to the user.       |
+| `fixed`       | `boolean` | ❌        | If true, the value is pre-defined and not user-editable. |
+| `value`       | `any`     | ❌        | Default value or the fixed value if `fixed` is true. |
 
-For common input types like text, numbers, addresses, and booleans:
+## Parameter Types
 
+Below are the specific parameter types available, each extending the `BaseParameter` properties with its own unique characteristics and additional fields.
+
+### Text-Based Parameters
+
+For inputs that expect textual data. This includes plain text, emails, URLs, and longer messages.
+
+**Interface:**
 ```typescript
-// Text input
-{
-  name: 'message',
-  label: 'Your Message',
-  type: 'text',
-  required: true,
-  minLength: 5,
-  maxLength: 100,
-  description: 'Enter your message here'
-}
-
-// Number input
-{
-  name: 'amount',
-  label: 'Amount',
-  type: 'number',
-  required: true,
-  min: 0.01,
-  max: 1000
-}
-
-// Address input (with validation)
-{
-  name: 'recipient',
-  label: 'Recipient Address',
-  type: 'address',
-  required: true,
-  pattern: '^0x[a-fA-F0-9]{40}$'
-}
-
-// Boolean checkbox
-{
-  name: 'confirm',
-  label: 'I agree to terms',
-  type: 'boolean',
-  required: true
-}
-
-// Email input (with validation)
-{
-  name: 'email',
-  label: 'Email Address',
-  type: 'email',
-  required: true,
-  pattern: '^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$'
-}
-
-// Large text input
-{
-  name: 'description',
-  label: 'Description',
-  type: 'textarea',
-  required: false,
-  maxLength: 500
+interface TextBasedParameter extends BaseParameter {
+  type:
+    | 'text'
+    | 'email'
+    | 'url'
+    | 'textarea'
+    | 'string' // Generic string, often used with ABI types
+    | 'bytes'  // For byte strings, typically hex-encoded
+    | Extract<AbiType, 'string' | 'bytes' | `bytes${number}`>;
+  minLength?: number;
+  maxLength?: number;
+  pattern?: string; // Regular expression for validation.
 }
 ```
 
-### SelectParameter
+**Properties:**
 
-For dropdown selections:
+| Property    | Type     | Description                                     |
+|-------------|----------|-------------------------------------------------|
+| `minLength` | `number` | Minimum character length.                       |
+| `maxLength` | `number` | Maximum character length.                       |
+| `pattern`   | `string` | A regex pattern for input validation.           |
 
-```typescript
-{
-  name: 'token',
-  label: 'Select Token',
-  type: 'select',
-  required: true,
-  options: [
+**Examples:**
+
+*   **Simple Text Input:**
+    ```json
     {
-      label: 'USDC',
-      value: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
-      description: 'USD Coin'
-    },
-    {
-      label: 'USDT',
-      value: '0xdAC17F958D2ee523a2206206994597C13D831ec7',
-      description: 'Tether USD'
-    },
-    {
-      label: 'DAI',
-      value: '0x6B175474E89094C44Da98b954EedeAC495271d0F',
-      description: 'Dai Stablecoin'
+      "name": "username",
+      "label": "Username",
+      "type": "text",
+      "required": true,
+      "minLength": 3,
+      "maxLength": 20,
+      "pattern": "^[a-zA-Z0-9_]+$",
+      "description": "Must be 3-20 alphanumeric characters or underscores."
     }
+    ```
+
+*   **Email Input:**
+    ```json
+    {
+      "name": "userEmail",
+      "label": "Email Address",
+      "type": "email",
+      "required": true,
+      "pattern": "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", // Example, often handled by UI
+      "description": "Please enter a valid email address."
+    }
+    ```
+
+*   **Textarea for Longer Messages:**
+    ```json
+    {
+      "name": "feedback",
+      "label": "Your Feedback",
+      "type": "textarea",
+      "required": false,
+      "maxLength": 500,
+      "description": "Provide your comments (max 500 characters)."
+    }
+    ```
+
+### Number-Based Parameters
+
+For inputs that expect numerical data, including integers, decimals, and dates/times represented as timestamps.
+
+**Interface:**
+```typescript
+interface NumberBasedParameter extends BaseParameter {
+  type: 'number' | 'datetime' | Extract<AbiType, `uint${string}` | `int${string}`>;
+  min?: number;     // Minimum allowed value.
+  max?: number;     // Maximum allowed value.
+  pattern?: string; // Regular expression (less common for numbers but available).
+}
+```
+
+**Properties:**
+
+| Property  | Type     | Description                                      |
+|-----------|----------|--------------------------------------------------|
+| `min`     | `number` | Minimum numerical value (inclusive).             |
+| `max`     | `number` | Maximum numerical value (inclusive).             |
+| `pattern` | `string` | A regex pattern for validating the number format. |
+
+**Examples:**
+
+*   **Decimal Number Input:**
+    ```json
+    {
+      "name": "amount",
+      "label": "Amount",
+      "type": "number",
+      "required": true,
+      "min": 0.01,
+      "max": 1000,
+      "description": "Enter an amount between 0.01 and 1000."
+    }
+    ```
+
+*   **Integer (ABI `uint256`) Input:**
+    ```json
+    {
+      "name": "tokenId",
+      "label": "Token ID",
+      "type": "uint256", // Or 'number' if not strictly for ABI
+      "required": true,
+      "min": 0,
+      "pattern": "^[0-9]+$",
+      "description": "Enter the NFT Token ID (non-negative integer)."
+    }
+    ```
+
+*   **Datetime Input (Unix Timestamp):**
+    ```json
+    {
+      "name": "expirationDate",
+      "label": "Expiration Date",
+      "type": "datetime",
+      "required": true,
+      "description": "Select the expiration date and time."
+    }
+    ```
+
+### Address Parameters
+
+For inputs that expect blockchain addresses (e.g., Ethereum addresses).
+
+**Interface:**
+```typescript
+interface AddressParameter extends BaseParameter {
+  type: 'address' | Extract<AbiType, 'address'>;
+  pattern?: string; // Regular expression for custom address validation.
+}
+```
+
+**Properties:**
+
+| Property  | Type     | Description                                     |
+|-----------|----------|-------------------------------------------------|
+| `pattern` | `string` | A regex pattern for validating the address format. Defaults to Ethereum address format if not provided. |
+
+**Example:**
+```json
+{
+  "name": "recipientAddress",
+  "label": "Recipient Address",
+  "type": "address",
+  "required": true,
+  "pattern": "^0x[a-fA-F0-9]{40}$", // Standard Ethereum address pattern
+  "description": "Enter a valid Ethereum wallet address."
+}
+```
+
+### Boolean Parameters
+
+For inputs that represent a true/false or yes/no choice, typically rendered as a checkbox.
+
+**Interface:**
+```typescript
+interface BooleanParameter extends BaseParameter {
+  type: 'boolean' | Extract<AbiType, 'bool'>;
+}
+```
+
+**Properties:**
+This parameter type uses only the `BaseParameter` properties.
+
+**Example:**
+```json
+{
+  "name": "agreeToTerms",
+  "label": "I agree to the terms and conditions",
+  "type": "boolean",
+  "required": true,
+  "value": false // Default to unchecked
+}
+```
+
+### Select Parameters
+
+For inputs where the user chooses one option from a dropdown list.
+
+**Interface:**
+```typescript
+interface SelectOption {
+  label: string;                      // Text displayed for the option.
+  value: string | number | boolean;   // Actual value of the option.
+  description?: string;               // Optional additional description for the option.
+}
+
+interface SelectParameter extends BaseParameter {
+  type: 'select';
+  options: SelectOption[];
+}
+```
+
+**Properties:**
+
+| Property  | Type             | Description                                     |
+|-----------|------------------|-------------------------------------------------|
+| `options` | `SelectOption[]` | An array of `SelectOption` objects to populate the dropdown. |
+
+**Example:**
+```json
+{
+  "name": "tokenChoice",
+  "label": "Select Token",
+  "type": "select",
+  "required": true,
+  "options": [
+    { "label": "Ether (ETH)", "value": "0xETHAddress", "description": "Native currency" },
+    { "label": "USD Coin (USDC)", "value": "0xUSDCAddress", "description": "Stablecoin" }
+  ],
+  "description": "Choose a token for the transaction."
+}
+```
+
+### Radio Parameters
+
+For inputs where the user chooses one option from a set of radio buttons.
+
+**Interface:**
+```typescript
+// Uses the same SelectOption interface as SelectParameter
+
+interface RadioParameter extends BaseParameter {
+  type: 'radio';
+  options: SelectOption[];
+}
+```
+
+**Properties:**
+
+| Property  | Type             | Description                                     |
+|-----------|------------------|-------------------------------------------------|
+| `options` | `SelectOption[]` | An array of `SelectOption` objects to create radio buttons. |
+
+**Example:**
+```json
+{
+  "name": "priorityLevel",
+  "label": "Priority Level",
+  "type": "radio",
+  "required": true,
+  "value": "medium", // Default selected radio option
+  "options": [
+    { "label": "Low", "value": "low", "description": "Standard processing time" },
+    { "label": "Medium", "value": "medium", "description": "Faster processing" },
+    { "label": "High", "value": "high", "description": "Immediate processing" }
   ]
 }
 ```
 
-### RadioParameter
+### File Parameters
 
-For radio button groups:
+For inputs that allow users to upload files.
 
+**Interface:**
 ```typescript
-{
-  name: 'priority',
-  label: 'Priority Level',
-  type: 'radio',
-  required: true,
-  options: [
-    {
-      label: 'Low',
-      value: 'low',
-      description: 'Standard processing time'
-    },
-    {
-      label: 'Medium',
-      value: 'medium',
-      description: 'Faster processing'
-    },
-    {
-      label: 'High',
-      value: 'high',
-      description: 'Priority processing'
-    }
-  ]
+interface FileParameter extends BaseParameter {
+  type: 'file';
+  accept?: string;    // Comma-separated string of accepted file types (e.g., "application/pdf,image/jpeg").
+  maxSize?: number;   // Maximum file size in bytes.
+  multiple?: boolean; // If true, allows multiple file selection.
 }
 ```
 
-## Parameter Templates
+**Properties:**
 
-Use predefined templates for common parameter types:
+| Property   | Type      | Description                                                                 |
+|------------|-----------|-----------------------------------------------------------------------------|
+| `accept`   | `string`  | MIME types or extensions (e.g., `image/png`, `.pdf`).                       |
+| `maxSize`  | `number`  | Maximum file size in bytes.                                                 |
+| `multiple` | `boolean` | Allows selection of multiple files if true.                                 |
 
-```typescript
-import { PARAM_TEMPLATES, createParameter } from '@sherrylinks/sdk';
-
-// Address parameter
-const recipientParam = createParameter(PARAM_TEMPLATES.ADDRESS, {
-  name: 'recipient',
-  label: 'Destination Address',
-  description: 'Where to send the tokens',
-});
-
-// Amount parameter
-const amountParam = createParameter(PARAM_TEMPLATES.AMOUNT, {
-  name: 'transferAmount',
-  label: 'Amount to Send',
-  min: 0.01,
-  max: 1000,
-});
-
-// Email parameter
-const emailParam = createParameter(PARAM_TEMPLATES.EMAIL, {
-  name: 'userEmail',
-  label: 'Your Email Address',
-});
-
-// Yes/No selection
-const confirmParam = createParameter(PARAM_TEMPLATES.YES_NO, {
-  name: 'confirmation',
-  label: 'Confirm this action?',
-});
-
-// Token selection
-const tokenParam = createParameter(PARAM_TEMPLATES.TOKEN_SELECT, {
-  name: 'selectedToken',
-  label: 'Choose Token',
-});
+**Example:**
+```json
+{
+  "name": "documentUpload",
+  "label": "Upload Document",
+  "type": "file",
+  "required": true,
+  "accept": "application/pdf,.docx",
+  "maxSize": 5242880, // 5MB
+  "multiple": false,
+  "description": "Upload your document in PDF or DOCX format (max 5MB)."
+}
 ```
 
-### Available Templates
+### Image Parameters
 
-| Template       | Type     | Description                            |
-| -------------- | -------- | -------------------------------------- |
-| `ADDRESS`      | address  | Ethereum address input with validation |
-| `AMOUNT`       | number   | Numeric amount for transfers           |
-| `TOKEN_AMOUNT` | number   | Token amount with decimal support      |
-| `INTEGER`      | number   | Integer-only number input              |
-| `EMAIL`        | email    | Email address with validation          |
-| `TEXT`         | text     | Basic text input                       |
-| `TEXTAREA`     | textarea | Multi-line text input                  |
-| `BOOLEAN`      | boolean  | Boolean checkbox                       |
-| `YES_NO`       | radio    | Yes/No radio selection                 |
-| `TOKEN_SELECT` | select   | Common token dropdown                  |
-| `CHAIN_SELECT` | select   | Blockchain selection                   |
+A specialized file input for uploading images, with additional properties for image-specific validation.
 
-## Helper Functions
-
-### Creating Select Parameters
-
+**Interface:**
 ```typescript
-import { createSelectParam, createSelectOptions } from '@sherrylinks/sdk';
-
-// Simple select parameter
-const prioritySelect = createSelectParam(
-  'priority',
-  'Priority Level',
-  [
-    { label: 'Low', value: 1 },
-    { label: 'Medium', value: 2 },
-    { label: 'High', value: 3 },
-  ],
-  true, // required
-  'Select the priority for this action',
-);
-
-// Using helper for options
-const tokenOptions = [
-  { label: 'ETH', value: 'eth', description: 'Ethereum' },
-  { label: 'AVAX', value: 'avax', description: 'Avalanche' },
-];
-
-const tokenSelect = createSelectParam(
-  'token',
-  'Select Token',
-  createSelectOptions(tokenOptions),
-  true,
-  'Choose the token to use',
-);
+interface ImageParameter extends BaseParameter {
+  type: 'image';
+  accept?: string;      // Accepted image types (e.g., "image/jpeg,image/png").
+  maxSize?: number;     // Maximum file size in bytes.
+  multiple?: boolean;   // If true, allows multiple image selection.
+  maxWidth?: number;    // Maximum image width in pixels.
+  maxHeight?: number;   // Maximum image height in pixels.
+  aspectRatio?: string; // Desired aspect ratio (e.g., "16:9", "1:1").
+}
 ```
 
-### Creating Radio Parameters
+**Properties:**
 
-```typescript
-import { createRadioParam } from '@sherrylinks/sdk';
+| Property      | Type      | Description                                                                 |
+|---------------|-----------|-----------------------------------------------------------------------------|
+| `accept`      | `string`  | MIME types for images (e.g., `image/jpeg`, `image/png`).                    |
+| `maxSize`     | `number`  | Maximum image file size in bytes.                                           |
+| `multiple`    | `boolean` | Allows selection of multiple images if true.                                |
+| `maxWidth`    | `number`  | Maximum allowed width of the image in pixels.                               |
+| `maxHeight`   | `number`  | Maximum allowed height of the image in pixels.                              |
+| `aspectRatio` | `string`  | Enforces a specific aspect ratio (e.g., "16:9", "4:3", "1:1").              |
 
-const confirmRadio = createRadioParam(
-  'confirm',
-  'Confirm Action',
-  [
-    { label: 'Yes, proceed', value: true },
-    { label: 'No, cancel', value: false },
-  ],
-  true,
-  'Please confirm your choice',
-);
+**Example:**
+```json
+{
+  "name": "profilePicture",
+  "label": "Profile Picture",
+  "type": "image",
+  "required": false,
+  "accept": "image/jpeg,image/png",
+  "maxSize": 2097152, // 2MB
+  "maxWidth": 800,
+  "maxHeight": 800,
+  "aspectRatio": "1:1",
+  "description": "Upload a square profile picture (JPG or PNG, max 2MB, 800x800px)."
+}
 ```
 
 ## Validation Properties
 
-### Text-Based Parameters
-
-```typescript
-{
-  name: 'username',
-  label: 'Username',
-  type: 'text',
-  minLength: 3,        // Minimum character length
-  maxLength: 20,       // Maximum character length
-  pattern: '^[a-zA-Z0-9_]+$',  // Regex pattern
-  required: true
-}
-```
-
-### Number-Based Parameters
-
-```typescript
-{
-  name: 'price',
-  label: 'Price',
-  type: 'number',
-  min: 0.01,          // Minimum value
-  max: 10000,         // Maximum value
-  required: true
-}
-```
-
-### Address Parameters
-
-```typescript
-{
-  name: 'wallet',
-  label: 'Wallet Address',
-  type: 'address',
-  pattern: '^0x[a-fA-F0-9]{40}$',  // Custom validation pattern
-  required: true
-}
-```
-
-## Fixed vs Dynamic Values
-
-### Fixed Parameters
-
-Use `fixed: true` for values that users shouldn't change:
-
-```typescript
-{
-  name: 'contractAddress',
-  label: 'Contract',
-  type: 'address',
-  value: '0x1234567890123456789012345678901234567890',
-  fixed: true,  // User cannot edit this
-  required: true
-}
-```
-
-### Default Values
-
-Provide defaults that users can modify:
-
-```typescript
-{
-  name: 'slippage',
-  label: 'Slippage Tolerance',
-  type: 'number',
-  value: 0.5,  // Default 0.5%
-  min: 0.1,
-  max: 5.0,
-  required: true
-}
-```
-
-## Special Values
-
-Some parameters accept special values:
-
-```typescript
-// 'sender' resolves to the current user's address
-{
-  name: 'recipient',
-  label: 'Send To',
-  type: 'address',
-  value: 'sender',  // Special value
-  required: true
-}
-```
-
-## ABI Type Compatibility
-
-For `BlockchainAction` parameters, the SDK automatically validates compatibility between parameter types and ABI types:
-
-| ABI Type            | Compatible Parameter Types                   |
-| ------------------- | -------------------------------------------- |
-| `address`           | `address`                                    |
-| `bool`              | `boolean`, `bool`                            |
-| `string`            | `text`, `email`, `url`, `textarea`, `string` |
-| `uint256`, `int256` | `number`, `uint256`, `int256`                |
-| `bytes`, `bytes32`  | `text`, `bytes`, `bytes32`                   |
-| `address[]`         | `text` (as JSON array)                       |
+Validation properties like `minLength`, `maxLength`, `min`, `max`, `pattern`, `required`, `accept`, `maxSize`, etc., are defined within each parameter type above. Ensure that user inputs meet these criteria for successful action execution. The UI will typically provide immediate feedback based on these validation rules.
 
 ## Best Practices
 
@@ -429,7 +454,7 @@ createParameter(PARAM_TEMPLATES.ADDRESS, {
   label: 'Send To',
   type: 'address',
   required: true,
-  pattern: '^0x[a-fA-F0-9]{40}
+  pattern: '^0x[a-fA-F0-9]{40}'
 }
 ```
 
@@ -514,10 +539,13 @@ const mintParams = [
 
 ```typescript
 const voteParams = [
-  createParameter(PARAM_TEMPLATES.INTEGER, {
+  {
     name: 'proposalId',
     label: 'Proposal ID',
-  }),
+    type: 'uint256', // or 'number'
+    required: true,
+    description: 'The ID of the proposal to vote on.'
+  },
   {
     name: 'support',
     label: 'Your Vote',
@@ -527,6 +555,7 @@ const voteParams = [
       { label: 'Yes - Support this proposal', value: true },
       { label: 'No - Oppose this proposal', value: false },
     ],
+    description: 'Cast your vote for or against the proposal.'
   },
 ];
 ```
@@ -535,17 +564,20 @@ const voteParams = [
 
 ```typescript
 const formParams = [
-  createParameter(PARAM_TEMPLATES.EMAIL, {
+  {
     name: 'email',
     label: 'Email Address',
-  }),
+    type: 'email',
+    required: true,
+    description: 'Please enter your email.'
+  },
   {
     name: 'feedback',
     label: 'Your Feedback',
     type: 'textarea',
     required: true,
     maxLength: 1000,
-    description: 'Tell us what you think',
+    description: 'Tell us what you think (max 1000 characters).'
   },
   {
     name: 'rating',
@@ -553,12 +585,13 @@ const formParams = [
     type: 'select',
     required: true,
     options: [
-      { label: '⭐ Poor', value: 1 },
-      { label: '⭐⭐ Fair', value: 2 },
-      { label: '⭐⭐⭐ Good', value: 3 },
-      { label: '⭐⭐⭐⭐ Very Good', value: 4 },
-      { label: '⭐⭐⭐⭐⭐ Excellent', value: 5 },
+      { label: '1 - Poor', value: 1 },
+      { label: '2 - Fair', value: 2 },
+      { label: '3 - Good', value: 3 },
+      { label: '4 - Very Good', value: 4 },
+      { label: '5 - Excellent', value: 5 },
     ],
+    description: 'Rate your experience.'
   },
 ];
 ```

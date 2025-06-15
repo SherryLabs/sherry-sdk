@@ -94,7 +94,8 @@ describe('DynamicActionExecutor', () => {
 
             // Verify the request was made to proxy
             const call = fetchMock.mock.calls[0];
-            expect(call[0]).toBe('https://proxy.sherry.social/proxy');
+            const expectedProxyUrl = `https://proxy.sherry.social/proxy?url=${encodeURIComponent(baseUrl)}`;
+            expect(call[0]).toBe(expectedProxyUrl);
         });
 
         it('should handle custom path in getMetadata', async () => {
