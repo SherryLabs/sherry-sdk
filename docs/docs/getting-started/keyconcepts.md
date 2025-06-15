@@ -1,14 +1,14 @@
 # Key Concepts
 
-## 📦 Metadata
+## Metadata
 
 ## What is Metadata?
 
-The metadata is the **backbone of every mini-app built using the Sherry SDK**. It’s a structured JSON object that defines how your mini-app behaves, how it interacts with blockchain smart contracts, and how it is rendered for users.
+The metadata is the **backbone of every trigger built using the Sherry SDK**. It's a structured JSON object that defines how your trigger behaves, how it interacts with blockchain smart contracts, and how it is rendered for users.
 
-By carefully crafting the metadata, developers can create mini-apps tailored to various use cases, from executing token swaps to interacting with complex decentralized protocols.
+By carefully crafting the metadata, developers can create triggers tailored to various use cases, from executing token swaps to interacting with complex decentralized protocols.
 
-This is how you define your mini-app's content and behavior:
+This is how you define your trigger's content and behavior:
 
 ```typescript
 import { createMetadata, Metadata } from '@sherrylinks/sdk';
@@ -26,13 +26,13 @@ interface Metadata {
 1. **url\***: The url that will be shown.<br/>
    Example: "https://sherry.social/links"
 
-2. **icon\***: URL of the mini-app's visual representation. <br/>
+2. **icon\***: URL of the trigger's visual representation. <br/>
    Example: "https://mi-image.com"
 
 3. **title\***: The title displayed in the user interface. <br/>
    Example: "sherry.social"
 
-4. **description\***: A short explanation of the mini-app's purpose. <br/>
+4. **description\***: A short explanation of the trigger's purpose. <br/>
    Example: "Claim your early supporter badge"
 
 5. **baseurl** : solo depende de si usas dynamic actions
@@ -42,9 +42,11 @@ interface Metadata {
 
 # Understanding Actions and Parameters
 
-## ⚙️ Actions
+Actions are the core of triggers, defining what a user can do. Parameters specify the inputs required for those actions.
 
-In Sherry, **actions** are the core interactive units that define what a mini-app can do.  
+## Actions
+
+In Sherry, **actions** are the core interactive units that define what a trigger can do.  
 Each action represents a specific task the user can trigger—such as sending tokens, calling a smart contract, making an HTTP request, or initiating a multi-step flow.
 
 Actions determine:
@@ -55,7 +57,7 @@ Actions determine:
 
 Sherry supports different types of actions, each tailored to common Web3 interactions.
 
-### ⚙️ Action Types
+### Action Types
 
 #### BlockchainAction
 
@@ -117,7 +119,7 @@ const transferAction: Metadata = {
 For making HTTP requests to external APIs.
 
 ```typescript
-const httpAction: Metadata = {
+const httpActionExample = {
   url: 'https://myapp.example',
   icon: 'https://example.com/icon.png',
   title: 'Submit Feedback',
@@ -131,7 +133,7 @@ const httpAction: Metadata = {
         {
           name: 'message',
           label: 'Your Message',
-          type: 'textarea',
+          type: 'textarea', // Using 'textarea' for multi-line
           required: true,
         },
         {
@@ -140,8 +142,8 @@ const httpAction: Metadata = {
           type: 'select',
           required: true,
           options: [
-            { label: '⭐', value: 1 },
-            { label: '⭐⭐⭐⭐⭐', value: 5 },
+            { label: '1 Star', value: 1 }, // Simplified labels
+            { label: '5 Stars', value: 5 },
           ],
         },
       ],
@@ -229,108 +231,37 @@ const swapFlow: ActionFlow = {
 };
 ```
 
-## ⚙️ Parameters
+## Parameters
 
-Parameters define the inputs a user provides when executing actions. They control the UI generation and validation for each required field.
+Parameters define the inputs a user provides when executing actions. They control the UI generation and validation for each required field. Each parameter has a `name`, `label`, `type`, and can include other properties like `required`, `description`, `value`, and type-specific validation rules (e.g., `minLength`, `maxSize`).
 
-### Parameter Types
+For detailed information on all parameter types and their properties, see the [Action Parameters API Reference](../api-reference/parameters/parameters.md).
 
-All parameters extend from `BaseParameter`:
+### Parameter Types Overview
 
-```typescript
-interface BaseParameter {
-  name: string; // Parameter identifier
-  label: string; // UI label
-  type: string; // Input type
-  required?: boolean; // Is mandatory?
-  description?: string; // Help text
-  fixed?: boolean; // Is non-editable?
-  value?: any; // Default/fixed value
-}
-```
+Sherry SDK supports a variety of parameter types to build rich user interfaces:
 
-#### StandardParameter
+- **Text-Based:** For single-line text, email, URLs, multi-line text areas.
+  - Example: `type: 'text'`, `type: 'email'`, `type: 'textarea'`
+- **Number-Based:** For numerical inputs, including dates and times.
+  - Example: `type: 'number'`, `type: 'datetime'`
+- **Address:** For blockchain addresses.
+  - Example: `type: 'address'`
+- **Boolean:** For true/false checkboxes.
+  - Example: `type: 'boolean'`
+- **Selection:** For dropdowns (`select`) and radio buttons (`radio`).
+  - Example: `type: 'select'`, `type: 'radio'`
+- **File Uploads:** For general files (`file`) and images (`image`) with specific validations.
+  - Example: `type: 'file'`, `type: 'image'`
 
-For common input types (text, numbers, addresses, booleans):
-
-```typescript
-// Text input
-{
-  name: 'message',
-  label: 'Your Message',
-  type: 'text',
-  required: true,
-  minLength: 5,
-  maxLength: 100
-}
-
-// Number input
-{
-  name: 'amount',
-  label: 'Amount',
-  type: 'number',
-  required: true,
-  min: 0.01,
-  max: 1000
-}
-
-// Address input
-{
-  name: 'recipient',
-  label: 'Recipient Address',
-  type: 'address',
-  required: true
-}
-
-// Boolean input
-{
-  name: 'confirm',
-  label: 'I agree to terms',
-  type: 'boolean',
-  required: true
-}
-```
-
-#### SelectParameter
-
-For dropdown selections:
-
-```typescript
-{
-  name: 'token',
-  label: 'Select Token',
-  type: 'select',
-  required: true,
-  options: [
-    { label: 'USDC', value: '0xUSDCAddress', description: 'USD Coin' },
-    { label: 'USDT', value: '0xUSDTAddress', description: 'Tether USD' }
-  ]
-}
-```
-
-#### RadioParameter
-
-For radio button selections:
-
-```typescript
-{
-  name: 'priority',
-  label: 'Priority Level',
-  type: 'radio',
-  required: true,
-  options: [
-    { label: 'Low', value: 'low', description: 'Standard processing' },
-    { label: 'High', value: 'high', description: 'Priority processing' }
-  ]
-}
-```
+Each type comes with specific validation properties. Refer to the [detailed parameter documentation](../api-reference/parameters/parameters.md) for comprehensive examples and all configurable properties.
 
 ### Parameter Templates
 
-Use predefined templates for common parameters:
+Use predefined templates for common parameters to ensure consistency and reduce boilerplate.
 
 ```typescript
-import { PARAM_TEMPLATES, createParameter } from '@sherrylinks/sdk';
+import { PARAM_TEMPLATES, createParameter } from '@sherrylabs/sdk'; // Assuming correct import path
 
 // Address parameter
 const recipientParam = createParameter(PARAM_TEMPLATES.ADDRESS, {
@@ -352,20 +283,19 @@ const confirmParam = createParameter(PARAM_TEMPLATES.YES_NO, {
 });
 ```
 
-Available templates include:
+Available templates include (but are not limited to):
 
-- `ADDRESS` - Ethereum address input
-- `AMOUNT` - Numeric amount for transfers
-- `EMAIL` - Email address input
-- `TEXT` - Basic text input
-- `BOOLEAN` - Boolean checkbox
-- `YES_NO` - Yes/No radio selection
-- `TOKEN_SELECT` - Common token dropdown
+- `ADDRESS`
+- `AMOUNT`
+- `EMAIL`
+- `TEXT`
+- `BOOLEAN`
+- `YES_NO` (typically a radio or select with Yes/No options)
 
 ---
 
 In the following sections, we'll explore each action type in detail and explain how to configure parameters for your specific use cases.
 
-## ✅ Validation
+## Validation
 
-Sherry SDK includes built-in validators to ensure your mini-app structure is solid before deployment.
+Sherry SDK includes built-in validators to ensure your trigger structure is solid before deployment.

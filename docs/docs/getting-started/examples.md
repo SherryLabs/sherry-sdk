@@ -6,19 +6,19 @@ Explore working examples of Sherry SDK mini-apps across different complexity lev
 
 <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', margin: '2rem 0'}}>
   <a href="#beginner-examples" style={{padding: '1rem', border: '1px solid var(--ifm-color-emphasis-300)', borderRadius: '8px', textDecoration: 'none', color: 'inherit'}}>
-    <h4>🟢 Beginner</h4>
+    <h4>Beginner</h4>
     <p>Simple transfers and basic contracts</p>
   </a>
   <a href="#intermediate-examples" style={{padding: '1rem', border: '1px solid var(--ifm-color-emphasis-300)', borderRadius: '8px', textDecoration: 'none', color: 'inherit'}}>
-    <h4>🟡 Intermediate</h4>
+    <h4>Intermediate</h4>
     <p>Smart contracts and multi-step flows</p>
   </a>
   <a href="#advanced-examples" style={{padding: '1rem', border: '1px solid var(--ifm-color-emphasis-300)', borderRadius: '8px', textDecoration: 'none', color: 'inherit'}}>
-    <h4>🔴 Advanced</h4>
+    <h4>Advanced</h4>
     <p>Dynamic actions and complex logic</p>
   </a>
   <a href="#full-applications" style={{padding: '1rem', border: '1px solid var(--ifm-color-emphasis-300)', borderRadius: '8px', textDecoration: 'none', color: 'inherit'}}>
-    <h4>🚀 Applications</h4>
+    <h4>Applications</h4>
     <p>Complete mini-app implementations</p>
   </a>
 </div>
@@ -29,10 +29,10 @@ Explore working examples of Sherry SDK mini-apps across different complexity lev
 
 ### Step 1: Choose Your Level
 
-- **🟢 Beginner**: Start with Transfer Actions or simple Blockchain Actions
-- **🟡 Intermediate**: Try Action Flows and more complex parameter handling
-- **🔴 Advanced**: Build Dynamic Actions with server-side logic
-- **🚀 Applications**: Combine multiple action types for complete solutions
+- **Beginner**: Start with Transfer Actions or simple Blockchain Actions
+- **Intermediate**: Try Action Flows and more complex parameter handling
+- **Advanced**: Build Dynamic Actions with server-side logic
+- **Applications**: Combine multiple action types for complete solutions
 
 ### Step 2: Clone & Deploy
 
@@ -53,11 +53,11 @@ Each example includes:
 
 ---
 
-## 🟢 Beginner Examples {#beginner-examples}
+## Beginner Examples {#beginner-examples}
 
 Perfect for getting started with the SDK basics.
 
-### 1. **Simple Creator Tip**
+### 1. Simple Creator Tip
 
 **⏱️ Setup: 2 minutes** | **Action Type: Transfer**
 
@@ -68,7 +68,7 @@ import { createMetadata, Metadata } from '@sherrylinks/sdk';
 
 const creatorTipApp: Metadata = {
   url: 'https://my-creator-tip-app.com',
-  icon: '☕',
+  icon: '',
   title: 'Tip the Creator',
   description: 'Show appreciation for great content',
   actions: [
@@ -81,9 +81,9 @@ const creatorTipApp: Metadata = {
         type: 'radio',
         label: 'Tip Amount',
         options: [
-          { label: 'Coffee ☕', value: 0.01, description: '0.01 AVAX' },
-          { label: 'Lunch 🍕', value: 0.05, description: '0.05 AVAX' },
-          { label: 'Dinner 🍽️', value: 0.1, description: '0.1 AVAX' },
+          { label: 'Coffee', value: 0.01, description: '0.01 AVAX' },
+          { label: 'Lunch', value: 0.05, description: '0.05 AVAX' },
+          { label: 'Dinner', value: 0.1, description: '0.1 AVAX' },
         ],
       },
     },
@@ -101,7 +101,7 @@ export default createMetadata(creatorTipApp);
 
 ---
 
-### 2. **Charity Donation Selector**
+### 2. Charity Donation Selector
 
 **⏱️ Setup: 3 minutes** | **Action Type: Transfer**
 
@@ -110,7 +110,7 @@ Let users choose between multiple charities with custom amounts.
 ```typescript
 const charityApp: Metadata = {
   url: 'https://charity-donations.com',
-  icon: '💝',
+  icon: '',
   title: 'Support a Cause',
   description: 'Make a difference with crypto donations',
   actions: [
@@ -123,17 +123,17 @@ const charityApp: Metadata = {
         label: 'Choose Your Cause',
         options: [
           {
-            label: 'Education Fund 🎓',
+            label: 'Education Fund',
             value: '0x1234567890123456789012345678901234567890',
             description: 'Supporting education worldwide',
           },
           {
-            label: 'Climate Action 🌍',
+            label: 'Environmental Fund',
             value: '0x2345678901234567890123456789012345678901',
             description: 'Fighting climate change',
           },
           {
-            label: 'Healthcare Access 🏥',
+            label: 'Healthcare Access',
             value: '0x3456789012345678901234567890123456789012',
             description: 'Improving global healthcare',
           },
@@ -161,7 +161,7 @@ const charityApp: Metadata = {
 
 ---
 
-### 3. **Fixed-Price NFT Mint**
+### 3. Fixed-Price NFT Mint
 
 **⏱️ Setup: 5 minutes** | **Action Type: Blockchain**
 
@@ -183,7 +183,7 @@ const nftMintAbi = [
 
 const simpleNFTApp: Metadata = {
   url: 'https://my-nft-collection.com',
-  icon: '🎨',
+  icon: '',
   title: 'Mint Cosmic NFT',
   description: 'Get your unique cosmic NFT',
   actions: [
@@ -226,7 +226,7 @@ const simpleNFTApp: Metadata = {
 
 ---
 
-### 4. **Simple Newsletter Signup**
+### 4. Simple Newsletter Signup
 
 **⏱️ Setup: 3 minutes** | **Action Type: HTTP**
 
@@ -235,7 +235,7 @@ Collect user emails with optional preferences.
 ```typescript
 const newsletterApp: Metadata = {
   url: 'https://newsletter-signup.com',
-  icon: '📧',
+  icon: '',
   title: 'Join Our Newsletter',
   description: 'Stay updated with the latest Web3 news',
   actions: [
@@ -296,11 +296,11 @@ const newsletterApp: Metadata = {
 
 ---
 
-## 🟡 Intermediate Examples {#intermediate-examples}
+## Intermediate Examples {#intermediate-examples}
 
 Ready to build more sophisticated mini-apps.
 
-### 5. **Token Approval + Swap Flow**
+### 5. Token Approval + Swap Flow
 
 **⏱️ Setup: 15 minutes** | **Action Type: Flow**
 
@@ -405,7 +405,7 @@ const tokenSwapFlow: ActionFlow = {
       id: 'swap-complete',
       type: 'completion',
       label: 'Swap Successful',
-      message: 'Your USDC has been swapped for AVAX! 🎉',
+      message: 'Your USDC has been swapped for AVAX!',
       status: 'success',
     },
     {
@@ -428,7 +428,7 @@ const tokenSwapFlow: ActionFlow = {
 
 ---
 
-### 6. **DAO Voting with Proposals**
+### 6. DAO Voting with Proposals
 
 **⏱️ Setup: 10 minutes** | **Action Type: Blockchain**
 
@@ -437,7 +437,7 @@ Vote on DAO proposals with real-time proposal data.
 ```typescript
 const daoVotingApp: Metadata = {
   url: 'https://dao-voting.com',
-  icon: '🗳️',
+  icon: '',
   title: 'DAO Governance',
   description: 'Vote on community proposals',
   actions: [
@@ -479,12 +479,12 @@ const daoVotingApp: Metadata = {
           required: true,
           options: [
             {
-              label: '✅ Yes - I support this proposal',
+              label: 'Yes - I support this proposal',
               value: true,
               description: 'Vote in favor of the proposal',
             },
             {
-              label: '❌ No - I oppose this proposal',
+              label: 'No - I oppose this proposal',
               value: false,
               description: 'Vote against the proposal',
             },
@@ -505,7 +505,7 @@ const daoVotingApp: Metadata = {
 
 ---
 
-### 7. **Cross-Chain Asset Bridge**
+### 7. Cross-Chain Asset Bridge
 
 **⏱️ Setup: 12 minutes** | **Action Type: Blockchain**
 
@@ -514,7 +514,7 @@ Bridge tokens between Avalanche and Celo networks.
 ```typescript
 const bridgeApp: Metadata = {
   url: 'https://cross-chain-bridge.com',
-  icon: '🌉',
+  icon: '',
   title: 'Cross-Chain Bridge',
   description: 'Move assets between Avalanche and Celo',
   actions: [
@@ -582,7 +582,7 @@ const bridgeApp: Metadata = {
 
 ---
 
-### 8. **Multi-Step User Onboarding**
+### 8. Multi-Step User Onboarding
 
 **⏱️ Setup: 20 minutes** | **Action Type: Flow**
 
@@ -686,7 +686,7 @@ const onboardingFlow: ActionFlow = {
     {
       id: 'onboarding-complete',
       type: 'completion',
-      label: 'Welcome Aboard! 🎉',
+      label: 'Welcome Aboard!',
       message: 'Your onboarding is complete! Check your wallet for your welcome NFT.',
       status: 'success',
     },
@@ -717,11 +717,11 @@ const onboardingFlow: ActionFlow = {
 
 ---
 
-## 🔴 Advanced Examples {#advanced-examples}
+## Advanced Examples {#advanced-examples}
 
 Complex mini-apps with server-side logic and optimization.
 
-### 9. **AI-Powered Yield Optimizer**
+### 9. AI-Powered Yield Optimizer
 
 **⏱️ Setup: 30 minutes** | **Action Type: Dynamic**
 
@@ -730,7 +730,7 @@ Server calculates optimal DeFi yield strategies across multiple protocols.
 ```typescript
 const yieldOptimizerApp: Metadata = {
   url: 'https://yield-optimizer.com',
-  icon: '🤖',
+  icon: '',
   title: 'AI Yield Optimizer',
   description: 'Maximize your DeFi yields with AI-powered strategies',
   baseUrl: 'https://api.yield-optimizer.com',
@@ -815,7 +815,7 @@ export async function POST(req: NextRequest) {
     const timeHorizon = parseInt(searchParams.get('timeHorizon') || '30');
     const autoCompound = searchParams.get('autoCompound') === 'true';
 
-    // 🧠 AI-POWERED YIELD CALCULATION
+    // AI-POWERED YIELD CALCULATION
     const protocols = await fetchProtocolYields();
     const filteredProtocols = filterByRisk(protocols, riskTolerance);
     const optimalStrategy = await calculateOptimalAllocation({
@@ -887,7 +887,7 @@ async function calculateOptimalAllocation(config: any) {
 
 ---
 
-### 10. **Dynamic NFT Pricing Engine**
+### 10. Dynamic NFT Pricing Engine
 
 **⏱️ Setup: 25 minutes** | **Action Type: Dynamic**
 
@@ -896,7 +896,7 @@ NFT pricing that adapts to market conditions, demand, and whale activity.
 ```typescript
 const dynamicNFTApp: Metadata = {
   url: 'https://dynamic-nft.com',
-  icon: '💎',
+  icon: '',
   title: 'Smart NFT Mint',
   description: 'AI-powered dynamic pricing based on market conditions',
   baseUrl: 'https://api.dynamic-nft.com',
@@ -914,22 +914,22 @@ const dynamicNFTApp: Metadata = {
           required: true,
           options: [
             {
-              label: 'Common ⚪',
+              label: 'Common',
               value: 'common',
               description: 'Basic tier with standard traits',
             },
             {
-              label: 'Rare 🔵',
+              label: 'Rare',
               value: 'rare',
               description: 'Enhanced traits and special effects',
             },
             {
-              label: 'Epic 🟣',
+              label: 'Epic',
               value: 'epic',
               description: 'Unique animations and rare attributes',
             },
             {
-              label: 'Legendary 🟡',
+              label: 'Legendary',
               value: 'legendary',
               description: 'Ultra-rare with exclusive benefits',
             },
@@ -963,7 +963,7 @@ export async function POST(req: NextRequest) {
     const tier = searchParams.get('tier');
     const quantity = parseInt(searchParams.get('quantity') || '1');
 
-    // 🎯 DYNAMIC PRICING ALGORITHM
+    // DYNAMIC PRICING ALGORITHM
     const marketData = await analyzeMarketConditions();
     const demandMetrics = await calculateDemandMetrics(tier);
     const whaleActivity = await detectWhaleActivity();
@@ -1050,7 +1050,7 @@ async function detectWhaleActivity() {
 
 ---
 
-### 11. **Advanced Arbitrage Bot**
+### 11. Advanced Arbitrage Bot
 
 **⏱️ Setup: 35 minutes** | **Action Type: Dynamic**
 
@@ -1059,7 +1059,7 @@ Multi-DEX arbitrage with flash loans and optimal routing.
 ```typescript
 const arbitrageBotApp: Metadata = {
   url: 'https://arbitrage-bot.com',
-  icon: '⚡',
+  icon: '',
   title: 'Flash Arbitrage Bot',
   description: 'Execute profitable arbitrage opportunities across DEXs',
   baseUrl: 'https://api.arbitrage-bot.com',
@@ -1139,7 +1139,7 @@ export async function POST(req: NextRequest) {
     const minProfitThreshold = parseFloat(searchParams.get('minProfitThreshold') || '0.1');
     const useFlashLoan = searchParams.get('useFlashLoan') === 'true';
 
-    // 🔍 SCAN MULTIPLE DEXs FOR ARBITRAGE OPPORTUNITIES
+    // SCAN MULTIPLE DEXs FOR ARBITRAGE OPPORTUNITIES
     const dexPrices = await scanDEXPrices(tokenPair);
     const opportunities = findArbitrageOpportunities(dexPrices, minProfitThreshold);
 
@@ -1212,11 +1212,11 @@ async function scanDEXPrices(tokenPair: string) {
 
 ---
 
-## 🚀 Full Applications {#full-applications}
+## Full Applications {#full-applications}
 
 Complete mini-app implementations ready for production.
 
-### 12. **DeFi Portfolio Manager**
+### 12. DeFi Portfolio Manager
 
 **⏱️ Setup: 45 minutes** | **Multiple Action Types**
 
@@ -1225,7 +1225,7 @@ Complete DeFi portfolio management with rebalancing, yield optimization, and ris
 ```typescript
 const portfolioManagerApp: Metadata = {
   url: 'https://defi-portfolio-manager.com',
-  icon: '📊',
+  icon: '',
   title: 'DeFi Portfolio Manager',
   description: 'Complete portfolio management with AI-powered optimization',
   baseUrl: 'https://api.defi-portfolio.com',
@@ -1312,12 +1312,12 @@ const portfolioManagerApp: Metadata = {
           required: true,
           options: [
             {
-              label: '⚠️ YES - Exit all positions immediately',
+              label: 'YES - Exit all positions immediately',
               value: true,
               description: 'This will close ALL positions and withdraw funds',
             },
             {
-              label: '❌ NO - Cancel emergency exit',
+              label: 'NO - Cancel emergency exit',
               value: false,
               description: 'Keep current positions',
             },
@@ -1462,7 +1462,7 @@ export async function POST(req: NextRequest) {
 
 ---
 
-### 13. **Social Trading Platform**
+### 13. Social Trading Platform
 
 **⏱️ Setup: 60 minutes** | **Action Flow**
 
@@ -1615,17 +1615,17 @@ const socialTradingFlow: ActionFlow = {
       description: 'Review your configuration and start following the trader',
       options: [
         {
-          label: '✅ Start Copy Trading',
+          label: 'Start Copy Trading',
           value: 'confirm',
           nextActionId: 'deploy-copy-trading',
         },
         {
-          label: '⚙️ Modify Settings',
+          label: 'Modify Settings',
           value: 'modify',
           nextActionId: 'configure-copy-trading',
         },
         {
-          label: '❌ Cancel',
+          label: 'Cancel',
           value: 'cancel',
           nextActionId: 'setup-cancelled',
         },
@@ -1686,7 +1686,7 @@ const socialTradingFlow: ActionFlow = {
     {
       id: 'copy-trading-active',
       type: 'completion',
-      label: 'Copy Trading Active! 🎉',
+      label: 'Copy Trading Active!',
       message:
         "Your copy trading vault is now live and will automatically follow your selected trader's moves.",
       status: 'success',
@@ -1719,7 +1719,7 @@ const socialTradingFlow: ActionFlow = {
 
 ---
 
-### 14. **Decentralized Insurance Platform**
+### 14. Decentralized Insurance Platform
 
 **⏱️ Setup: 50 minutes** | **Multiple Action Types**
 
@@ -1728,7 +1728,7 @@ Complete insurance platform with policy creation, claims, and payouts.
 ```typescript
 const insurancePlatformApp: Metadata = {
   url: 'https://defi-insurance.com',
-  icon: '🛡️',
+  icon: '',
   title: 'DeFi Insurance Hub',
   description: 'Protect your DeFi investments with decentralized insurance',
   baseUrl: 'https://api.defi-insurance.com',
@@ -1930,12 +1930,12 @@ const insurancePlatformApp: Metadata = {
           required: true,
           options: [
             {
-              label: '✅ APPROVE - Valid claim, should be paid',
+              label: 'APPROVE - Valid claim, should be paid',
               value: true,
               description: 'Vote to approve this insurance claim'
             },
             {
-              label: '❌ REJECT - Invalid claim, should not be paid',
+              label: 'REJECT - Invalid claim, should not be paid',
               value: false,
               description: 'Vote to reject this insurance claim'
             }
@@ -2027,7 +2027,7 @@ export async function POST(req: NextRequest) {
   const coveragePeriod = parseInt(searchParams.get('coveragePeriod') || '30');
   const riskTolerance = searchParams.get('riskTolerance');
 
-  // 🔍 RISK ASSESSMENT ALGORITHM
+  // RISK ASSESSMENT ALGORITHM
   const protocolRisk = await assessProtocolRisk(protocolAddress);
   const marketConditions = await getMarketConditions();
   const historicalClaims = await getHistoricalClaims(protocolAddress);
@@ -2164,4 +2164,4 @@ Ready to build your own mini-app? Here are some great starting points:
 3. **Test thoroughly** using our debugging tools
 4. **Deploy and share** with the community
 
-The future of Web3 UX is in your hands! 🌟
+The future of Web3 UX is in your hands!

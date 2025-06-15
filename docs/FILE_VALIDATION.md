@@ -1,6 +1,6 @@
 # File Validation Documentation
 
-This document provides comprehensive information about the file validation functionality in the Sherry SDK, including file and image parameter types, validation functions, and best practices.
+This document outlines how to define and validate file and image parameters within the Sherry SDK.
 
 ## Table of Contents
 
@@ -29,29 +29,31 @@ Both types support:
 
 ## File Parameters
 
+File parameters allow users to upload generic files.
+
 ### Interface Definition
 
 ```typescript
 interface FileParameter extends BaseParameter {
   type: 'file';
-  accept?: string; // Accepted file types
-  maxSize?: number; // Maximum size in bytes
-  multiple?: boolean; // Allow multiple files
+  accept?: string; // Accepted file types (MIME types or extensions)
+  maxSize?: number; // Maximum file size in bytes
+  multiple?: boolean; // Allow multiple file selection
 }
 ```
 
 ### Properties
 
-| Property      | Type      | Required | Description                                    |
-| ------------- | --------- | -------- | ---------------------------------------------- |
-| `type`        | `'file'`  | ✅       | Parameter type identifier                      |
-| `name`        | `string`  | ✅       | Unique parameter name                          |
-| `label`       | `string`  | ✅       | User-friendly label                            |
-| `accept`      | `string`  | ❌       | Accepted file types (MIME types or extensions) |
-| `maxSize`     | `number`  | ❌       | Maximum file size in bytes                     |
-| `multiple`    | `boolean` | ❌       | Allow multiple file selection                  |
-| `required`    | `boolean` | ❌       | Whether the field is required                  |
-| `description` | `string`  | ❌       | Additional help text                           |
+| Property      | Type      | Required | Description                                            |
+| ------------- | --------- | -------- | ------------------------------------------------------ |
+| `type`        | `'file'`  | ✅       | Parameter type identifier.                             |
+| `name`        | `string`  | ✅       | Unique parameter name.                                 |
+| `label`       | `string`  | ✅       | User-friendly label.                                   |
+| `accept`      | `string`  | ❌       | Accepted file types (e.g., "application/pdf", ".txt"). |
+| `maxSize`     | `number`  | ❌       | Maximum file size in bytes.                            |
+| `multiple`    | `boolean` | ❌       | Allow multiple file selection (default: false).        |
+| `required`    | `boolean` | ❌       | Whether the field is required.                         |
+| `description` | `string`  | ❌       | Additional help text.                                  |
 
 ### Accept Format Examples
 
@@ -72,27 +74,29 @@ accept: 'image/jpeg,image/png,.gif';
 
 ## Image Parameters
 
+Image parameters are a specialization of file parameters, tailored for image uploads with additional validation options.
+
 ### Interface Definition
 
 ```typescript
 interface ImageParameter extends BaseParameter {
   type: 'image';
-  accept?: string; // Accepted image types
+  accept?: string; // Accepted image types (e.g., "image/jpeg,image/png")
   maxSize?: number; // Maximum size in bytes
   multiple?: boolean; // Allow multiple images
   maxWidth?: number; // Maximum width in pixels
   maxHeight?: number; // Maximum height in pixels
-  aspectRatio?: string; // Desired aspect ratio
+  aspectRatio?: string; // Desired aspect ratio (e.g., "16:9", "1:1")
 }
 ```
 
 ### Additional Properties
 
-| Property      | Type     | Required | Description                                 |
-| ------------- | -------- | -------- | ------------------------------------------- |
-| `maxWidth`    | `number` | ❌       | Maximum image width in pixels               |
-| `maxHeight`   | `number` | ❌       | Maximum image height in pixels              |
-| `aspectRatio` | `string` | ❌       | Required aspect ratio (e.g., "16:9", "1:1") |
+| Property      | Type     | Required | Description                                  |
+| ------------- | -------- | -------- | -------------------------------------------- |
+| `maxWidth`    | `number` | ❌       | Maximum image width in pixels.               |
+| `maxHeight`   | `number` | ❌       | Maximum image height in pixels.              |
+| `aspectRatio` | `string` | ❌       | Required aspect ratio (e.g., "16:9", "1:1"). |
 
 ### Aspect Ratio Format
 

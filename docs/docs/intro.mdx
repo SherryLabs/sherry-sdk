@@ -1,6 +1,6 @@
 # Sherry SDK
 
-## Build Interactive Web3 Mini-Apps
+## Build Interactive Web3 Triggers
 
 [![npm version](https://img.shields.io/npm/v/@sherrylinks/sdk.svg)](https://www.npmjs.com/package/@sherrylinks/sdk)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
@@ -18,18 +18,18 @@ import Admonition from '@theme/Admonition';
   feed.
 </Admonition>
 
-Sherry SDK is a **TypeScript-first toolkit** for building interactive Web3 **mini-apps** that embed directly within social media posts. Transform static content into dynamic blockchain experiences that users can interact with seamlessly.
+Sherry SDK is a **TypeScript-first toolkit** for building interactive Web3 **triggers** that embed directly within social media posts. Transform static content into dynamic blockchain experiences that users can interact with seamlessly.
 
 ### What Makes Sherry Special?
 
-- **🔗 Embed Anywhere**: Your mini-apps work in Twitter, Discord, Telegram, and any platform that supports rich content
-- **🎯 Zero Context Switch**: Users never leave their social feed to interact with your dApp
-- **🛠️ Developer Friendly**: TypeScript-first with built-in validation and comprehensive tooling
-- **🌐 Multi-Chain Ready**: One codebase, multiple blockchains - Avalanche, Celo, Ethereum, and more
+- **Embed Anywhere**: Your triggers work in Twitter, Discord, Telegram, and any platform that supports rich content
+- **Zero Context Switch**: Users never leave their social feed to interact with your dApp
+- **Developer Friendly**: TypeScript-first with built-in validation and comprehensive tooling
+- **Multi-Chain Ready**: One codebase, multiple blockchains - Avalanche, Celo, Ethereum, and more
 
 ---
 
-## ✨ Key Features
+## Key Features
 
 ### 🧩 **5 Powerful Action Types**
 
@@ -40,25 +40,28 @@ Sherry SDK is a **TypeScript-first toolkit** for building interactive Web3 **min
 | **Dynamic**    | Server-computed actions     | Complex DeFi strategies, dynamic pricing |
 | **Flow**       | Multi-step processes        | Onboarding, approval + swap workflows    |
 
-### 🔗 **Multi-Chain Support**
+### Multi-Chain Support
 
 - **Mainnets**: Avalanche C-Chain, Celo, Ethereum
 - **Testnets**: Avalanche Fuji, Celo Alfajores
 - **Cross-Chain**: Built-in bridge support via Wormhole
 
-### 📋 **Built-in Validation**
+### Built-in Validation
 
 - **Compile-time**: Full TypeScript support catches errors early
-- **Runtime**: `createMetadata()` validates your mini-app configuration
+- **Runtime**: `createMetadata()` validates your trigger configuration
 - **ABI Compatibility**: Automatic parameter validation against smart contract ABIs
 
-### ⚡ **Rich Parameter System**
+### Rich Parameter System
 
 Configure user inputs with built-in validation:
 
-- **Standard Types**: Text, numbers, addresses, booleans, dates
-- **Selection Types**: Dropdowns, radio buttons with custom options
-- **Templates**: Pre-built parameter templates for common use cases
+- **Standard Types**: Text, numbers, addresses, booleans, dates.
+- **Selection Types**: Dropdowns, radio buttons with custom options.
+- **File Types**: Support for file and image uploads with specific constraints.
+- **Templates**: Pre-built parameter templates for common use cases like email, amount, etc.
+
+Refer to the [Action Parameters documentation](./api-reference/parameters/parameters.md) for full details.
 
 ---
 
@@ -70,7 +73,7 @@ Configure user inputs with built-in validation:
 npm install @sherrylinks/sdk
 ```
 
-### Your First Mini-App
+### Your First Trigger
 
 ```typescript
 import { createMetadata, Metadata } from '@sherrylinks/sdk';
@@ -108,14 +111,14 @@ const metadata: Metadata = {
   ],
 };
 
-// Validate and use your mini-app
+// Validate and use your trigger
 const validated = createMetadata(metadata);
-console.log('✅ Mini-app ready to deploy!');
+console.log('✅ Trigger ready to deploy!');
 ```
 
 ### What This Creates
 
-When embedded in a social post, this mini-app renders as:
+When embedded in a social post, this trigger renders as:
 
 ```
 🎨 Mint Cosmic NFT
@@ -135,7 +138,7 @@ Choose your adventure based on your experience level:
 
 ### 🏃‍♂️ **I want to start immediately**
 
-→ [**5-Minute Quickstart**](getting-started/quickstart) - Get a mini-app running in 5 minutes
+→ [**5-Minute Quickstart**](getting-started/quickstart) - Get a trigger running in 5 minutes
 
 ### 🧑‍💻 **I'm new to Web3 development**
 
@@ -147,7 +150,7 @@ Choose your adventure based on your experience level:
 
 ### 💡 **I want to see examples**
 
-→ [**Live Examples**](getting-started/examples) - Working mini-apps for common use cases
+→ [**Live Examples**](getting-started/examples) - Working triggers for common use cases
 
 ---
 
@@ -162,7 +165,7 @@ Choose your adventure based on your experience level:
     borderRadius: '8px',
   }}
 >
-  <h4>🎨 NFT Collections</h4>
+  <h4>NFT Collections</h4>
   <p>Let users mint NFTs directly from announcement posts</p>
 </div>
 
@@ -173,7 +176,7 @@ Choose your adventure based on your experience level:
     borderRadius: '8px',
   }}
 >
-  <h4>🔄 Token Swaps</h4>
+  <h4>Token Swaps</h4>
   <p>Enable DeFi trading without leaving social media</p>
 </div>
 
@@ -184,7 +187,7 @@ Choose your adventure based on your experience level:
     borderRadius: '8px',
   }}
 >
-  <h4>🗳️ DAO Governance</h4>
+  <h4>DAO Governance</h4>
   <p>Embed voting directly in community discussions</p>
 </div>
 
@@ -195,7 +198,7 @@ Choose your adventure based on your experience level:
     borderRadius: '8px',
   }}
 >
-  <h4>💝 Donations</h4>
+  <h4>Donations</h4>
   <p>Accept crypto donations with custom amounts and recipients</p>
 </div>
 
@@ -206,7 +209,7 @@ Choose your adventure based on your experience level:
     borderRadius: '8px',
   }}
 >
-  <h4>🌉 Cross-Chain Bridges</h4>
+  <h4>Cross-Chain Bridges</h4>
   <p>Move assets between blockchains seamlessly</p>
 </div>
 
@@ -217,7 +220,7 @@ Choose your adventure based on your experience level:
     borderRadius: '8px',
   }}
 >
-  <h4>📋 Lead Generation</h4>
+  <h4>Lead Generation</h4>
   <p>Combine Web3 actions with email collection</p>
 </div>
 
@@ -309,13 +312,13 @@ Your server calculates the optimal swap route and returns a ready-to-execute tra
 
 <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', margin: '2rem 0' }}>
   <a href="/docs/getting-started/quickstart" className="button button--primary button--lg">
-    🚀 Quick Start (5 min)
+    Quick Start (5 min)
   </a>
   <a href="/docs/guides/guide-en" className="button button--secondary button--lg">
-    📖 Complete Tutorial
+    Complete Tutorial
   </a>
   <a href="/docs/getting-started/examples" className="button button--outline button--lg">
-    💡 View Examples
+    View Examples
   </a>
 </div>
 
@@ -323,11 +326,11 @@ Your server calculates the optimal swap route and returns a ready-to-execute tra
 
 ## 📊 SDK Stats
 
-- **📦 Bundle Size**: ~50KB gzipped
-- **🔧 Dependencies**: Minimal (viem, abitype)
-- **🧪 Test Coverage**: >90%
-- **📚 TypeScript**: 100% type coverage
-- **⚡ Performance**: ${'<100ms'} validation time
+- **Bundle Size**: ~50KB gzipped
+- **Dependencies**: Minimal (viem, abitype)
+- **Test Coverage**: >90%
+- **TypeScript**: 100% type coverage
+- **Performance**: ${'<100ms'} validation time
 
 ---
 
