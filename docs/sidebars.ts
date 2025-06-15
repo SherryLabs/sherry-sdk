@@ -83,6 +83,7 @@ const sidebars: SidebarsConfig = {
             ],
         },
         // 4. Integrate Us Section
+        /*
         {
             type: 'category',
             label: 'Integrate Sherry',
@@ -96,11 +97,9 @@ const sidebars: SidebarsConfig = {
             items: [
                 'integrate-us/trigger-ui',
                 'integrate-us/trigger-ui-extension', // Overview of the SDK
-                //'integrate-us/sdk-setup', // Setting up the SDK
-                //'integrate-us/sdk-integration', // Integrating the SDK into your project
-                //'integrate-us/sdk-configuration', // Configuring the SDK
             ],
         },
+        */
         // 5. Guides Section
         {
             type: 'category',

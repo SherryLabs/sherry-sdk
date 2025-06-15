@@ -36,23 +36,11 @@ This comprehensive guide will teach you step by step how to create powerful mini
   built-in TransferAction.
 </Admonition>
 
-## 📋 Table of Contents
+:::info Action Flows - In Final Development
+Action Flows are currently in their final development stage and have not yet been released. This functionality will be available in upcoming versions.
+:::
 
-- [How Sherry Works - Understanding the Flow](#🔄-how-sherry-works---understanding-the-flow)
-- [Prerequisites](#🛠️-prerequisites)
-- [Initial Setup](#🏗️-initial-setup)
-- [Creating the GET Endpoint - Metadata](#🎯-creating-the-get-endpoint---metadata)
-- [Example 1: Simple Transfer (Learning Only)](#📚-example-1-simple-transfer-learning-only)
-- [Example 2: Smart Contract Interaction (Minithon Ready)](#🎯-example-2-smart-contract-interaction-minithon-ready)
-- [CORS Handling](#🌐-cors-handling)
-- [Testing Your Mini App](#🧪-testing-your-mini-app)
-- [Minithon Guidelines](#🏆-minithon-guidelines)
-- [Troubleshooting](#🔧-troubleshooting)
-- [Complete Code Example](#🚀-complete-code-example)
-- [Example Repository](#📚-example-repository)
-- [Next Steps](#🎯-next-steps)
-
-## 🔄 How Sherry Works - Understanding the Flow
+## How Sherry Works - Understanding the Flow
 
 Before we start building, it's important to understand how Sherry Links connects users, platforms, and your mini app backend. The following diagram illustrates the complete flow:
 
@@ -107,14 +95,14 @@ Before we start building, it's important to understand how Sherry Links connects
   powerful: combining great UX with custom blockchain functionality.
 </Admonition>
 
-## 🛠️ Prerequisites
+## Prerequisites
 
 - **Node.js**: Version 18.x or higher
 - **Package Manager**:npm, yarn, or pnpm
 - **Framework Knowledge**: Basic Next.js and TypeScript
 - **Blockchain Basics**: Smart contracts and ABI understanding
 
-## 🏗️ Initial Setup
+## Initial Setup
 
 ### 1. Create Next.js Project
 
@@ -188,7 +176,7 @@ const nextConfig = {
 module.exports = nextConfig;
 ```
 
-## 🎯 Creating the GET Endpoint - Metadata
+## Creating the GET Endpoint - Metadata
 
 The GET endpoint is the **heart** of your mini app. Here you define all the information and structure that platforms need to render your application.
 
@@ -403,7 +391,7 @@ export async function GET(req: NextRequest) {
   SDK requirements before returning it to the platform.
 </Admonition>
 
-## 📚 Example 1: Simple Transfer (Learning Only)
+## Example 1: Simple Transfer (Learning Only)
 
 <Admonition type="danger" title="Important Note">
   This example is for **learning basic concepts only**. Simple transfers like this are already
@@ -560,7 +548,7 @@ export async function POST(req: NextRequest) {
   complex, value-added functionality.
 </Admonition>
 
-## 🎯 Example 2: Smart Contract Interaction (Minithon Ready)
+## Example 2: Smart Contract Interaction (Minithon Ready)
 
 <Admonition type="success" title="Minithon Suitable">
   This example demonstrates **smart contract interaction** with custom business logic, which is what
@@ -1100,7 +1088,7 @@ function calculateOptimizedTimestamp(message: string): number {
   utility for timestamp optimization
 </Admonition>
 
-## 🌐 CORS Handling
+## CORS Handling
 
 <Admonition type="warning" title="Essential Configuration">
   **It's crucial to configure CORS before testing or deploying your mini app**. Without proper CORS
@@ -1142,7 +1130,7 @@ headers: {
 }
 ```
 
-## 🧪 Testing Your Mini App
+## Testing Your Mini App
 
 ### Option 1: Sherry Social App
 
@@ -1216,7 +1204,7 @@ headers: {
    - Fill out form and test POST
    - Verify generated transaction
 
-## 🏆 Minithon Guidelines
+## Minithon Guidelines
 
 ### What Makes a Winning Minithon Submission
 
@@ -1260,7 +1248,7 @@ headers: {
 - Mini apps that do not interact with smart contracts
 - Broken implementations that do not work end-to-end
 
-## 🔧 Troubleshooting
+## Troubleshooting
 
 <Tabs>
 <TabItem value="get-errors" label="GET Endpoint Issues" default>
@@ -1342,7 +1330,7 @@ console.log('Message parameter:', searchParams.get('message'));
 </TabItem>
 </Tabs>
 
-## 🚀 Complete Code Example
+## Complete Code Example
 
 Here's a complete, **minithon-ready** route file that demonstrates all concepts:
 
@@ -1487,7 +1475,7 @@ function calculateOptimizedTimestamp(message: string): number {
 }
 ```
 
-## 📚 Example Repository
+## Example Repository
 
 <Admonition type="info" title="Complete Examples Available">
   You can find complete working examples in our repository:
@@ -1504,7 +1492,7 @@ This repository contains:
 - Advanced testing utilities
 - Comprehensive documentation
 
-## 🎯 Next Steps
+## Next Steps
 
 <Tabs>
 <TabItem value="learning" label="For Learning" default>
@@ -1547,7 +1535,7 @@ This repository contains:
     margin: '2rem 0',
   }}
 >
-  <h2>🚀 Ready to Build Something Amazing?</h2>
+  <h2>Ready to Build Something Amazing?</h2>
   <p>
     Remember, the key to a successful minithon submission is not just making it work, but making it{' '}
     <strong>useful</strong>, <strong>innovative</strong>, and{' '}
@@ -1555,6 +1543,6 @@ This repository contains:
     that demonstrate the power of blockchain technology combined with great user experience.
   </p>
   <p>
-    <strong>Good luck with your mini app development and minithon submission! 🏆</strong>
+    <strong>Good luck with your mini app development and minithon submission!</strong>
   </p>
 </div>

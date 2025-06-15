@@ -19,40 +19,7 @@ import Admonition from '@theme/Admonition';
   allowfullscreen
 ></iframe>
 
-## Creando Mini Apps con Next.js y Sherry SDK
-
-Esta guía completa te enseñará paso a paso cómo crear mini apps potentes usando **Next.js** y el **Sherry Links SDK**. Las mini apps son aplicaciones dinámicas que pueden integrarse en diferentes plataformas y permiten a los usuarios interactuar con contratos inteligentes de manera fluida.
-
-<Admonition type="info" title="Información del Minithon">
-  Este tutorial contiene notas específicas para **participantes del hackathon Minithon**. Si el
-  Minithon ya ha concluido, puedes ignorar estas referencias - todo el contenido técnico y ejemplos
-  siguen siendo completamente aplicables para aprender y probar acciones dinámicas en producción.
-</Admonition>
-
-<Admonition type="warning" title="Importante para Participantes del Minithon">
-  Este tutorial progresa desde un **ejemplo básico** (transferencia simple) hasta un **ejemplo
-  complejo** (interacción con contratos inteligentes). Para envíos al minithon, necesitarás
-  implementar la versión compleja que interactúa con contratos inteligentes, ya que las
-  transferencias simples ya pueden manejarse con nuestro TransferAction incorporado.
-</Admonition>
-
-## 📋 Tabla de Contenidos
-
-- [Cómo Funciona Sherry - Entendiendo el Flujo](#🔄-cómo-funciona-sherry---entendiendo-el-flujo)
-- [Requisitos Previos](#🛠️-requisitos-previos)
-- [Configuración Inicial](#🏗️-configuración-inicial)
-- [Creando el Endpoint GET - Metadata](#🎯-creando-el-endpoint-get---metadata)
-- [Ejemplo 1: Transferencia Simple (Solo Aprendizaje)](#📚-ejemplo-1-transferencia-simple-solo-aprendizaje)
-- [Ejemplo 2: Interacción con Contratos Inteligentes (Listo para Minithon)](#🎯-ejemplo-2-interacción-con-contratos-inteligentes-listo-para-minithon)
-- [Manejo de CORS](#🌐-manejo-de-cors)
-- [Probando tu Mini App](#🧪-probando-tu-mini-app)
-- [Guías del Minithon](#🏆-guías-del-minithon)
-- [Resolución de Problemas](#🔧-resolución-de-problemas)
-- [Ejemplo de Código Completo](#🚀-ejemplo-de-código-completo)
-- [Repositorio de Ejemplos](#📚-repositorio-de-ejemplos)
-- [Próximos Pasos](#🎯-próximos-pasos)
-
-## 🔄 Cómo Funciona Sherry - Entendiendo el Flujo
+## Cómo Funciona Sherry - Entendiendo el Flujo
 
 Antes de empezar a construir, es importante entender cómo Sherry Links conecta usuarios, plataformas y tu backend de mini app. El siguiente diagrama ilustra el flujo completo:
 
@@ -107,7 +74,7 @@ Antes de empezar a construir, es importante entender cómo Sherry Links conecta 
   lo que hace poderoso a Sherry Links: combinar gran UX con funcionalidad blockchain personalizada.
 </Admonition>
 
-## 🛠️ Requisitos Previos
+## Requisitos Previos
 
 Antes de comenzar, asegúrate de tener lo siguiente instalado y configurado:
 
@@ -116,7 +83,7 @@ Antes de comenzar, asegúrate de tener lo siguiente instalado y configurado:
 - **Conocimiento del Framework**: Conceptos básicos de Next.js y TypeScript
 - **Conceptos Básicos de Blockchain**: Entendimiento de contratos inteligentes y ABI
 
-## 🏗️ Configuración Inicial
+## Configuración Inicial
 
 ### 1. Crear Proyecto Next.js
 
@@ -190,7 +157,7 @@ const nextConfig = {
 module.exports = nextConfig;
 ```
 
-## 🎯 Creando el Endpoint GET - Metadata
+## Creando el Endpoint GET - Metadata
 
 El endpoint GET es el **corazón** de tu mini app. Aquí defines toda la información y estructura que las plataformas necesitan para renderizar tu aplicación.
 
@@ -331,7 +298,7 @@ const metadata: Metadata = {
       params: [
         {
           name: 'mensaje',
-          label: '¡Tu Mensaje Hermano!',
+          label: 'Tu Mensaje',
           type: 'text',
           required: true,
           description: 'Ingresa el mensaje que quieres almacenar en la blockchain',
@@ -375,7 +342,7 @@ export async function GET(req: NextRequest) {
           params: [
             {
               name: 'mensaje',
-              label: '¡Tu Mensaje Hermano!',
+              label: 'Tu Mensaje',
               type: 'text',
               required: true,
               description: 'Ingresa el mensaje que quieres almacenar en la blockchain',
@@ -407,7 +374,7 @@ export async function GET(req: NextRequest) {
   requisitos del Sherry SDK antes de retornarla a la plataforma.
 </Admonition>
 
-## 📚 Ejemplo 1: Transferencia Simple (Solo Aprendizaje)
+## Ejemplo 1: Transferencia Simple (Solo Aprendizaje)
 
 <Admonition type="danger" title="Nota Importante">
   Este ejemplo es para **aprender los conceptos básicos solamente**. Transferencias simples como
@@ -565,7 +532,7 @@ export async function POST(req: NextRequest) {
   demostrar funcionalidad más compleja y con valor agregado.
 </Admonition>
 
-## 🎯 Ejemplo 2: Interacción con Contratos Inteligentes (Listo para Minithon)
+## Ejemplo 2: Interacción con Contratos Inteligentes (Listo para Minithon)
 
 <Admonition type="success" title="Adecuado para Minithon">
   Este ejemplo demuestra **interacción con contratos inteligentes** con lógica de negocio
@@ -1088,7 +1055,7 @@ function calculateOptimizedTimestamp(message: string): number {
 }
 ```
 
-## 🌐 Manejo de CORS
+## Manejo de CORS
 
 <Admonition type="warning" title="Configuración Esencial">
   **Es fundamental configurar CORS antes de probar o desplegar tu mini app**. Sin la configuración
@@ -1130,7 +1097,7 @@ headers: {
 }
 ```
 
-## 🧪 Probando tu Mini App
+## Probando tu Mini App
 
 ### Opción 1: App Sherry Social
 
@@ -1224,7 +1191,7 @@ headers: {
    - Completar formulario y probar POST
    - Verificar transacción generada
 
-## 🏆 Guías del Minithon
+## Guías del Minithon
 
 ### Qué Hace una Presentación Ganadora del Minithon
 
@@ -1362,7 +1329,7 @@ headers: {
   </div>
 </div>
 
-## 🔧 Resolución de Problemas
+## Resolución de Problemas
 
 <Tabs>
 <TabItem value="get-errors" label="Problemas del Endpoint GET" default>
@@ -1446,7 +1413,7 @@ console.log('Parámetro mensaje:', searchParams.get('mensaje'));
 </TabItem>
 </Tabs>
 
-## 🚀 Ejemplo de Código Completo
+## Ejemplo de Código Completo
 
 Aquí tienes un archivo de ruta completo, **listo para minithon** que demuestra todos los conceptos:
 
@@ -1468,7 +1435,6 @@ export async function GET(req: NextRequest) {
 
     const metadata: Metadata = {
       url: 'https://sherry.social',
-      icon: 'https://avatars.githubusercontent.com/u/117962315',
       title: 'Mensaje con Timestamp',
       baseUrl: serverUrl,
       description:
@@ -1484,7 +1450,7 @@ export async function GET(req: NextRequest) {
           params: [
             {
               name: 'mensaje',
-              label: '¡Tu Mensaje Hermano!',
+              label: 'Tu Mensaje',
               type: 'text',
               required: true,
               description: 'Ingresa el mensaje que quieres almacenar en la blockchain',
@@ -1593,7 +1559,7 @@ function calculateOptimizedTimestamp(message: string): number {
 }
 ```
 
-## 📚 Repositorio de Ejemplos
+## Repositorio de Ejemplos
 
 <Admonition type="info" title="Ejemplos Completos Disponibles">
   Puedes encontrar ejemplos completos de trabajo en nuestro repositorio:
@@ -1610,7 +1576,7 @@ Este repositorio contiene:
 - Utilidades avanzadas de prueba
 - Documentación completa
 
-## 🎯 Próximos Pasos
+## Próximos Pasos
 
 <Tabs>
 <TabItem value="learning" label="Para Aprender" default>
@@ -1642,25 +1608,3 @@ Este repositorio contiene:
 </TabItem>
 </Tabs>
 
----
-
-<div
-  style={{
-    textAlign: 'center',
-    padding: '2rem',
-    backgroundColor: 'var(--ifm-color-primary-contrast-background)',
-    borderRadius: '8px',
-    margin: '2rem 0',
-  }}
->
-  <h2>🚀 ¿Listo para Construir Algo Increíble?</h2>
-  <p>
-    Recuerda, la clave para un envío exitoso al minithon no es solo hacer que funcione, sino hacerlo{' '}
-    <strong>útil</strong>, <strong>innovador</strong> y <strong>técnicamente impresionante</strong>.
-    Enfócate en resolver problemas reales con soluciones creativas que demuestren el poder de la
-    tecnología blockchain combinada con una gran experiencia de usuario.
-  </p>
-  <p>
-    <strong>¡Buena suerte con el desarrollo de tu mini app y el envío al minithon! 🏆</strong>
-  </p>
-</div>
