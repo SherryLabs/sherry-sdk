@@ -114,16 +114,29 @@ export function PopupApp() {
       <div className="bg-blue-600 text-white p-4 mb-4 rounded">
         <h1 className="text-lg font-semibold">TriggerKit</h1>
       </div>
-      
+
       <div className="mb-4">
-        <button onClick={() => setActiveTab('wallet')} className={activeTab === 'wallet' ? 'font-bold' : ''}>Wallet</button>
-        <button onClick={() => setActiveTab('settings')} className={activeTab === 'settings' ? 'font-bold' : ''}>Settings</button>
-        <button onClick={() => setActiveTab('about')} className={activeTab === 'about' ? 'font-bold' : ''}>About</button>
+        <button
+          onClick={() => setActiveTab('wallet')}
+          className={activeTab === 'wallet' ? 'font-bold' : ''}
+        >
+          Wallet
+        </button>
+        <button
+          onClick={() => setActiveTab('settings')}
+          className={activeTab === 'settings' ? 'font-bold' : ''}
+        >
+          Settings
+        </button>
+        <button
+          onClick={() => setActiveTab('about')}
+          className={activeTab === 'about' ? 'font-bold' : ''}
+        >
+          About
+        </button>
       </div>
 
-      <div>
-        {/* Content for each tab */}
-      </div>
+      <div>{/* Content for each tab */}</div>
     </div>
   );
 }

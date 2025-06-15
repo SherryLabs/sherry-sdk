@@ -59,14 +59,15 @@ export abstract class BaseExecutor {
     constructor(clientKey?: string, proxyUrl?: string) {
         this.clientKey = clientKey;
         this.isBrowser = typeof window !== 'undefined';
-        this.proxyBaseUrl = proxyUrl || process.env.SHERRY_PROXY_URL || 'https://proxy.sherry.social';
+        this.proxyBaseUrl =
+            proxyUrl || process.env.SHERRY_PROXY_URL || 'https://proxy.sherry.social';
         this.defaultTimeout = 30000;
 
         // Warn about CORS issues in browser environments
         if (this.isBrowser && this.proxyBaseUrl.includes('proxy.sherry.social')) {
             console.warn(
                 'Sherry SDK: Running in browser environment. You may encounter CORS issues. ' +
-                'Consider using a CORS proxy or server-side implementation for production.'
+                    'Consider using a CORS proxy or server-side implementation for production.',
             );
         }
     }
@@ -118,7 +119,7 @@ export abstract class BaseExecutor {
                 method: 'GET',
                 headers,
             },
-            finalProxyUrl
+            finalProxyUrl,
         );
     }
 
@@ -230,8 +231,8 @@ export abstract class BaseExecutor {
                 if (this.isBrowser) {
                     throw new Error(
                         'CORS error: Cannot access proxy from browser. ' +
-                        'Use a CORS proxy, implement server-side calls, or configure your proxy to allow CORS. ' +
-                        `Original error: ${error.message}`
+                            'Use a CORS proxy, implement server-side calls, or configure your proxy to allow CORS. ' +
+                            `Original error: ${error.message}`,
                     );
                 }
             }

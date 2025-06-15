@@ -36,24 +36,24 @@ File parameters allow users to upload generic files.
 ```typescript
 interface FileParameter extends BaseParameter {
   type: 'file';
-  accept?: string;    // Accepted file types (MIME types or extensions)
-  maxSize?: number;   // Maximum file size in bytes
+  accept?: string; // Accepted file types (MIME types or extensions)
+  maxSize?: number; // Maximum file size in bytes
   multiple?: boolean; // Allow multiple file selection
 }
 ```
 
 ### Properties
 
-| Property      | Type      | Required | Description                                    |
-| ------------- | --------- | -------- | ---------------------------------------------- |
-| `type`        | `'file'`  | ✅       | Parameter type identifier.                     |
-| `name`        | `string`  | ✅       | Unique parameter name.                         |
-| `label`       | `string`  | ✅       | User-friendly label.                           |
+| Property      | Type      | Required | Description                                            |
+| ------------- | --------- | -------- | ------------------------------------------------------ |
+| `type`        | `'file'`  | ✅       | Parameter type identifier.                             |
+| `name`        | `string`  | ✅       | Unique parameter name.                                 |
+| `label`       | `string`  | ✅       | User-friendly label.                                   |
 | `accept`      | `string`  | ❌       | Accepted file types (e.g., "application/pdf", ".txt"). |
-| `maxSize`     | `number`  | ❌       | Maximum file size in bytes.                    |
-| `multiple`    | `boolean` | ❌       | Allow multiple file selection (default: false). |
-| `required`    | `boolean` | ❌       | Whether the field is required.                 |
-| `description` | `string`  | ❌       | Additional help text.                          |
+| `maxSize`     | `number`  | ❌       | Maximum file size in bytes.                            |
+| `multiple`    | `boolean` | ❌       | Allow multiple file selection (default: false).        |
+| `required`    | `boolean` | ❌       | Whether the field is required.                         |
+| `description` | `string`  | ❌       | Additional help text.                                  |
 
 ### Accept Format Examples
 
@@ -81,22 +81,22 @@ Image parameters are a specialization of file parameters, tailored for image upl
 ```typescript
 interface ImageParameter extends BaseParameter {
   type: 'image';
-  accept?: string;      // Accepted image types (e.g., "image/jpeg,image/png")
-  maxSize?: number;     // Maximum size in bytes
-  multiple?: boolean;   // Allow multiple images
-  maxWidth?: number;    // Maximum width in pixels
-  maxHeight?: number;   // Maximum height in pixels
+  accept?: string; // Accepted image types (e.g., "image/jpeg,image/png")
+  maxSize?: number; // Maximum size in bytes
+  multiple?: boolean; // Allow multiple images
+  maxWidth?: number; // Maximum width in pixels
+  maxHeight?: number; // Maximum height in pixels
   aspectRatio?: string; // Desired aspect ratio (e.g., "16:9", "1:1")
 }
 ```
 
 ### Additional Properties
 
-| Property      | Type     | Required | Description                                 |
-| ------------- | -------- | -------- | ------------------------------------------- |
-| `maxWidth`    | `number` | ❌       | Maximum image width in pixels.              |
-| `maxHeight`   | `number` | ❌       | Maximum image height in pixels.             |
-| `aspectRatio` | `string` | ❌       | Required aspect ratio (e.g., "16:9", "1:1").|
+| Property      | Type     | Required | Description                                  |
+| ------------- | -------- | -------- | -------------------------------------------- |
+| `maxWidth`    | `number` | ❌       | Maximum image width in pixels.               |
+| `maxHeight`   | `number` | ❌       | Maximum image height in pixels.              |
+| `aspectRatio` | `string` | ❌       | Required aspect ratio (e.g., "16:9", "1:1"). |
 
 ### Aspect Ratio Format
 

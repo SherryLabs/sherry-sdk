@@ -226,6 +226,7 @@ interface BaseParameter {
 ### Parameter Types by Action
 
 #### Dynamic Actions - Most Flexible
+
 - Can use any parameter type.
 - Server processes all inputs.
 - Perfect for complex forms.
@@ -238,7 +239,9 @@ params: [
     name: 'strategy',
     label: 'Investment Strategy',
     type: 'select',
-    options: [ /* options */ ],
+    options: [
+      /* options */
+    ],
   },
   {
     name: 'amount',
@@ -251,6 +254,7 @@ params: [
 ```
 
 #### Blockchain Actions - ABI-Constrained
+
 - Must match contract function parameters.
 - Types should be compatible with ABI types (e.g., `uint256` can map to `type: 'number'`).
 - Order must match ABI function signature.
@@ -264,6 +268,7 @@ params: [
 ```
 
 #### Transfer Actions - Configuration-Based
+
 - Uses `amountConfig` and `recipient` instead of `params`.
 - Built-in UI components.
 - No ABI knowledge required.

@@ -241,18 +241,18 @@ For detailed information on all parameter types and their properties, see the [A
 
 Sherry SDK supports a variety of parameter types to build rich user interfaces:
 
-*   **Text-Based:** For single-line text, email, URLs, multi-line text areas.
-    *   Example: `type: 'text'`, `type: 'email'`, `type: 'textarea'`
-*   **Number-Based:** For numerical inputs, including dates and times.
-    *   Example: `type: 'number'`, `type: 'datetime'`
-*   **Address:** For blockchain addresses.
-    *   Example: `type: 'address'`
-*   **Boolean:** For true/false checkboxes.
-    *   Example: `type: 'boolean'`
-*   **Selection:** For dropdowns (`select`) and radio buttons (`radio`).
-    *   Example: `type: 'select'`, `type: 'radio'`
-*   **File Uploads:** For general files (`file`) and images (`image`) with specific validations.
-    *   Example: `type: 'file'`, `type: 'image'`
+- **Text-Based:** For single-line text, email, URLs, multi-line text areas.
+  - Example: `type: 'text'`, `type: 'email'`, `type: 'textarea'`
+- **Number-Based:** For numerical inputs, including dates and times.
+  - Example: `type: 'number'`, `type: 'datetime'`
+- **Address:** For blockchain addresses.
+  - Example: `type: 'address'`
+- **Boolean:** For true/false checkboxes.
+  - Example: `type: 'boolean'`
+- **Selection:** For dropdowns (`select`) and radio buttons (`radio`).
+  - Example: `type: 'select'`, `type: 'radio'`
+- **File Uploads:** For general files (`file`) and images (`image`) with specific validations.
+  - Example: `type: 'file'`, `type: 'image'`
 
 Each type comes with specific validation properties. Refer to the [detailed parameter documentation](../api-reference/parameters/parameters.md) for comprehensive examples and all configurable properties.
 

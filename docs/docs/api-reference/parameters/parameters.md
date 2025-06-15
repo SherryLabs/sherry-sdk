@@ -12,25 +12,25 @@ All parameter types extend from a base structure and include the following prope
 
 ```typescript
 interface BaseParameter {
-  name: string;        // Unique identifier for the parameter.
-  label: string;       // User-friendly label displayed in the UI.
-  type: string;        // Specifies the input type (e.g., 'text', 'number', 'select').
-  required?: boolean;  // Whether the parameter is mandatory (default: false).
-  description?: string;// Additional help text or guidance for the user.
-  fixed?: boolean;     // If true, the parameter's value is pre-set and not editable by the user.
-  value?: any;         // Default or fixed value for the parameter.
+  name: string; // Unique identifier for the parameter.
+  label: string; // User-friendly label displayed in the UI.
+  type: string; // Specifies the input type (e.g., 'text', 'number', 'select').
+  required?: boolean; // Whether the parameter is mandatory (default: false).
+  description?: string; // Additional help text or guidance for the user.
+  fixed?: boolean; // If true, the parameter's value is pre-set and not editable by the user.
+  value?: any; // Default or fixed value for the parameter.
 }
 ```
 
-| Property      | Type      | Required | Description                                       |
-|---------------|-----------|----------|---------------------------------------------------|
-| `name`        | `string`  | ✅        | Unique parameter name/identifier.                 |
-| `label`       | `string`  | ✅        | User-friendly label for the UI.                   |
-| `type`        | `string`  | ✅        | The specific type of the parameter.               |
-| `required`    | `boolean` | ❌        | Whether the field is mandatory.                   |
-| `description` | `string`  | ❌        | Additional help text displayed to the user.       |
-| `fixed`       | `boolean` | ❌        | If true, the value is pre-defined and not user-editable. |
-| `value`       | `any`     | ❌        | Default value or the fixed value if `fixed` is true. |
+| Property      | Type      | Required | Description                                              |
+| ------------- | --------- | -------- | -------------------------------------------------------- |
+| `name`        | `string`  | ✅       | Unique parameter name/identifier.                        |
+| `label`       | `string`  | ✅       | User-friendly label for the UI.                          |
+| `type`        | `string`  | ✅       | The specific type of the parameter.                      |
+| `required`    | `boolean` | ❌       | Whether the field is mandatory.                          |
+| `description` | `string`  | ❌       | Additional help text displayed to the user.              |
+| `fixed`       | `boolean` | ❌       | If true, the value is pre-defined and not user-editable. |
+| `value`       | `any`     | ❌       | Default value or the fixed value if `fixed` is true.     |
 
 ## Parameter Types
 
@@ -41,6 +41,7 @@ Below are the specific parameter types available, each extending the `BaseParame
 For inputs that expect textual data. This includes plain text, emails, URLs, and longer messages.
 
 **Interface:**
+
 ```typescript
 interface TextBasedParameter extends BaseParameter {
   type:
@@ -49,7 +50,7 @@ interface TextBasedParameter extends BaseParameter {
     | 'url'
     | 'textarea'
     | 'string' // Generic string, often used with ABI types
-    | 'bytes'  // For byte strings, typically hex-encoded
+    | 'bytes' // For byte strings, typically hex-encoded
     | Extract<AbiType, 'string' | 'bytes' | `bytes${number}`>;
   minLength?: number;
   maxLength?: number;
@@ -59,118 +60,124 @@ interface TextBasedParameter extends BaseParameter {
 
 **Properties:**
 
-| Property    | Type     | Description                                     |
-|-------------|----------|-------------------------------------------------|
-| `minLength` | `number` | Minimum character length.                       |
-| `maxLength` | `number` | Maximum character length.                       |
-| `pattern`   | `string` | A regex pattern for input validation.           |
+| Property    | Type     | Description                           |
+| ----------- | -------- | ------------------------------------- |
+| `minLength` | `number` | Minimum character length.             |
+| `maxLength` | `number` | Maximum character length.             |
+| `pattern`   | `string` | A regex pattern for input validation. |
 
 **Examples:**
 
-*   **Simple Text Input:**
-    ```json
-    {
-      "name": "username",
-      "label": "Username",
-      "type": "text",
-      "required": true,
-      "minLength": 3,
-      "maxLength": 20,
-      "pattern": "^[a-zA-Z0-9_]+$",
-      "description": "Must be 3-20 alphanumeric characters or underscores."
-    }
-    ```
+- **Simple Text Input:**
 
-*   **Email Input:**
-    ```json
-    {
-      "name": "userEmail",
-      "label": "Email Address",
-      "type": "email",
-      "required": true,
-      "pattern": "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", // Example, often handled by UI
-      "description": "Please enter a valid email address."
-    }
-    ```
+  ```json
+  {
+    "name": "username",
+    "label": "Username",
+    "type": "text",
+    "required": true,
+    "minLength": 3,
+    "maxLength": 20,
+    "pattern": "^[a-zA-Z0-9_]+$",
+    "description": "Must be 3-20 alphanumeric characters or underscores."
+  }
+  ```
 
-*   **Textarea for Longer Messages:**
-    ```json
-    {
-      "name": "feedback",
-      "label": "Your Feedback",
-      "type": "textarea",
-      "required": false,
-      "maxLength": 500,
-      "description": "Provide your comments (max 500 characters)."
-    }
-    ```
+- **Email Input:**
+
+  ```json
+  {
+    "name": "userEmail",
+    "label": "Email Address",
+    "type": "email",
+    "required": true,
+    "pattern": "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", // Example, often handled by UI
+    "description": "Please enter a valid email address."
+  }
+  ```
+
+- **Textarea for Longer Messages:**
+  ```json
+  {
+    "name": "feedback",
+    "label": "Your Feedback",
+    "type": "textarea",
+    "required": false,
+    "maxLength": 500,
+    "description": "Provide your comments (max 500 characters)."
+  }
+  ```
 
 ### Number-Based Parameters
 
 For inputs that expect numerical data, including integers, decimals, and dates/times represented as timestamps.
 
 **Interface:**
+
 ```typescript
 interface NumberBasedParameter extends BaseParameter {
   type: 'number' | 'datetime' | Extract<AbiType, `uint${string}` | `int${string}`>;
-  min?: number;     // Minimum allowed value.
-  max?: number;     // Maximum allowed value.
+  min?: number; // Minimum allowed value.
+  max?: number; // Maximum allowed value.
   pattern?: string; // Regular expression (less common for numbers but available).
 }
 ```
 
 **Properties:**
 
-| Property  | Type     | Description                                      |
-|-----------|----------|--------------------------------------------------|
-| `min`     | `number` | Minimum numerical value (inclusive).             |
-| `max`     | `number` | Maximum numerical value (inclusive).             |
+| Property  | Type     | Description                                       |
+| --------- | -------- | ------------------------------------------------- |
+| `min`     | `number` | Minimum numerical value (inclusive).              |
+| `max`     | `number` | Maximum numerical value (inclusive).              |
 | `pattern` | `string` | A regex pattern for validating the number format. |
 
 **Examples:**
 
-*   **Decimal Number Input:**
-    ```json
-    {
-      "name": "amount",
-      "label": "Amount",
-      "type": "number",
-      "required": true,
-      "min": 0.01,
-      "max": 1000,
-      "description": "Enter an amount between 0.01 and 1000."
-    }
-    ```
+- **Decimal Number Input:**
 
-*   **Integer (ABI `uint256`) Input:**
-    ```json
-    {
-      "name": "tokenId",
-      "label": "Token ID",
-      "type": "uint256", // Or 'number' if not strictly for ABI
-      "required": true,
-      "min": 0,
-      "pattern": "^[0-9]+$",
-      "description": "Enter the NFT Token ID (non-negative integer)."
-    }
-    ```
+  ```json
+  {
+    "name": "amount",
+    "label": "Amount",
+    "type": "number",
+    "required": true,
+    "min": 0.01,
+    "max": 1000,
+    "description": "Enter an amount between 0.01 and 1000."
+  }
+  ```
 
-*   **Datetime Input (Unix Timestamp):**
-    ```json
-    {
-      "name": "expirationDate",
-      "label": "Expiration Date",
-      "type": "datetime",
-      "required": true,
-      "description": "Select the expiration date and time."
-    }
-    ```
+- **Integer (ABI `uint256`) Input:**
+
+  ```json
+  {
+    "name": "tokenId",
+    "label": "Token ID",
+    "type": "uint256", // Or 'number' if not strictly for ABI
+    "required": true,
+    "min": 0,
+    "pattern": "^[0-9]+$",
+    "description": "Enter the NFT Token ID (non-negative integer)."
+  }
+  ```
+
+- **Datetime Input (Unix Timestamp):**
+  ```json
+  {
+    "name": "expirationDate",
+    "label": "Expiration Date",
+    "type": "datetime",
+    "required": true,
+    "description": "Select the expiration date and time."
+  }
+  ```
 
 ### Address Parameters
 
 For inputs that expect blockchain addresses (e.g., Ethereum addresses).
 
 **Interface:**
+
 ```typescript
 interface AddressParameter extends BaseParameter {
   type: 'address' | Extract<AbiType, 'address'>;
@@ -180,11 +187,12 @@ interface AddressParameter extends BaseParameter {
 
 **Properties:**
 
-| Property  | Type     | Description                                     |
-|-----------|----------|-------------------------------------------------|
+| Property  | Type     | Description                                                                                             |
+| --------- | -------- | ------------------------------------------------------------------------------------------------------- |
 | `pattern` | `string` | A regex pattern for validating the address format. Defaults to Ethereum address format if not provided. |
 
 **Example:**
+
 ```json
 {
   "name": "recipientAddress",
@@ -201,6 +209,7 @@ interface AddressParameter extends BaseParameter {
 For inputs that represent a true/false or yes/no choice, typically rendered as a checkbox.
 
 **Interface:**
+
 ```typescript
 interface BooleanParameter extends BaseParameter {
   type: 'boolean' | Extract<AbiType, 'bool'>;
@@ -211,6 +220,7 @@ interface BooleanParameter extends BaseParameter {
 This parameter type uses only the `BaseParameter` properties.
 
 **Example:**
+
 ```json
 {
   "name": "agreeToTerms",
@@ -226,11 +236,12 @@ This parameter type uses only the `BaseParameter` properties.
 For inputs where the user chooses one option from a dropdown list.
 
 **Interface:**
+
 ```typescript
 interface SelectOption {
-  label: string;                      // Text displayed for the option.
-  value: string | number | boolean;   // Actual value of the option.
-  description?: string;               // Optional additional description for the option.
+  label: string; // Text displayed for the option.
+  value: string | number | boolean; // Actual value of the option.
+  description?: string; // Optional additional description for the option.
 }
 
 interface SelectParameter extends BaseParameter {
@@ -241,11 +252,12 @@ interface SelectParameter extends BaseParameter {
 
 **Properties:**
 
-| Property  | Type             | Description                                     |
-|-----------|------------------|-------------------------------------------------|
+| Property  | Type             | Description                                                  |
+| --------- | ---------------- | ------------------------------------------------------------ |
 | `options` | `SelectOption[]` | An array of `SelectOption` objects to populate the dropdown. |
 
 **Example:**
+
 ```json
 {
   "name": "tokenChoice",
@@ -265,6 +277,7 @@ interface SelectParameter extends BaseParameter {
 For inputs where the user chooses one option from a set of radio buttons.
 
 **Interface:**
+
 ```typescript
 // Uses the same SelectOption interface as SelectParameter
 
@@ -276,11 +289,12 @@ interface RadioParameter extends BaseParameter {
 
 **Properties:**
 
-| Property  | Type             | Description                                     |
-|-----------|------------------|-------------------------------------------------|
+| Property  | Type             | Description                                                 |
+| --------- | ---------------- | ----------------------------------------------------------- |
 | `options` | `SelectOption[]` | An array of `SelectOption` objects to create radio buttons. |
 
 **Example:**
+
 ```json
 {
   "name": "priorityLevel",
@@ -301,24 +315,26 @@ interface RadioParameter extends BaseParameter {
 For inputs that allow users to upload files.
 
 **Interface:**
+
 ```typescript
 interface FileParameter extends BaseParameter {
   type: 'file';
-  accept?: string;    // Comma-separated string of accepted file types (e.g., "application/pdf,image/jpeg").
-  maxSize?: number;   // Maximum file size in bytes.
+  accept?: string; // Comma-separated string of accepted file types (e.g., "application/pdf,image/jpeg").
+  maxSize?: number; // Maximum file size in bytes.
   multiple?: boolean; // If true, allows multiple file selection.
 }
 ```
 
 **Properties:**
 
-| Property   | Type      | Description                                                                 |
-|------------|-----------|-----------------------------------------------------------------------------|
-| `accept`   | `string`  | MIME types or extensions (e.g., `image/png`, `.pdf`).                       |
-| `maxSize`  | `number`  | Maximum file size in bytes.                                                 |
-| `multiple` | `boolean` | Allows selection of multiple files if true.                                 |
+| Property   | Type      | Description                                           |
+| ---------- | --------- | ----------------------------------------------------- |
+| `accept`   | `string`  | MIME types or extensions (e.g., `image/png`, `.pdf`). |
+| `maxSize`  | `number`  | Maximum file size in bytes.                           |
+| `multiple` | `boolean` | Allows selection of multiple files if true.           |
 
 **Example:**
+
 ```json
 {
   "name": "documentUpload",
@@ -337,30 +353,32 @@ interface FileParameter extends BaseParameter {
 A specialized file input for uploading images, with additional properties for image-specific validation.
 
 **Interface:**
+
 ```typescript
 interface ImageParameter extends BaseParameter {
   type: 'image';
-  accept?: string;      // Accepted image types (e.g., "image/jpeg,image/png").
-  maxSize?: number;     // Maximum file size in bytes.
-  multiple?: boolean;   // If true, allows multiple image selection.
-  maxWidth?: number;    // Maximum image width in pixels.
-  maxHeight?: number;   // Maximum image height in pixels.
+  accept?: string; // Accepted image types (e.g., "image/jpeg,image/png").
+  maxSize?: number; // Maximum file size in bytes.
+  multiple?: boolean; // If true, allows multiple image selection.
+  maxWidth?: number; // Maximum image width in pixels.
+  maxHeight?: number; // Maximum image height in pixels.
   aspectRatio?: string; // Desired aspect ratio (e.g., "16:9", "1:1").
 }
 ```
 
 **Properties:**
 
-| Property      | Type      | Description                                                                 |
-|---------------|-----------|-----------------------------------------------------------------------------|
-| `accept`      | `string`  | MIME types for images (e.g., `image/jpeg`, `image/png`).                    |
-| `maxSize`     | `number`  | Maximum image file size in bytes.                                           |
-| `multiple`    | `boolean` | Allows selection of multiple images if true.                                |
-| `maxWidth`    | `number`  | Maximum allowed width of the image in pixels.                               |
-| `maxHeight`   | `number`  | Maximum allowed height of the image in pixels.                              |
-| `aspectRatio` | `string`  | Enforces a specific aspect ratio (e.g., "16:9", "4:3", "1:1").              |
+| Property      | Type      | Description                                                    |
+| ------------- | --------- | -------------------------------------------------------------- |
+| `accept`      | `string`  | MIME types for images (e.g., `image/jpeg`, `image/png`).       |
+| `maxSize`     | `number`  | Maximum image file size in bytes.                              |
+| `multiple`    | `boolean` | Allows selection of multiple images if true.                   |
+| `maxWidth`    | `number`  | Maximum allowed width of the image in pixels.                  |
+| `maxHeight`   | `number`  | Maximum allowed height of the image in pixels.                 |
+| `aspectRatio` | `string`  | Enforces a specific aspect ratio (e.g., "16:9", "4:3", "1:1"). |
 
 **Example:**
+
 ```json
 {
   "name": "profilePicture",
@@ -544,7 +562,7 @@ const voteParams = [
     label: 'Proposal ID',
     type: 'uint256', // or 'number'
     required: true,
-    description: 'The ID of the proposal to vote on.'
+    description: 'The ID of the proposal to vote on.',
   },
   {
     name: 'support',
@@ -555,7 +573,7 @@ const voteParams = [
       { label: 'Yes - Support this proposal', value: true },
       { label: 'No - Oppose this proposal', value: false },
     ],
-    description: 'Cast your vote for or against the proposal.'
+    description: 'Cast your vote for or against the proposal.',
   },
 ];
 ```
@@ -569,7 +587,7 @@ const formParams = [
     label: 'Email Address',
     type: 'email',
     required: true,
-    description: 'Please enter your email.'
+    description: 'Please enter your email.',
   },
   {
     name: 'feedback',
@@ -577,7 +595,7 @@ const formParams = [
     type: 'textarea',
     required: true,
     maxLength: 1000,
-    description: 'Tell us what you think (max 1000 characters).'
+    description: 'Tell us what you think (max 1000 characters).',
   },
   {
     name: 'rating',
@@ -591,7 +609,7 @@ const formParams = [
       { label: '4 - Very Good', value: 4 },
       { label: '5 - Excellent', value: 5 },
     ],
-    description: 'Rate your experience.'
+    description: 'Rate your experience.',
   },
 ];
 ```
