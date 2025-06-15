@@ -15,7 +15,6 @@ import { createMetadata, Metadata } from '@sherrylinks/sdk';
 
 interface Metadata {
   url: string;
-  icon: string;
   title: string;
   description: string;
   actions: Action[];
@@ -26,23 +25,24 @@ interface Metadata {
 1. **url\***: The url that will be shown.<br/>
    Example: "https://sherry.social/links"
 
-2. **icon\***: URL of the trigger's visual representation. <br/>
-   Example: "https://mi-image.com"
-
-3. **title\***: The title displayed in the user interface. <br/>
+2. **title\***: The title displayed in the user interface. <br/>
    Example: "sherry.social"
 
-4. **description\***: A short explanation of the trigger's purpose. <br/>
+3. **description\***: A short explanation of the trigger's purpose. <br/>
    Example: "Claim your early supporter badge"
 
-5. **baseurl** : solo depende de si usas dynamic actions
+4. **baseurl** : solo depende de si usas dynamic actions
 
-6. **actions\***: <br/>
+5. **actions\***: <br/>
    Puede variar dependiendo de que action se vaya a usar.
 
 # Understanding Actions and Parameters
 
 Actions are the core of triggers, defining what a user can do. Parameters specify the inputs required for those actions.
+
+:::info Action Flows - In Final Development
+Action Flows are currently in their final development stage and have not yet been released. This functionality will be available in upcoming versions.
+:::
 
 ## Actions
 
@@ -68,7 +68,6 @@ import { Metadata } from '@sherrylinks/sdk';
 
 const nftMintAction: Metadata = {
   url: 'https://myapp.example',
-  icon: 'https://example.com/icon.png',
   title: 'NFT Minter',
   description: 'Mint awesome NFTs',
   actions: [
@@ -99,7 +98,6 @@ For sending native tokens between addresses.
 ```typescript
 const transferAction: Metadata = {
   url: 'https://myapp.example',
-  icon: 'https://example.com/icon.png',
   title: 'Send AVAX',
   description: 'Quick AVAX transfer',
   actions: [
@@ -121,7 +119,6 @@ For making HTTP requests to external APIs.
 ```typescript
 const httpActionExample = {
   url: 'https://myapp.example',
-  icon: 'https://example.com/icon.png',
   title: 'Submit Feedback',
   description: 'Send feedback to our API',
   actions: [
@@ -159,7 +156,6 @@ For flexible actions where logic is computed server-side.
 ```typescript
 const dynamicAction: Metadata = {
   url: 'https://myapp.example',
-  icon: 'https://example.com/icon.png',
   title: 'Dynamic Swap',
   description: 'Smart token swapping',
   baseUrl: 'https://myapp.example',
@@ -185,6 +181,10 @@ const dynamicAction: Metadata = {
 #### ActionFlow
 
 For multi-step processes with conditional logic.
+
+:::info Coming Soon
+ActionFlow functionality is currently in its final development stage and will be available in upcoming releases.
+:::
 
 ```typescript
 import { ActionFlow } from '@sherrylinks/sdk';
@@ -261,7 +261,7 @@ Each type comes with specific validation properties. Refer to the [detailed para
 Use predefined templates for common parameters to ensure consistency and reduce boilerplate.
 
 ```typescript
-import { PARAM_TEMPLATES, createParameter } from '@sherrylabs/sdk'; // Assuming correct import path
+import { PARAM_TEMPLATES, createParameter } from '@sherrylinks/sdk'; // Assuming correct import path
 
 // Address parameter
 const recipientParam = createParameter(PARAM_TEMPLATES.ADDRESS, {

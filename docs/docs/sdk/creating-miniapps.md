@@ -3,32 +3,32 @@
 sidebar_position: 2
 ---
 
-# Creating Mini-Apps
+# Creating Triggers
 
-The heart of a Sherry mini-app is the `Metadata` object. This object defines how your mini-app looks and what it does.
+The heart of a Sherry trigger is the `Metadata` object. This object defines how your trigger looks and what it does.
 
 ## The `Metadata` Interface
 
 ```typescript
 // src/interface/metadata.ts
 export interface Metadata {
-  url: string; // Unique identifying URL for your mini-app
+  url: string; // Unique identifying URL for your trigger
   icon: string; // URL of the icon to display
-  title: string; // Main title of the mini-app
+  title: string; // Main title of the trigger
   description: string; // Short description
-  actions: Action[]; // Array of actions the mini-app can perform
+  actions: Action[]; // Array of actions the trigger can perform
 }
 ```
 
 - `url`: Must be a unique URL that identifies your application. Using a URL under your control is recommended.
-- `icon`: A URL to an image (preferably PNG or SVG) representing your mini-app.
+- `icon`: A URL to an image (preferably PNG or SVG) representing your trigger.
 - `title`: A concise and descriptive title.
-- `description`: A brief explanation of what the mini-app does.
+- `description`: A brief explanation of what the trigger does.
 - `actions`: An array containing one or more action definitions. These can be `BlockchainActionMetadata`, `TransferAction`, `HttpAction`, or `ActionFlow`.
 
 ## Basic Example
 
-Here's a simple example of `Metadata` for a mini-app that allows sending 0.1 AVAX to a fixed address:
+Here's a simple example of `Metadata` for a trigger that allows sending 0.1 AVAX to a fixed address:
 
 ```typescript
 import { Metadata, TransferAction } from '@sherrylinks/sdk';
