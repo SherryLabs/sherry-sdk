@@ -15,7 +15,7 @@ describe('Dynamic Action Validation', () => {
                     description: 'Test dynamic action',
                     path: '/relative/path',
                     chains: {
-                        source: 'fuji',
+                        source: 43113,
                     },
                     params: [
                         {
@@ -56,7 +56,7 @@ describe('Dynamic Action Validation', () => {
                     description: 'Test dynamic action',
                     path: 'https://api.example.com/action',
                     chains: {
-                        source: 'fuji',
+                        source: 43113,
                     },
                 },
             ],
@@ -79,7 +79,7 @@ describe('Dynamic Action Validation', () => {
                     description: 'Test dynamic action',
                     path: '/relative/path',
                     chains: {
-                        source: 'fuji',
+                        source: 43113,
                     },
                 },
             ],

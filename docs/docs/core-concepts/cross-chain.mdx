@@ -71,7 +71,7 @@ const actionMetadata: BlockchainActionMetadata = {
   address: '0x1234567890abcdef1234567890abcdef12345678',
   abi: exampleAbi,
   functionName: 'mint',
-  chains: { source: 'avalanche', destination: 'celo' },
+  chains: { source: 43114, destination: 42220 },
   amount: 0.01, // Optional: amount of native cryptocurrency to send
 };
 ```
@@ -99,11 +99,11 @@ const actions: TransferAction[] = [
     label: '0.01 CELO',
     to: '0x5b1869D9A4C187F2EAa108f3062412ecf0526b24',
     amount: 0.01,
-    chains: { source: 'avalanche', destination: 'celo' },
+    chains: { source: 43114, destination: 42220 },
   },
   {
     label: 'Manual Transfer',
-    chains: { source: 'avalanche', destination: 'celo' },
+    chains: { source: 43114, destination: 42220 },
   },
 ];
 ```

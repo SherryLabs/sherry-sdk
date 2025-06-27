@@ -83,7 +83,7 @@ function createValidBaseAction(
         address: '0x1234567890123456789012345678901234567890',
         abi: abi,
         functionName: functionName,
-        chains: { source: 'fuji' },
+        chains: { source: 43113 },
     };
 }
 
@@ -461,7 +461,7 @@ describe('BlockchainActionValidator', () => {
                 address: USDC_ADDRESS,
                 abi: erc20Abi,
                 functionName: 'approve',
-                chains: { source: 'avalanche' },
+                chains: { source: 43114 },
                 params: [
                     {
                         name: 'spender', // address
@@ -497,7 +497,7 @@ describe('BlockchainActionValidator', () => {
                 address: ROUTER_ADDRESS,
                 abi: routerAbi,
                 functionName: 'swapExactIn',
-                chains: { source: 'avalanche' },
+                chains: { source: 43114 },
                 // Note: swapExactIn is often payable when swapping *from* native token
                 // Let's assume the ABI provided is correct (nonpayable) for this test,
                 // or adjust if the real ABI is payable and add `amount` property.

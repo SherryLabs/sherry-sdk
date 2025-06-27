@@ -160,7 +160,7 @@ describe('FlowValidator', () => {
                     },
                 ],
                 functionName: 'approve',
-                chains: { source: 'ethereum' },
+                chains: { source: 1 },
                 nextActions: [{ actionId: 'complete' }],
             };
 

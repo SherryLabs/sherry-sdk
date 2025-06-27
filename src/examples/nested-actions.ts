@@ -120,7 +120,7 @@ export const onboardingFlowApp: ActionFlow = {
             address: '0x1234567890123456789012345678901234567890',
             abi: onboardingNftAbi,
             functionName: 'mintWelcomeNFT',
-            chains: { source: 'avalanche' },
+            chains: { source: 43114 },
             params: [
                 {
                     name: 'to',
@@ -262,7 +262,7 @@ export const defiSwapFlowApp: ActionFlow = {
             address: '0xb322E239E5A32724633A595b8f8657F9cbb307B2', //'{{fromToken}}' as `0x${string}`, // Dynamic address from previous step // TODO: Fix this
             abi: erc20Abi,
             functionName: 'approve',
-            chains: { source: 'avalanche' },
+            chains: { source: 43114 },
             params: [
                 {
                     name: 'spender',
@@ -301,7 +301,7 @@ export const defiSwapFlowApp: ActionFlow = {
             //description: 'Swap tokens on the DEX',
             abi: dexAbi,
             functionName: 'swapExactTokensForTokens',
-            chains: { source: 'avalanche' },
+            chains: { source: 43114 },
             params: [
                 {
                     name: 'amountIn',
@@ -510,7 +510,7 @@ export const governanceFlowApp: ActionFlow = {
             address: '0xb322E239E5A32724633A595b8f8657F9cbb307B2', // DAO contract address
             abi: daoAbi,
             functionName: 'createProposal',
-            chains: { source: 'celo' },
+            chains: { source: 42220 },
             params: [
                 {
                     name: 'title',
@@ -613,7 +613,7 @@ export const governanceFlowApp: ActionFlow = {
             address: '0xb322E239E5A32724633A595b8f8657F9cbb307B2', // DAO contract address
             abi: daoAbi,
             functionName: 'castVote',
-            chains: { source: 'celo' },
+            chains: { source: 42220 },
             params: [
                 {
                     name: 'proposalId',
@@ -685,7 +685,7 @@ export const governanceFlowApp: ActionFlow = {
             address: '0xb322E239E5A32724633A595b8f8657F9cbb307B2', // DAO contract address
             abi: daoAbi,
             functionName: 'executeProposal',
-            chains: { source: 'celo' },
+            chains: { source: 42220 },
             params: [
                 {
                     name: 'proposalId',

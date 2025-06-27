@@ -15,7 +15,7 @@ The most sophisticated action type for complex Web3 operations. Your server comp
   type: 'dynamic',
   label: 'Optimal DeFi Strategy',
   path: '/api/calculate-best-yield',
-  chains: { source: 'avalanche' },
+  chains: { source: 43114 },
   params: [
     {
       name: 'amount',
@@ -64,7 +64,7 @@ For direct smart contract interactions where you know exactly which function to 
   address: '0x742d35Cc6734C0532925a3b8D4ccd306f6F4B26C',
   // abi: nftAbi, // Assuming nftAbi is defined elsewhere
   functionName: 'mint',
-  chains: { source: 'avalanche' },
+  chains: { source: 43114 },
   amount: 0.1, // Fixed mint price in native currency
   params: [
     {
@@ -98,7 +98,7 @@ The most user-friendly way to send native tokens (ETH, AVAX, CELO) with customiz
 {
   type: 'transfer',
   label: 'Support Creator',
-  chains: { source: 'avalanche' },
+  chains: { source: 43114 },
   to: '0x742d35Cc6734C0532925a3b8D4ccd306f6F4B26C',
   amountConfig: {
     type: 'radio',
@@ -320,7 +320,7 @@ const amountParam = createParameter(PARAM_TEMPLATES.AMOUNT, {
 
 ```typescript
 // ✅ Good - Use Transfer Action for AVAX/ETH/CELO
-{ type: 'transfer', amount: 0.1, chains: { source: 'avalanche' } }
+{ type: 'transfer', amount: 0.1, chains: { source: 43114 } }
 
 // ❌ Avoid - Don't use Blockchain Action for simple transfers
 { type: 'blockchain', functionName: 'transfer', /* complex setup */ }

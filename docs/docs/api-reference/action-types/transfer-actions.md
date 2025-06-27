@@ -8,11 +8,11 @@ Transfer Actions are designed for **simple, user-friendly native token transfers
 
 Unlike Blockchain Actions that require contract knowledge, or Dynamic Actions that need server logic, Transfer Actions are:
 
-- 🎯 **Purpose-built** for native token transfers
-- 🎨 **Highly interactive** with built-in UI configurability
-- 🚀 **Zero complexity** - no ABIs, no contracts, just send tokens
-- 📱 **Mobile-optimized** with beautiful selection interfaces
-- ⚡ **Instant setup** - works in minutes, not hours
+- **Purpose-built** for native token transfers
+- **Highly interactive** with built-in UI configurability
+- **Zero complexity** - no ABIs, no contracts, just send tokens
+- **Mobile-optimized** with beautiful selection interfaces
+- **Instant setup** - works in minutes, not hours
 
 ## Interface
 
@@ -44,7 +44,7 @@ const simpleDonation: TransferAction = {
   type: 'transfer',
   label: 'Donate 0.1 AVAX',
   description: 'Support our project development',
-  chains: { source: 'avalanche' },
+  chains: { source: 43114 },
   to: '0x742d35Cc6734C0532925a3b8D4ccd306f6F4B26C',
   amount: 0.1,
 };
@@ -59,7 +59,7 @@ const charityDonation: TransferAction = {
   type: 'transfer',
   label: 'Support a Cause',
   description: 'Choose your preferred charity',
-  chains: { source: 'celo' },
+  chains: { source: 42220 },
   recipient: {
     type: 'select',
     label: 'Select Charity',
@@ -95,7 +95,7 @@ const creatorTipping: TransferAction = {
   type: 'transfer',
   label: 'Tip Creator',
   description: 'Show appreciation for great content',
-  chains: { source: 'avalanche' },
+  chains: { source: 43114 },
   to: '0x9876543210987654321098765432109876543210', // Fixed recipient
   amountConfig: {
     type: 'radio',
@@ -136,7 +136,7 @@ const flexiblePayment: TransferAction = {
   type: 'transfer',
   label: 'Send Payment',
   description: 'Send AVAX to team members',
-  chains: { source: 'avalanche' },
+  chains: { source: 43114 },
 
   recipient: {
     type: 'select',
@@ -196,7 +196,7 @@ const crossChainTransfer: TransferAction = {
   label: 'Bridge to Celo',
   description: 'Send tokens from Avalanche to Celo network',
   chains: {
-    source: 'avalanche',
+    source: 43114,
     destination: 'celo',
   },
   // When neither to/amount nor configs are specified,
@@ -251,7 +251,7 @@ const contextualTipping: TransferAction = {
   type: 'transfer',
   label: 'Tip for this Post',
   description: 'Reward quality content creation',
-  chains: { source: 'celo' },
+  chains: { source: 42220 },
   to: '0xContentCreatorAddress',
 
   amountConfig: {
@@ -286,7 +286,7 @@ const crowdfunding: TransferAction = {
   type: 'transfer',
   label: 'Fund This Project',
   description: 'Help us reach our funding goal',
-  chains: { source: 'avalanche' },
+  chains: { source: 43114 },
   to: '0xProjectFundingAddress',
 
   amountConfig: {
@@ -326,7 +326,7 @@ const splitPayment: TransferAction = {
   type: 'transfer',
   label: 'Pay Team Share',
   description: 'Distribute project earnings',
-  chains: { source: 'fuji' },
+  chains: { source: 43113 },
 
   recipient: {
     type: 'radio',
@@ -396,11 +396,11 @@ type: 'radio';
 
 Transfer Actions automatically validate:
 
-- ✅ **Address format** - Ensures valid Ethereum addresses
-- ✅ **Amount ranges** - Prevents negative or excessive amounts
-- ✅ **Chain compatibility** - Verifies supported chains
-- ✅ **Required fields** - Enforces required selections
-- ✅ **Option existence** - Ensures selected options are valid
+- **Address format** - Ensures valid Ethereum addresses
+- **Amount ranges** - Prevents negative or excessive amounts
+- **Chain compatibility** - Verifies supported chains
+- **Required fields** - Enforces required selections
+- **Option existence** - Ensures selected options are valid
 
 ```typescript
 // Validation happens automatically
@@ -430,7 +430,7 @@ try {
 
 ## When to Use Transfer Actions
 
-### ✅ **Perfect for:**
+### Perfect for:
 
 - Tips and donations
 - Social media rewards
@@ -441,7 +441,7 @@ try {
 - Membership fees
 - Content creator support
 
-### ❌ **Not suitable for:**
+### Not suitable for:
 
 - Token transfers (ERC-20) - use Blockchain Actions
 - Complex DeFi operations - use Dynamic Actions
@@ -453,24 +453,24 @@ try {
 ### 1. **Make Options Descriptive**
 
 ```typescript
-// ✅ Good - Clear context and value
+// Good - Clear context and value
 {
   label: 'Premium Support 💎',
   value: 0.1,
   description: '0.1 AVAX - Priority support for 1 month'
 }
 
-// ❌ Avoid - Unclear value proposition
+// Avoid - Unclear value proposition
 { label: 'Option 1', value: 0.1 }
 ```
 
 ### 2. **Use Appropriate UI Components**
 
 ```typescript
-// ✅ Radio for 2-5 options (visual comparison)
+// Radio for 2-5 options (visual comparison)
 type: 'radio'; // Good for tip amounts
 
-// ✅ Select for 5+ options (saves space)
+// Select for 5+ options (saves space)
 type: 'select'; // Good for many recipients
 ```
 

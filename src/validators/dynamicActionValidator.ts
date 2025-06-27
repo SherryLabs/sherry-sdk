@@ -121,7 +121,7 @@ export class DynamicActionValidator {
             typeof obj.path === 'string' &&
             obj.chains &&
             typeof obj.chains === 'object' &&
-            typeof obj.chains.source === 'string'
+            typeof obj.chains.source === 'number'
         );
     }
 }

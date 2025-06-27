@@ -70,7 +70,7 @@ const avaxToUsdtSwapApp: Metadata = {
             description: 'Dynamic Swap',
             path: '/swapExactTokensForTokens',
             chains: {
-                source: 'fuji',
+                source: 43113,
             },
         } as DynamicAction,
         {
@@ -79,7 +79,7 @@ const avaxToUsdtSwapApp: Metadata = {
             description: 'Dynamic Swap',
             path: '/swapExactTokensForTokens',
             chains: {
-                source: 'fuji',
+                source: 43113,
             },
             params: [
                 {

@@ -32,7 +32,7 @@ const metadata: Metadata = {
       address: '0x...',
       abi: nftAbi,
       functionName: 'safeMint',
-      chains: { source: 'avalanche' },
+      chains: { source: 43114 },
       params: [
         {
           name: 'to',
@@ -207,7 +207,7 @@ const validMetadata: Metadata = {
         },
       ],
       functionName: 'safeMint',
-      chains: { source: 'avalanche' },
+      chains: { source: 43114 },
       amount: 0.1,
       params: [
         {
@@ -267,7 +267,7 @@ const invalidAction = {
     },
   ],
   functionName: 'transfer',
-  chains: { source: 'avalanche' },
+  chains: { source: 43114 },
   params: [
     // Wrong order! Should be 'to' first, then 'amount'
     {
@@ -313,7 +313,7 @@ const invalidDynamic: Metadata = {
       type: 'dynamic',
       label: 'Dynamic Action',
       path: '/api/dynamic', // Relative path but no baseUrl
-      chains: { source: 'avalanche' },
+      chains: { source: 43114 },
     },
   ],
 };

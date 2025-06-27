@@ -1,6 +1,6 @@
 # Quick Start
 
-## First Steps! 🚀
+## First Steps!
 
 This section will help you get up and running with the Sherry SDK in minutes.  
 You’ll learn how to install the SDK, create your first mini-app, and validate your setup to start building interactive Web3 experiences inside social media posts.
@@ -22,7 +22,7 @@ const metadata: Metadata = {
       description: 'Transfer 0.1 AVAX to recipient',
       to: '0x1234567890123456789012345678901234567890',
       amount: 0.1,
-      chains: { source: 'avalanche' },
+      chains: { source: 43114 },
     },
   ],
 };
