@@ -8,6 +8,9 @@ import {
     sepolia,
 } from 'viem/chains';
 
+// Export all chains from Viem
+export * from 'viem/chains';
+
 export const VALID_CHAIN_IDS = [
     1, // Ethereum Mainnet
     11155111, // Sepolia Testnet
@@ -26,6 +29,39 @@ export const CHAIN_INFO: Record<ChainId, ChainViem> = {
     43113: avalancheFuji,
     42220: celo,
     44787: celoAlfajores,
+};
+
+// Chain name mappings for validation
+export const CHAIN_NAME_TO_ID: Record<string, ChainId> = {
+    // Main names
+    'Ethereum': 1,
+    'Ethereum Mainnet': 1,
+    'Sepolia': 11155111,
+    'Sepolia Testnet': 11155111,
+    'Avalanche': 43114,
+    'Avalanche C-Chain': 43114,
+    'Avalanche Fuji': 43113,
+    'Avalanche Fuji Testnet': 43113,
+    'Celo': 42220,
+    'Celo Mainnet': 42220,
+    'Celo Alfajores': 44787,
+    'Celo Alfajores Testnet': 44787,
+    // Legacy names (lowercase)
+    'ethereum': 1,
+    'sepolia': 11155111,
+    'avalanche': 43114,
+    'fuji': 43113,
+    'celo': 42220,
+    'alfajores': 44787,
+};
+
+export const CHAIN_ID_TO_NAME: Record<ChainId, string> = {
+    1: 'Ethereum',
+    11155111: 'Sepolia',
+    43114: 'Avalanche',
+    43113: 'Avalanche Fuji',
+    42220: 'Celo',
+    44787: 'Celo Alfajores',
 };
 
 export const LEGACY_CHAIN_NAMES = [
@@ -138,5 +174,40 @@ export const chainUtils = {
      */
     getTestnetChains(): ChainId[] {
         return VALID_CHAIN_IDS.filter(id => CHAIN_INFO[id].testnet);
+    },
+
+    /**
+     * Validate if a chain name is supported by Sherry
+     * @param chainName - The chain name to validate (e.g., "Avalanche Fuji", "Ethereum")
+     * @returns boolean indicating if the chain is supported
+     */
+    isValidChainName(chainName: string): boolean {
+        return chainName in CHAIN_NAME_TO_ID;
+    },
+
+    /**
+     * Get chain ID from chain name
+     * @param chainName - The chain name (e.g., "Avalanche Fuji", "Ethereum")
+     * @returns ChainId if valid, undefined if not supported
+     */
+    getChainIdByName(chainName: string): ChainId | undefined {
+        return CHAIN_NAME_TO_ID[chainName];
+    },
+
+    /**
+     * Get chain name from chain ID
+     * @param chainId - The chain ID
+     * @returns Chain name if valid, undefined if not supported
+     */
+    getChainNameById(chainId: ChainId): string | undefined {
+        return CHAIN_ID_TO_NAME[chainId];
+    },
+
+    /**
+     * Get all supported chain names
+     * @returns Array of all supported chain names
+     */
+    getSupportedChainNames(): string[] {
+        return Object.keys(CHAIN_NAME_TO_ID);
     },
 };
