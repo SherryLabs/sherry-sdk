@@ -34,25 +34,25 @@ export const CHAIN_INFO: Record<ChainId, ChainViem> = {
 // Chain name mappings for validation
 export const CHAIN_NAME_TO_ID: Record<string, ChainId> = {
     // Main names
-    'Ethereum': 1,
+    Ethereum: 1,
     'Ethereum Mainnet': 1,
-    'Sepolia': 11155111,
+    Sepolia: 11155111,
     'Sepolia Testnet': 11155111,
-    'Avalanche': 43114,
+    Avalanche: 43114,
     'Avalanche C-Chain': 43114,
     'Avalanche Fuji': 43113,
     'Avalanche Fuji Testnet': 43113,
-    'Celo': 42220,
+    Celo: 42220,
     'Celo Mainnet': 42220,
     'Celo Alfajores': 44787,
     'Celo Alfajores Testnet': 44787,
     // Legacy names (lowercase)
-    'ethereum': 1,
-    'sepolia': 11155111,
-    'avalanche': 43114,
-    'fuji': 43113,
-    'celo': 42220,
-    'alfajores': 44787,
+    ethereum: 1,
+    sepolia: 11155111,
+    avalanche: 43114,
+    fuji: 43113,
+    celo: 42220,
+    alfajores: 44787,
 };
 
 export const CHAIN_ID_TO_NAME: Record<ChainId, string> = {
