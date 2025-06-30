@@ -213,7 +213,7 @@ export interface ValidatedMetadata extends Omit<Metadata, 'actions'> {
      *     address: '0xA0b86a33E6417C8D7648D5b1D6fF0F6dB6c15b2a',
      *     abi: [...],
      *     functionName: 'approve',
-     *     chains: { source: 'ethereum' },
+     *     chains: { source: 1 },
      *     blockchainActionType: 'approve' // Added during processing
      *   },
      *   // TransferAction (validated but structurally unchanged)

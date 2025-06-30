@@ -154,7 +154,7 @@ describe('HttpActionValidator', () => {
             address: '0x1234',
             abi: [],
             functionName: 'test',
-            chains: { source: 'avalanche' },
+            chains: { source: 43114 },
         };
         expect(HttpActionValidator.isHttpAction(blockchainAction)).toBe(false);
     });

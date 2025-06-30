@@ -7,7 +7,7 @@ describe('TransferActionValidator', () => {
     const validTransferAction: TransferAction = {
         type: 'transfer',
         label: 'Transfer AVAX',
-        chains: { source: 'avalanche' },
+        chains: { source: 43114 },
         to: '0x1234567890123456789012345678901234567890',
         amount: 0.1,
     };
@@ -23,7 +23,7 @@ describe('TransferActionValidator', () => {
                 address: '0x1234567890123456789012345678901234567890',
                 abi: [],
                 functionName: 'test',
-                chains: { source: 'avalanche' },
+                chains: { source: 43114 },
             };
             expect(TransferActionValidator.isTransferAction(blockchainAction)).toBe(false);
         });
@@ -48,7 +48,7 @@ describe('TransferActionValidator', () => {
             const actionWithRecipientConfig: TransferAction = {
                 type: 'transfer',
                 label: 'Transfer Tokens',
-                chains: { source: 'avalanche' },
+                chains: { source: 43114 },
                 recipient: {
                     type: 'select',
                     options: [
@@ -68,7 +68,7 @@ describe('TransferActionValidator', () => {
             const actionWithAmountConfig: TransferAction = {
                 type: 'transfer',
                 label: 'Transfer Tokens',
-                chains: { source: 'avalanche' },
+                chains: { source: 43114 },
                 to: '0x1234567890123456789012345678901234567890',
                 amountConfig: {
                     type: 'select',
@@ -101,7 +101,7 @@ describe('TransferActionValidator', () => {
         it('rejects transfer with invalid chain', () => {
             const invalidAction = {
                 ...validTransferAction,
-                chains: { source: 'invalid-chain' },
+                chains: { source: 99999 },
             };
 
             expect(() =>

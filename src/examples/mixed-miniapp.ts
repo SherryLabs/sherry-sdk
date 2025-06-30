@@ -69,7 +69,7 @@ export const mixedActionMiniApp: Metadata = {
         {
             label: 'Tip Developer',
             type: 'transfer',
-            chains: { source: 'avalanche' },
+            chains: { source: 43114 },
             to: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045', // Vitalik's address as example
             amountConfig: {
                 type: 'radio',
@@ -91,7 +91,7 @@ export const mixedActionMiniApp: Metadata = {
             address: '0x5ee75a1B1648C023e885E58bD3735Ae273f2cc52' as `0x${string}`,
             abi: erc20Abi,
             functionName: 'approve',
-            chains: { source: 'fuji' },
+            chains: { source: 43113 },
             params: [
                 // Spender address (app contract)
                 createParameter(PARAM_TEMPLATES.ADDRESS, {

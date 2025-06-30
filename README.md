@@ -71,7 +71,7 @@ const metadata: Metadata = {
       description: 'Transfer 0.1 AVAX to recipient',
       to: '0x1234567890123456789012345678901234567890',
       amount: 0.1,
-      chains: { source: 'avalanche' },
+      chains: { source: 43114 },
     },
   ],
 };
@@ -251,7 +251,7 @@ Test and validate your mini-apps during development:
   address: '0xContractAddress',
   abi: [...],  // Contract ABI
   functionName: 'approve',
-  chains: { source: 'avalanche' },
+  chains: { source: 43114 },
   params: [
     {
       name: 'spender',

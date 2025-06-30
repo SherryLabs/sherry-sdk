@@ -75,7 +75,7 @@ const approveAction: BlockchainActionMetadata = {
   address: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', // USDC contract
   abi: erc20Abi,
   functionName: 'approve',
-  chains: { source: 'avalanche' },
+  chains: { source: 43114 },
   params: [
     {
       name: 'spender',
@@ -118,7 +118,7 @@ const mintAction: BlockchainActionMetadata = {
   address: '0x742d35Cc6734C0532925a3b8D4ccd306f6F4B26C',
   abi: nftAbi,
   functionName: 'mint',
-  chains: { source: 'avalanche' },
+  chains: { source: 43114 },
   amount: 0.1, // 0.1 AVAX mint price
   params: [
     {
@@ -162,7 +162,7 @@ const voteAction: BlockchainActionMetadata = {
   address: '0xDaoContractAddress',
   abi: daoAbi,
   functionName: 'castVote',
-  chains: { source: 'celo' },
+  chains: { source: 42220 },
   params: [
     {
       name: 'proposalId',
@@ -221,7 +221,7 @@ const bridgeAction: BlockchainActionMetadata = {
   abi: bridgeAbi,
   functionName: 'bridgeTokens',
   chains: {
-    source: 'avalanche',
+    source: 43114,
     destination: 'celo', // Cross-chain action
   },
   params: [
@@ -346,7 +346,7 @@ const payableAction: BlockchainActionMetadata = {
   address: '0xDonationContract',
   abi: donationAbi,
   functionName: 'donate',
-  chains: { source: 'avalanche' },
+  chains: { source: 43114 },
   amount: 0.5, // Send 0.5 AVAX with the transaction
   params: [
     {

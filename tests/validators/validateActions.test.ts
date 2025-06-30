@@ -28,8 +28,8 @@ describe('Action Validators', () => {
             ],
             functionName: 'approve',
             chains: {
-                source: 'fuji',
-                destination: 'alfajores',
+                source: 43113,
+                destination: 43114,
             },
             params: [
                 {
@@ -73,7 +73,7 @@ describe('Action Validators', () => {
         const transferAction = {
             label: 'Send AVAX',
             description: 'Transfer AVAX to another address',
-            chains: { source: 'fuji', destination: 'alfajores' },
+            chains: { source: 43113, destination: 44787 },
             to: '0x1234567890123456789012345678901234567890',
             amount: 0.1,
         };

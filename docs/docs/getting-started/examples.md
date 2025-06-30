@@ -2,7 +2,7 @@
 
 Explore working examples of Sherry SDK mini-apps across different complexity levels and use cases. Each example includes complete source code, deployment instructions, and live demos.
 
-## 🎯 **Quick Navigation**
+## Quick Navigation
 
 <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', margin: '2rem 0'}}>
   <a href="#beginner-examples" style={{padding: '1rem', border: '1px solid var(--ifm-color-emphasis-300)', borderRadius: '8px', textDecoration: 'none', color: 'inherit'}}>
@@ -25,7 +25,7 @@ Explore working examples of Sherry SDK mini-apps across different complexity lev
 
 ---
 
-## 🎯 **Getting Started Guide**
+## Getting Started Guide
 
 ### Step 1: Choose Your Level
 
@@ -38,11 +38,11 @@ Explore working examples of Sherry SDK mini-apps across different complexity lev
 
 Each example includes:
 
-- ✅ Complete source code
-- ✅ Step-by-step setup instructions
-- ✅ Deployment scripts
-- ✅ Live demo links
-- ✅ Explanation of key concepts
+- Complete source code
+- Step-by-step setup instructions
+- Deployment scripts
+- Live demo links
+- Explanation of key concepts
 
 ### Step 3: Customize & Extend
 
@@ -59,7 +59,7 @@ Perfect for getting started with the SDK basics.
 
 ### 1. Simple Creator Tip
 
-**⏱️ Setup: 2 minutes** | **Action Type: Transfer**
+**Setup: 2 minutes** | **Action Type: Transfer**
 
 A one-click tipping system for content creators.
 
@@ -75,7 +75,7 @@ const creatorTipApp: Metadata = {
     {
       type: 'transfer',
       label: 'Send Tip',
-      chains: { source: 'avalanche' },
+      chains: { source: 43114 },
       to: '0x742d35Cc6734C0532925a3b8D4ccd306f6F4B26C',
       amountConfig: {
         type: 'radio',
@@ -93,7 +93,7 @@ const creatorTipApp: Metadata = {
 export default createMetadata(creatorTipApp);
 ```
 
-**🎯 What you'll learn:**
+**What you'll learn:**
 
 - Basic Transfer Action setup
 - Interactive amount selection
@@ -103,7 +103,7 @@ export default createMetadata(creatorTipApp);
 
 ### 2. Charity Donation Selector
 
-**⏱️ Setup: 3 minutes** | **Action Type: Transfer**
+**Setup: 3 minutes** | **Action Type: Transfer**
 
 Let users choose between multiple charities with custom amounts.
 
@@ -117,7 +117,7 @@ const charityApp: Metadata = {
     {
       type: 'transfer',
       label: 'Donate Now',
-      chains: { source: 'celo' },
+      chains: { source: 42220 },
       recipient: {
         type: 'select',
         label: 'Choose Your Cause',
@@ -153,7 +153,7 @@ const charityApp: Metadata = {
 };
 ```
 
-**🎯 What you'll learn:**
+**What you'll learn:**
 
 - Both recipient and amount selection
 - Dropdown vs radio button UX
@@ -163,7 +163,7 @@ const charityApp: Metadata = {
 
 ### 3. Fixed-Price NFT Mint
 
-**⏱️ Setup: 5 minutes** | **Action Type: Blockchain**
+**Setup: 5 minutes** | **Action Type: Blockchain**
 
 Simple NFT minting with fixed price and metadata.
 
@@ -193,7 +193,7 @@ const simpleNFTApp: Metadata = {
       address: '0x742d35Cc6734C0532925a3b8D4ccd306f6F4B26C',
       abi: nftMintAbi,
       functionName: 'mint',
-      chains: { source: 'fuji' },
+      chains: { source: 43113 },
       amount: 0.1,
       params: [
         {
@@ -217,7 +217,7 @@ const simpleNFTApp: Metadata = {
 };
 ```
 
-**🎯 What you'll learn:**
+**What you'll learn:**
 
 - Basic Blockchain Action setup
 - Working with contract ABIs
@@ -228,7 +228,7 @@ const simpleNFTApp: Metadata = {
 
 ### 4. Simple Newsletter Signup
 
-**⏱️ Setup: 3 minutes** | **Action Type: HTTP**
+**Setup: 3 minutes** | **Action Type: HTTP**
 
 Collect user emails with optional preferences.
 
@@ -287,7 +287,7 @@ const newsletterApp: Metadata = {
 };
 ```
 
-**🎯 What you'll learn:**
+**What you'll learn:**
 
 - HTTP Action basics
 - Form parameter types
@@ -302,7 +302,7 @@ Ready to build more sophisticated mini-apps.
 
 ### 5. Token Approval + Swap Flow
 
-**⏱️ Setup: 15 minutes** | **Action Type: Flow**
+**Setup: 15 minutes** | **Action Type: Flow**
 
 A two-step process: approve tokens, then swap them.
 
@@ -322,7 +322,7 @@ const tokenSwapFlow: ActionFlow = {
       address: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
       abi: erc20Abi,
       functionName: 'approve',
-      chains: { source: 'avalanche' },
+      chains: { source: 43114 },
       params: [
         {
           name: 'spender',
@@ -359,7 +359,7 @@ const tokenSwapFlow: ActionFlow = {
       address: '0x60aE616a2155Ee3d9A68541Ba4544862310933d4',
       abi: routerAbi,
       functionName: 'swapExactTokensForAVAX',
-      chains: { source: 'avalanche' },
+      chains: { source: 43114 },
       params: [
         {
           name: 'amountIn',
@@ -419,7 +419,7 @@ const tokenSwapFlow: ActionFlow = {
 };
 ```
 
-**🎯 What you'll learn:**
+**What you'll learn:**
 
 - Multi-step Action Flows
 - Conditional navigation between steps
@@ -430,7 +430,7 @@ const tokenSwapFlow: ActionFlow = {
 
 ### 6. DAO Voting with Proposals
 
-**⏱️ Setup: 10 minutes** | **Action Type: Blockchain**
+**Setup: 10 minutes** | **Action Type: Blockchain**
 
 Vote on DAO proposals with real-time proposal data.
 
@@ -447,7 +447,7 @@ const daoVotingApp: Metadata = {
       address: '0xDAOGovernanceContract',
       abi: daoAbi,
       functionName: 'castVote',
-      chains: { source: 'celo' },
+      chains: { source: 42220 },
       params: [
         {
           name: 'proposalId',
@@ -496,7 +496,7 @@ const daoVotingApp: Metadata = {
 };
 ```
 
-**🎯 What you'll learn:**
+**What you'll learn:**
 
 - Complex parameter selection
 - Boolean parameter handling
@@ -507,7 +507,7 @@ const daoVotingApp: Metadata = {
 
 ### 7. Cross-Chain Asset Bridge
 
-**⏱️ Setup: 12 minutes** | **Action Type: Blockchain**
+**Setup: 12 minutes** | **Action Type: Blockchain**
 
 Bridge tokens between Avalanche and Celo networks.
 
@@ -524,7 +524,7 @@ const bridgeApp: Metadata = {
       address: '0xBridgeContractAddress',
       abi: bridgeAbi,
       functionName: 'bridgeTokens',
-      chains: { source: 'avalanche', destination: 'celo' },
+      chains: { source: 43114, destination: 42220 },
       params: [
         {
           name: 'token',
@@ -573,7 +573,7 @@ const bridgeApp: Metadata = {
 };
 ```
 
-**🎯 What you'll learn:**
+**What you'll learn:**
 
 - Cross-chain action configuration
 - Token selection with descriptions
@@ -584,7 +584,7 @@ const bridgeApp: Metadata = {
 
 ### 8. Multi-Step User Onboarding
 
-**⏱️ Setup: 20 minutes** | **Action Type: Flow**
+**Setup: 20 minutes** | **Action Type: Flow**
 
 Complete user onboarding with email, wallet, and NFT mint.
 
@@ -663,7 +663,7 @@ const onboardingFlow: ActionFlow = {
       address: '0xWelcomeNFTContract',
       abi: welcomeNftAbi,
       functionName: 'mintWelcome',
-      chains: { source: 'fuji' },
+      chains: { source: 43113 },
       params: [
         {
           name: 'to',
@@ -708,7 +708,7 @@ const onboardingFlow: ActionFlow = {
 };
 ```
 
-**🎯 What you'll learn:**
+**What you'll learn:**
 
 - Complex multi-step flows
 - Decision trees and branching
@@ -723,7 +723,7 @@ Complex mini-apps with server-side logic and optimization.
 
 ### 9. AI-Powered Yield Optimizer
 
-**⏱️ Setup: 30 minutes** | **Action Type: Dynamic**
+**Setup: 30 minutes** | **Action Type: Dynamic**
 
 Server calculates optimal DeFi yield strategies across multiple protocols.
 
@@ -739,7 +739,7 @@ const yieldOptimizerApp: Metadata = {
       type: 'dynamic',
       label: 'Optimize My Yield',
       path: '/api/calculate-optimal-yield',
-      chains: { source: 'avalanche' },
+      chains: { source: 43114 },
       params: [
         {
           name: 'amount',
@@ -831,7 +831,7 @@ export async function POST(req: NextRequest) {
 
     const response: ExecutionResponse = {
       serializedTransaction: serializedTx,
-      chainId: 'avalanche',
+      chainId: 43,
       params: {
         functionName: 'executeYieldStrategy',
         args: {
@@ -877,7 +877,7 @@ async function calculateOptimalAllocation(config: any) {
 }
 ```
 
-**🎯 What you'll learn:**
+**What you'll learn:**
 
 - Complex Dynamic Action implementation
 - Server-side AI/ML integration
@@ -889,7 +889,7 @@ async function calculateOptimalAllocation(config: any) {
 
 ### 10. Dynamic NFT Pricing Engine
 
-**⏱️ Setup: 25 minutes** | **Action Type: Dynamic**
+**Setup: 25 minutes** | **Action Type: Dynamic**
 
 NFT pricing that adapts to market conditions, demand, and whale activity.
 
@@ -905,7 +905,7 @@ const dynamicNFTApp: Metadata = {
       type: 'dynamic',
       label: 'Mint at Current Price',
       path: '/api/calculate-nft-price',
-      chains: { source: 'avalanche' },
+      chains: { source: 43114 },
       params: [
         {
           name: 'tier',
@@ -990,7 +990,7 @@ export async function POST(req: NextRequest) {
 
     const response: ExecutionResponse = {
       serializedTransaction: serialize(transaction),
-      chainId: 'avalanche',
+      chainId: 43114,
       params: {
         functionName: 'mintWithDynamicPrice',
         args: {
@@ -1040,7 +1040,7 @@ async function detectWhaleActivity() {
 }
 ```
 
-**🎯 What you'll learn:**
+**What you'll learn:**
 
 - Real-time market analysis
 - Dynamic pricing algorithms
@@ -1052,7 +1052,7 @@ async function detectWhaleActivity() {
 
 ### 11. Advanced Arbitrage Bot
 
-**⏱️ Setup: 35 minutes** | **Action Type: Dynamic**
+**Setup: 35 minutes** | **Action Type: Dynamic**
 
 Multi-DEX arbitrage with flash loans and optimal routing.
 
@@ -1068,7 +1068,7 @@ const arbitrageBotApp: Metadata = {
       type: 'dynamic',
       label: 'Find & Execute Arbitrage',
       path: '/api/find-arbitrage',
-      chains: { source: 'avalanche' },
+      chains: { source: 43114 },
       params: [
         {
           name: 'tokenPair',
@@ -1165,7 +1165,7 @@ export async function POST(req: NextRequest) {
 
     const response: ExecutionResponse = {
       serializedTransaction: serialize(transaction),
-      chainId: 'avalanche',
+      chainId: 43114,
       params: {
         functionName: useFlashLoan ? 'executeFlashArbitrage' : 'executeDirectArbitrage',
         args: {
@@ -1202,7 +1202,7 @@ async function scanDEXPrices(tokenPair: string) {
 }
 ```
 
-**🎯 What you'll learn:**
+**What you'll learn:**
 
 - Multi-DEX price scanning
 - Flash loan implementation
@@ -1218,7 +1218,7 @@ Complete mini-app implementations ready for production.
 
 ### 12. DeFi Portfolio Manager
 
-**⏱️ Setup: 45 minutes** | **Multiple Action Types**
+**Setup: 45 minutes** | **Multiple Action Types**
 
 Complete DeFi portfolio management with rebalancing, yield optimization, and risk management.
 
@@ -1235,7 +1235,7 @@ const portfolioManagerApp: Metadata = {
       type: 'dynamic',
       label: 'Analyze Portfolio',
       path: '/api/analyze-portfolio',
-      chains: { source: 'avalanche' },
+      chains: { source: 43114 },
       params: [
         {
           name: 'walletAddress',
@@ -1252,7 +1252,7 @@ const portfolioManagerApp: Metadata = {
       type: 'dynamic',
       label: 'Smart Rebalance',
       path: '/api/rebalance-portfolio',
-      chains: { source: 'avalanche' },
+      chains: { source: 43114 },
       params: [
         {
           name: 'strategy',
@@ -1296,7 +1296,7 @@ const portfolioManagerApp: Metadata = {
       address: '0xPortfolioManagerContract',
       abi: portfolioManagerAbi,
       functionName: 'emergencyExitAll',
-      chains: { source: 'avalanche' },
+      chains: { source: 43114 },
       params: [
         {
           name: 'recipient',
@@ -1333,7 +1333,7 @@ const portfolioManagerApp: Metadata = {
       address: '0xPortfolioManagerContract',
       abi: portfolioManagerAbi,
       functionName: 'setGlobalStopLoss',
-      chains: { source: 'avalanche' },
+      chains: { source: 43114 },
       params: [
         {
           name: 'stopLossPercentage',
@@ -1399,7 +1399,7 @@ export async function POST(req: NextRequest) {
 
   return NextResponse.json({
     serializedTransaction: serialize(transaction),
-    chainId: 'avalanche',
+    chainId: 43114,
     params: {
       functionName: 'displayPortfolioAnalysis',
       args: {
@@ -1437,7 +1437,7 @@ export async function POST(req: NextRequest) {
 
   return NextResponse.json({
     serializedTransaction: serialize(batchTransaction),
-    chainId: 'avalanche',
+    chainId: 43114,
     params: {
       functionName: 'executeBatchRebalance',
       args: {
@@ -1452,7 +1452,7 @@ export async function POST(req: NextRequest) {
 }
 ```
 
-**🎯 What you'll learn:**
+**What you'll learn:**
 
 - Multi-protocol portfolio analysis
 - Risk scoring algorithms
@@ -1464,7 +1464,7 @@ export async function POST(req: NextRequest) {
 
 ### 13. Social Trading Platform
 
-**⏱️ Setup: 60 minutes** | **Action Flow**
+**Setup: 60 minutes** | **Action Flow**
 
 Follow successful traders and automatically copy their strategies.
 
@@ -1640,7 +1640,7 @@ const socialTradingFlow: ActionFlow = {
       address: '0xSocialTradingFactory',
       abi: socialTradingAbi,
       functionName: 'createCopyTradingVault',
-      chains: { source: 'avalanche' },
+      chains: { source: 43114 },
       params: [
         {
           name: 'traderAddress',
@@ -1709,7 +1709,7 @@ const socialTradingFlow: ActionFlow = {
 };
 ```
 
-**🎯 What you'll learn:**
+**What you'll learn:**
 
 - Social trading mechanics
 - Dynamic trader discovery
@@ -1721,7 +1721,7 @@ const socialTradingFlow: ActionFlow = {
 
 ### 14. Decentralized Insurance Platform
 
-**⏱️ Setup: 50 minutes** | **Multiple Action Types**
+**Setup: 50 minutes** | **Multiple Action Types**
 
 Complete insurance platform with policy creation, claims, and payouts.
 
@@ -1738,7 +1738,7 @@ const insurancePlatformApp: Metadata = {
       type: 'dynamic',
       label: 'Buy Insurance Policy',
       path: '/api/calculate-premium',
-      chains: { source: 'avalanche' },
+      chains: { source: 43114 },
       params: [
         {
           name: 'protocolAddress',
@@ -1898,7 +1898,7 @@ const insurancePlatformApp: Metadata = {
       address: '0xInsuranceGovernanceContract',
       abi: insuranceGovernanceAbi,
       functionName: 'voteOnClaim',
-      chains: { source: 'avalanche' },
+      chains: { source: 43114 },
       params: [
         {
           name: 'claimId',
@@ -1963,7 +1963,7 @@ const insurancePlatformApp: Metadata = {
       address: '0xInsuranceLiquidityPool',
       abi: liquidityPoolAbi,
       functionName: 'provideLiquidity',
-      chains: { source: 'avalanche' },
+      chains: { source: 43114 },
       amount: 0, // User specifies amount via parameter
       params: [
         {
@@ -2068,7 +2068,7 @@ export async function POST(req: NextRequest) {
 
   return NextResponse.json({
     serializedTransaction: serialize(transaction),
-    chainId: 'avalanche',
+    chainId: 43114,
     params: {
       functionName: 'purchaseInsurancePolicy',
       args: {
@@ -2107,7 +2107,7 @@ async function assessProtocolRisk(protocolAddress: string) {
 }
 ```
 
-**🎯 What you'll learn:**
+**What you'll learn:**
 
 - Risk assessment algorithms
 - Decentralized claims processing
@@ -2117,7 +2117,7 @@ async function assessProtocolRisk(protocolAddress: string) {
 
 ---
 
-## 🔧 **Development Tools**
+## Development Tools
 
 ### Testing Your Mini-Apps
 
@@ -2155,7 +2155,7 @@ Want to contribute your own examples? Check out our [Community Examples Reposito
 
 ---
 
-## 🚀 **What's Next?**
+## What's Next?
 
 Ready to build your own mini-app? Here are some great starting points:
 

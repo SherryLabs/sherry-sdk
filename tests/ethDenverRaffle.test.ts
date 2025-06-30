@@ -28,7 +28,7 @@ describe('ETH Denver Raffle Metadata', () => {
                         },
                     ],
                     functionName: 'checkAndRegister',
-                    chains: { source: 'fuji', destination: 'alfajores' },
+                    chains: { source: 43113, destination: 44787 },
                 },
             ],
         };
@@ -59,7 +59,7 @@ describe('ETH Denver Raffle Metadata', () => {
         expect(action.blockchainActionType).toBe('nonpayable');
 
         // Validate chains field
-        expect(action.chains).toEqual({ source: 'fuji', destination: 'alfajores' });
+        expect(action.chains).toEqual({ source: 43113, destination: 44787 });
     });
 
     it('should reject invalid metadata', () => {
@@ -73,7 +73,7 @@ describe('ETH Denver Raffle Metadata', () => {
                     address: '0xB7cfa4c519a8508900c02d21b6C8B5310f63D53b',
                     // Missing abi
                     functionName: 'checkAndRegister',
-                    chains: { source: 'fuji', destination: 'alfajores' },
+                    chains: { source: 43113, destination: 44787 },
                 },
             ],
         };

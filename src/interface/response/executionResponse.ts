@@ -46,19 +46,12 @@ export interface ExecutionResponse {
     serializedTransaction: string;
 
     /**
-     * The blockchain network identifier where the transaction should be executed.
-     * Use the human-readable chain name, not the numeric ID.
+     * The chain ID where the transaction will be executed.
+     * This is used to ensure the transaction is sent to the correct network.
      *
-     * Supported values include:
-     * - "fuji" for Avalanche Fuji Testnet
-     * - "avalanche" for Avalanche Mainnet
-     * - "ethereum" for Ethereum Mainnet
-     * - "polygon" for Polygon Mainnet
-     * - "sepolia" for Ethereum Sepolia Testnet
-     *
-     * @example "fuji"
+     * @example 1 for Ethereum mainnet, 11155111 for Sepolia testnet
      */
-    chainId: string;
+    chainId: number;
 
     /**
      * Optional contract ABI (Application Binary Interface) for transaction verification.
