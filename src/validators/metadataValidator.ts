@@ -97,13 +97,13 @@ class SecurityUtils {
         if (typeof value !== 'string' || value.length === 0) {
             throw new SherryValidationError(`Metadata missing required '${fieldName}' field`);
         }
-        
+
         if (value.length > maxLength) {
             throw new SherryValidationError(
-                `${fieldName} exceeds maximum length of ${maxLength} characters`
+                `${fieldName} exceeds maximum length of ${maxLength} characters`,
             );
         }
-        
+
         return value;
     }
 
@@ -120,7 +120,7 @@ class SecurityUtils {
 
         if (!SECURITY_LIMITS.ALLOWED_PROTOCOLS.includes(url.protocol as 'https:' | 'http:')) {
             throw new SherryValidationError(
-                `${fieldName} must use HTTP or HTTPS protocol, got: ${url.protocol}`
+                `${fieldName} must use HTTP or HTTPS protocol, got: ${url.protocol}`,
             );
         }
 
@@ -145,27 +145,23 @@ export class MetadataValidator {
         const url = SecurityUtils.validateSafeString(
             metadata.url,
             'url',
-            SECURITY_LIMITS.MAX_URL_LENGTH
+            SECURITY_LIMITS.MAX_URL_LENGTH,
         );
         SecurityUtils.validateSafeURL(url, 'url');
 
-        SecurityUtils.validateSafeString(
-            metadata.icon,
-            'icon',
-            SECURITY_LIMITS.MAX_URL_LENGTH
-        );
+        SecurityUtils.validateSafeString(metadata.icon, 'icon', SECURITY_LIMITS.MAX_URL_LENGTH);
         SecurityUtils.validateSafeURL(metadata.icon as string, 'icon');
 
         SecurityUtils.validateSafeString(
             metadata.title,
             'title',
-            SECURITY_LIMITS.MAX_STRING_LENGTH
+            SECURITY_LIMITS.MAX_STRING_LENGTH,
         );
 
         SecurityUtils.validateSafeString(
             metadata.description,
             'description',
-            SECURITY_LIMITS.MAX_DESCRIPTION_LENGTH
+            SECURITY_LIMITS.MAX_DESCRIPTION_LENGTH,
         );
 
         // Validate actions array with enhanced security
@@ -189,7 +185,7 @@ export class MetadataValidator {
             const baseUrl = SecurityUtils.validateSafeString(
                 metadata.baseUrl,
                 'baseUrl',
-                SECURITY_LIMITS.MAX_URL_LENGTH
+                SECURITY_LIMITS.MAX_URL_LENGTH,
             );
             SecurityUtils.validateSafeURL(baseUrl, 'baseUrl');
         }
@@ -197,9 +193,7 @@ export class MetadataValidator {
         // Validate each action with enhanced security
         actions.forEach((action, index) => {
             if (!SecurityUtils.isPlainObject(action)) {
-                throw new SherryValidationError(
-                    `Action at index ${index} must be a valid object`
-                );
+                throw new SherryValidationError(`Action at index ${index} must be a valid object`);
             }
 
             if (typeof action.type !== 'string') {
@@ -259,7 +253,7 @@ export class MetadataValidator {
         try {
             // 1. Enhanced security validation of metadata structure
             this.validateBasicMetadata(metadata);
-            
+
             // Cast to Metadata after security validation
             const safeMetadata = metadata as Metadata;
 
