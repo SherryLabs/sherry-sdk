@@ -8,9 +8,6 @@ import {
     sepolia,
 } from 'viem/chains';
 
-// Export all chains from Viem
-export * from 'viem/chains';
-
 export const VALID_CHAIN_IDS = [
     1, // Ethereum Mainnet
     11155111, // Sepolia Testnet
