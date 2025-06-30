@@ -16,7 +16,7 @@ export type * from './chains';
 /**
  * Re-exports the constant array of supported chain identifiers.
  */
-export { VALID_CHAINS } from './chains';
+export * from './chains';
 
 // ========================================================================
 // Action Exports

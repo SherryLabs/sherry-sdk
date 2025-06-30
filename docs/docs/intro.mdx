@@ -8,7 +8,7 @@
 [![Tests](https://img.shields.io/badge/Tests-Jest-green)](https://jestjs.io/)
 [![GitHub Repo](https://img.shields.io/badge/GitHub-Repo-blue.svg)](https://github.com/SherryLabs/sherry-sdk)
 
-## 🌟 What is Sherry SDK?
+## What is Sherry SDK?
 
 import Admonition from '@theme/Admonition';
 
@@ -31,7 +31,7 @@ Sherry SDK is a **TypeScript-first toolkit** for building interactive Web3 **tri
 
 ## Key Features
 
-### 🧩 **5 Powerful Action Types**
+### 5 Powerful Action Types
 
 | Action Type    | Use Case                    | Example                                  |
 | -------------- | --------------------------- | ---------------------------------------- |
@@ -65,7 +65,7 @@ Refer to the [Action Parameters documentation](./api-reference/parameters/parame
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Installation
 
@@ -90,7 +90,7 @@ const metadata: Metadata = {
       address: '0x742d35Cc6734C0532925a3b8D4ccd306f6F4B26C',
       abi: contractAbi,
       functionName: 'mint',
-      chains: { source: 'avalanche' },
+      chains: { source: 43114 },
       amount: 0.1, // 0.1 AVAX mint price
       params: [
         {
@@ -121,7 +121,7 @@ console.log('✅ Trigger ready to deploy!');
 When embedded in a social post, this trigger renders as:
 
 ```
-🎨 Mint Cosmic NFT
+Mint Cosmic NFT
 ┌─────────────────────────────────┐
 │ Your Address: [0x...________] │
 │ [Mint for 0.1 AVAX]           │
@@ -136,25 +136,25 @@ Users can mint directly from their social feed!
 
 Choose your adventure based on your experience level:
 
-### 🏃‍♂️ **I want to start immediately**
+### I want to start immediately
 
 → [**5-Minute Quickstart**](getting-started/quickstart) - Get a trigger running in 5 minutes
 
-### 🧑‍💻 **I'm new to Web3 development**
+### I'm new to Web3 development
 
 → [**Complete Tutorial**](guides/guide-en) - Step-by-step with Next.js (30 min)
 
-### 🔧 **I'm experienced, show me the API**
+### I'm experienced, show me the API
 
 → [**Action Types Reference**](api-reference/action-types/blockchain-actions) - Deep dive into the API
 
-### 💡 **I want to see examples**
+### I want to see examples
 
 → [**Live Examples**](getting-started/examples) - Working triggers for common use cases
 
 ---
 
-## 🎯 Popular Use Cases
+## Popular Use Cases
 
 <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem', margin: '2rem 0'}}>
 
@@ -228,7 +228,7 @@ Choose your adventure based on your experience level:
 
 ---
 
-## 🛠️ Advanced Features
+## Advanced Features
 
 ### Multi-Step Flows
 
@@ -276,7 +276,7 @@ Server-side computed actions for complex logic:
   type: 'dynamic',
   label: 'Smart Swap',
   path: '/api/calculate-optimal-swap',
-  chains: { source: 'avalanche' },
+  chains: { source: 43114 },
   params: [
     {
       name: 'amount',
@@ -308,7 +308,7 @@ Your server calculates the optimal swap route and returns a ready-to-execute tra
 
 ---
 
-## 🎯 Ready to Build?
+## Ready to Build?
 
 <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', margin: '2rem 0' }}>
   <a href="/docs/getting-started/quickstart" className="button button--primary button--lg">

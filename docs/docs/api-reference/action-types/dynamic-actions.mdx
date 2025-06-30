@@ -68,7 +68,7 @@ const optimalYieldAction: DynamicAction = {
   label: 'Find Best Yield',
   description: 'AI-powered yield optimization across 15+ protocols',
   path: '/api/optimize-yield',
-  chains: { source: 'avalanche' },
+  chains: { source: 43114 },
   params: [
     {
       name: 'amount',
@@ -191,7 +191,7 @@ export async function POST(req: NextRequest) {
     // 7. Return the response
     const response: ExecutionResponse = {
       serializedTransaction: serializedTx,
-      chainId: 'fuji',
+      chainId: avalancheFuji.id,
       abi: strategy.contractAbi,
       params: {
         functionName: strategy.functionName,
@@ -295,7 +295,7 @@ const arbitrageAction: DynamicAction = {
   type: 'dynamic',
   label: 'Execute Arbitrage',
   path: '/api/find-arbitrage',
-  chains: { source: 'avalanche' },
+  chains: { source: 43114 },
   params: [
     {
       name: 'token',
@@ -333,7 +333,7 @@ const dynamicMintAction: DynamicAction = {
   type: 'dynamic',
   label: 'Mint at Current Price',
   path: '/api/nft-current-price',
-  chains: { source: 'avalanche' },
+  chains: { source: 43114 },
   params: [
     {
       name: 'tier',
@@ -363,7 +363,7 @@ const crossChainAction: DynamicAction = {
   type: 'dynamic',
   label: 'Optimal Cross-Chain Swap',
   path: '/api/cross-chain-optimize',
-  chains: { source: 'avalanche', destination: 'celo' },
+  chains: { source: 43114, destination: 42220 },
   params: [
     {
       name: 'fromToken',

@@ -34,7 +34,7 @@ async function main() {
                 address: '0x1234567890abcdef1234567890abcdef12345678',
                 abi: exampleAbi,
                 functionName: 'safeTransferFrom',
-                chains: { source: 'fuji' },
+                chains: { source: 43113 },
             },
             {
                 type: 'blockchain',
@@ -42,7 +42,7 @@ async function main() {
                 address: '0x1234567890abcdef1234567890abcdef12345678',
                 abi: exampleAbi,
                 functionName: 'safeTransferFrom',
-                chains: { source: 'fuji' },
+                chains: { source: 43113 },
             },
         ],
     };

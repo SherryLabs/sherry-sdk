@@ -24,7 +24,7 @@ describe('validateMetadata', () => {
                         },
                     ],
                     functionName: 'testFunction',
-                    chains: { source: 'fuji', destination: 'alfajores' },
+                    chains: { source: 43113, destination: 44787 },
                 },
             ],
         };
@@ -58,7 +58,7 @@ describe('validateMetadata', () => {
                     ],
                     functionName: 'testFunction',
                     blockchainActionType: 'nonpayable', // This makes it ValidatedMetadata
-                    chains: { source: 'fuji', destination: 'alfajores' },
+                    chains: { source: 43113, destination: 44787 },
                 },
             ],
         };
@@ -80,7 +80,7 @@ describe('validateMetadata', () => {
                     address: '0xB7cfa4c519a8508900c02d21b6C8B5310f63D53b',
                     // Missing abi
                     functionName: 'testFunction',
-                    chains: { source: 'fuji', destination: 'alfajores' },
+                    chains: { source: 43113, destination: 44787 },
                 },
             ],
         };
@@ -129,7 +129,7 @@ describe('validateMetadata', () => {
                         },
                     ],
                     functionName: 'testFunction',
-                    chains: { source: 'fuji', destination: 'alfajores' },
+                    chains: { source: 43113, destination: 44787 },
                 },
             ],
         });

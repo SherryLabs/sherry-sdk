@@ -507,7 +507,7 @@ For select/radio parameters, organize options logically:
     { label: 'Celo Mainnet', value: 'celo' },
     // Then testnets
     { label: 'Avalanche Fuji (Testnet)', value: 'fuji' },
-    { label: 'Celo Alfajores (Testnet)', value: 'alfajores' }
+    { label: 'Celo Alfajores (Testnet)', value: 44787 }
   ]
 }
 ```

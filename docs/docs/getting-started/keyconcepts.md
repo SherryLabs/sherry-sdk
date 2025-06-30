@@ -77,7 +77,7 @@ const nftMintAction: Metadata = {
       address: '0x1234567890abcdef1234567890abcdef12345678',
       abi: nftAbi,
       functionName: 'safeMint',
-      chains: { source: 'avalanche' },
+      chains: { source: 43114 },
       params: [
         {
           name: 'to',
@@ -106,7 +106,7 @@ const transferAction: Metadata = {
       label: 'Send 0.1 AVAX',
       to: '0x1234567890123456789012345678901234567890',
       amount: 0.1,
-      chains: { source: 'avalanche' },
+      chains: { source: 43114 },
     },
   ],
 };
@@ -164,7 +164,7 @@ const dynamicAction: Metadata = {
       type: 'dynamic',
       label: 'Smart Swap',
       path: '/api/swap',
-      chains: { source: 'avalanche' },
+      chains: { source: 43114 },
       params: [
         {
           name: 'amount',
@@ -201,7 +201,7 @@ const swapFlow: ActionFlow = {
       address: '0xTokenAddress',
       abi: erc20Abi,
       functionName: 'approve',
-      chains: { source: 'avalanche' },
+      chains: { source: 43114 },
       params: [
         /* ... */
       ],
@@ -214,7 +214,7 @@ const swapFlow: ActionFlow = {
       address: '0xDEXAddress',
       abi: dexAbi,
       functionName: 'swap',
-      chains: { source: 'avalanche' },
+      chains: { source: 43114 },
       params: [
         /* ... */
       ],

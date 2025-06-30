@@ -223,7 +223,7 @@ Actions in a flow can reference values from previous action results using templa
     label: 'Send Tokens',
     to: '{{lastResult.data.recipientAddress}}',
     amount: 0.1,
-    chains: { source: 'avalanche' }
+    chains: { source: 43114 }
 }
 ```
 

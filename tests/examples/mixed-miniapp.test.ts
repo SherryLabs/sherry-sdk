@@ -75,7 +75,7 @@ describe('Mixed Action Mini-App', () => {
         expect(TransferActionValidator.isTransferAction(transferAction)).toBe(true);
         expect(transferAction).toHaveProperty('to', '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045');
         expect(transferAction).toHaveProperty('chains');
-        expect(transferAction.chains).toHaveProperty('source', 'avalanche');
+        expect(transferAction.chains).toHaveProperty('source', 43114);
 
         // Verify amountConfig if it exists (optional check to avoid undefined property access)
         if (transferAction.amountConfig) {

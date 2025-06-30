@@ -77,7 +77,7 @@ describe('AVAX to USDT Swap Action', () => {
                     address: '0x18556DA13313f3532c54711497A8FedAC273220E', // Trader Joe V2.2 Router
                     abi: routerAbi,
                     functionName: 'swapExactNATIVEForTokens',
-                    chains: { source: 'avalanche' },
+                    chains: { source: 43114 },
                     amount: 1, // 1 AVAX to swap
                     params: [
                         {
@@ -157,7 +157,7 @@ describe('AVAX to USDT Swap Action', () => {
         expect(action.amount).toBe(1);
 
         // Validate chains field
-        expect(action.chains).toEqual({ source: 'avalanche' });
+        expect(action.chains).toEqual({ source: 43114 });
 
         // Validate parameters
         expect(action.params).toHaveLength(4);

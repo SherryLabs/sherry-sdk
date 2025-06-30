@@ -20,8 +20,8 @@ describe('DynamicActionExecutor', () => {
     const sampleInputs = { amount: 0.1, recipient: '0xRecipientAddress' };
     const sampleContext: BlockchainContext & { baseUrl: string } = {
         userAddress: '0xUserAddress',
-        sourceChain: 'fuji',
-        destinationChain: 'ethereum',
+        sourceChain: 43113,
+        destinationChain: 1,
         baseUrl: baseUrl,
     };
 
@@ -30,7 +30,7 @@ describe('DynamicActionExecutor', () => {
         type: 'dynamic',
         label: 'Test Action',
         path: '/api/transfer',
-        chains: { source: 'fuji' },
+        chains: { source: 43113 },
         params: [
             { name: 'amount', type: 'number', label: 'Amount', required: true },
             { name: 'recipient', type: 'string', label: 'Recipient', required: true },
@@ -46,7 +46,7 @@ describe('DynamicActionExecutor', () => {
     // Mock responses for tests
     const validResponse: ExecutionResponse = {
         serializedTransaction: '0x1234567890abcdef',
-        chainId: 'fuji',
+        chainId: 43113,
     };
 
     const validMetadataResponse = {
@@ -143,7 +143,7 @@ describe('DynamicActionExecutor', () => {
         });
 
         it('should throw error if sourceChain is missing', async () => {
-            const invalidContext = { ...sampleContext, sourceChain: '' };
+            const invalidContext = { ...sampleContext, sourceChain: 0 as any };
 
             await expect(
                 executor.execute(sampleAction, sampleInputs, invalidContext),

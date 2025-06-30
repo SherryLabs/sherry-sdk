@@ -3,6 +3,7 @@ import { ActionValidationError } from '../errors/customErrors';
 import { ExecutionResponse } from '../interface/response/executionResponse';
 import { buildSdkHeaders, VALID_OPERATIONS } from '../headers/headers';
 import { BaseExecutor, ExecutorOptions } from './baseExecutor';
+import { ChainId } from '../interface/chains';
 
 /**
  * Blockchain context information required for dynamic action execution.
@@ -10,10 +11,10 @@ import { BaseExecutor, ExecutorOptions } from './baseExecutor';
 export interface BlockchainContext {
     /** The user's wallet address initiating the transaction */
     userAddress: string;
-    /** The source blockchain network identifier (e.g., 'avalanche', 'polygon') */
-    sourceChain: string;
+    /** The source blockchain network identifier (e.g., 43114 for avalanche, 1 for ethereum) */
+    sourceChain: ChainId;
     /** Optional destination chain for cross-chain operations */
-    destinationChain?: string;
+    destinationChain?: ChainId;
 }
 
 /**
@@ -408,8 +409,7 @@ export class DynamicActionExecutor extends BaseExecutor {
             typeof data === 'object' &&
             typeof data.serializedTransaction === 'string' &&
             data.serializedTransaction.length > 0 &&
-            typeof data.chainId === 'string' &&
-            data.chainId.length > 0 &&
+            (typeof data.chainId === 'string' || typeof data.chainId === 'number') &&
             (data.abi === undefined || Array.isArray(data.abi)) &&
             (data.params === undefined ||
                 (typeof data.params === 'object' &&
@@ -417,7 +417,8 @@ export class DynamicActionExecutor extends BaseExecutor {
                     typeof data.params.args === 'object')) &&
             (data.crossChain === undefined ||
                 (typeof data.crossChain === 'object' &&
-                    typeof data.crossChain.destinationChainId === 'string'))
+                    (typeof data.crossChain.destinationChainId === 'string' ||
+                        typeof data.crossChain.destinationChainId === 'number')))
         );
     }
 

@@ -46,7 +46,7 @@ describe('createMetadata', () => {
         abi: sampleAbi,
         functionName: 'transfer',
         chains: {
-            source: 'avalanche',
+            source: 43114,
         },
         params: [
             {
@@ -75,7 +75,7 @@ describe('createMetadata', () => {
         abi: sampleAbi,
         functionName: 'deposit',
         chains: {
-            source: 'avalanche',
+            source: 43114,
         },
         amount: 0.1, // ETH to send
     };

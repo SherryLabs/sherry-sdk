@@ -30,7 +30,7 @@ import { ChainContext } from '../chains';
  *   address: '0x...',
  *   abi: [...],
  *   functionName: 'approve',
- *   chains: { source: 'ethereum' }
+ *   chains: { source: 1 }
  * };
  *
  * // TransferAction
@@ -49,7 +49,7 @@ import { ChainContext } from '../chains';
  *   label: 'Submit Form',
  *   method: 'POST',
  *   url: '/api/submit',
- *   chains: { source: 'ethereum' }
+ *   chains: { source: 1 }
  * };
  * ```
  */
@@ -85,7 +85,7 @@ export type Action =
  *   address: '0x...',
  *   abi: [...],
  *   functionName: 'approve',
- *   chains: { source: 'ethereum' },
+ *   chains: { source: 1 },
  *   // Additional validated properties
  *   blockchainActionType: 'approve',
  *   estimatedGas: '45000',
@@ -174,12 +174,12 @@ export interface BaseAction {
      * ```typescript
      * // Single chain operation
      * chains: {
-     *   source: 'avalanche'
+     *   source: 43114
      * }
      *
      * // Cross-chain operation
      * chains: {
-     *   source: 'avalanche',
+     *   source: 43114,
      *   destination: 'celo'
      * }
      * ```

@@ -152,7 +152,7 @@ const defiSwapFlow: ActionFlow = {
       address: '0xUsdcAddress...',
       abi: erc20Abi,
       functionName: 'approve',
-      chains: { source: 'avalanche' },
+      chains: { source: 43114 },
       params: [
         createParameter(PARAM_TEMPLATES.ADDRESS, {
           name: 'spender',
@@ -197,7 +197,7 @@ const defiSwapFlow: ActionFlow = {
       address: '0xDexRouterAddress...',
       abi: dexAbi,
       functionName: 'swapExactTokensForTokens',
-      chains: { source: 'avalanche' },
+      chains: { source: 43114 },
       params: [
         // Swap parameters, could use context values {{...}}
         // e.g., { name: 'amountIn', value: '{{approveStep.params.amount}}' }

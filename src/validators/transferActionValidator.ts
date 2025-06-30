@@ -1,6 +1,6 @@
 import { isAddress } from 'viem';
 import { TransferAction } from '../interface/actions/transferAction';
-import { ChainContext } from '../interface/chains';
+import { ChainContext, chainUtils } from '../interface/chains';
 import { InvalidMetadataError } from '../errors/customErrors';
 
 /**
@@ -43,19 +43,18 @@ export class TransferActionValidator {
             throw new InvalidMetadataError('Chains configuration is required');
         }
 
-        if (!chains.source || typeof chains.source !== 'string') {
-            throw new InvalidMetadataError('Source chain is required');
+        if (chains.source === undefined || typeof chains.source !== 'number') {
+            throw new InvalidMetadataError('Source chain is required and must be a number');
         }
 
-        const validChains = ['fuji', 'avalanche', 'alfajores', 'celo'];
-        if (!validChains.includes(chains.source)) {
+        if (!chainUtils.isValidChainId(chains.source)) {
             throw new InvalidMetadataError(`Invalid source chain: ${chains.source}`);
         }
 
         if (chains.destination !== undefined) {
             if (
-                typeof chains.destination !== 'string' ||
-                !validChains.includes(chains.destination)
+                typeof chains.destination !== 'number' ||
+                !chainUtils.isValidChainId(chains.destination)
             ) {
                 throw new InvalidMetadataError(`Invalid destination chain: ${chains.destination}`);
             }
@@ -159,7 +158,7 @@ export class TransferActionValidator {
             typeof obj.label === 'string' &&
             obj.chains &&
             typeof obj.chains === 'object' &&
-            typeof obj.chains.source === 'string';
+            typeof obj.chains.source === 'number';
 
         if (!hasBaseProperties) return false;
 

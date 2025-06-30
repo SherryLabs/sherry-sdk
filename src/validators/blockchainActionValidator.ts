@@ -1,7 +1,7 @@
 import { Abi, AbiFunction, AbiParameter, AbiStateMutability, AbiType } from 'abitype';
 import { ContractFunctionName, isAddress } from 'viem';
 import { BlockchainActionMetadata, BlockchainAction } from '../interface/actions/blockchainAction';
-import { ChainContext } from '../interface/chains';
+import { ChainContext, chainUtils } from '../interface/chains';
 import { SherryValidationError, ActionValidationError } from '../errors/customErrors';
 import {
     isTextBasedParameter,
@@ -161,8 +161,8 @@ export class BlockchainActionValidator {
      */
     static validateChainContext(chains: ChainContext): boolean {
         if (!chains || typeof chains !== 'object') return false;
-        if (!chains.source || !this.isValidChain(chains.source)) return false;
-        if (chains.destination !== undefined && !this.isValidChain(chains.destination))
+        if (chains.source === undefined || !chainUtils.isValidChainId(chains.source)) return false;
+        if (chains.destination !== undefined && !chainUtils.isValidChainId(chains.destination))
             return false;
         return true;
     }
@@ -171,9 +171,7 @@ export class BlockchainActionValidator {
      * Validates that a chain identifier is valid
      */
     static isValidChain(chain: any): boolean {
-        // Consider making this list configurable or importing from a central place
-        const validChains = ['fuji', 'avalanche', 'alfajores', 'celo', 'ethereum'];
-        return typeof chain === 'string' && validChains.includes(chain);
+        return typeof chain === 'number' && chainUtils.isValidChainId(chain);
     }
 
     /**
@@ -756,7 +754,7 @@ export class BlockchainActionValidator {
             Array.isArray(obj.abi) &&
             typeof obj.functionName === 'string' &&
             obj.chains &&
-            typeof obj.chains.source === 'string'
+            typeof obj.chains.source === 'number'
         );
     }
 

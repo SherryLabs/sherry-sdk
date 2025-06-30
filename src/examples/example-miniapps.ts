@@ -75,7 +75,7 @@ export const tokenSwapMiniApp = {
             address: '0x5ee75a1B1648C023e885E58bD3735Ae273f2cc52' as `0x${string}`, // 0xERC20TokenAddress
             abi: erc20Abi,
             functionName: 'approve',
-            chains: { source: 'avalanche' },
+            chains: { source: 43114 },
             params: [
                 // Router address (spender)
                 createParameter(PARAM_TEMPLATES.ADDRESS, {
@@ -104,7 +104,7 @@ export const tokenSwapMiniApp = {
             address: '0x5ee75a1B1648C023e885E58bD3735Ae273f2cc52' as `0x${string}`, // 0xUniswapRouterAddress
             abi: uniswapRouterAbi,
             functionName: 'swapExactTokensForTokens',
-            chains: { source: 'avalanche' },
+            chains: { source: 43114 },
             params: [
                 // Amount In
                 {
@@ -174,7 +174,7 @@ export const tokenSwapMiniApp = {
             address: '0x5ee75a1B1648C023e885E58bD3735Ae273f2cc52' as `0x${string}`, // 0xUniswapRouterAddress
             abi: uniswapRouterAbi,
             functionName: 'swapExactAVAXForTokens',
-            chains: { source: 'avalanche' },
+            chains: { source: 43114 },
             amount: 0.1, // Send 0.1 AVAX with transaction
             params: [
                 // Minimum Amount Out (with slippage)
@@ -276,7 +276,7 @@ export const nftMarketplaceMiniApp = {
             address: '0x5ee75a1B1648C023e885E58bD3735Ae273f2cc52' as `0x${string}`, // 0xNFTMarketplaceAddress
             abi: nftMarketplaceAbi,
             functionName: 'createListing',
-            chains: { source: 'fuji' },
+            chains: { source: 43113 },
             params: [
                 // NFT Contract Address
                 createParameter(PARAM_TEMPLATES.ADDRESS, {
@@ -324,7 +324,7 @@ export const nftMarketplaceMiniApp = {
             address: '0x5ee75a1B1648C023e885E58bD3735Ae273f2cc52' as `0x${string}`, // 0xNFTMarketplaceAddress
             abi: nftMarketplaceAbi,
             functionName: 'buyNFT',
-            chains: { source: 'fuji' },
+            chains: { source: 43113 },
             params: [
                 // Listing ID
                 {
@@ -345,7 +345,7 @@ export const nftMarketplaceMiniApp = {
             address: '0x5ee75a1B1648C023e885E58bD3735Ae273f2cc52' as `0x${string}`, // 0xNFTMarketplaceAddress
             abi: nftMarketplaceAbi,
             functionName: 'cancelListing',
-            chains: { source: 'fuji' },
+            chains: { source: 43113 },
             params: [
                 // Listing ID
                 {
@@ -410,7 +410,7 @@ export const daoVotingMiniApp = {
             address: '0x5ee75a1B1648C023e885E58bD3735Ae273f2cc52' as `0x${string}`, // 0xDAOVotingAddress
             abi: daoVotingAbi,
             functionName: 'createProposal',
-            chains: { source: 'celo' },
+            chains: { source: 42220 },
             params: [
                 // Title
                 {
@@ -465,7 +465,7 @@ export const daoVotingMiniApp = {
             address: '0x5ee75a1B1648C023e885E58bD3735Ae273f2cc52' as `0x${string}`,
             abi: daoVotingAbi,
             functionName: 'vote',
-            chains: { source: 'celo' },
+            chains: { source: 42220 },
             params: [
                 // Proposal ID
                 {
@@ -495,7 +495,7 @@ export const daoVotingMiniApp = {
             address: '0x5ee75a1B1648C023e885E58bD3735Ae273f2cc52' as `0x${string}`,
             abi: daoVotingAbi,
             functionName: 'executeProposal',
-            chains: { source: 'celo' },
+            chains: { source: 42220 },
             params: [
                 // Proposal ID
                 {
@@ -558,7 +558,7 @@ export const fundraisingMiniApp = {
             address: '0xFundraisingAddress' as `0x${string}`,
             abi: fundraisingAbi,
             functionName: 'createCampaign',
-            chains: { source: 'fuji' },
+            chains: { source: 43113 },
             params: [
                 // Title
                 {
@@ -619,7 +619,7 @@ export const fundraisingMiniApp = {
             address: '0xFundraisingAddress' as `0x${string}`,
             abi: fundraisingAbi,
             functionName: 'donate',
-            chains: { source: 'fuji' },
+            chains: { source: 43113 },
             amount: 0.1, // Default donation of 0.1 AVAX
             params: [
                 // Campaign ID
@@ -641,7 +641,7 @@ export const fundraisingMiniApp = {
             address: '0xFundraisingAddress' as `0x${string}`,
             abi: fundraisingAbi,
             functionName: 'claimFunds',
-            chains: { source: 'fuji' },
+            chains: { source: 43113 },
             params: [
                 // Campaign ID
                 {
@@ -688,7 +688,7 @@ export const bridgeMiniApp: Metadata = {
             address: '0xBridgeAddress' as `0x${string}`,
             abi: bridgeAbi,
             functionName: 'bridgeTokens',
-            chains: { source: 'avalanche', destination: 'celo' },
+            chains: { source: 43114, destination: 42220 },
             params: [
                 // Token address - Ahora usando select para tokens predefinidos
                 createSelectParam(
@@ -760,7 +760,7 @@ export const simpleTransferMiniApp: Metadata = {
         {
             type: 'transfer',
             label: 'Transfer AVAX',
-            chains: { source: 'fuji' },
+            chains: { source: 43113 },
             to: '0x1234567890123456789012345678901234567890',
             amount: 0.1,
         },
@@ -768,7 +768,7 @@ export const simpleTransferMiniApp: Metadata = {
         {
             type: 'transfer',
             label: 'Send to Recipient',
-            chains: { source: 'avalanche' },
+            chains: { source: 43114 },
             recipient: {
                 type: 'select',
                 label: 'Select Recipient',
@@ -820,7 +820,7 @@ export const parameterTypesDemoMiniApp: Metadata = {
             address: '0xDemoAddress' as `0x${string}`,
             abi: [],
             functionName: 'textDemo',
-            chains: { source: 'fuji' },
+            chains: { source: 43113 },
             params: [
                 // Text parameter
                 {
@@ -880,7 +880,7 @@ export const parameterTypesDemoMiniApp: Metadata = {
             address: '0xDemoAddress' as `0x${string}`,
             abi: [],
             functionName: 'numberDemo',
-            chains: { source: 'fuji' },
+            chains: { source: 43113 },
             params: [
                 // Number parameter
                 {
@@ -920,7 +920,7 @@ export const parameterTypesDemoMiniApp: Metadata = {
             address: '0xDemoAddress' as `0x${string}`,
             abi: [],
             functionName: 'selectionDemo',
-            chains: { source: 'fuji' },
+            chains: { source: 43113 },
             params: [
                 // Select parameter
                 createSelectParam(
