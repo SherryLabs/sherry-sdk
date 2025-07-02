@@ -14,7 +14,7 @@ import { Action, ValidatedAction } from './actions/action';
  * const metadata: Metadata = {
  *   url: 'https://example.com/miniapp',
  *   icon: 'https://example.com/icon.png',
- *   title: 'My Mini App',
+ *   title: 'My Trigger',
  *   description: 'A sample mini app for demonstration',
  *   baseUrl: 'https://api.example.com',
  *   actions: [
@@ -166,7 +166,7 @@ export interface Metadata {
  * const validatedMetadata: ValidatedMetadata = {
  *   url: 'https://example.com/miniapp',
  *   icon: 'https://example.com/icon.png',
- *   title: 'My Mini App',
+ *   title: 'My Trigger',
  *   description: 'A validated mini app',
  *   baseUrl: 'https://api.example.com',
  *   actions: [

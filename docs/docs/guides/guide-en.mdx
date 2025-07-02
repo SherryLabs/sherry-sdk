@@ -9,7 +9,7 @@ import TabItem from '@theme/TabItem';
 import CodeBlock from '@theme/CodeBlock';
 import Admonition from '@theme/Admonition';
 
-# Guide - MiniApp with NextJS
+# Guide - Trigger with NextJS
 
 <iframe
   style={{ width: '100%', aspectRatio: '16 / 9', border: 'none' }}
@@ -19,7 +19,7 @@ import Admonition from '@theme/Admonition';
   allowfullscreen
 ></iframe>
 
-## Creating Mini Apps with Next.js and Sherry SDK
+## Creating Triggers with Next.js and Sherry SDK
 
 This comprehensive guide will teach you step by step how to create powerful mini apps using **Next.js** and the **Sherry Links SDK**. Mini apps are dynamic applications that can be integrated into different platforms and allow users to interact with smart contracts seamlessly.
 
@@ -288,9 +288,9 @@ const metadata: Metadata = {
 - **type**: Always use `"dynamic"` for complex mini apps that need custom logic
 - **label**: The text that will appear on the action button
 - **description**: Explanation of what this specific action does
-- **chains.source**: The blockchain where the transaction will execute
-  - `"fuji"` = Avalanche Fuji Testnet
-  - `"avalanche"` = Avalanche Mainnet
+- **chains.source**: The blockchain where the transaction will execute (chain ID)
+  - `43113` = Avalanche Fuji Testnet
+  - `43114` = Avalanche Mainnet
 - **path**: The API endpoint that will handle the POST request
 
 </details>
@@ -523,7 +523,7 @@ export async function POST(req: NextRequest) {
     // Create the response object that Sherry expects
     const resp: ExecutionResponse = {
       serializedTransaction: serialized,
-      chainId: avalancheFuji.name, // Use the chain name, not ID
+      chainId: avalancheFuji.id, // Use the chain ID
     };
 
     // Return the response with CORS headers
@@ -1033,7 +1033,7 @@ export async function POST(req: NextRequest) {
     // Create response
     const resp: ExecutionResponse = {
       serializedTransaction: serialized,
-      chainId: avalancheFuji.name,
+      chainId: avalancheFuji.id,
     };
 
     return NextResponse.json(resp, {
@@ -1130,7 +1130,7 @@ headers: {
 }
 ```
 
-## Testing Your Mini App
+## Testing Your Trigger
 
 ### Option 1: Sherry Social App
 
@@ -1234,8 +1234,8 @@ headers: {
 **Examples of Good Ideas (but not limited to):**
 
 - A tool that analyzes wallet history to suggest DeFi optimizations.
-- A MiniApp for creating and managing multi-signature Gnosis Safe transactions with a simplified UI.
-- A dynamic NFT minting MiniApp where traits are determined by off-chain data or user inputs.
+- A Trigger for creating and managing multi-signature Gnosis Safe transactions with a simplified UI.
+- A dynamic NFT minting Trigger where traits are determined by off-chain data or user inputs.
 - A prediction market interface that interacts with a specific smart contract.
 
 </TabItem>
@@ -1429,7 +1429,7 @@ export async function POST(req: NextRequest) {
 
     const resp: ExecutionResponse = {
       serializedTransaction: serialized,
-      chainId: avalancheFuji.name,
+      chainId: avalancheFuji.id,
     };
 
     return NextResponse.json(resp, {

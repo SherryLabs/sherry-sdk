@@ -23,7 +23,7 @@ import { createMetadata, Metadata } from '@sherrylinks/sdk';
 const metadata: Metadata = {
   url: 'https://myapp.example',
   icon: 'https://example.com/icon.png',
-  title: 'My Mini App',
+  title: 'My Trigger',
   description: 'An awesome Web3 mini-app',
   actions: [
     {
@@ -173,7 +173,7 @@ if (result.isValid) {
 ### Chain Validation
 
 ```typescript
-✅ Supported chains: 'fuji', 'avalanche', 'alfajores', 'celo', 'ethereum', 'sepolia'
+✅ Supported chains: 43113, 43114, 44787, 42220, 1, 11155111
 ✅ Source chain: always required
 ✅ Destination chain: optional, valid if provided
 ✅ Cross-chain logic: proper source/destination combination
@@ -292,11 +292,11 @@ const invalidAction = {
 const invalidChain = {
   type: 'transfer',
   label: 'Send Tokens',
-  chains: { source: 'invalid-chain' }, // Invalid chain
+  chains: { source: 99999 }, // Invalid chain
   amount: 0.1,
 };
 
-// Error: "Invalid source chain: invalid-chain"
+// Error: "Invalid source chain: 99999"
 ```
 
 #### Missing BaseUrl for Dynamic Action

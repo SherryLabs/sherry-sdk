@@ -285,7 +285,7 @@ Send native tokens or assets:
 
 - **[Quick Start](https://docs.sherry.social/docs/getting-started/quickstart)** -
   5-minute setup
-- **[Your First Mini App](https://docs.sherry.social/docs/getting-started/creatingminiapp)** -
+- **[Your First Trigger](https://docs.sherry.social/docs/getting-started/creatingminiapp)** -
   Step-by-step tutorial
 - **[Core Concepts](https://docs.sherry.social/docs/core-concepts)** -
   Understanding the fundamentals

@@ -4,17 +4,19 @@
 
 Dynamic Actions are the **most sophisticated** action type in the Sherry SDK. They enable complex Web3 operations by leveraging server-side computation to determine the optimal transaction based on user inputs, market conditions, and complex business logic.
 
-## Why Dynamic Actions?
+## Why Choose Dynamic Actions?
 
 Unlike Blockchain Actions where you call a specific contract function directly, Dynamic Actions let your server:
 
-- 🧠 **Analyze market conditions** in real-time
-- 🔄 **Calculate optimal routes** across multiple protocols
-- 📊 **Process complex strategies** that require multiple steps
-- 🎯 **Personalize transactions** based on user profile
-- ⚡ **Adapt to changing conditions** before execution
+- **Analyze market conditions** in real-time
+- **Calculate optimal routes** across multiple protocols
+- **Process complex strategies** that require multiple steps
+- **Personalize transactions** based on user profile
+- **Adapt to changing conditions** before execution
 
-## Interface
+## Core Concepts
+
+### Interface Definition
 
 ```typescript
 interface DynamicAction {
@@ -27,7 +29,7 @@ interface DynamicAction {
 }
 ```
 
-## How It Works
+### Execution Flow
 
 ```mermaid
 graph TD
@@ -39,14 +41,14 @@ graph TD
     F --> G[User signs & executes transaction]
 ```
 
-## API Endpoint Requirements
+### API Response Requirements
 
 Your endpoint must return an `ExecutionResponse`:
 
 ```typescript
 interface ExecutionResponse {
   serializedTransaction: string; // Ready-to-execute transaction
-  chainId: string; // Chain name (e.g., 'avalanche')
+  chainId: number; // Chain ID (e.g., 43114 for Avalanche)
   abi?: any[]; // Optional: for verification
   params?: {
     // Optional: for better UX
@@ -56,7 +58,7 @@ interface ExecutionResponse {
 }
 ```
 
-## Complete Example: Optimal DeFi Yield Strategy
+## Complete Example: DeFi Yield Optimization
 
 ### Frontend Configuration
 
@@ -125,81 +127,70 @@ const optimalYieldAction: DynamicAction = {
 };
 ```
 
-### Backend Implementation (Next.js API Route)
+### Backend Implementation
+
+#### Core API Handler (Next.js)
 
 ```typescript
 // pages/api/optimize-yield.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { serialize } from 'wagmi';
-import { avalancheFuji } from 'viem/chains';
+import { avalanche } from 'viem/chains';
 
 export async function POST(req: NextRequest) {
   try {
-    // Get parameters from URL query
+    // Extract parameters from request
     const { searchParams } = new URL(req.url);
     const amount = parseFloat(searchParams.get('amount') || '0');
     const riskTolerance = searchParams.get('riskTolerance');
     const duration = parseInt(searchParams.get('duration') || '30');
     const autoCompound = searchParams.get('autoCompound') === 'true';
 
-    // Validate inputs
+    // Input validation
     if (amount < 100) {
-      return NextResponse.json({ error: 'Minimum investment is $100' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'Minimum investment is $100' },
+        { status: 400 }
+      );
     }
 
-    // 🧠 COMPLEX SERVER-SIDE LOGIC STARTS HERE
+    if (!['low', 'medium', 'high'].includes(riskTolerance || '')) {
+      return NextResponse.json(
+        { error: 'Invalid risk tolerance' },
+        { status: 400 }
+      );
+    }
 
-    // 1. Fetch current yields from multiple protocols
-    const protocolYields = await fetchProtocolYields([
-      'AAVE',
-      'Compound',
-      'Yearn',
-      'Convex',
-      'Curve',
-      'TraderJoe',
-    ]);
-
-    // 2. Filter by risk tolerance
-    const filteredProtocols = filterByRisk(protocolYields, riskTolerance);
-
-    // 3. Calculate optimal allocation
-    const optimalAllocation = calculateOptimalAllocation(
-      filteredProtocols,
+    // Complex server-side computation starts here
+    const optimizationResult = await performYieldOptimization({
       amount,
+      riskTolerance,
       duration,
       autoCompound,
-    );
-
-    // 4. Determine best execution strategy
-    const strategy = await planExecutionStrategy(optimalAllocation);
-
-    // 5. Build the optimal transaction
-    const transaction = await buildOptimalTransaction(strategy, {
-      amount,
-      userAddress: req.headers.get('x-wallet-address'),
-      slippageTolerance: 0.5, // 0.5%
     });
 
-    // 6. Serialize the transaction
+    // Build and serialize the transaction
+    const transaction = await buildOptimalTransaction(optimizationResult);
     const serializedTx = serialize({
       to: transaction.to,
       data: transaction.data,
       value: BigInt(transaction.value || 0),
-      chainId: avalancheFuji.id,
+      chainId: avalanche.id,
     });
 
-    // 7. Return the response
+    // Prepare response
     const response: ExecutionResponse = {
       serializedTransaction: serializedTx,
-      chainId: avalancheFuji.id,
-      abi: strategy.contractAbi,
+      chainId: avalanche.id,
+      abi: transaction.abi,
       params: {
-        functionName: strategy.functionName,
+        functionName: transaction.functionName,
         args: {
           amount: amount.toString(),
-          strategy: strategy.name,
-          expectedAPY: `${strategy.projectedAPY}%`,
-          protocols: strategy.protocols.map(p => p.name),
+          strategy: optimizationResult.strategyName,
+          expectedAPY: `${optimizationResult.projectedAPY}%`,
+          protocols: optimizationResult.protocols.map(p => p.name),
+          estimatedGas: transaction.estimatedGas,
         },
       },
     };
@@ -208,92 +199,123 @@ export async function POST(req: NextRequest) {
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'POST',
+        'Access-Control-Allow-Headers': 'Content-Type',
       },
     });
   } catch (error) {
     console.error('Yield optimization error:', error);
-    return NextResponse.json({ error: 'Failed to optimize yield strategy' }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: 'Failed to optimize yield strategy',
+        details: process.env.NODE_ENV === 'development' ? error.message : undefined,
+      },
+      { status: 500 }
+    );
   }
 }
+```
 
-// Helper functions for complex logic
-async function fetchProtocolYields(protocols: string[]) {
-  // Fetch real-time APY data from multiple DeFi protocols
-  const yields = await Promise.all(
-    protocols.map(async protocol => {
-      const response = await fetch(`https://api.${protocol.toLowerCase()}.com/yields`);
-      return response.json();
-    }),
-  );
-  return yields;
-}
+#### Advanced Optimization Logic
 
-function filterByRisk(yields: any[], riskTolerance: string) {
-  switch (riskTolerance) {
-    case 'low':
-      return yields.filter(y => y.riskScore <= 3 && y.apy >= 3);
-    case 'medium':
-      return yields.filter(y => y.riskScore <= 6 && y.apy >= 5);
-    case 'high':
-      return yields.filter(y => y.apy >= 12);
-    default:
-      return yields;
-  }
-}
+```typescript
+async function performYieldOptimization(config: OptimizationConfig) {
+  // 1. Fetch current yields from multiple protocols
+  const protocolData = await fetchProtocolYields([
+    'AAVE',
+    'Compound',
+    'Yearn',
+    'Convex',
+    'Curve',
+    'TraderJoe',
+    'Benqi',
+  ]);
 
-function calculateOptimalAllocation(
-  protocols: any[],
-  amount: number,
-  duration: number,
-  autoCompound: boolean,
-) {
-  // Complex portfolio optimization algorithm
-  // Consider correlation, expected returns, volatility, etc.
+  // 2. Filter protocols by risk tolerance
+  const filteredProtocols = filterByRiskProfile(protocolData, config.riskTolerance);
 
-  const allocation = portfolioOptimizer.optimize({
-    protocols,
-    totalAmount: amount,
-    timeHorizon: duration,
-    autoCompound,
-    objective: 'maximize_sharpe_ratio',
+  // 3. Calculate optimal portfolio allocation
+  const allocation = await calculateOptimalAllocation({
+    protocols: filteredProtocols,
+    amount: config.amount,
+    timeHorizon: config.duration,
+    autoCompound: config.autoCompound,
   });
 
-  return allocation;
-}
-
-async function planExecutionStrategy(allocation: any) {
-  // Determine the most gas-efficient way to execute the allocation
-  // Could involve batch transactions, optimal ordering, etc.
+  // 4. Plan execution strategy
+  const executionPlan = await planOptimalExecution(allocation);
 
   return {
-    contractAddress: '0xOptimalYieldManager...',
-    functionName: 'executeOptimalStrategy',
-    contractAbi: optimizerAbi,
-    data: encodeStrategyData(allocation),
+    strategyName: executionPlan.name,
+    projectedAPY: executionPlan.expectedReturn,
     protocols: allocation.protocols,
-    projectedAPY: allocation.expectedReturn,
-    name: allocation.strategyName,
+    contractAddress: executionPlan.contractAddress,
+    functionName: executionPlan.functionName,
+    callData: executionPlan.encodedData,
+    estimatedGas: executionPlan.gasEstimate,
   };
 }
 
-async function buildOptimalTransaction(strategy: any, config: any) {
-  // Build the final transaction data
-  return {
-    to: strategy.contractAddress,
-    data: strategy.data,
-    value: config.amount,
+async function fetchProtocolYields(protocols: string[]) {
+  const yields = await Promise.allSettled(
+    protocols.map(async protocol => {
+      try {
+        const response = await fetch(
+          `https://api.defillama.com/yields/pool/${protocol}`,
+          { timeout: 5000 }
+        );
+        return await response.json();
+      } catch (error) {
+        console.warn(`Failed to fetch ${protocol} data:`, error);
+        return null;
+      }
+    })
+  );
+
+  return yields
+    .filter(result => result.status === 'fulfilled' && result.value)
+    .map(result => result.value);
+}
+
+function filterByRiskProfile(protocols: any[], riskTolerance: string) {
+  const riskThresholds = {
+    low: { maxRisk: 3, minAPY: 3 },
+    medium: { maxRisk: 6, minAPY: 5 },
+    high: { maxRisk: 10, minAPY: 8 },
   };
+
+  const threshold = riskThresholds[riskTolerance];
+  return protocols.filter(
+    p => p.riskScore <= threshold.maxRisk && p.apy >= threshold.minAPY
+  );
+}
+
+async function calculateOptimalAllocation(config: AllocationConfig) {
+  // Implement Modern Portfolio Theory or similar optimization
+  const optimizer = new PortfolioOptimizer();
+  
+  return optimizer.optimize({
+    protocols: config.protocols,
+    totalAmount: config.amount,
+    timeHorizon: config.timeHorizon,
+    autoCompound: config.autoCompound,
+    objective: 'maximize_sharpe_ratio',
+    constraints: {
+      maxProtocolAllocation: 0.4, // Max 40% in any single protocol
+      minDiversification: 3, // At least 3 protocols
+    },
+  });
 }
 ```
 
 ## Advanced Use Cases
 
-### 1. **Multi-Protocol Arbitrage**
+### Multi-Protocol Arbitrage
 
 ```typescript
 const arbitrageAction: DynamicAction = {
   type: 'dynamic',
   label: 'Execute Arbitrage',
+  description: 'Find and execute profitable arbitrage opportunities',
   path: '/api/find-arbitrage',
   chains: { source: 43114 },
   params: [
@@ -301,10 +323,12 @@ const arbitrageAction: DynamicAction = {
       name: 'token',
       label: 'Token to Arbitrage',
       type: 'select',
+      required: true,
       options: [
         { label: 'USDC', value: 'usdc' },
         { label: 'USDT', value: 'usdt' },
         { label: 'DAI', value: 'dai' },
+        { label: 'WETH', value: 'weth' },
       ],
     },
     {
@@ -314,96 +338,129 @@ const arbitrageAction: DynamicAction = {
       value: 0.5,
       min: 0.1,
       max: 5,
+      step: 0.1,
+    },
+    {
+      name: 'minProfit',
+      label: 'Minimum Profit ($)',
+      type: 'number',
+      value: 10,
+      min: 5,
+      max: 1000,
     },
   ],
 };
 ```
 
-**Server Logic:**
-
+**Backend Logic:**
 - Scans 10+ DEXs for price differences
 - Calculates optimal route considering gas costs
 - Executes flash loan arbitrage if profitable
 - Returns single transaction that captures profit
 
-### 2. **Dynamic NFT Pricing**
+### Dynamic NFT Pricing
 
 ```typescript
 const dynamicMintAction: DynamicAction = {
   type: 'dynamic',
   label: 'Mint at Current Price',
-  path: '/api/nft-current-price',
+  description: 'Mint NFT with dynamic pricing based on market conditions',
+  path: '/api/nft-dynamic-price',
   chains: { source: 43114 },
   params: [
     {
       name: 'tier',
       label: 'NFT Tier',
       type: 'select',
+      required: true,
       options: [
         { label: 'Common', value: 'common' },
         { label: 'Rare', value: 'rare' },
+        { label: 'Epic', value: 'epic' },
         { label: 'Legendary', value: 'legendary' },
       ],
+    },
+    {
+      name: 'quantity',
+      label: 'Quantity to Mint',
+      type: 'number',
+      value: 1,
+      min: 1,
+      max: 10,
     },
   ],
 };
 ```
 
-**Server Logic:**
-
-- Analyzes current market conditions
-- Adjusts price based on demand/supply
+**Backend Logic:**
+- Analyzes current market demand
+- Adjusts price based on supply/demand ratio
 - Considers whale wallet activity
-- Sets optimal mint price dynamically
+- Implements dynamic pricing algorithm
 
-### 3. **Cross-Chain Optimization**
+### Cross-Chain Route Optimization
 
 ```typescript
 const crossChainAction: DynamicAction = {
   type: 'dynamic',
   label: 'Optimal Cross-Chain Swap',
+  description: 'Find the best route for cross-chain token swaps',
   path: '/api/cross-chain-optimize',
   chains: { source: 43114, destination: 42220 },
   params: [
     {
       name: 'fromToken',
-      label: 'From Token',
+      label: 'From Token (Avalanche)',
       type: 'select',
+      required: true,
       options: [
-        /* tokens on Avalanche */
+        { label: 'AVAX', value: 'avax' },
+        { label: 'USDC', value: 'usdc' },
+        { label: 'USDT', value: 'usdt' },
       ],
     },
     {
       name: 'toToken',
-      label: 'To Token',
+      label: 'To Token (Celo)',
       type: 'select',
+      required: true,
       options: [
-        /* tokens on Celo */
+        { label: 'CELO', value: 'celo' },
+        { label: 'cUSD', value: 'cusd' },
+        { label: 'cEUR', value: 'ceur' },
       ],
     },
     {
       name: 'amount',
-      label: 'Amount',
+      label: 'Amount to Swap',
       type: 'number',
       required: true,
+      min: 0.001,
+    },
+    {
+      name: 'maxTime',
+      label: 'Max Time (minutes)',
+      type: 'select',
+      value: 15,
+      options: [
+        { label: '5 minutes', value: 5 },
+        { label: '15 minutes', value: 15 },
+        { label: '30 minutes', value: 30 },
+        { label: '1 hour', value: 60 },
+      ],
     },
   ],
 };
 ```
 
-**Server Logic:**
+## Parameter Handling
 
-- Compares direct bridge vs multi-hop routes
-- Considers bridge fees, slippage, time
-- Finds optimal path across chains
-- Executes complex cross-chain transaction
-
-## Parameter Processing
+### Parameter Processing
 
 Dynamic Actions receive parameters as URL query parameters:
 
 ```typescript
-// Frontend config
+// Frontend configuration
 params: [
   { name: 'amount', label: 'Amount', type: 'number' },
   { name: 'strategy', label: 'Strategy', type: 'select', options: [...] }
@@ -413,144 +470,346 @@ params: [
 // POST /api/your-endpoint?amount=1000&strategy=aggressive&userAddress=0x...
 ```
 
-### Accessing Parameters
+### Best Practices for Parameter Access
 
 ```typescript
 export async function POST(req: NextRequest) {
   const { searchParams } = new URL(req.url);
 
-  // Get user inputs
+  // Type-safe parameter extraction
   const amount = parseFloat(searchParams.get('amount') || '0');
-  const strategy = searchParams.get('strategy');
-
-  // Get additional context
+  const strategy = searchParams.get('strategy') as 'conservative' | 'moderate' | 'aggressive';
+  
+  // Additional context
   const userAddress = searchParams.get('userAddress');
-  const chainId = searchParams.get('chain');
+  const chainId = parseInt(searchParams.get('chainId') || '43114');
+
+  // Validate all inputs
+  if (!amount || amount <= 0) {
+    return NextResponse.json({ error: 'Invalid amount' }, { status: 400 });
+  }
+
+  if (!['conservative', 'moderate', 'aggressive'].includes(strategy)) {
+    return NextResponse.json({ error: 'Invalid strategy' }, { status: 400 });
+  }
 
   // Your logic here...
 }
 ```
 
-## Error Handling
+## Error Handling and Validation
 
-Handle errors gracefully in your Dynamic Actions:
+### Comprehensive Error Handling
 
 ```typescript
 export async function POST(req: NextRequest) {
   try {
-    // Your logic
-    return NextResponse.json(response);
+    // Input validation layer
+    const validationResult = await validateInputs(req);
+    if (!validationResult.valid) {
+      return NextResponse.json(
+        { error: validationResult.message },
+        { status: 400 }
+      );
+    }
+
+    // Business logic layer
+    const result = await executeBusinessLogic(validationResult.data);
+    
+    return NextResponse.json(result);
   } catch (error) {
-    console.error('Dynamic action error:', error);
+    // Log error for debugging
+    console.error('Dynamic action error:', {
+      error: error.message,
+      stack: error.stack,
+      url: req.url,
+      timestamp: new Date().toISOString(),
+    });
 
     // Return user-friendly error
+    if (error instanceof ValidationError) {
+      return NextResponse.json(
+        { error: error.message },
+        { status: 400 }
+      );
+    }
+
+    if (error instanceof RateLimitError) {
+      return NextResponse.json(
+        { error: 'Too many requests. Please try again later.' },
+        { status: 429 }
+      );
+    }
+
+    // Generic error for unknown issues
     return NextResponse.json(
       {
-        error: 'Unable to calculate optimal strategy. Please try again.',
+        error: 'Unable to process request. Please try again.',
+        code: 'INTERNAL_ERROR',
         details: process.env.NODE_ENV === 'development' ? error.message : undefined,
       },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }
 ```
 
-## Best Practices
-
-### 1. **Validate Inputs**
+### Input Validation
 
 ```typescript
-// Always validate user inputs
-if (amount < minimumAmount) {
-  return NextResponse.json({ error: 'Amount too low' }, { status: 400 });
-}
-```
+async function validateInputs(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+  
+  // Create validation schema
+  const schema = {
+    amount: {
+      required: true,
+      type: 'number',
+      min: 0.001,
+      max: 1000000,
+    },
+    riskTolerance: {
+      required: true,
+      type: 'string',
+      enum: ['low', 'medium', 'high'],
+    },
+    userAddress: {
+      required: true,
+      type: 'address',
+      validator: isValidEthereumAddress,
+    },
+  };
 
-### 2. **Handle Rate Limits**
+  const errors = [];
+  const data = {};
 
-```typescript
-// Implement rate limiting for expensive calculations
-const rateLimiter = new RateLimit({
-  windowMs: 60 * 1000, // 1 minute
-  max: 10, // 10 requests per minute
-});
-```
+  for (const [key, rules] of Object.entries(schema)) {
+    const value = searchParams.get(key);
+    
+    if (rules.required && !value) {
+      errors.push(`${key} is required`);
+      continue;
+    }
 
-### 3. **Cache When Possible**
-
-```typescript
-// Cache expensive calculations
-const cacheKey = `strategy-${amount}-${risk}-${duration}`;
-const cached = await redis.get(cacheKey);
-if (cached) {
-  return NextResponse.json(JSON.parse(cached));
-}
-```
-
-### 4. **Provide Rich Feedback**
-
-```typescript
-// Include useful info in the response
-params: {
-  functionName: 'executeStrategy',
-  args: {
-    expectedAPY: '12.5%',
-    protocols: ['Aave', 'Compound'],
-    riskLevel: 'Medium',
-    projectedValue: '$1,125 after 1 year'
+    if (value) {
+      // Type validation
+      if (rules.type === 'number') {
+        const numValue = parseFloat(value);
+        if (isNaN(numValue)) {
+          errors.push(`${key} must be a valid number`);
+          continue;
+        }
+        if (rules.min && numValue < rules.min) {
+          errors.push(`${key} must be at least ${rules.min}`);
+          continue;
+        }
+        if (rules.max && numValue > rules.max) {
+          errors.push(`${key} must be at most ${rules.max}`);
+          continue;
+        }
+        data[key] = numValue;
+      } else if (rules.type === 'string') {
+        if (rules.enum && !rules.enum.includes(value)) {
+          errors.push(`${key} must be one of: ${rules.enum.join(', ')}`);
+          continue;
+        }
+        data[key] = value;
+      } else if (rules.type === 'address') {
+        if (rules.validator && !rules.validator(value)) {
+          errors.push(`${key} must be a valid address`);
+          continue;
+        }
+        data[key] = value;
+      }
+    }
   }
+
+  return {
+    valid: errors.length === 0,
+    message: errors.join(', '),
+    data,
+  };
 }
 ```
 
-### 5. **Security Considerations**
+## Performance and Security
+
+### Rate Limiting
 
 ```typescript
-// Validate user address if needed
-const userAddress = req.headers.get('x-wallet-address');
-if (!isValidAddress(userAddress)) {
-  return NextResponse.json({ error: 'Invalid wallet' }, { status: 401 });
+import { RateLimiter } from 'limiter';
+
+// Create rate limiter (10 requests per minute per IP)
+const limiter = new RateLimiter({
+  tokensPerInterval: 10,
+  interval: 'minute',
+});
+
+export async function POST(req: NextRequest) {
+  const clientIP = req.ip || req.headers.get('x-forwarded-for') || 'unknown';
+  
+  const allowed = await limiter.removeTokens(1, clientIP);
+  if (!allowed) {
+    return NextResponse.json(
+      { error: 'Rate limit exceeded' },
+      { status: 429 }
+    );
+  }
+
+  // Continue with normal processing...
+}
+```
+
+### Caching Strategies
+
+```typescript
+import Redis from 'ioredis';
+
+const redis = new Redis(process.env.REDIS_URL);
+
+export async function POST(req: NextRequest) {
+  // Create cache key from parameters
+  const { searchParams } = new URL(req.url);
+  const cacheKey = `yield-optimization:${searchParams.toString()}`;
+  
+  // Check cache first
+  const cached = await redis.get(cacheKey);
+  if (cached) {
+    console.log('Cache hit for:', cacheKey);
+    return NextResponse.json(JSON.parse(cached));
+  }
+
+  // Perform expensive calculation
+  const result = await performYieldOptimization(/* params */);
+  
+  // Cache result for 5 minutes
+  await redis.setex(cacheKey, 300, JSON.stringify(result));
+  
+  return NextResponse.json(result);
+}
+```
+
+### Security Best Practices
+
+```typescript
+export async function POST(req: NextRequest) {
+  // Validate origin
+  const origin = req.headers.get('origin');
+  const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') || [];
+  
+  if (process.env.NODE_ENV === 'production' && !allowedOrigins.includes(origin)) {
+    return NextResponse.json({ error: 'Unauthorized origin' }, { status: 403 });
+  }
+
+  // Rate limiting by user address
+  const userAddress = req.headers.get('x-wallet-address');
+  if (userAddress) {
+    const userRequestCount = await redis.incr(`requests:${userAddress}`);
+    if (userRequestCount === 1) {
+      await redis.expire(`requests:${userAddress}`, 3600); // 1 hour window
+    }
+    if (userRequestCount > 100) { // Max 100 requests per hour per address
+      return NextResponse.json(
+        { error: 'User rate limit exceeded' },
+        { status: 429 }
+      );
+    }
+  }
+
+  // Sanitize and validate all inputs
+  const sanitizedInputs = sanitizeInputs(req);
+  
+  // Continue with processing...
 }
 
-// Sanitize inputs
-const sanitizedAmount = Math.max(0, Math.min(amount, MAX_AMOUNT));
+function sanitizeInputs(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+  
+  return {
+    amount: Math.max(0, Math.min(parseFloat(searchParams.get('amount') || '0'), 1000000)),
+    userAddress: searchParams.get('userAddress')?.toLowerCase().trim(),
+    // Add more sanitization as needed
+  };
+}
 ```
 
 ## When to Use Dynamic Actions
 
-### ✅ **Perfect for:**
+### Perfect Use Cases
 
-- Multi-protocol yield optimization
-- Real-time price calculations
-- Complex arbitrage opportunities
-- Cross-chain route optimization
-- AI-powered trading strategies
-- Market-dependent decisions
-- Multi-step transaction planning
+- **Multi-protocol yield optimization**
+- **Real-time arbitrage detection**
+- **Complex cross-chain routing**
+- **AI-powered trading strategies**
+- **Dynamic pricing calculations**
+- **Market-dependent decisions**
+- **Multi-step transaction planning**
+- **Portfolio rebalancing**
 
-### ❌ **Overkill for:**
+### Not Recommended For
 
-- Simple token transfers (use Transfer Actions)
-- Fixed-price NFT minting (use Blockchain Actions)
-- Static contract calls (use Blockchain Actions)
-- Simple approve/transfer flows
+- **Simple token transfers** (use Transfer Actions)
+- **Fixed-price NFT minting** (use Blockchain Actions)
+- **Static contract calls** (use Blockchain Actions)
+- **Basic approve/transfer flows**
+- **Operations that don't require server computation**
 
-## Deployment Considerations
+## Deployment Checklist
 
-### Production Checklist:
+### Pre-Production Verification
 
-- [ ] **Performance**: API responds in ${'<2'} seconds
-- [ ] **Error Handling**: Graceful error messages
-- [ ] **Rate Limiting**: Prevent abuse
-- [ ] **Monitoring**: Log important events
-- [ ] **Caching**: Cache expensive calculations
-- [ ] **Security**: Validate all inputs
-- [ ] **Testing**: Test with various scenarios
+- [ ] **Performance**: API responds in less than 2 seconds
+- [ ] **Error Handling**: Graceful error messages for all scenarios
+- [ ] **Rate Limiting**: Protection against abuse
+- [ ] **Monitoring**: Comprehensive logging and alerting
+- [ ] **Caching**: Expensive calculations are cached appropriately
+- [ ] **Security**: All inputs validated and sanitized
+- [ ] **Testing**: Comprehensive test coverage including edge cases
+- [ ] **Documentation**: API endpoints and behavior documented
+- [ ] **Fallbacks**: Graceful degradation when external services fail
+- [ ] **CORS**: Proper cross-origin resource sharing configuration
 
----
+### Monitoring and Observability
+
+```typescript
+// Add comprehensive logging
+export async function POST(req: NextRequest) {
+  const startTime = Date.now();
+  const requestId = generateRequestId();
+  
+  console.log('Dynamic action started:', {
+    requestId,
+    url: req.url,
+    userAgent: req.headers.get('user-agent'),
+    timestamp: new Date().toISOString(),
+  });
+
+  try {
+    const result = await processRequest(req);
+    
+    console.log('Dynamic action completed:', {
+      requestId,
+      duration: Date.now() - startTime,
+      success: true,
+    });
+    
+    return NextResponse.json(result);
+  } catch (error) {
+    console.error('Dynamic action failed:', {
+      requestId,
+      duration: Date.now() - startTime,
+      error: error.message,
+      stack: error.stack,
+    });
+    
+    throw error;
+  }
+}
+```
 
 ## Next Steps
 
 - [**Blockchain Actions**](./blockchain-actions) - When direct contract calls are sufficient
 - [**Transfer Actions**](./transfer-actions) - For simple native token transfers
-- [**Action Flows**](./action-flows) - Combine Dynamic Actions in multi-step workflows
+- [**Action Flows**](./nested-action-flows) - Combine Dynamic Actions in multi-step workflows
 - [**Parameters Guide**](../parameters/parameters) - Master parameter configuration

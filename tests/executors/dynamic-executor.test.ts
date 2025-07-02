@@ -50,7 +50,7 @@ describe('DynamicActionExecutor', () => {
     };
 
     const validMetadataResponse = {
-        name: 'Test Mini App',
+        name: 'Test Trigger',
         version: '1.0.0',
         actions: [sampleAction],
     };

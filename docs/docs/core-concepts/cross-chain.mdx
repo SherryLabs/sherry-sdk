@@ -76,7 +76,7 @@ const actionMetadata: BlockchainActionMetadata = {
 };
 ```
 
-As you can see, celo has been defined as destination, this will be interpreted as cross-chain by Sherry (from Avalanche to Celo).
+As you can see, Celo (42220) has been defined as destination, this will be interpreted as cross-chain by Sherry (from Avalanche to Celo).
 
 **Parameters:**
 
@@ -84,7 +84,7 @@ As you can see, celo has been defined as destination, this will be interpreted a
 - `address`: The smart contract's address on the target blockchain.
 - `abi`: The ABI of the contract required to interact with its functions.
 - `functionName`: The function in the contract to be executed (e.g., mint).
-- `chains`: The blockchains where the action will take place (e.g., avalanche - celo).
+- `chains`: The blockchains where the action will take place (e.g., 43114 - 42220).
 - `amount`: (Optional) Amount of native cryptocurrency to send to the function. If specified, the function must be payable.
 
 Additionally, the ABI is validated to check if the mint function requires parameters. If so, the corresponding input fields are dynamically generated for the user.

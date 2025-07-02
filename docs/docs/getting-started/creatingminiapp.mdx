@@ -1,175 +1,187 @@
-# Creating Your First Mini App
+# Creating Your First Trigger
 
-Learn how to develop your mini-app with TypeScript
+Learn how to develop your mini-app with TypeScript and the Sherry SDK
 
 ## Prerequisites
 
-To follow this guide you will need to have installed
+Before starting, ensure you have the following installed:
 
-- Code editor as [**VSCode**](https://code.visualstudio.com/)
-- [**NodeJS**](https://nodejs.org/en/)
+- Code editor such as [VSCode](https://code.visualstudio.com/)
+- [Node.js](https://nodejs.org/en/) (version 16 or higher)
+- Basic knowledge of TypeScript and blockchain concepts
 
-## 1️⃣ Install
+## Step 1: Installation
 
-Install the **Sherry SDK** using your preferred package manager:
+Install the Sherry SDK using your preferred package manager:
 
+**Using npm:**
 ```bash
 npm install @sherrylinks/sdk
 ```
 
+**Using yarn:**
 ```bash
 yarn add @sherrylinks/sdk
 ```
 
-## 2️⃣ Import
-
-Import the Metadata interface from the SDK
-
-```typescript
-import { Metadata } from '@sherrylinks/sdk';
+**Using pnpm:**
+```bash
+pnpm add @sherrylinks/sdk
 ```
 
-## 3️⃣ Utilize
+## Step 2: Import Required Components
 
-Use the Metadata interface to start defining your miniapp
+Import the necessary interfaces and functions from the SDK:
+
+```typescript
+import { Metadata, createMetadata, ValidatedMetadata } from '@sherrylinks/sdk';
+```
+
+## Step 3: Define Your ABI
+
+First, create your contract ABI. This example uses an ERC-721 NFT contract:
+
+`contracts/example-abi.ts`
+
+```typescript
+export const exampleAbi = [
+  {
+    name: 'balanceOf',
+    type: 'function',
+    stateMutability: 'view',
+    inputs: [{ name: 'owner', type: 'address' }],
+    outputs: [{ name: 'balance', type: 'uint256' }],
+  },
+  {
+    name: 'safeTransferFrom',
+    type: 'function',
+    stateMutability: 'nonpayable',
+    inputs: [
+      { name: 'from', type: 'address' },
+      { name: 'to', type: 'address' },
+      { name: 'tokenId', type: 'uint256' },
+    ],
+    outputs: [],
+  },
+] as const;
+```
+
+## Step 4: Create Your Metadata
+
+Define your trigger's metadata with proper configuration:
 
 `metadata.ts`
 
 ```typescript
-const metadata: Metadata = {
-  url: 'sherry.social',
-  icon: 'icon',
-  title: 'title',
-  description: 'description',
-  actions: [
-    {
-      label: 'Test Action 1',
-      address: '0x1234567890abcdef1234567890abcdef12345678',
-      abi: exampleAbi,
-      functionName: 'safeTransferFrom',
-      chains: { source: 43114 },
-    },
-  ],
-};
-```
-
-`example-abi.ts`
-
-```typescript
-const exampleAbi = [
-  {
-    name: 'balanceOf',
-    type: 'function',
-    stateMutability: 'view',
-    inputs: [{ name: 'owner', type: 'address' }],
-    outputs: [{ name: 'balance', type: 'uint256' }],
-  },
-  {
-    name: 'safeTransferFrom',
-    type: 'function',
-    stateMutability: 'nonpayable',
-    inputs: [
-      { name: 'from', type: 'address' },
-      { name: 'to', type: 'address' },
-      { name: 'tokenId', type: 'uint256' },
-    ],
-    outputs: [],
-  },
-] as const;
-```
-
-# 4️⃣ Finally
-
-Finally your file will look as follows
-
-`metadata.ts `
-
-```typescript
 import { Metadata } from '@sherrylinks/sdk';
-import { exampleAbi } from './example-abi.ts';
+import { exampleAbi } from './contracts/example-abi';
 
 const metadata: Metadata = {
-  url: 'sherry.social',
-  icon: 'icon',
-  title: 'title',
-  description: 'description',
+  url: 'https://your-app.example.com',
+  icon: 'https://your-app.example.com/icon.png',
+  title: 'My NFT Transfer Trigger',
+  description: 'Transfer NFTs safely between addresses',
   actions: [
     {
-      label: 'Test Action 1',
-      address: '0x1234567890abcdef1234567890abcdef12345678',
+      type: 'blockchain',
+      label: 'Transfer NFT',
+      address: '0x1234567890abcdef1234567890abcdef12345678', // Replace with actual contract address
       abi: exampleAbi,
       functionName: 'safeTransferFrom',
-      chains: { source: 43114 },
+      chains: { source: 43114 }, // Avalanche C-Chain
+      params: [
+        {
+          name: 'from',
+          label: 'From Address',
+          type: 'address',
+          required: true,
+          description: 'Current owner of the NFT'
+        },
+        {
+          name: 'to',
+          label: 'To Address',
+          type: 'address',
+          required: true,
+          description: 'Address to receive the NFT'
+        },
+        {
+          name: 'tokenId',
+          label: 'Token ID',
+          type: 'number',
+          required: true,
+          description: 'Unique identifier of the NFT'
+        }
+      ]
     },
   ],
 };
+
+export default metadata;
 ```
 
-`example-abi.ts`
+## Step 5: Validate Your Metadata
 
-```typescript
-const exampleAbi = [
-  {
-    name: 'balanceOf',
-    type: 'function',
-    stateMutability: 'view',
-    inputs: [{ name: 'owner', type: 'address' }],
-    outputs: [{ name: 'balance', type: 'uint256' }],
-  },
-  {
-    name: 'safeTransferFrom',
-    type: 'function',
-    stateMutability: 'nonpayable',
-    inputs: [
-      { name: 'from', type: 'address' },
-      { name: 'to', type: 'address' },
-      { name: 'tokenId', type: 'uint256' },
-    ],
-    outputs: [],
-  },
-] as const;
-```
-
-# 5️⃣ Validate
-
-Validate your `Metadata` using the createMetadata function. This function will check the definition and return the validated metadata of your mini-app. The type returned will be `ValidatedMetadata`.
+Use the `createMetadata` function to validate your configuration:
 
 ```typescript
 import { createMetadata, ValidatedMetadata } from '@sherrylinks/sdk';
+import metadata from './metadata';
 
-const finalMetadata: ValidatedMetadata = await createMetadata(metadata);
+async function validateMetadata() {
+  try {
+    const validatedMetadata: ValidatedMetadata = await createMetadata(metadata);
+    console.log('Metadata validation successful!');
+    return validatedMetadata;
+  } catch (error) {
+    console.error('Metadata validation failed:', error);
+    throw error;
+  }
+}
+
+// Usage
+const finalMetadata = await validateMetadata();
 ```
 
-# 6️⃣ Result
+## Step 6: Understanding the Validated Output
 
-Once your metadata is validated, this is the metadata that will be returned by your application, and will be consumed by Sherry.
+After validation, your metadata will be processed and enhanced with additional fields:
 
 ```typescript
-Metadata: {
+{
   "type": "action",
-  "url": "sherry.social",
-  "icon": "icon",
-  "title": "title",
-  "description": "description",
+  "url": "https://your-app.example.com",
+  "icon": "https://your-app.example.com/icon.png",
+  "title": "My NFT Transfer Trigger",
+  "description": "Transfer NFTs safely between addresses",
   "actions": [
     {
-      "label": "Test Action 1",
+      "type": "blockchain",
+      "label": "Transfer NFT",
       "address": "0x1234567890abcdef1234567890abcdef12345678",
-      "abi": [ ... ],
+      "abi": [...],
       "functionName": "safeTransferFrom",
-      "chains": { "source": "avalanche" }
+      "chains": { "source": 43114 },
       "params": [
         {
-          "name": "From",
-          "type": "address"
+          "name": "from",
+          "label": "From Address",
+          "type": "address",
+          "required": true,
+          "description": "Current owner of the NFT"
         },
         {
-          "name": "to",
-          "type": "address"
+          "name": "to", 
+          "label": "To Address",
+          "type": "address",
+          "required": true,
+          "description": "Address to receive the NFT"
         },
         {
           "name": "tokenId",
-          "type": "uint256"
+          "label": "Token ID", 
+          "type": "number",
+          "required": true,
+          "description": "Unique identifier of the NFT"
         }
       ],
       "blockchainActionType": "nonpayable"
@@ -178,6 +190,89 @@ Metadata: {
 }
 ```
 
-# 7️⃣ Deploy your Sherry Link
+## Step 7: Deploy Your Trigger
 
-Publish your application according to your preferences. The metadata must be exposed through an endpoint that must be accessed through a GET request so that the client applications can render the mini-app.
+### Creating an API Endpoint
+
+Create an HTTP endpoint that serves your metadata via GET request:
+
+**Using Next.js (pages/api/metadata.ts):**
+```typescript
+import { NextApiRequest, NextApiResponse } from 'next';
+import { createMetadata } from '@sherrylinks/sdk';
+import metadata from '../../metadata';
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  if (req.method === 'GET') {
+    try {
+      const validatedMetadata = await createMetadata(metadata);
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.status(200).json(validatedMetadata);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to validate metadata' });
+    }
+  } else {
+    res.setHeader('Allow', ['GET']);
+    res.status(405).end(`Method ${req.method} Not Allowed`);
+  }
+}
+```
+
+**Using Express.js:**
+```typescript
+import express from 'express';
+import cors from 'cors';
+import { createMetadata } from '@sherrylinks/sdk';
+import metadata from './metadata';
+
+const app = express();
+app.use(cors());
+
+app.get('/api/metadata', async (req, res) => {
+  try {
+    const validatedMetadata = await createMetadata(metadata);
+    res.json(validatedMetadata);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to validate metadata' });
+  }
+});
+
+app.listen(3000, () => {
+  console.log('Server running on http://localhost:3000');
+});
+```
+
+### Deployment Checklist
+
+- [ ] Ensure your endpoint returns metadata via GET request
+- [ ] Enable CORS for cross-origin requests
+- [ ] Verify all contract addresses are correct for your target network
+- [ ] Test your endpoint returns valid JSON
+- [ ] Deploy to a publicly accessible URL
+
+## Next Steps
+
+1. **Test Your Trigger**: Use the [Sherry Social App](https://app.sherry.social/home) to test your trigger
+2. **Add More Actions**: Extend your metadata with additional blockchain actions
+3. **Implement Dynamic Actions**: Create server-side logic for complex operations
+4. **Handle User Input**: Add form validation and user-friendly interfaces
+
+## Best Practices
+
+- Always validate user inputs before processing
+- Use testnet chain IDs during development (43113 for Avalanche Fuji)
+- Provide clear descriptions for all parameters
+- Handle errors gracefully in your API endpoints
+- Keep your ABI definitions up to date with your smart contracts
+
+## Troubleshooting
+
+**Common Issues:**
+
+- **CORS errors**: Ensure your server has proper CORS headers
+- **Invalid chain ID**: Use supported chain IDs from the chains documentation
+- **ABI mismatch**: Verify your ABI matches your deployed contract
+- **Network issues**: Check if your contract is deployed on the specified network
