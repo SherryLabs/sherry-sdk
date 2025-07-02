@@ -61,7 +61,7 @@ export const CHAIN_ID_TO_NAME: Record<ChainId, string> = {
     44787: 'Celo Alfajores',
 };
 
-// Deprecated: Legacy chain names - use chain IDs instead  
+// Deprecated: Legacy chain names - use chain IDs instead
 export const LEGACY_CHAIN_NAMES = [
     'fuji',
     'avalanche',

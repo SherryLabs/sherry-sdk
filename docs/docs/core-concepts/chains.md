@@ -22,11 +22,11 @@ interface ChainContext {
 // Supported chain IDs
 const supportedChains = {
   43114: 'Avalanche C-Chain Mainnet',
-  43113: 'Avalanche Fuji Testnet', 
+  43113: 'Avalanche Fuji Testnet',
   42220: 'Celo Mainnet',
   44787: 'Celo Alfajores Testnet',
   1: 'Ethereum Mainnet',
-  11155111: 'Ethereum Sepolia Testnet'
+  11155111: 'Ethereum Sepolia Testnet',
 };
 
 type SupportedChainId = 43114 | 43113 | 42220 | 44787 | 1 | 11155111;
@@ -317,14 +317,14 @@ The Sherry SDK has transitioned from using string-based chain names to numeric c
 
 ### Chain ID Reference Table
 
-| Network | Chain ID | Description |
-|---------|----------|-------------|
-| Ethereum Mainnet | `1` | The original Ethereum network |
-| Ethereum Sepolia | `11155111` | Ethereum's recommended testnet |
-| Avalanche C-Chain | `43114` | Avalanche mainnet |
-| Avalanche Fuji | `43113` | Avalanche's testnet |
-| Celo Mainnet | `42220` | Celo's main network |
-| Celo Alfajores | `44787` | Celo's testnet |
+| Network           | Chain ID   | Description                    |
+| ----------------- | ---------- | ------------------------------ |
+| Ethereum Mainnet  | `1`        | The original Ethereum network  |
+| Ethereum Sepolia  | `11155111` | Ethereum's recommended testnet |
+| Avalanche C-Chain | `43114`    | Avalanche mainnet              |
+| Avalanche Fuji    | `43113`    | Avalanche's testnet            |
+| Celo Mainnet      | `42220`    | Celo's main network            |
+| Celo Alfajores    | `44787`    | Celo's testnet                 |
 
 ### Quick Migration Guide
 
@@ -332,21 +332,25 @@ If you're updating existing code, here are the key changes:
 
 ```typescript
 // Before (deprecated)
-chains: { source: 'avalanche' }
+chains: {
+  source: 'avalanche';
+}
 
 // After (current)
-chains: { source: 43114 }
+chains: {
+  source: 43114;
+}
 ```
 
 ```typescript
 // Before (deprecated)
-chains: { 
+chains: {
   source: 'ethereum',
   destination: 'celo'
 }
 
 // After (current)
-chains: { 
+chains: {
   source: 1,
   destination: 42220
 }

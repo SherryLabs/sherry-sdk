@@ -15,16 +15,19 @@ Before starting, ensure you have the following installed:
 Install the Sherry SDK using your preferred package manager:
 
 **Using npm:**
+
 ```bash
 npm install @sherrylinks/sdk
 ```
 
 **Using yarn:**
+
 ```bash
 yarn add @sherrylinks/sdk
 ```
 
 **Using pnpm:**
+
 ```bash
 pnpm add @sherrylinks/sdk
 ```
@@ -95,23 +98,23 @@ const metadata: Metadata = {
           label: 'From Address',
           type: 'address',
           required: true,
-          description: 'Current owner of the NFT'
+          description: 'Current owner of the NFT',
         },
         {
           name: 'to',
           label: 'To Address',
           type: 'address',
           required: true,
-          description: 'Address to receive the NFT'
+          description: 'Address to receive the NFT',
         },
         {
           name: 'tokenId',
           label: 'Token ID',
           type: 'number',
           required: true,
-          description: 'Unique identifier of the NFT'
-        }
-      ]
+          description: 'Unique identifier of the NFT',
+        },
+      ],
     },
   ],
 };
@@ -170,7 +173,7 @@ After validation, your metadata will be processed and enhanced with additional f
           "description": "Current owner of the NFT"
         },
         {
-          "name": "to", 
+          "name": "to",
           "label": "To Address",
           "type": "address",
           "required": true,
@@ -178,7 +181,7 @@ After validation, your metadata will be processed and enhanced with additional f
         },
         {
           "name": "tokenId",
-          "label": "Token ID", 
+          "label": "Token ID",
           "type": "number",
           "required": true,
           "description": "Unique identifier of the NFT"
@@ -197,15 +200,13 @@ After validation, your metadata will be processed and enhanced with additional f
 Create an HTTP endpoint that serves your metadata via GET request:
 
 **Using Next.js (pages/api/metadata.ts):**
+
 ```typescript
 import { NextApiRequest, NextApiResponse } from 'next';
 import { createMetadata } from '@sherrylinks/sdk';
 import metadata from '../../metadata';
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
     try {
       const validatedMetadata = await createMetadata(metadata);
@@ -222,6 +223,7 @@ export default async function handler(
 ```
 
 **Using Express.js:**
+
 ```typescript
 import express from 'express';
 import cors from 'cors';
