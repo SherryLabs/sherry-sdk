@@ -28,7 +28,7 @@ export const CHAIN_INFO: Record<ChainId, ChainViem> = {
     44787: celoAlfajores,
 };
 
-// Chain name mappings for validation
+// Chain name mappings for validation (supports both modern and legacy names)
 export const CHAIN_NAME_TO_ID: Record<string, ChainId> = {
     // Main names
     Ethereum: 1,
@@ -43,7 +43,7 @@ export const CHAIN_NAME_TO_ID: Record<string, ChainId> = {
     'Celo Mainnet': 42220,
     'Celo Alfajores': 44787,
     'Celo Alfajores Testnet': 44787,
-    // Legacy names (lowercase)
+    // Legacy names (lowercase) - deprecated, use chain IDs instead
     ethereum: 1,
     sepolia: 11155111,
     avalanche: 43114,
@@ -61,6 +61,7 @@ export const CHAIN_ID_TO_NAME: Record<ChainId, string> = {
     44787: 'Celo Alfajores',
 };
 
+// Deprecated: Legacy chain names - use chain IDs instead
 export const LEGACY_CHAIN_NAMES = [
     'fuji',
     'avalanche',
@@ -95,6 +96,7 @@ export interface ChainContext {
     destination?: ChainId;
 }
 
+// Deprecated: Use ChainContext with chain IDs instead
 export interface LegacyChainContext {
     source: LegacyChainName;
     destination?: LegacyChainName;

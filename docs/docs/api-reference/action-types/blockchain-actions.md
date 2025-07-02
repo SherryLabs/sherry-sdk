@@ -21,7 +21,7 @@ interface ChainContext {
   destination?: Chain; // Optional: for cross-chain actions
 }
 
-type Chain = 'avalanche' | 'celo' | 'fuji' | 'alfajores';
+type Chain = 43114 | 42220 | 43113 | 44787;
 ```
 
 ## Key Properties
@@ -222,7 +222,7 @@ const bridgeAction: BlockchainActionMetadata = {
   functionName: 'bridgeTokens',
   chains: {
     source: 43114,
-    destination: 'celo', // Cross-chain action
+    destination: 42220, // Cross-chain action
   },
   params: [
     {

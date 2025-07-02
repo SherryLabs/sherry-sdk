@@ -502,11 +502,11 @@ For select/radio parameters, organize options logically:
   required: true,
   options: [
     // Mainnets first
-    { label: 'Ethereum Mainnet', value: 'ethereum' },
-    { label: 'Avalanche C-Chain', value: 'avalanche' },
-    { label: 'Celo Mainnet', value: 'celo' },
+    { label: 'Ethereum Mainnet', value: 1 },
+    { label: 'Avalanche C-Chain', value: 43114 },
+    { label: 'Celo Mainnet', value: 42220 },
     // Then testnets
-    { label: 'Avalanche Fuji (Testnet)', value: 'fuji' },
+    { label: 'Avalanche Fuji (Testnet)', value: 43113 },
     { label: 'Celo Alfajores (Testnet)', value: 44787 }
   ]
 }

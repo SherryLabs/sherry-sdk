@@ -9,7 +9,7 @@ import TabItem from '@theme/TabItem';
 import CodeBlock from '@theme/CodeBlock';
 import Admonition from '@theme/Admonition';
 
-# Guía - MiniApp con NextJS
+# Guía - Trigger con NextJS
 
 <iframe
   style={{ width: '100%', aspectRatio: '16 / 9', border: 'none' }}
@@ -271,9 +271,9 @@ const metadata: Metadata = {
 - **type**: Siempre usa `"dynamic"` para mini apps complejas que necesitan lógica personalizada
 - **label**: El texto que aparecerá en el botón de acción
 - **description**: Explicación de qué hace esta acción específica
-- **chains.source**: La blockchain donde se ejecutará la transacción
-  - `"fuji"` = Avalanche Fuji Testnet
-  - `"avalanche"` = Avalanche Mainnet
+- **chains.source**: La blockchain donde se ejecutará la transacción (chain ID)
+  - `43113` = Avalanche Fuji Testnet
+  - `43114` = Avalanche Mainnet
 - **path**: El endpoint de API que manejará la petición POST
 
 </details>
@@ -507,7 +507,7 @@ export async function POST(req: NextRequest) {
     // Crear el objeto de respuesta que Sherry espera
     const resp: ExecutionResponse = {
       serializedTransaction: serialized,
-      chainId: avalancheFuji.name, // Usar el nombre de la chain, no el ID
+      chainId: avalancheFuji.id, // Usar el ID de la chain
     };
 
     // Retornar la respuesta con headers CORS
@@ -1017,7 +1017,7 @@ export async function POST(req: NextRequest) {
     // Crear respuesta
     const resp: ExecutionResponse = {
       serializedTransaction: serialized,
-      chainId: avalancheFuji.name,
+      chainId: avalancheFuji.id,
     };
 
     return NextResponse.json(resp, {
@@ -1097,7 +1097,7 @@ headers: {
 }
 ```
 
-## Probando tu Mini App
+## Probando tu Trigger
 
 ### Opción 1: App Sherry Social
 
@@ -1513,7 +1513,7 @@ export async function POST(req: NextRequest) {
 
     const resp: ExecutionResponse = {
       serializedTransaction: serialized,
-      chainId: avalancheFuji.name,
+      chainId: avalancheFuji.id,
     };
 
     return NextResponse.json(resp, {
