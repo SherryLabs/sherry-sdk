@@ -197,7 +197,7 @@ const crossChainTransfer: TransferAction = {
   description: 'Send tokens from Avalanche to Celo network',
   chains: {
     source: 43114,
-    destination: 'celo',
+    destination: 42220,
   },
   // When neither to/amount nor configs are specified,
   // user gets standard input fields for both
