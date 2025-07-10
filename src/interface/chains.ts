@@ -6,15 +6,24 @@ import {
     celoAlfajores,
     mainnet,
     sepolia,
+    mantle,
+    mantleSepoliaTestnet,
+    base,
+    baseSepolia
 } from 'viem/chains';
 
 export const VALID_CHAIN_IDS = [
-    1, // Ethereum Mainnet
-    11155111, // Sepolia Testnet
-    43114, // Avalanche C-Chain
-    43113, // Avalanche Fuji Testnet
-    42220, // Celo Mainnet
-    44787, // Celo Alfajores Testnet
+    mainnet.id, // Ethereum Mainnet
+    sepolia.id, // Sepolia Testnet
+    avalanche.id, // Avalanche C-Chain
+    avalancheFuji.id, // Avalanche Fuji Testnet
+    celo.id, // Celo Mainnet
+    celoAlfajores.id, // Celo Alfajores Testnet
+    mantle.id, // Mantle Mainnet
+    mantleSepoliaTestnet.id, // Mantle Sepolia Testnet
+    base.id, // Base Mainnet
+    baseSepolia.id, // Base Sepolia Testnet
+
 ];
 
 export type ChainId = (typeof VALID_CHAIN_IDS)[number];
@@ -26,6 +35,10 @@ export const CHAIN_INFO: Record<ChainId, ChainViem> = {
     43113: avalancheFuji,
     42220: celo,
     44787: celoAlfajores,
+    5000: mantle, // Mantle Mainnet
+    5003: mantleSepoliaTestnet, // Mantle Sepolia Testnet
+    8453: base, // Base Mainnet
+    84532: baseSepolia, // Base Sepolia Testnet
 };
 
 // Chain name mappings for validation (supports both modern and legacy names)
@@ -43,6 +56,14 @@ export const CHAIN_NAME_TO_ID: Record<string, ChainId> = {
     'Celo Mainnet': 42220,
     'Celo Alfajores': 44787,
     'Celo Alfajores Testnet': 44787,
+    Mantle: 5000,
+    'Mantle Mainnet': 5000,
+    'Mantle Sepolia Testnet': 5003,
+    MantleSepoliaTestnet: 5003,
+    Base: 8453,
+    'Base Mainnet': 8453,
+    'Base Sepolia Testnet': 84532,
+    baseSepolia: 84532,
     // Legacy names (lowercase) - deprecated, use chain IDs instead
     ethereum: 1,
     sepolia: 11155111,
@@ -59,6 +80,10 @@ export const CHAIN_ID_TO_NAME: Record<ChainId, string> = {
     43113: 'Avalanche Fuji',
     42220: 'Celo',
     44787: 'Celo Alfajores',
+    5000: 'Mantle',
+    5003: 'Mantle Sepolia Testnet',
+    8453: 'Base',
+    84532: 'Base Sepolia Testnet',
 };
 
 // Deprecated: Legacy chain names - use chain IDs instead
@@ -69,6 +94,10 @@ export const LEGACY_CHAIN_NAMES = [
     'celo',
     'ethereum',
     'sepolia',
+    'mantle',
+    'mantleSepoliaTestnet',
+    'base',
+    'baseSepolia',
 ] as const;
 
 export type LegacyChainName = (typeof LEGACY_CHAIN_NAMES)[number];
@@ -80,6 +109,10 @@ export const LEGACY_TO_CHAIN_ID: Record<LegacyChainName, ChainId> = {
     fuji: 43113,
     celo: 42220,
     alfajores: 44787,
+    mantle: 5000,
+    mantleSepoliaTestnet: 5003,
+    base: 8453,
+    baseSepolia: 84532,
 };
 
 export const CHAIN_ID_TO_LEGACY: Record<ChainId, LegacyChainName> = {
@@ -89,6 +122,10 @@ export const CHAIN_ID_TO_LEGACY: Record<ChainId, LegacyChainName> = {
     43113: 'fuji',
     42220: 'celo',
     44787: 'alfajores',
+    5000: 'mantle',
+    5003: 'mantleSepoliaTestnet',
+    8453: 'base',
+    84532: 'baseSepolia',
 };
 
 export interface ChainContext {
@@ -100,6 +137,29 @@ export interface ChainContext {
 export interface LegacyChainContext {
     source: LegacyChainName;
     destination?: LegacyChainName;
+}
+
+/**
+ * Check if a chain is supported by name
+ * @param chain - The chain name to validate
+ * @returns boolean indicating if the chain is supported
+ */
+export function isChainSupported(chain: string): boolean {
+    return chainUtils.isValidChainName(chain);
+}
+
+/**
+ * Get complete chain information by chain name or chain ID
+ * @param identifier - Chain name (string) or chain ID (number)
+ * @returns Chain information from viem/chains or undefined if not supported
+ */
+export function getChainInfo(identifier: string | number): ChainViem | undefined {
+    if (typeof identifier === 'string') {
+        const chainId = chainUtils.getChainIdByName(identifier);
+        return chainId ? CHAIN_INFO[chainId] : undefined;
+    } else {
+        return chainUtils.isValidChainId(identifier) ? CHAIN_INFO[identifier] : undefined;
+    }
 }
 
 /**
@@ -208,5 +268,32 @@ export const chainUtils = {
      */
     getSupportedChainNames(): string[] {
         return Object.keys(CHAIN_NAME_TO_ID);
+    },
+
+    /**
+     * Validate chain by name or ID
+     * @param identifier - Chain name (string) or chain ID (number)
+     * @returns boolean indicating if the chain is supported
+     */
+    isChainSupported(identifier: string | number): boolean {
+        if (typeof identifier === 'string') {
+            return this.isValidChainName(identifier);
+        } else {
+            return this.isValidChainId(identifier);
+        }
+    },
+
+    /**
+     * Get complete chain information by name or ID
+     * @param identifier - Chain name (string) or chain ID (number)
+     * @returns Chain information from viem/chains or undefined if not supported
+     */
+    getCompleteChainInfo(identifier: string | number): ChainViem | undefined {
+        if (typeof identifier === 'string') {
+            const chainId = this.getChainIdByName(identifier);
+            return chainId ? CHAIN_INFO[chainId] : undefined;
+        } else {
+            return this.isValidChainId(identifier) ? CHAIN_INFO[identifier] : undefined;
+        }
     },
 };
