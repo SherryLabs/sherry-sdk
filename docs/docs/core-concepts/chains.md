@@ -21,15 +21,19 @@ interface ChainContext {
 
 // Supported chain IDs
 const supportedChains = {
+  1: 'Ethereum Mainnet',
+  11155111: 'Ethereum Sepolia Testnet',
   43114: 'Avalanche C-Chain Mainnet',
   43113: 'Avalanche Fuji Testnet',
   42220: 'Celo Mainnet',
   44787: 'Celo Alfajores Testnet',
-  1: 'Ethereum Mainnet',
-  11155111: 'Ethereum Sepolia Testnet',
+  5000: 'Mantle Mainnet',
+  5003: 'Mantle Sepolia Testnet',
+  8453: 'Base Mainnet',
+  84532: 'Base Sepolia Testnet',
 };
 
-type SupportedChainId = 43114 | 43113 | 42220 | 44787 | 1 | 11155111;
+type SupportedChainId = 1 | 11155111 | 43114 | 43113 | 42220 | 44787 | 5000 | 5003 | 8453 | 84532;
 ```
 
 ### Flexible Chain Specification
@@ -74,6 +78,20 @@ chains: {
 - Largest DeFi and NFT ecosystem
 - Ideal for: DeFi protocols, NFT collections, DAO governance
 
+**Mantle (Chain ID: `5000`)**
+
+- Native token: MNT
+- High-performance Layer 2 solution focused on scalability
+- Low fees with fast transaction processing
+- Ideal for: High-frequency applications, gaming, DeFi
+
+**Base (Chain ID: `8453`)**
+
+- Native token: ETH
+- Coinbase's Layer 2 solution built on Optimism
+- Seamless integration with Coinbase ecosystem
+- Ideal for: Consumer applications, DeFi, NFTs
+
 ### Testnets
 
 **Fuji (Chain ID: `43113`)**
@@ -93,6 +111,18 @@ chains: {
 - Ethereum's recommended testnet
 - Proof-of-stake consensus matching mainnet
 - Reliable and well-maintained testing environment
+
+**Mantle Sepolia Testnet (Chain ID: `5003`)**
+
+- Mantle's testnet environment
+- Full feature parity with Mantle mainnet
+- Free tokens available for development
+
+**Base Sepolia Testnet (Chain ID: `84532`)**
+
+- Base's testnet environment
+- Perfect for testing Base-specific features
+- Free tokens available for development
 
 ## Implementation Examples
 
@@ -317,14 +347,18 @@ The Sherry SDK has transitioned from using string-based chain names to numeric c
 
 ### Chain ID Reference Table
 
-| Network           | Chain ID   | Description                    |
-| ----------------- | ---------- | ------------------------------ |
-| Ethereum Mainnet  | `1`        | The original Ethereum network  |
-| Ethereum Sepolia  | `11155111` | Ethereum's recommended testnet |
-| Avalanche C-Chain | `43114`    | Avalanche mainnet              |
-| Avalanche Fuji    | `43113`    | Avalanche's testnet            |
-| Celo Mainnet      | `42220`    | Celo's main network            |
-| Celo Alfajores    | `44787`    | Celo's testnet                 |
+| Network                | Chain ID   | Description                    |
+| ---------------------- | ---------- | ------------------------------ |
+| Ethereum Mainnet       | `1`        | The original Ethereum network  |
+| Ethereum Sepolia       | `11155111` | Ethereum's recommended testnet |
+| Avalanche C-Chain      | `43114`    | Avalanche mainnet              |
+| Avalanche Fuji         | `43113`    | Avalanche's testnet            |
+| Celo Mainnet           | `42220`    | Celo's main network            |
+| Celo Alfajores         | `44787`    | Celo's testnet                 |
+| Mantle Mainnet         | `5000`     | Mantle's main network          |
+| Mantle Sepolia Testnet | `5003`     | Mantle's testnet               |
+| Base Mainnet           | `8453`     | Base's main network            |
+| Base Sepolia Testnet   | `84532`    | Base's testnet                 |
 
 ### Quick Migration Guide
 
@@ -362,7 +396,6 @@ The Sherry SDK is designed to easily add new blockchain networks. Future additio
 
 - **Polygon (137):** High-performance Ethereum scaling solution
 - **Arbitrum One (42161):** Optimistic rollup for Ethereum
-- **Base (8453):** Coinbase's Ethereum L2 solution
 - **Optimism (10):** Another popular Ethereum L2
 
 Stay tuned for announcements about new chain support!
