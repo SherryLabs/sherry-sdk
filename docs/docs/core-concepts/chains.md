@@ -347,18 +347,18 @@ The Sherry SDK has transitioned from using string-based chain names to numeric c
 
 ### Chain ID Reference Table
 
-| Network                | Chain ID   | Description                       |
-| ---------------------- | ---------- | --------------------------------- |
-| Ethereum Mainnet       | `1`        | The original Ethereum network     |
-| Ethereum Sepolia       | `11155111` | Ethereum's recommended testnet    |
-| Avalanche C-Chain      | `43114`    | Avalanche mainnet                 |
-| Avalanche Fuji         | `43113`    | Avalanche's testnet               |
-| Celo Mainnet           | `42220`    | Celo's main network               |
-| Celo Alfajores         | `44787`    | Celo's testnet                    |
-| Mantle Mainnet         | `5000`     | Mantle's main network             |
-| Mantle Sepolia Testnet | `5003`     | Mantle's testnet                  |
-| Base Mainnet           | `8453`     | Base's main network               |
-| Base Sepolia Testnet   | `84532`    | Base's testnet                    |
+| Network                | Chain ID   | Description                    |
+| ---------------------- | ---------- | ------------------------------ |
+| Ethereum Mainnet       | `1`        | The original Ethereum network  |
+| Ethereum Sepolia       | `11155111` | Ethereum's recommended testnet |
+| Avalanche C-Chain      | `43114`    | Avalanche mainnet              |
+| Avalanche Fuji         | `43113`    | Avalanche's testnet            |
+| Celo Mainnet           | `42220`    | Celo's main network            |
+| Celo Alfajores         | `44787`    | Celo's testnet                 |
+| Mantle Mainnet         | `5000`     | Mantle's main network          |
+| Mantle Sepolia Testnet | `5003`     | Mantle's testnet               |
+| Base Mainnet           | `8453`     | Base's main network            |
+| Base Sepolia Testnet   | `84532`    | Base's testnet                 |
 
 ### Quick Migration Guide
 

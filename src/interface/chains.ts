@@ -9,7 +9,7 @@ import {
     mantle,
     mantleSepoliaTestnet,
     base,
-    baseSepolia
+    baseSepolia,
 } from 'viem/chains';
 
 export const VALID_CHAIN_IDS = [
@@ -23,7 +23,6 @@ export const VALID_CHAIN_IDS = [
     mantleSepoliaTestnet.id, // Mantle Sepolia Testnet
     base.id, // Base Mainnet
     baseSepolia.id, // Base Sepolia Testnet
-
 ];
 
 export type ChainId = (typeof VALID_CHAIN_IDS)[number];
