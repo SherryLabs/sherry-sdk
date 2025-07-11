@@ -95,7 +95,7 @@ export const CHAIN_NAME_TO_ID: Record<string, ChainId> = {
     'Base Sepolia Testnet': 84532,
     baseSepolia: 84532,
     'Soshi L1 Testnet': 3278,
-    'Soshi': 3278,
+    Soshi: 3278,
     // Legacy names (lowercase) - deprecated, use chain IDs instead
     ethereum: 1,
     sepolia: 11155111,

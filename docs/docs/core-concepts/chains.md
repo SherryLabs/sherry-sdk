@@ -34,7 +34,18 @@ const supportedChains = {
   3278: 'Soshi L1 Testnet',
 };
 
-type SupportedChainId = 1 | 11155111 | 43114 | 43113 | 42220 | 44787 | 5000 | 5003 | 8453 | 84532 | 3278;
+type SupportedChainId =
+  | 1
+  | 11155111
+  | 43114
+  | 43113
+  | 42220
+  | 44787
+  | 5000
+  | 5003
+  | 8453
+  | 84532
+  | 3278;
 ```
 
 ### Flexible Chain Specification
