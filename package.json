@@ -15,6 +15,11 @@
       "import": "./dist/index.esm.js",
       "require": "./dist/index.js"
     },
+    "./chains": {
+      "types": "./dist/chains.d.ts",
+      "import": "./dist/chains.esm.js",
+      "require": "./dist/chains.js"
+    },
     "./headers": {
       "import": "./dist/headers/index.js",
       "require": "./dist/headers/index.cjs",
@@ -75,7 +80,9 @@
     "@jest/globals": "^29.7.0",
     "abitype": "^1.0.6",
     "oxc-parser": "^0.38.0",
-    "typescript": "^5.6.3",
+    "typescript": "^5.6.3"
+  },
+  "peerDependencies": {
     "viem": "^2.21.45"
   },
   "directories": {

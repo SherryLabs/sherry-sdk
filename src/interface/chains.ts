@@ -12,6 +12,35 @@ import {
     baseSepolia,
 } from 'viem/chains';
 
+// Custom chain definition for Soshi L1 Testnet (not available in viem)
+const soshiL1Testnet: ChainViem = {
+    id: 3278,
+    name: 'Soshi L1 Testnet',
+    nativeCurrency: {
+        name: 'Soshi',
+        symbol: 'SOSHI',
+        decimals: 18,
+    },
+    rpcUrls: {
+        default: {
+            http: ['https://subnets.avax.network/soshi/testnet/rpc'],
+        },
+    },
+    blockExplorers: {
+        default: {
+            name: 'Soshi Explorer',
+            url: 'https://subnets.avax.network/soshi/testnet',
+        },
+    },
+    testnet: true,
+    contracts: {
+        multicall3: {
+            address: '0xca11bde05977b3631167028862be2a173976ca11',
+            blockCreated: 0,
+        },
+    },
+};
+
 export const VALID_CHAIN_IDS = [
     mainnet.id, // Ethereum Mainnet
     sepolia.id, // Sepolia Testnet
@@ -23,6 +52,7 @@ export const VALID_CHAIN_IDS = [
     mantleSepoliaTestnet.id, // Mantle Sepolia Testnet
     base.id, // Base Mainnet
     baseSepolia.id, // Base Sepolia Testnet
+    soshiL1Testnet.id, // Soshi L1 Testnet
 ];
 
 export type ChainId = (typeof VALID_CHAIN_IDS)[number];
@@ -38,6 +68,7 @@ export const CHAIN_INFO: Record<ChainId, ChainViem> = {
     5003: mantleSepoliaTestnet, // Mantle Sepolia Testnet
     8453: base, // Base Mainnet
     84532: baseSepolia, // Base Sepolia Testnet
+    3278: soshiL1Testnet, // Soshi L1 Testnet
 };
 
 // Chain name mappings for validation (supports both modern and legacy names)
@@ -63,6 +94,8 @@ export const CHAIN_NAME_TO_ID: Record<string, ChainId> = {
     'Base Mainnet': 8453,
     'Base Sepolia Testnet': 84532,
     baseSepolia: 84532,
+    'Soshi L1 Testnet': 3278,
+    'Soshi': 3278,
     // Legacy names (lowercase) - deprecated, use chain IDs instead
     ethereum: 1,
     sepolia: 11155111,
@@ -83,6 +116,7 @@ export const CHAIN_ID_TO_NAME: Record<ChainId, string> = {
     5003: 'Mantle Sepolia Testnet',
     8453: 'Base',
     84532: 'Base Sepolia Testnet',
+    3278: 'Soshi L1 Testnet',
 };
 
 // Deprecated: Legacy chain names - use chain IDs instead
