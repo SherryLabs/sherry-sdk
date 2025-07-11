@@ -82,24 +82,21 @@ const sidebars: SidebarsConfig = {
                 'api-reference/parameters/parameters',
             ],
         },
-        // 4. Integrate Us Section
-        /*
+        // 4. Integrators Section
         {
             type: 'category',
-            label: 'Integrate Sherry',
+            label: 'Integrators',
             collapsed: true,
             link: {
                 type: 'generated-index',
-                title: 'Integrate Sherry TriggertKit',
-                description: 'Detailed reference for the Sherry SDK components.',
-                slug: '/integrate-us',
+                title: 'Integrators Documentation',
+                description: 'Complete documentation for integrating Sherry SDK - build powerful social dapps with ease.',
+                slug: '/integrators',
             },
             items: [
-                'integrate-us/trigger-ui',
-                'integrate-us/trigger-ui-extension', // Overview of the SDK
+                'integrators/integrate-sherry', // Integration Guide
             ],
         },
-        */
         // 5. Guides Section
         {
             type: 'category',
