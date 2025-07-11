@@ -31,9 +31,21 @@ const supportedChains = {
   5003: 'Mantle Sepolia Testnet',
   8453: 'Base Mainnet',
   84532: 'Base Sepolia Testnet',
+  3278: 'Soshi L1 Testnet',
 };
 
-type SupportedChainId = 1 | 11155111 | 43114 | 43113 | 42220 | 44787 | 5000 | 5003 | 8453 | 84532;
+type SupportedChainId =
+  | 1
+  | 11155111
+  | 43114
+  | 43113
+  | 42220
+  | 44787
+  | 5000
+  | 5003
+  | 8453
+  | 84532
+  | 3278;
 ```
 
 ### Flexible Chain Specification
@@ -123,6 +135,13 @@ chains: {
 - Base's testnet environment
 - Perfect for testing Base-specific features
 - Free tokens available for development
+
+**Soshi L1 Testnet (Chain ID: `3278`)**
+
+- Soshi's custom testnet environment
+- Native token: SOSHI
+- Avalanche subnet with custom configuration
+- Ideal for: Testing Soshi-specific features and applications
 
 ## Implementation Examples
 
@@ -359,6 +378,7 @@ The Sherry SDK has transitioned from using string-based chain names to numeric c
 | Mantle Sepolia Testnet | `5003`     | Mantle's testnet               |
 | Base Mainnet           | `8453`     | Base's main network            |
 | Base Sepolia Testnet   | `84532`    | Base's testnet                 |
+| Soshi L1 Testnet       | `3278`     | Soshi's custom testnet         |
 
 ### Quick Migration Guide
 
