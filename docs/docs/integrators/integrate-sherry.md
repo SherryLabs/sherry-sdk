@@ -39,12 +39,8 @@ import { useConfig } from 'wagmi';
 function MyApp() {
   const config = useConfig(); // Your wagmi config
   const adapter = createWagmiAdapter(config);
-  
-  return (
-    <div>
-      {/* Your app content */}
-    </div>
-  );
+
+  return <div>{/* Your app content */}</div>;
 }
 ```
 
@@ -54,13 +50,7 @@ function MyApp() {
 import { Trigger } from '@sherrylinks/slinks';
 
 function MyTriggerComponent() {
-  return (
-    <Trigger
-      url="https://example.com/api/miniapp"
-      adapter={adapter}
-      enableAnalytics={true}
-    />
-  );
+  return <Trigger url="https://example.com/api/miniapp" adapter={adapter} enableAnalytics={true} />;
 }
 ```
 
@@ -115,10 +105,16 @@ function DirectoryTriggers({ adapter }) {
   if (loading) return <div>Loading mini-apps...</div>;
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+        gap: '20px',
+      }}
+    >
       {miniApps
         .filter(app => app.state === 'trusted') // Only show trusted apps
-        .map((app) => (
+        .map(app => (
           <Trigger
             key={app.id}
             url={`${app.host}${app.path}`}
@@ -160,13 +156,7 @@ function MetadataTrigger({ adapter }) {
 
   const validatedMetadata = createMetadata(miniappMetadata);
 
-  return (
-    <Trigger
-      metadata={validatedMetadata}
-      adapter={adapter}
-      securityState="unknown"
-    />
-  );
+  return <Trigger metadata={validatedMetadata} adapter={adapter} securityState="unknown" />;
 }
 ```
 
@@ -200,7 +190,7 @@ To use a mini-app from the directory, combine `host + path` and pass it to the T
 
 ```jsx
 const miniAppUrl = `${miniApp.host}${miniApp.path}`;
-<Trigger url={miniAppUrl} adapter={adapter} />
+<Trigger url={miniAppUrl} adapter={adapter} />;
 ```
 
 ### Style Presets
@@ -217,13 +207,13 @@ const miniAppUrl = `${miniApp.host}${miniApp.path}`;
 
 ### Security States
 
-**⚠️ Under Development** - Security state customization is currently under development and will be available in a future release.
+Control how security warnings are displayed:
 
 ```jsx
 <Trigger
   metadata={validatedMetadata}
   adapter={adapter}
-  // securityState="verified" // Coming soon - will support "unknown", "malicious", "verified"
+  securityState="verified" // "unknown", "malicious", "verified"
 />
 ```
 
@@ -259,12 +249,14 @@ function MiniAppContainer() {
   ];
 
   return (
-    <div style={{ 
-      display: 'grid', 
-      gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-      gap: '20px',
-      padding: '20px'
-    }}>
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+        gap: '20px',
+        padding: '20px',
+      }}
+    >
       {miniapps.map((url, index) => (
         <Trigger
           key={index}
@@ -316,7 +308,7 @@ export type TriggerProps = {
     }
   | {
       metadata: ValidatedMetadata;
-      securityState: TriggerSecurityState; // ⚠️ Under Development
+      securityState: TriggerSecurityState;
       url?: string;
     }
 );
@@ -329,7 +321,7 @@ The adapter interface provides wallet connectivity:
 ```typescript
 interface SherryAdapter {
   connect(): Promise<string>;
-  sendTransaction(params: TransactionParams): Promise<{hash: string}>;
+  sendTransaction(params: TransactionParams): Promise<{ hash: string }>;
   signMessage(message: string): Promise<string>;
   switchChain(chainId: number): Promise<void>;
   getAddress(): Promise<string>;
@@ -357,15 +349,72 @@ const response = await fetch('https://api.sherry.social/v1/directory/v1');
 const directory = await response.json();
 
 // Filter by category
-const swapApps = directory.mini_apps.filter(app => 
-  app.state === 'trusted' && app.subcategory === 'Swap'
+const swapApps = directory.mini_apps.filter(
+  app => app.state === 'trusted' && app.subcategory === 'Swap',
 );
 
 // Filter by protocol
-const protocolApps = directory.mini_apps.filter(app => 
-  app.protocol === 'Protocol'
-);
+const protocolApps = directory.mini_apps.filter(app => app.protocol === 'Protocol');
 ```
+
+## Working with Custom Metadata
+
+If you want to create mini-apps using custom metadata objects (instead of fetching from URLs), you'll need to install the Sherry SDK to access the required interfaces and validation functions:
+
+### Additional Installation
+
+```bash
+npm install @sherrylinks/sherry-sdk
+```
+
+### Using Custom Metadata
+
+```jsx
+import { Trigger } from '@sherrylinks/slinks';
+import { createMetadata } from '@sherrylinks/sherry-sdk';
+import type { ValidatedMetadata } from '@sherrylinks/sherry-sdk';
+
+function CustomMiniApp({ adapter }) {
+  const customMetadata = {
+    url: 'https://example.com',
+    icon: 'https://example.com/icon.png',
+    title: 'My Custom Mini App',
+    description: 'A custom blockchain mini-app',
+    baseUrl: 'https://api.example.com',
+    actions: [
+      {
+        type: 'transfer',
+        label: 'Send 0.01 ETH',
+        to: '0x742d35Cc6634C0532925a3b8D000b7AA5b7eA48C',
+        amount: 0.01,
+        chains: {
+          source: 1, // Ethereum mainnet
+        },
+      },
+    ],
+  };
+
+  // Validate and create metadata
+  const validatedMetadata: ValidatedMetadata = createMetadata(customMetadata);
+
+  return (
+    <Trigger
+      metadata={validatedMetadata}
+      adapter={adapter}
+      securityState="unknown" // Custom metadata apps appear as unverified
+      enableAnalytics={true}
+    />
+  );
+}
+```
+
+### Important Notes
+
+⚠️ **Security State**: Mini-apps created with custom metadata will always appear as **unverified** to users, as they haven't gone through the official verification process.
+
+⚠️ **Validation**: The `createMetadata` function validates your metadata structure and ensures it meets the required format.
+
+⚠️ **Types**: Import the `ValidatedMetadata` type from the SDK for proper TypeScript support.
 
 ## Support
 

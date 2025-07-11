@@ -90,7 +90,8 @@ const sidebars: SidebarsConfig = {
             link: {
                 type: 'generated-index',
                 title: 'Integrators Documentation',
-                description: 'Complete documentation for integrating Sherry SDK - build powerful social dapps with ease.',
+                description:
+                    'Complete documentation for integrating Sherry SDK - build powerful social dapps with ease.',
                 slug: '/integrators',
             },
             items: [

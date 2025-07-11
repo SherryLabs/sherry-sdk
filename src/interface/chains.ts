@@ -13,7 +13,7 @@ import {
 } from 'viem/chains';
 
 // Custom chain definition for Soshi L1 Testnet (not available in viem)
-const soshiL1Testnet: ChainViem = {
+export const soshiL1Testnet: ChainViem = {
     id: 3278,
     name: 'Soshi L1 Testnet',
     nativeCurrency: {
