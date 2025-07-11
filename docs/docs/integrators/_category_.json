@@ -1,0 +1,8 @@
+{
+  "label": "Integrators Documentation",
+  "position": 4,
+  "link": {
+    "type": "generated-index",
+    "description": "Complete documentation for the Sherry SDK - build powerful social dapps with ease."
+  }
+}

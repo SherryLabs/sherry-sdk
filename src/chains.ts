@@ -16,3 +16,6 @@ export {
     base,
     baseSepolia,
 } from 'viem/chains';
+
+// Export custom chains
+export { soshiL1Testnet } from './interface/chains';
