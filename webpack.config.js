@@ -5,7 +5,7 @@ module.exports = {
     mode: 'production', // O 'development' para depuración
     entry: {
         'index.esm': './src/index.ts', // Punto de entrada principal
-        'chains/index.esm': './src/chains.ts' // Punto de entrada para chains
+        'chains/index.esm': './src/chains.ts', // Punto de entrada para chains
     },
     output: {
         filename: '[name].js', // Nombre del archivo de salida ESM
