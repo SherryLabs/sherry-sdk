@@ -3,9 +3,12 @@ const path = require('path');
 
 module.exports = {
     mode: 'production', // O 'development' para depuración
-    entry: './src/index.ts', // Punto de entrada de tu SDK
+    entry: {
+        'index.esm': './src/index.ts', // Punto de entrada principal
+        'chains/index.esm': './src/chains.ts' // Punto de entrada para chains
+    },
     output: {
-        filename: 'index.esm.js', // Nombre del archivo de salida ESM
+        filename: '[name].js', // Nombre del archivo de salida ESM
         path: path.resolve(__dirname, 'dist'), // Directorio de salida
         library: {
             type: 'module', // ¡Fundamental para generar ESM!
