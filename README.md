@@ -10,9 +10,9 @@ A powerful TypeScript SDK for building interactive Web3 mini-apps that can be em
 ## Features
 
 - **Multi-chain Support**: Ethereum, Avalanche, Celo, Base, and more
-- **Action Types**: 
+- **Action Types**:
   - Transfer actions for token transfers
-  - Blockchain actions for smart contract interactions  
+  - Blockchain actions for smart contract interactions
   - Dynamic actions for server-side logic
   - Nested action flows for multi-step processes
 - **Built-in Validation**: Comprehensive type checking and security validation
@@ -74,7 +74,9 @@ const metadata: Metadata = {
       label: 'Approve USDC',
       description: 'Approve contract to spend USDC',
       address: '0xA0b86a33E6417C8D7648D5b1D6fF0F6dB6c15b2a',
-      abi: [/* contract ABI */],
+      abi: [
+        /* contract ABI */
+      ],
       functionName: 'approve',
       chains: { source: 1 },
       params: [
@@ -82,17 +84,17 @@ const metadata: Metadata = {
           name: 'spender',
           type: 'address',
           value: '0xSpenderAddress',
-          fixed: true
+          fixed: true,
         },
         {
           name: 'amount',
           type: 'number',
           label: 'Amount',
-          required: true
-        }
-      ]
-    }
-  ]
+          required: true,
+        },
+      ],
+    },
+  ],
 };
 
 const validatedMetadata = createMetadata(metadata);
@@ -101,33 +103,43 @@ const validatedMetadata = createMetadata(metadata);
 ## Action Types
 
 ### Transfer Actions
+
 Send native tokens with customizable parameters:
+
 - Fixed or user-configurable amounts
 - Support for all major chains
 - Built-in validation
 
-### Blockchain Actions  
+### Blockchain Actions
+
 Direct smart contract interactions:
+
 - Call any contract function
 - Rich parameter configuration
 - Support for all Solidity types
 - Automatic ABI validation
 
 ### HTTP Actions
+
 Server-side processing with REST endpoints:
+
 - Custom business logic
 - Form submissions
 - External API integrations
 - Rich parameter types (select, radio, textarea, file upload)
 
 ### Dynamic Actions
+
 Advanced server-side processing:
+
 - Complex calculations
 - Real-time data processing
 - External service integrations
 
 ### Action Flows
+
 Multi-step interactive experiences:
+
 - Conditional branching
 - Decision points
 - Progress tracking
@@ -188,16 +200,19 @@ const tokenParam = createParameter(PARAM_TEMPLATES.TOKEN_SELECT, {
 ## API Reference
 
 ### Core Functions
+
 - `createMetadata(metadata)` - Validates and processes metadata
 - `validateMetadata(input)` - Validates metadata and returns detailed results
 
-### Type Guards  
+### Type Guards
+
 - `isBlockchainActionMetadata(action)` - Type guard for blockchain actions
 - `isTransferAction(action)` - Type guard for transfer actions
 - `isHttpAction(action)` - Type guard for HTTP actions
 - `isActionFlow(obj)` - Type guard for nested action flows
 
 ### Parameter Helpers
+
 - `createParameter(template, customizations)` - Helper for parameter creation
 - `PARAM_TEMPLATES` - Library of predefined parameter templates
 
@@ -207,7 +222,7 @@ const tokenParam = createParameter(PARAM_TEMPLATES.TOKEN_SELECT, {
 # Install dependencies
 yarn install
 
-# Run tests  
+# Run tests
 yarn test
 
 # Build the package
@@ -220,6 +235,7 @@ yarn lint
 ## Examples
 
 The SDK includes comprehensive examples in the `src/examples` directory:
+
 - Basic transfer actions
 - Smart contract interactions
 - HTTP actions with forms
@@ -239,7 +255,7 @@ Contributions are welcome! Please submit a Pull Request.
 1. Fork the repository
 2. Create a feature branch from `develop`
 3. Make your changes
-4. Add tests if applicable  
+4. Add tests if applicable
 5. Open a Pull Request to the `develop` branch
 
 ## License
