@@ -84,18 +84,16 @@ describe('TransferActionValidator', () => {
             ).not.toThrow();
         });
 
-        it('rejects transfer without recipient', () => {
-            const invalidAction = {
+        it('allows transfer without recipient for dynamic input cases', () => {
+            const actionWithoutRecipient = {
                 ...validTransferAction,
                 to: undefined,
+                amount: undefined,
             };
 
             expect(() =>
-                TransferActionValidator.validateTransferAction(invalidAction as TransferAction),
-            ).toThrow(InvalidMetadataError);
-            expect(() =>
-                TransferActionValidator.validateTransferAction(invalidAction as TransferAction),
-            ).toThrow('Either "to" or "recipient" must be provided');
+                TransferActionValidator.validateTransferAction(actionWithoutRecipient as TransferAction),
+            ).not.toThrow();
         });
 
         it('rejects transfer with invalid chain', () => {

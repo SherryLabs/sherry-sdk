@@ -191,4 +191,235 @@ describe('createMetadata', () => {
             createMetadata(invalidMetadata);
         }).toThrow(SherryValidationError);
     });
+
+    // Test for Base Sepolia (84532) metadata validation
+    test('should validate Base Sepolia metadata with transfer actions', () => {
+        const baseSepoliaMetadata: Metadata = {
+            url: "https://tips.sherry.link/baseSepolia/0x75765f035c4471250dcD36e8C20d0a3EEd506ADc",
+            icon: "https://kfrzkvoejzjkugwosqxx.supabase.co/storage/v1/object/public/images//BuyCoffee-Miniapp.png",
+            title: "🔵 Tip with ETH on Base (Testnet)",
+            actions: [
+                {
+                    to: "0x75765f035c4471250dcD36e8C20d0a3EEd506ADc",
+                    type: "transfer",
+                    label: "Send Tip",
+                    chains: {
+                        source: 84532
+                    },
+                    amountConfig: {
+                        type: "select",
+                        label: "Amount",
+                        options: [
+                            {
+                                label: "0.001 AVAX",
+                                value: 0.001,
+                                description: "0.001 AVAX"
+                            },
+                            {
+                                label: "0.01 AVAX",
+                                value: 0.01,
+                                description: "0.01 AVAX"
+                            },
+                            {
+                                label: "0.1 AVAX",
+                                value: 0.1,
+                                description: "0.1 AVAX"
+                            }
+                        ],
+                        required: true
+                    }
+                },
+                {
+                    to: "0x75765f035c4471250dcD36e8C20d0a3EEd506ADc",
+                    type: "transfer",
+                    label: "Send Tip",
+                    chains: {
+                        source: 84532
+                    }
+                }
+            ],
+            baseUrl: "https://api.sherry.social",
+            description: "Send ETH tips on Base Sepolia Testnet - Test Base's L2 features"
+        };
+
+        const result = createMetadata(baseSepoliaMetadata);
+
+        expect(result).toEqual(
+            expect.objectContaining({
+                url: baseSepoliaMetadata.url,
+                icon: baseSepoliaMetadata.icon,
+                title: baseSepoliaMetadata.title,
+                description: baseSepoliaMetadata.description,
+                baseUrl: baseSepoliaMetadata.baseUrl,
+            }),
+        );
+
+        expect(result.actions).toHaveLength(2);
+        
+        // Verify first action with amountConfig
+        expect(result.actions[0]).toEqual(
+            expect.objectContaining({
+                type: "transfer",
+                label: "Send Tip",
+                to: "0x75765f035c4471250dcD36e8C20d0a3EEd506ADc",
+                chains: {
+                    source: 84532
+                },
+                amountConfig: expect.objectContaining({
+                    type: "select",
+                    label: "Amount",
+                    required: true,
+                    options: expect.arrayContaining([
+                        expect.objectContaining({
+                            label: "0.001 AVAX",
+                            value: 0.001,
+                            description: "0.001 AVAX"
+                        })
+                    ])
+                })
+            }),
+        );
+
+        // Verify second action without amountConfig
+        expect(result.actions[1]).toEqual(
+            expect.objectContaining({
+                type: "transfer",
+                label: "Send Tip",
+                to: "0x75765f035c4471250dcD36e8C20d0a3EEd506ADc",
+                chains: {
+                    source: 84532
+                }
+            }),
+        );
+
+        // Verify Base Sepolia chain ID is properly validated
+        expect((result.actions[0] as any).chains.source).toBe(84532);
+        expect((result.actions[1] as any).chains.source).toBe(84532);
+    });
+
+    // Test for cross-chain transfer metadata validation
+    test('should validate cross-chain TIP_CROSS_CHAIN metadata', () => {
+        const TIP_CROSS_CHAIN: Metadata = {
+            title: 'Send a Cross-Chain Tip – ETH to AVAX',
+            description:
+                "Show appreciation across networks! Enter the recipient's avalanche address and send a crypto tip from base to avalanche in seconds.",
+            icon: 'https://kfrzkvoejzjkugwosqxx.supabase.co/storage/v1/object/public/images//whtip.png',
+            url: 'https://tips.sherry.link/crosschain/base/avalanche/0x5ee75a1B1648C023e885E58bD3735Ae273f2cc52',
+            baseUrl: 'https://api.sherry.social',
+            actions: [
+                {
+                    label: 'Custom Amount',
+                    type: 'transfer',
+                    chains: {
+                        source: 8453,
+                        destination: 43114,
+                    },
+                },
+                {
+                    type: 'transfer',
+                    label: '0.01 AVAX',
+                    to: '0x5ee75a1B1648C023e885E58bD3735Ae273f2cc52',
+                    amount: 0.01,
+                    chains: {
+                        source: 8453,
+                        destination: 43114,
+                    },
+                },
+                {
+                    type: 'transfer',
+                    label: '0.1 AVAX',
+                    to: '0x5ee75a1B1648C023e885E58bD3735Ae273f2cc52',
+                    amount: 0.1,
+                    chains: {
+                        source: 8453,
+                        destination: 43114,
+                    },
+                },
+                {
+                    type: 'transfer',
+                    label: '1 AVAX',
+                    to: '0x5ee75a1B1648C023e885E58bD3735Ae273f2cc52',
+                    amount: 1,
+                    chains: {
+                        source: 8453,
+                        destination: 43114,
+                    },
+                },
+            ],
+        };
+
+        const result = createMetadata(TIP_CROSS_CHAIN);
+
+        expect(result).toEqual(
+            expect.objectContaining({
+                title: TIP_CROSS_CHAIN.title,
+                description: TIP_CROSS_CHAIN.description,
+                icon: TIP_CROSS_CHAIN.icon,
+                url: TIP_CROSS_CHAIN.url,
+                baseUrl: TIP_CROSS_CHAIN.baseUrl,
+            }),
+        );
+
+        expect(result.actions).toHaveLength(4);
+        
+        // Verify first action (Custom Amount - for dynamic input)
+        expect(result.actions[0]).toEqual(
+            expect.objectContaining({
+                label: 'Custom Amount',
+                type: 'transfer',
+                chains: {
+                    source: 8453,
+                    destination: 43114,
+                },
+            }),
+        );
+
+        // Verify second action (0.01 AVAX)
+        expect(result.actions[1]).toEqual(
+            expect.objectContaining({
+                type: 'transfer',
+                label: '0.01 AVAX',
+                to: '0x5ee75a1B1648C023e885E58bD3735Ae273f2cc52',
+                amount: 0.01,
+                chains: {
+                    source: 8453,
+                    destination: 43114,
+                },
+            }),
+        );
+
+        // Verify third action (0.1 AVAX)
+        expect(result.actions[2]).toEqual(
+            expect.objectContaining({
+                type: 'transfer',
+                label: '0.1 AVAX',
+                to: '0x5ee75a1B1648C023e885E58bD3735Ae273f2cc52',
+                amount: 0.1,
+                chains: {
+                    source: 8453,
+                    destination: 43114,
+                },
+            }),
+        );
+
+        // Verify fourth action (1 AVAX)
+        expect(result.actions[3]).toEqual(
+            expect.objectContaining({
+                type: 'transfer',
+                label: '1 AVAX',
+                to: '0x5ee75a1B1648C023e885E58bD3735Ae273f2cc52',
+                amount: 1,
+                chains: {
+                    source: 8453,
+                    destination: 43114,
+                },
+            }),
+        );
+
+        // Verify cross-chain configuration is properly validated
+        result.actions.forEach(action => {
+            expect((action as any).chains.source).toBe(8453); // Base
+            expect((action as any).chains.destination).toBe(43114); // Avalanche
+        });
+    });
 });
