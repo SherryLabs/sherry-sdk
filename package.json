@@ -1,6 +1,6 @@
 {
   "name": "@sherrylinks/sdk",
-  "version": "2.26.23-beta.1",
+  "version": "2.27.24-beta.1",
   "description": "SDK for Sherry Links",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
@@ -17,7 +17,7 @@
     },
     "./chains": {
       "types": "./dist/chains.d.ts",
-      "import": "./dist/chains.esm.js",
+      "import": "./dist/chains/index.esm.js",
       "require": "./dist/chains.js"
     },
     "./headers": {

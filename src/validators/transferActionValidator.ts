@@ -98,10 +98,8 @@ export class TransferActionValidator {
             }
         }
 
-        // Either direct recipient or recipient configuration must be provided
-        if (action.to === undefined && action.recipient === undefined) {
-            throw new InvalidMetadataError('Either "to" or "recipient" must be provided');
-        }
+        // Note: Both 'to' and 'recipient' can be undefined for dynamic input cases
+        // where the user will provide these values at runtime
     }
 
     /**
@@ -162,8 +160,9 @@ export class TransferActionValidator {
 
         if (!hasBaseProperties) return false;
 
-        // Ensure it has at least one of the transfer-specific properties
+        // Ensure it has transfer type or at least one of the transfer-specific properties
         const hasTransferSpecificProperties =
+            obj.type === 'transfer' ||
             obj.to !== undefined ||
             obj.amount !== undefined ||
             obj.recipient !== undefined ||
