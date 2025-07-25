@@ -195,51 +195,51 @@ describe('createMetadata', () => {
     // Test for Base Sepolia (84532) metadata validation
     test('should validate Base Sepolia metadata with transfer actions', () => {
         const baseSepoliaMetadata: Metadata = {
-            url: "https://tips.sherry.link/baseSepolia/0x75765f035c4471250dcD36e8C20d0a3EEd506ADc",
-            icon: "https://kfrzkvoejzjkugwosqxx.supabase.co/storage/v1/object/public/images//BuyCoffee-Miniapp.png",
-            title: "🔵 Tip with ETH on Base (Testnet)",
+            url: 'https://tips.sherry.link/baseSepolia/0x75765f035c4471250dcD36e8C20d0a3EEd506ADc',
+            icon: 'https://kfrzkvoejzjkugwosqxx.supabase.co/storage/v1/object/public/images//BuyCoffee-Miniapp.png',
+            title: '🔵 Tip with ETH on Base (Testnet)',
             actions: [
                 {
-                    to: "0x75765f035c4471250dcD36e8C20d0a3EEd506ADc",
-                    type: "transfer",
-                    label: "Send Tip",
+                    to: '0x75765f035c4471250dcD36e8C20d0a3EEd506ADc',
+                    type: 'transfer',
+                    label: 'Send Tip',
                     chains: {
-                        source: 84532
+                        source: 84532,
                     },
                     amountConfig: {
-                        type: "select",
-                        label: "Amount",
+                        type: 'select',
+                        label: 'Amount',
                         options: [
                             {
-                                label: "0.001 AVAX",
+                                label: '0.001 AVAX',
                                 value: 0.001,
-                                description: "0.001 AVAX"
+                                description: '0.001 AVAX',
                             },
                             {
-                                label: "0.01 AVAX",
+                                label: '0.01 AVAX',
                                 value: 0.01,
-                                description: "0.01 AVAX"
+                                description: '0.01 AVAX',
                             },
                             {
-                                label: "0.1 AVAX",
+                                label: '0.1 AVAX',
                                 value: 0.1,
-                                description: "0.1 AVAX"
-                            }
+                                description: '0.1 AVAX',
+                            },
                         ],
-                        required: true
-                    }
+                        required: true,
+                    },
                 },
                 {
-                    to: "0x75765f035c4471250dcD36e8C20d0a3EEd506ADc",
-                    type: "transfer",
-                    label: "Send Tip",
+                    to: '0x75765f035c4471250dcD36e8C20d0a3EEd506ADc',
+                    type: 'transfer',
+                    label: 'Send Tip',
                     chains: {
-                        source: 84532
-                    }
-                }
+                        source: 84532,
+                    },
+                },
             ],
-            baseUrl: "https://api.sherry.social",
-            description: "Send ETH tips on Base Sepolia Testnet - Test Base's L2 features"
+            baseUrl: 'https://api.sherry.social',
+            description: "Send ETH tips on Base Sepolia Testnet - Test Base's L2 features",
         };
 
         const result = createMetadata(baseSepoliaMetadata);
@@ -255,40 +255,40 @@ describe('createMetadata', () => {
         );
 
         expect(result.actions).toHaveLength(2);
-        
+
         // Verify first action with amountConfig
         expect(result.actions[0]).toEqual(
             expect.objectContaining({
-                type: "transfer",
-                label: "Send Tip",
-                to: "0x75765f035c4471250dcD36e8C20d0a3EEd506ADc",
+                type: 'transfer',
+                label: 'Send Tip',
+                to: '0x75765f035c4471250dcD36e8C20d0a3EEd506ADc',
                 chains: {
-                    source: 84532
+                    source: 84532,
                 },
                 amountConfig: expect.objectContaining({
-                    type: "select",
-                    label: "Amount",
+                    type: 'select',
+                    label: 'Amount',
                     required: true,
                     options: expect.arrayContaining([
                         expect.objectContaining({
-                            label: "0.001 AVAX",
+                            label: '0.001 AVAX',
                             value: 0.001,
-                            description: "0.001 AVAX"
-                        })
-                    ])
-                })
+                            description: '0.001 AVAX',
+                        }),
+                    ]),
+                }),
             }),
         );
 
         // Verify second action without amountConfig
         expect(result.actions[1]).toEqual(
             expect.objectContaining({
-                type: "transfer",
-                label: "Send Tip",
-                to: "0x75765f035c4471250dcD36e8C20d0a3EEd506ADc",
+                type: 'transfer',
+                label: 'Send Tip',
+                to: '0x75765f035c4471250dcD36e8C20d0a3EEd506ADc',
                 chains: {
-                    source: 84532
-                }
+                    source: 84532,
+                },
             }),
         );
 
@@ -361,7 +361,7 @@ describe('createMetadata', () => {
         );
 
         expect(result.actions).toHaveLength(4);
-        
+
         // Verify first action (Custom Amount - for dynamic input)
         expect(result.actions[0]).toEqual(
             expect.objectContaining({

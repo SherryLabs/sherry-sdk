@@ -92,7 +92,9 @@ describe('TransferActionValidator', () => {
             };
 
             expect(() =>
-                TransferActionValidator.validateTransferAction(actionWithoutRecipient as TransferAction),
+                TransferActionValidator.validateTransferAction(
+                    actionWithoutRecipient as TransferAction,
+                ),
             ).not.toThrow();
         });
 
