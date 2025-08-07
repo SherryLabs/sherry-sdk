@@ -24,14 +24,59 @@ interface TransferAction {
   chains: ChainContext; // Source and optional destination
 
   // Simple Configuration (fixed values)
-  to?: `0x${string}`; // Fixed recipient address
+  to?: AddressOrSender; // Fixed recipient address or 'sender'
   amount?: number; // Fixed amount in native units
 
   // Interactive Configuration (user choices)
   recipient?: RecipientConfig; // Let user choose recipient
   amountConfig?: AmountConfig; // Let user choose amount
 }
+
+// Type for addresses that can be either valid addresses or 'sender' keyword
+type AddressOrSender = `0x${string}` | 'sender';
 ```
+
+## 🆕 Special 'sender' Keyword
+
+Transfer Actions support the special `'sender'` keyword that automatically resolves to the user's wallet address at runtime:
+
+```typescript
+// Transfer to the user themselves (self-transfer)
+const selfTransfer: TransferAction = {
+  type: 'transfer',
+  label: 'Return Refund',
+  description: 'Refund will be sent back to your wallet',
+  chains: { source: 43114 },
+  to: 'sender', // Resolves to user's address automatically
+  amount: 0.05,
+};
+
+// Let users choose including themselves as an option
+const flexibleRecipient: TransferAction = {
+  type: 'transfer',
+  label: 'Send Payment',
+  description: 'Send to team member or keep for yourself',
+  chains: { source: 43114 },
+  recipient: {
+    type: 'select',
+    label: 'Recipient',
+    defaultValue: 'sender', // Default to sending to themselves
+    options: [
+      { label: 'Keep for myself 👤', value: 'sender' },
+      { label: 'Alice - Developer 👩‍💻', value: '0x1111...' },
+      { label: 'Bob - Designer 👨‍🎨', value: '0x2222...' },
+    ],
+  },
+  amount: 1.0,
+};
+```
+
+### When to Use 'sender'
+
+- **Refunds**: Automatically return funds to the user
+- **Self-transactions**: Users interacting with their own accounts  
+- **Flexible options**: Include user as a recipient choice
+- **Testing**: Easy testing without hardcoded addresses
 
 ## Configuration Options
 
@@ -214,7 +259,7 @@ interface RecipientConfig {
   label?: string; // Field label
   description?: string; // Help text
   required?: boolean; // Is selection required
-  defaultValue?: `0x${string}`; // Default selection
+  defaultValue?: AddressOrSender; // Default selection (address or 'sender')
   options?: SelectOption[]; // Predefined recipients
 }
 ```
@@ -396,11 +441,12 @@ type: 'radio';
 
 Transfer Actions automatically validate:
 
-- **Address format** - Ensures valid Ethereum addresses
+- **Address format** - Ensures valid Ethereum addresses or 'sender' keyword
 - **Amount ranges** - Prevents negative or excessive amounts
 - **Chain compatibility** - Verifies supported chains
 - **Required fields** - Enforces required selections
 - **Option existence** - Ensures selected options are valid
+- **Special keywords** - Validates 'sender' keyword (case-insensitive)
 
 ```typescript
 // Validation happens automatically

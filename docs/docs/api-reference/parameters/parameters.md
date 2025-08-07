@@ -174,7 +174,7 @@ interface NumberBasedParameter extends BaseParameter {
 
 ### Address Parameters
 
-For inputs that expect blockchain addresses (e.g., Ethereum addresses).
+For inputs that expect blockchain addresses (e.g., Ethereum addresses). Address parameters also support the special `'sender'` keyword that resolves to the user's wallet address.
 
 **Interface:**
 
@@ -182,7 +182,10 @@ For inputs that expect blockchain addresses (e.g., Ethereum addresses).
 interface AddressParameter extends BaseParameter {
   type: 'address' | Extract<AbiType, 'address'>;
   pattern?: string; // Regular expression for custom address validation.
+  value?: AddressOrSender; // Can be a valid address or 'sender'
 }
+
+type AddressOrSender = `0x${string}` | 'sender';
 ```
 
 **Properties:**
@@ -190,8 +193,11 @@ interface AddressParameter extends BaseParameter {
 | Property  | Type     | Description                                                                                             |
 | --------- | -------- | ------------------------------------------------------------------------------------------------------- |
 | `pattern` | `string` | A regex pattern for validating the address format. Defaults to Ethereum address format if not provided. |
+| `value`   | `AddressOrSender` | Default/fixed value. Can be a valid Ethereum address or `'sender'` keyword. |
 
-**Example:**
+**Examples:**
+
+- **Standard Address Input:**
 
 ```json
 {
@@ -199,8 +205,38 @@ interface AddressParameter extends BaseParameter {
   "label": "Recipient Address",
   "type": "address",
   "required": true,
-  "pattern": "^0x[a-fA-F0-9]{40}$", // Standard Ethereum address pattern
+  "pattern": "^0x[a-fA-F0-9]{40}$",
   "description": "Enter a valid Ethereum wallet address."
+}
+```
+
+- **🆕 Using 'sender' Keyword:**
+
+```json
+{
+  "name": "beneficiary",
+  "label": "Reward Recipient",
+  "type": "address",
+  "value": "sender",
+  "fixed": true,
+  "description": "Rewards will be sent to your wallet address."
+}
+```
+
+- **Address Selection with 'sender' Option:**
+
+```json
+{
+  "name": "tokenRecipient",
+  "label": "Send Tokens To",
+  "type": "select",
+  "required": true,
+  "options": [
+    { "label": "Keep in my wallet 👤", "value": "sender" },
+    { "label": "Treasury Address 🏛️", "value": "0x1234567890123456789012345678901234567890" },
+    { "label": "Burn Address 🔥", "value": "0x0000000000000000000000000000000000000000" }
+  ],
+  "description": "Choose destination for the tokens."
 }
 ```
 

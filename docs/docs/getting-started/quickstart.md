@@ -18,9 +18,10 @@ const metadata: Metadata = {
   description: 'Quick AVAX transfer',
   actions: [
     {
+      type: 'transfer',
       label: 'Send 0.1 AVAX',
       description: 'Transfer 0.1 AVAX to recipient',
-      to: '0x1234567890123456789012345678901234567890',
+      to: '0x1234567890123456789012345678901234567890', // or use 'sender' to send to user
       amount: 0.1,
       chains: { source: 43114 },
     },

@@ -123,10 +123,15 @@ const mintAction: BlockchainActionMetadata = {
   params: [
     {
       name: 'to',
-      label: 'Recipient Address',
-      type: 'address',
+      label: 'NFT Recipient',
+      type: 'select',
       required: true,
-      description: 'Address that will receive the NFT',
+      options: [
+        { label: 'Mint to my wallet 👤', value: 'sender' },
+        { label: 'Gift to friend 🎁', value: '0x1234567890123456789012345678901234567890' },
+        { label: 'Send to collection 🏛️', value: '0x9876543210987654321098765432109876543210' },
+      ],
+      description: 'Choose who will receive the NFT',
     },
     {
       name: 'tokenURI',
@@ -273,14 +278,14 @@ const bridgeAction: BlockchainActionMetadata = {
 
 Parameters must be compatible with the corresponding ABI types:
 
-| ABI Type            | Compatible Parameter Types             | Example              |
-| ------------------- | -------------------------------------- | -------------------- |
-| `address`           | `address`                              | Wallet addresses     |
-| `bool`              | `boolean`, `radio` with boolean values | True/false choices   |
-| `string`            | `text`, `email`, `url`, `textarea`     | Text inputs          |
-| `uint256`, `int256` | `number`                               | Numeric inputs       |
-| `bytes`, `bytes32`  | `text` (hex format)                    | Hex-encoded data     |
-| `address[]`         | `text` (JSON array format)             | `["0x...", "0x..."]` |
+| ABI Type            | Compatible Parameter Types             | Example                        |
+| ------------------- | -------------------------------------- | ------------------------------ |
+| `address`           | `address`                              | Wallet addresses or `'sender'` |
+| `bool`              | `boolean`, `radio` with boolean values | True/false choices             |
+| `string`            | `text`, `email`, `url`, `textarea`     | Text inputs                    |
+| `uint256`, `int256` | `number`                               | Numeric inputs                 |
+| `bytes`, `bytes32`  | `text` (hex format)                    | Hex-encoded data               |
+| `address[]`         | `text` (JSON array format)             | `["0x...", "sender"]`          |
 
 ## Parameter Validation
 
@@ -327,12 +332,14 @@ Fixed and default values are validated against ABI types:
 ```typescript
 // ✅ Valid values
 { name: 'spender', type: 'address', value: '0x123...abc', fixed: true }
+{ name: 'recipient', type: 'address', value: 'sender', fixed: true } // Special keyword
 { name: 'amount', type: 'number', value: 100.5 }
 { name: 'active', type: 'boolean', value: true }
 
 // ❌ Invalid values will cause validation error
 { name: 'spender', type: 'address', value: 'invalid-address', fixed: true }
 { name: 'amount', type: 'number', value: 'not-a-number' }
+{ name: 'recipient', type: 'address', value: 'not-sender', fixed: true } // Only 'sender' is valid keyword
 ```
 
 ## Payable Functions
@@ -381,18 +388,51 @@ const params = [
 ];
 ```
 
-### Special Values
+### 🆕 Special 'sender' Keyword
 
-Some parameters accept special values:
+Address parameters support the special `'sender'` keyword that automatically resolves to the user's wallet address (msg.sender) at runtime:
 
 ```typescript
+// Fixed recipient as sender
 {
   name: 'to',
   label: 'Recipient',
   type: 'address',
-  value: 'sender' // Special value: resolves to current user's address
+  value: 'sender', // Resolves to user's address automatically
+  fixed: true,
+}
+
+// User can choose including sender as option
+{
+  name: 'recipient',
+  label: 'Send Tokens To',
+  type: 'select',
+  required: true,
+  options: [
+    { label: 'Keep in my wallet 👤', value: 'sender' },
+    { label: 'Treasury Address 🏛️', value: '0x1234...' },
+    { label: 'Burn Address 🔥', value: '0x0000...' },
+  ]
+}
+
+// Default to sender with user override option
+{
+  name: 'beneficiary',
+  label: 'Reward Recipient', 
+  type: 'address',
+  value: 'sender', // Default to user
+  fixed: false, // Allow user to change
+  description: 'Address that will receive the rewards (defaults to you)'
 }
 ```
+
+### When to Use 'sender' in Blockchain Actions
+
+- **Self-interactions**: Tokens sent to user's own wallet
+- **Reward claims**: User claiming rewards to their address
+- **Flexible recipients**: Include user as a recipient option  
+- **Default behavior**: Reasonable default for many DeFi operations
+- **Refund mechanisms**: Automatic refunds to transaction initiator
 
 ### Complex Parameter Types
 
