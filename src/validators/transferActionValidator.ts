@@ -71,7 +71,8 @@ export class TransferActionValidator {
                 throw new InvalidMetadataError('Recipient address must be a string');
             }
 
-            if (!isAddress(action.to)) {
+            // Allow 'sender' keyword or valid address
+            if (action.to.toLowerCase() !== 'sender' && !isAddress(action.to)) {
                 throw new InvalidMetadataError(`Invalid recipient address: ${action.to}`);
             }
         }

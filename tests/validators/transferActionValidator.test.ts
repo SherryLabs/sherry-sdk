@@ -98,6 +98,36 @@ describe('TransferActionValidator', () => {
             ).not.toThrow();
         });
 
+        it('allows transfer with "sender" as recipient address', () => {
+            const actionWithSender: TransferAction = {
+                type: 'transfer',
+                label: 'Transfer to Sender',
+                chains: { source: 43114 },
+                to: 'sender',
+                amount: 0.5,
+            };
+
+            expect(() =>
+                TransferActionValidator.validateTransferAction(actionWithSender),
+            ).not.toThrow();
+            const result = TransferActionValidator.validateTransferAction(actionWithSender);
+            expect(result.to).toBe('sender');
+        });
+
+        it('allows transfer with "SENDER" (case insensitive)', () => {
+            const actionWithSender: TransferAction = {
+                type: 'transfer',
+                label: 'Transfer to Sender',
+                chains: { source: 43114 },
+                to: 'SENDER' as any, // Force the type since TypeScript expects lowercase
+                amount: 0.5,
+            };
+
+            expect(() =>
+                TransferActionValidator.validateTransferAction(actionWithSender),
+            ).not.toThrow();
+        });
+
         it('rejects transfer with invalid chain', () => {
             const invalidAction = {
                 ...validTransferAction,

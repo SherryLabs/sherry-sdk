@@ -2,9 +2,12 @@ import { ChainContext } from '../chains';
 import { BaseAction } from './action';
 import { SelectOption } from '../inputs';
 
+// Type for addresses that can be either a valid Ethereum address or 'sender' keyword
+export type AddressOrSender = `0x${string}` | 'sender';
+
 // Configuration for the "to" field
 export interface RecipientConfig {
-    defaultValue?: `0x${string}`; // Default address if any
+    defaultValue?: AddressOrSender; // Default address or 'sender' if any
     type?: 'select' | 'radio'; // How to render the selection
     options?: SelectOption[]; // Options if using select/radio
     label?: string; // Label for the input
@@ -26,7 +29,7 @@ export interface TransferAction extends BaseAction {
     type: 'transfer'; // Type of action
     // Simple configuration
     token?: `0x${string}`; // Token address (ERC20, ERC721, etc.)
-    to?: `0x${string}`; // Direct recipient address (takes precedence)
+    to?: AddressOrSender; // Direct recipient address or 'sender' (takes precedence)
     amount?: number; // Direct amount (takes precedence)
 
     // Advanced configuration (used if direct values not provided)
