@@ -74,7 +74,7 @@ const flexibleRecipient: TransferAction = {
 ### When to Use 'sender'
 
 - **Refunds**: Automatically return funds to the user
-- **Self-transactions**: Users interacting with their own accounts  
+- **Self-transactions**: Users interacting with their own accounts
 - **Flexible options**: Include user as a recipient choice
 - **Testing**: Easy testing without hardcoded addresses
 

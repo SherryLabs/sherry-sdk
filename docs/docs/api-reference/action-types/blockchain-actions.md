@@ -418,7 +418,7 @@ Address parameters support the special `'sender'` keyword that automatically res
 // Default to sender with user override option
 {
   name: 'beneficiary',
-  label: 'Reward Recipient', 
+  label: 'Reward Recipient',
   type: 'address',
   value: 'sender', // Default to user
   fixed: false, // Allow user to change
@@ -430,7 +430,7 @@ Address parameters support the special `'sender'` keyword that automatically res
 
 - **Self-interactions**: Tokens sent to user's own wallet
 - **Reward claims**: User claiming rewards to their address
-- **Flexible recipients**: Include user as a recipient option  
+- **Flexible recipients**: Include user as a recipient option
 - **Default behavior**: Reasonable default for many DeFi operations
 - **Refund mechanisms**: Automatic refunds to transaction initiator
 

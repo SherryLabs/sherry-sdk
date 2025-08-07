@@ -190,10 +190,10 @@ type AddressOrSender = `0x${string}` | 'sender';
 
 **Properties:**
 
-| Property  | Type     | Description                                                                                             |
-| --------- | -------- | ------------------------------------------------------------------------------------------------------- |
-| `pattern` | `string` | A regex pattern for validating the address format. Defaults to Ethereum address format if not provided. |
-| `value`   | `AddressOrSender` | Default/fixed value. Can be a valid Ethereum address or `'sender'` keyword. |
+| Property  | Type              | Description                                                                                             |
+| --------- | ----------------- | ------------------------------------------------------------------------------------------------------- |
+| `pattern` | `string`          | A regex pattern for validating the address format. Defaults to Ethereum address format if not provided. |
+| `value`   | `AddressOrSender` | Default/fixed value. Can be a valid Ethereum address or `'sender'` keyword.                             |
 
 **Examples:**
 
