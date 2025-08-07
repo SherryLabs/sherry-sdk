@@ -7,6 +7,8 @@
 
 A powerful TypeScript SDK for building interactive Web3 mini-apps that can be embedded within social media posts and platforms. Transform any post into an interactive dApp that allows users to swap tokens, vote on proposals, mint NFTs, and more - all without leaving their social media feed.
 
+> **🆕 Recent Updates**: Enhanced support for the `'sender'` keyword in both Transfer and Blockchain actions, allowing automatic resolution to the user's address at runtime.
+
 ## Features
 
 - **Multi-chain Support**: Ethereum, Avalanche, Celo, Base, and more
@@ -47,10 +49,9 @@ const metadata: Metadata = {
     {
       type: 'transfer',
       label: 'Send 0.1 AVAX',
-      description: 'Transfer 0.1 AVAX to recipient',
-      to: '0x1234567890123456789012345678901234567890',
+      to: '0x1234567890123456789012345678901234567890', // or 'sender' to send to user
       amount: 0.1,
-      chains: { source: 43114 },
+      chains: { source: 43114 }, // Avalanche C-Chain
     },
   ],
 };
@@ -82,14 +83,15 @@ const metadata: Metadata = {
       params: [
         {
           name: 'spender',
+          label: 'Spender Address',
           type: 'address',
           value: '0xSpenderAddress',
           fixed: true,
         },
         {
           name: 'amount',
+          label: 'Amount to Approve',
           type: 'number',
-          label: 'Amount',
           required: true,
         },
       ],
@@ -107,8 +109,19 @@ const validatedMetadata = createMetadata(metadata);
 Send native tokens with customizable parameters:
 
 - Fixed or user-configurable amounts
+- Support for `'sender'` keyword to auto-resolve to user's address
 - Support for all major chains
 - Built-in validation
+
+```typescript
+{
+  type: 'transfer',
+  label: 'Send to yourself',
+  to: 'sender', // Special keyword - resolves to user's address
+  amount: 1.0,
+  chains: { source: 43114 }
+}
+```
 
 ### Blockchain Actions
 
@@ -116,8 +129,19 @@ Direct smart contract interactions:
 
 - Call any contract function
 - Rich parameter configuration
-- Support for all Solidity types
+- Support for all Solidity types including `'sender'` for address parameters
 - Automatic ABI validation
+
+```typescript
+// Address parameter can use 'sender' keyword
+{
+  name: 'to',
+  label: 'Recipient',
+  type: 'address',
+  value: 'sender', // Resolves to msg.sender
+  fixed: true
+}
+```
 
 ### HTTP Actions
 
@@ -157,6 +181,7 @@ Multi-step interactive experiences:
 - **Base Sepolia** (testnet)
 - **Mantle Mainnet**
 - **Mantle Sepolia** (testnet)
+- **Soshi L1 Testnet** (custom subnet)
 
 ## Validation
 
@@ -181,19 +206,29 @@ The SDK provides template helpers for common parameter types:
 ```typescript
 import { createParameter, PARAM_TEMPLATES } from '@sherrylinks/sdk';
 
+// Email parameter template
 const emailParam = createParameter(PARAM_TEMPLATES.EMAIL, {
   name: 'email',
   label: 'Your Email',
   required: true,
 });
 
+// Token selection with predefined options
 const tokenParam = createParameter(PARAM_TEMPLATES.TOKEN_SELECT, {
   name: 'token',
   label: 'Select Token',
   options: [
-    { label: 'USDC', value: 'usdc' },
-    { label: 'DAI', value: 'dai' },
+    { label: 'USDC', value: '0xA0b86a33E6417C8D7648D5b1D6fF0F6dB6c15b2a' },
+    { label: 'DAI', value: '0x6B175474E89094C44Da98b954EedeAC495271d0F' },
   ],
+});
+
+// Address parameter that accepts 'sender'
+const recipientParam = createParameter(PARAM_TEMPLATES.ADDRESS, {
+  name: 'to',
+  label: 'Recipient Address',
+  value: 'sender', // Special keyword for user's address
+  required: true,
 });
 ```
 
@@ -210,25 +245,40 @@ const tokenParam = createParameter(PARAM_TEMPLATES.TOKEN_SELECT, {
 - `isTransferAction(action)` - Type guard for transfer actions
 - `isHttpAction(action)` - Type guard for HTTP actions
 - `isActionFlow(obj)` - Type guard for nested action flows
+- `isDynamicAction(action)` - Type guard for dynamic actions
 
 ### Parameter Helpers
 
 - `createParameter(template, customizations)` - Helper for parameter creation
 - `PARAM_TEMPLATES` - Library of predefined parameter templates
 
+### Types
+
+- `AddressOrSender` - Type for addresses that accept either valid Ethereum addresses or `'sender'` keyword
+- `TransferAction` - Enhanced transfer action interface with sender support
+- `BlockchainAction` - Smart contract interaction with comprehensive validation
+
 ## Development
 
 ```bash
 # Install dependencies
+npm install
+# or
 yarn install
 
 # Run tests
+npm test
+# or
 yarn test
 
 # Build the package
-yarn build
+npm run build:all
+# or
+yarn build:all
 
 # Lint code
+npm run lint
+# or
 yarn lint
 ```
 
@@ -236,10 +286,11 @@ yarn lint
 
 The SDK includes comprehensive examples in the `src/examples` directory:
 
-- Basic transfer actions
-- Smart contract interactions
-- HTTP actions with forms
-- Multi-step action flows
+- **transfer-miniapps.ts** - Various transfer action patterns
+- **example-miniapps.ts** - Smart contract interactions and complex examples
+- **mixed-miniapp.ts** - HTTP, Transfer, and Blockchain actions combined
+- **nested-actions.ts** - Multi-step action flows
+- **dynamic-miniapp.ts** - Server-side dynamic actions
 
 ## Resources
 
