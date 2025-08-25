@@ -35,7 +35,7 @@ export const onboardingFlowApp: ActionFlow = {
             id: 'signup-form',
             type: 'http',
             label: 'Sign Up',
-            path: 'https://api.sherry.social/signup',
+            miniAppId: 'a1234567-1234-5678-9012-123456789012',
             params: [
                 {
                     name: 'name',
@@ -84,7 +84,7 @@ export const onboardingFlowApp: ActionFlow = {
             id: 'connect-wallet',
             type: 'http',
             label: 'Connect Wallet',
-            path: 'https://api.sherry.social/connect-wallet',
+            miniAppId: 'b2345678-2345-6789-0123-234567890123',
             params: [],
             nextActions: [{ actionId: 'mint-welcome-nft' }],
         } as NestedHttpAction,
@@ -94,7 +94,7 @@ export const onboardingFlowApp: ActionFlow = {
             id: 'create-wallet-guide',
             type: 'http',
             label: 'Create Wallet',
-            path: 'https://api.sherry.social/wallet-guide',
+            miniAppId: 'c3456789-3456-7890-1234-345678901234',
             params: [
                 {
                     name: 'device',
@@ -206,7 +206,7 @@ export const defiSwapFlowApp: ActionFlow = {
             id: 'select-tokens',
             type: 'http',
             label: 'Select Tokens',
-            path: 'https://api.sherry.social/get-swap-quote',
+            miniAppId: 'd4567890-4567-8901-2345-456789012345',
             params: [
                 {
                     name: 'fromToken',
@@ -461,7 +461,7 @@ export const governanceFlowApp: ActionFlow = {
             id: 'create-proposal-form',
             type: 'http',
             label: 'Proposal Details',
-            path: 'https://api.sherry.social/validate-proposal',
+            miniAppId: 'e5678901-5678-9012-3456-567890123456',
             params: [
                 {
                     name: 'title',
@@ -560,7 +560,7 @@ export const governanceFlowApp: ActionFlow = {
             id: 'vote-proposal-selection',
             type: 'http',
             label: 'Select Proposal',
-            path: 'https://api.sherry.social/get-active-proposals',
+            miniAppId: 'f6789012-6789-0123-4567-678901234567',
             params: [
                 {
                     name: 'proposalId',
@@ -647,7 +647,7 @@ export const governanceFlowApp: ActionFlow = {
             id: 'execute-proposal-selection',
             type: 'http',
             label: 'Select Proposal to Execute',
-            path: 'https://api.sherry.social/get-executable-proposals',
+            miniAppId: '12345678-9abc-def0-1234-567890abcdef',
             params: [
                 {
                     name: 'proposalId',

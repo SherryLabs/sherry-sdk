@@ -191,7 +191,7 @@ export class FlowValidator {
             const httpAction: HttpAction = {
                 type: 'http',
                 label: action.label,
-                path: action.path,
+                miniAppId: action.miniAppId,
                 params: action.params || [],
             };
 

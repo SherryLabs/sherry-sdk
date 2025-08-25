@@ -7,7 +7,7 @@ describe('HttpAction Validation', () => {
     const validHttpAction: HttpAction = {
         type: 'http',
         label: 'Subscribe to Newsletter',
-        path: 'https://api.example.com/subscribe',
+        miniAppId: '12345678-1234-5678-9012-123456789abc',
         params: [
             {
                 name: 'email',
@@ -31,10 +31,10 @@ describe('HttpAction Validation', () => {
         expect(validatedAction.params!.length).toBe(2);
     });
 
-    it('should fail with invalid path', () => {
+    it('should fail with invalid miniAppId', () => {
         const invalidAction: HttpAction = {
             ...validHttpAction,
-            path: 'not-a-valid-url',
+            miniAppId: 'not-a-valid-uuid',
         };
 
         expect(() => {
@@ -46,7 +46,7 @@ describe('HttpAction Validation', () => {
         const actionWithSelect: HttpAction = {
             type: 'http',
             label: 'Choose Plan',
-            path: 'https://api.example.com/subscribe',
+            miniAppId: '87654321-4321-8765-4321-876543210def',
             params: [
                 {
                     name: 'plan',
@@ -71,7 +71,7 @@ describe('HttpAction Validation', () => {
         const invalidSelect: HttpAction = {
             type: 'http',
             label: 'Choose Plan',
-            path: 'https://api.example.com/subscribe',
+            miniAppId: '87654321-4321-8765-4321-876543210def',
             params: [
                 {
                     name: 'plan',
@@ -122,7 +122,7 @@ describe('HTTP Action in Metadata', () => {
         const formAction: HttpAction = {
             type: 'http',
             label: 'Contact Form',
-            path: 'https://api.example.com/contact',
+            miniAppId: 'abcdef12-3456-7890-abcd-ef1234567890',
             params: [
                 {
                     name: 'name',
@@ -152,7 +152,7 @@ describe('HTTP Action in Metadata', () => {
         const actionWithRadio: HttpAction = {
             type: 'http',
             label: 'Choose Payment',
-            path: 'https://api.example.com/payment',
+            miniAppId: 'fedcba09-8765-4321-abcd-ba9876543210',
             params: [
                 {
                     name: 'paymentType',

@@ -422,4 +422,124 @@ describe('createMetadata', () => {
             expect((action as any).chains.destination).toBe(43114); // Avalanche
         });
     });
+
+    // Test for onboarding mini app metadata validation
+    test('should validate onboarding mini app metadata with blockchain action', () => {
+        const onboardingMetadata: Metadata = {
+            url: 'https://chat.sherry.social/accounts/gilbertsahumada',
+            icon: 'https://ipfs.io/ipfs/QmXSrQdhCoMW26g2RAFLC5MXufUp9dpjcT1LnFNKd797N7/gilbertsahumada_profile.jpg',
+            title: 'ONBOARDING MINI APP',
+            description: 'Onboarding mini app by @gilbertsahumada',
+            baseUrl: 'https://api.sherry.social',
+            actions: [
+                {
+                    abi: [
+                        {
+                            name: 'createCollectionAndMint',
+                            type: 'function',
+                            inputs: [
+                                {
+                                    name: 'miniAppId',
+                                    type: 'string',
+                                    internalType: 'string',
+                                },
+                                {
+                                    name: 'twitterHandle',
+                                    type: 'string',
+                                    internalType: 'string',
+                                },
+                                {
+                                    name: 'metadataURI',
+                                    type: 'string',
+                                    internalType: 'string',
+                                },
+                                {
+                                    name: 'to',
+                                    type: 'address',
+                                    internalType: 'address',
+                                },
+                            ],
+                            outputs: [
+                                {
+                                    name: '',
+                                    type: 'uint256',
+                                    internalType: 'uint256',
+                                },
+                            ],
+                            stateMutability: 'nonpayable',
+                        },
+                    ],
+                    type: 'blockchain',
+                    label: "LET'S GET ONBOARDED",
+                    chains: {
+                        source: 43114,
+                        destination: 42220,
+                    },
+                    params: [
+                        {
+                            name: 'miniAppId',
+                            type: 'string',
+                            label: 'Mini App ID',
+                            value: '6489b206-f48a-4bc3-baf7-eb3c751446e2',
+                        },
+                        {
+                            name: 'twitterHandle',
+                            type: 'string',
+                            label: 'Twitter Handle',
+                        },
+                        {
+                            name: 'metadataURI',
+                            type: 'string',
+                            label: 'Metadata URI',
+                            value: 'https://ipfs.io/ipfs/QmRrGRNLM8VSPZN4wyy5xzHgryPQkG99dQhJkDVnDMxxDj/metadata.json',
+                        },
+                        {
+                            name: 'to',
+                            type: 'address',
+                            label: 'Recipient Address',
+                            value: 'sender',
+                        },
+                    ],
+                    address: '0x83A8A1CFA58AcA9A8e76B657aD6032EA51D474C5',
+                    functionName: 'createCollectionAndMint',
+                },
+            ],
+        };
+
+        const result = createMetadata(onboardingMetadata);
+
+        expect(result).toEqual(
+            expect.objectContaining({
+                url: onboardingMetadata.url,
+                icon: onboardingMetadata.icon,
+                title: onboardingMetadata.title,
+                description: onboardingMetadata.description,
+                baseUrl: onboardingMetadata.baseUrl,
+            }),
+        );
+
+        expect(result.actions).toHaveLength(1);
+        expect(result.actions[0]).toEqual(
+            expect.objectContaining({
+                type: 'blockchain',
+                label: "LET'S GET ONBOARDED",
+                address: '0x83A8A1CFA58AcA9A8e76B657aD6032EA51D474C5',
+                functionName: 'createCollectionAndMint',
+                blockchainActionType: 'nonpayable',
+                chains: {
+                    source: 43114,
+                    destination: 42220,
+                },
+            }),
+        );
+
+        // Verify the action has the required fields
+        const action = result.actions[0] as any;
+        expect(action.abi).toBeDefined();
+        expect(action.params).toBeDefined();
+        expect(action.abiParams).toBeDefined();
+        expect(Array.isArray(action.abi)).toBe(true);
+        expect(Array.isArray(action.params)).toBe(true);
+        expect(Array.isArray(action.abiParams)).toBe(true);
+    });
 });

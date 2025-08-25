@@ -5,6 +5,8 @@ export const SDK_TO_PROXY_HEADERS = {
     CLIENT_KEY: 'X-Sherry-Client-Key',
     TARGET_URL: 'X-Sherry-Target-URL',
     OPERATION: 'X-Sherry-Operation',
+    MINI_APP_ID: 'X-Sherry-Mini-App-ID', // For HTTP actions
+    USER_ADDRESS: 'X-Sherry-User-Address', // For HTTP actions
     CONTENT_TYPE: 'Content-Type',
     USER_AGENT: 'User-Agent',
 } as const;
@@ -39,6 +41,7 @@ export const SHERRY_VALUES = {
 export const VALID_OPERATIONS = {
     EXECUTE: 'execute',
     FETCH: 'fetch',
+    HTTP_ACTION: 'http-action', // New operation for HTTP actions via proxy
 } as const;
 
 export type ValidOperation = (typeof VALID_OPERATIONS)[keyof typeof VALID_OPERATIONS];
@@ -64,6 +67,34 @@ export function buildSdkHeaders(
     // Add client key if provided
     if (clientKey) {
         headers[SDK_TO_PROXY_HEADERS.CLIENT_KEY] = clientKey;
+    }
+
+    return headers;
+}
+
+/**
+ * ✅ NUEVA: Headers específicos para HTTP Actions con miniAppId
+ */
+export function buildHttpActionHeaders(
+    miniAppId: string,
+    clientKey?: string,
+    userAddress?: string,
+): Record<string, string> {
+    const headers: Record<string, string> = {
+        [SDK_TO_PROXY_HEADERS.OPERATION]: VALID_OPERATIONS.HTTP_ACTION,
+        [SDK_TO_PROXY_HEADERS.MINI_APP_ID]: miniAppId,
+        [SDK_TO_PROXY_HEADERS.CONTENT_TYPE]: SHERRY_VALUES.CONTENT_TYPE_JSON,
+        [SDK_TO_PROXY_HEADERS.USER_AGENT]: SHERRY_VALUES.USER_AGENT,
+    };
+
+    // Add client key if provided
+    if (clientKey) {
+        headers[SDK_TO_PROXY_HEADERS.CLIENT_KEY] = clientKey;
+    }
+
+    // Add user address if provided (for audit/rate limiting)
+    if (userAddress) {
+        headers[SDK_TO_PROXY_HEADERS.USER_ADDRESS] = userAddress;
     }
 
     return headers;

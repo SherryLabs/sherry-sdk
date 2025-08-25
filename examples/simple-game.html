@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simple Web3 Game</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+      }
+
+      .game-container {
+        max-width: 600px;
+        margin: 0 auto;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 20px;
+        border-radius: 10px;
+        backdrop-filter: blur(10px);
+      }
+
+      .wallet-info {
+        background: rgba(0, 0, 0, 0.3);
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+      }
+
+      .game-board {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        max-width: 300px;
+        margin: 0 auto;
+      }
+
+      .cell {
+        width: 80px;
+        height: 80px;
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        border-radius: 8px;
+        color: white;
+        font-size: 24px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .cell:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: scale(1.05);
+      }
+
+      .cell.taken {
+        cursor: not-allowed;
+        opacity: 0.7;
+      }
+
+      .status {
+        text-align: center;
+        margin: 20px 0;
+        font-size: 18px;
+      }
+
+      .controls {
+        text-align: center;
+        margin-top: 20px;
+      }
+
+      button {
+        background: #4caf50;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin: 0 5px;
+      }
+
+      button:hover {
+        background: #45a049;
+      }
+
+      .context-info {
+        background: rgba(0, 0, 0, 0.2);
+        padding: 10px;
+        border-radius: 5px;
+        margin: 5px 0;
+        font-family: monospace;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="game-container">
+      <h1>🎮 Simple Tic-Tac-Toe Game</h1>
+
+      <div class="wallet-info">
+        <h3>🔗 Wallet Connection</h3>
+        <div class="context-info">
+          <strong>Address:</strong> <span id="user-address">Loading...</span>
+        </div>
+        <div class="context-info">
+          <strong>Chain ID:</strong> <span id="chain-id">Loading...</span>
+        </div>
+        <div class="context-info">
+          <strong>Network:</strong> <span id="network-name">Loading...</span>
+        </div>
+        <div class="context-info">
+          <strong>Balance:</strong> <span id="balance">Loading...</span>
+        </div>
+      </div>
+
+      <div class="status" id="game-status">Player X's turn</div>
+
+      <div class="game-board" id="game-board">
+        <!-- Game cells will be generated here -->
+      </div>
+
+      <div class="controls">
+        <button onclick="resetGame()">🔄 Reset Game</button>
+        <button onclick="refreshWalletInfo()">🔄 Refresh Wallet</button>
+      </div>
+
+      <div style="margin-top: 20px; font-size: 12px; opacity: 0.7">
+        This game receives wallet context from the parent Sherry application
+      </div>
+    </div>
+
+    <script>
+      // Simple Sherry Context API implementation for the embedded game
+      const SherryContextAPI = {
+        requestData: dataType => {
+          return new Promise((resolve, reject) => {
+            const requestId = Math.random().toString(36).substring(2, 15);
+
+            const messageHandler = event => {
+              if (event.data?.type === 'SHERRY_RESPONSE' && event.data?.requestId === requestId) {
+                window.removeEventListener('message', messageHandler);
+
+                if (event.data.success) {
+                  resolve(event.data.value);
+                } else {
+                  reject(new Error(event.data.error));
+                }
+              }
+            };
+
+            window.addEventListener('message', messageHandler);
+
+            // Send request to parent
+            window.parent.postMessage(
+              {
+                type: 'SHERRY_REQUEST',
+                requestId,
+                data: dataType,
+              },
+              '*',
+            );
+
+            // Timeout after 5 seconds
+            setTimeout(() => {
+              window.removeEventListener('message', messageHandler);
+              reject(new Error('Request timeout'));
+            }, 5000);
+          });
+        },
+      };
+
+      // Game state
+      let currentPlayer = 'X';
+      let gameBoard = ['', '', '', '', '', '', '', '', ''];
+      let gameActive = true;
+
+      // Initialize game
+      function initGame() {
+        const board = document.getElementById('game-board');
+        board.innerHTML = '';
+
+        for (let i = 0; i < 9; i++) {
+          const cell = document.createElement('button');
+          cell.classList.add('cell');
+          cell.setAttribute('data-index', i);
+          cell.addEventListener('click', () => makeMove(i));
+          board.appendChild(cell);
+        }
+
+        updateDisplay();
+        loadWalletInfo();
+      }
+
+      // Load wallet information from Sherry
+      async function loadWalletInfo() {
+        try {
+          // Try to get wallet context from parent Sherry app
+          const address = await SherryContextAPI.requestData('userAddress');
+          const chainId = await SherryContextAPI.requestData('chainId');
+          const networkName = await SherryContextAPI.requestData('networkName');
+          const balance = await SherryContextAPI.requestData('balance');
+
+          document.getElementById('user-address').textContent = address || 'Not connected';
+          document.getElementById('chain-id').textContent = chainId || 'Unknown';
+          document.getElementById('network-name').textContent = networkName || 'Unknown';
+          document.getElementById('balance').textContent = balance ? `${balance} ETH` : 'Unknown';
+        } catch (error) {
+          console.log('Could not load wallet info from parent:', error);
+          // Fallback for standalone testing
+          document.getElementById('user-address').textContent = 'No parent context';
+          document.getElementById('chain-id').textContent = 'Standalone mode';
+          document.getElementById('network-name').textContent = 'Local';
+          document.getElementById('balance').textContent = 'N/A';
+        }
+      }
+
+      // Refresh wallet info
+      function refreshWalletInfo() {
+        loadWalletInfo();
+      }
+
+      // Make a move in the game
+      function makeMove(index) {
+        if (gameBoard[index] !== '' || !gameActive) {
+          return;
+        }
+
+        gameBoard[index] = currentPlayer;
+        updateDisplay();
+
+        if (checkWinner()) {
+          document.getElementById('game-status').textContent = `🎉 Player ${currentPlayer} wins!`;
+          gameActive = false;
+
+          // Simulate sending a "game won" event to parent
+          try {
+            window.parent.postMessage(
+              {
+                type: 'GAME_EVENT',
+                event: 'game_won',
+                winner: currentPlayer,
+                moves: gameBoard.filter(cell => cell !== '').length,
+              },
+              '*',
+            );
+          } catch (error) {
+            console.log('Could not send game event to parent');
+          }
+        } else if (gameBoard.every(cell => cell !== '')) {
+          document.getElementById('game-status').textContent = "🤝 It's a tie!";
+          gameActive = false;
+        } else {
+          currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+          document.getElementById('game-status').textContent = `Player ${currentPlayer}'s turn`;
+        }
+      }
+
+      // Update the visual display
+      function updateDisplay() {
+        const cells = document.querySelectorAll('.cell');
+        cells.forEach((cell, index) => {
+          cell.textContent = gameBoard[index];
+          cell.classList.toggle('taken', gameBoard[index] !== '');
+        });
+      }
+
+      // Check for winner
+      function checkWinner() {
+        const winPatterns = [
+          [0, 1, 2],
+          [3, 4, 5],
+          [6, 7, 8], // Rows
+          [0, 3, 6],
+          [1, 4, 7],
+          [2, 5, 8], // Columns
+          [0, 4, 8],
+          [2, 4, 6], // Diagonals
+        ];
+
+        return winPatterns.some(pattern => {
+          const [a, b, c] = pattern;
+          return gameBoard[a] && gameBoard[a] === gameBoard[b] && gameBoard[a] === gameBoard[c];
+        });
+      }
+
+      // Reset the game
+      function resetGame() {
+        currentPlayer = 'X';
+        gameBoard = ['', '', '', '', '', '', '', '', ''];
+        gameActive = true;
+        document.getElementById('game-status').textContent = "Player X's turn";
+        updateDisplay();
+      }
+
+      // Listen for context updates from parent
+      window.addEventListener('message', event => {
+        if (event.data?.type === 'CONTEXT_UPDATE') {
+          // Handle real-time context updates (like chain changes)
+          console.log('Context updated:', event.data);
+          loadWalletInfo(); // Refresh wallet info
+        }
+      });
+
+      // Initialize game when page loads
+      window.addEventListener('load', initGame);
+    </script>
+  </body>
+</html>

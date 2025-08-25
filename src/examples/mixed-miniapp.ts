@@ -30,7 +30,7 @@ export const mixedActionMiniApp: Metadata = {
         {
             type: 'http',
             label: 'Submit Feedback',
-            path: 'https://api.example.com/feedback',
+            miniAppId: '12345678-1234-5678-9012-123456789abc',
             params: [
                 // Corrección: especificar el tipo correcto para email
                 {

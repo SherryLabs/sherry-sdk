@@ -7,10 +7,8 @@ export type HttpParameter = StandardParameter | SelectParameter | RadioParameter
 export interface HttpAction {
     type: 'http';
     label: string;
-    path: string;
+    miniAppId: string; // UUID of registered mini-app instead of direct path
     method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
-    headers?: Record<string, string>;
-    body?: Record<string, any>;
     params?: HttpParameter[];
 }
 

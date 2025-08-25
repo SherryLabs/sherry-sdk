@@ -4,7 +4,7 @@ import { SelectParameter, RadioParameter, StandardParameter } from '../interface
 
 export class HttpActionValidator {
     static validateHttpAction(action: HttpAction): HttpAction {
-        HttpActionValidator.validatepath(action.path);
+        HttpActionValidator.validateMiniAppId(action.miniAppId);
 
         const validatedParams = HttpActionValidator.validateParameters(action.params);
 
@@ -14,11 +14,19 @@ export class HttpActionValidator {
         };
     }
 
-    private static validatepath(path: string): void {
-        try {
-            new URL(path);
-        } catch {
-            throw new InvalidMetadataError('[HttpAction-validatepath]Invalid path URL');
+    private static validateMiniAppId(miniAppId: string): void {
+        if (!miniAppId || typeof miniAppId !== 'string') {
+            throw new InvalidMetadataError(
+                '[HttpAction-validateMiniAppId] miniAppId is required and must be a string',
+            );
+        }
+
+        // Validate UUID format (basic check)
+        const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+        if (!uuidRegex.test(miniAppId)) {
+            throw new InvalidMetadataError(
+                '[HttpAction-validateMiniAppId] miniAppId must be a valid UUID format',
+            );
         }
     }
 
@@ -180,7 +188,7 @@ export class HttpActionValidator {
 
         // Then validate HTTP action required properties
         const hasRequiredProps =
-            typeof action.label === 'string' && typeof action.path === 'string';
+            typeof action.label === 'string' && typeof action.miniAppId === 'string';
 
         if (!hasRequiredProps) return false;
 

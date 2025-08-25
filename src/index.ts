@@ -51,3 +51,29 @@ export {
     createAnonymousExecutor,
 } from './executors/dynamicExecutor';
 export { MiniAppExecutor } from './executors/miniAppExecutor';
+
+// Export HTTP and HTML executors
+export {
+    HttpActionExecutor,
+    type HttpActionResponse,
+    type SecureHttpRequest,
+} from './executors/httpExecutor';
+
+export { HTMLActionExecutor, type ContextProvider } from './executors/htmlExecutor';
+
+// Export HTML Action types
+export { type ContextData, type ContextSharing } from './interface/actions/htmlAction';
+
+// Export shared action utilities
+export {
+    ActionParameterValidator,
+    SecureRequestBuilder,
+    ActionErrorHandler,
+    UUIDValidator,
+    type BaseParameter,
+    type ParameterType,
+    type RequestMetadata,
+} from './utils/actionUtils';
+
+// Export enhanced header utilities
+export { buildHttpActionHeaders, VALID_OPERATIONS, SDK_TO_PROXY_HEADERS } from './headers/headers';

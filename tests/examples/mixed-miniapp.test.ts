@@ -67,7 +67,7 @@ describe('Mixed Action Mini-App', () => {
 
         // HTTP action validation - check if it maintains core properties
         expect(HttpActionValidator.isHttpAction(httpAction)).toBe(true);
-        expect(httpAction).toHaveProperty('path', 'https://api.example.com/feedback');
+        expect(httpAction).toHaveProperty('miniAppId', '12345678-1234-5678-9012-123456789abc');
         expect(httpAction).toHaveProperty('params');
         expect(httpAction.params).toHaveLength(3);
 
